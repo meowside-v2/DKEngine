@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace DKBasicEngine_1_0
@@ -28,7 +26,7 @@ namespace DKBasicEngine_1_0
 
                 try
                 {
-                    this.model = Database.GameObjectsMaterial[Database.GameObjects[value]];
+                    this.model = Database.GetGameObjectMaterial(value);
                 }
                 catch (Exception e)
                 {
@@ -111,15 +109,9 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public int AnimationState { get; set; }
-
+        public int AnimationState { get; set; } = 0;
+        
         public Material model { get; set; }
-
-        public int jumpheight { get; set; }     // Number of Blocks
-        public int jumplength { get; set; }     // In miliseconds
-
-        public bool ForceJump { get; set; }
-        public bool Jumped { get; set; }
 
         public GameObject()
         {
@@ -151,7 +143,7 @@ namespace DKBasicEngine_1_0
 
         public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
-            if (model != null) model.Render(X - x, Y - y, bufferData, bufferKey, ScaleX, ScaleY);
+            if (model != null) model.Render(X - x, Y - y, AnimationState, bufferData, bufferKey, ScaleX, ScaleY);
         }
     }
 }

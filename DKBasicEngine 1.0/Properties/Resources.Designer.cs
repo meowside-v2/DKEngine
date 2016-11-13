@@ -73,9 +73,9 @@ namespace DKBasicEngine_1._0.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] MarioFontFile {
+        internal static byte[] FontFile {
             get {
-                object obj = ResourceManager.GetObject("MarioFontFile", resourceCulture);
+                object obj = ResourceManager.GetObject("FontFile", resourceCulture);
                 return ((byte[])(obj));
             }
         }

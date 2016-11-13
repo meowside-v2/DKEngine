@@ -107,12 +107,12 @@ namespace DKBasicEngine_1_0
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            model.Render(X + x, Y + y, imageBuffer, imageBufferKey, Parent.ScaleX, Parent.ScaleY);
+            model.Render(X + x, Y + y, 0, imageBuffer, imageBufferKey, Parent.ScaleX, Parent.ScaleY);
         }
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey, Color? clr)
         {
-            model.Render(X + x, Y + y, imageBuffer, imageBufferKey, ScaleX, ScaleY, clr);
+            model.Render(X + x, Y + y, 0, imageBuffer, imageBufferKey, ScaleX, ScaleY, clr);
         }
     }
 }

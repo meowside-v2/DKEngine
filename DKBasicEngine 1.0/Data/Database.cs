@@ -6,10 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DKBasicEngine_1_0
 {
-    public class Database
+    public static class Database
     {
         public enum Font
         {
@@ -100,7 +101,7 @@ namespace DKBasicEngine_1_0
 
         private static void CreateLetterReferences()
         {
-            using (BinaryReader br = new BinaryReader(new MemoryStream(Resources.MarioFontFile)))
+            using (BinaryReader br = new BinaryReader(new MemoryStream(Resources.FontFile)))
             {
                 int lenght = br.ReadInt32();
 
@@ -117,18 +118,37 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public static Dictionary<string, int> GameObjects = new Dictionary<string, int>()
-        {
-            { "border" , 0 }
-        };
+        private static Dictionary<string, int> GameObjects = new Dictionary<string, int>();
 
-        public static List<Material> GameObjectsMaterial = new List<Material>();
+        private static List<Material> GameObjectsMaterial = new List<Material>();
 
         public static void InitDatabase()
         {
-            GameObjectsMaterial.Add(new Material(Resources.border));
+            AddNewGameObject("border", new Material(Resources.border));
 
             CreateLetterReferences();
+        }
+
+        public static void AddNewGameObject(string ObjectName, Material Object)
+        {
+            GameObjects.Add(ObjectName, GameObjectsMaterial.Count);
+            GameObjectsMaterial.Add(Object);
+        }
+
+        public static Material GetGameObjectMaterial(string Key)
+        {
+            Material retValue = null;
+
+            try
+            {
+                retValue = GameObjectsMaterial[GameObjects[Key]];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Object not found\n" + ex);
+            }
+
+            return retValue;
         }
     }
 }
