@@ -43,14 +43,14 @@ namespace DKBasicEngine_1_0
         {
             get
             {
-                return (model == null ? 0 : model.width);
+                return (model == null ? 0 : (int)(model.width * ScaleX));
             }
         }
         public int height
         {
             get
             {
-                return (model == null ? 0 : model.height);
+                return (model == null ? 0 : (int)(model.height * ScaleY));
             }
         }
         public int depth

@@ -66,7 +66,7 @@ namespace DKBasicEngine_1_0
                 for (int i = 0; i < Frames; i++)
                 {
                     this_delay = BitConverter.ToInt32(source.GetPropertyItem(20736).Value, index) * 10;
-                    delay += (this_delay < 100 ? 100 : this_delay);  // Minimum delay is 100 ms
+                    delay += (this_delay < 1 ? 1 : this_delay);  // Minimum delay is 100 ms
                     index += 4;
                 }
 

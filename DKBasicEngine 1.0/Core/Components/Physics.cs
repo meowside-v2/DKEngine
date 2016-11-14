@@ -9,6 +9,11 @@ namespace DKBasicEngine_1_0
 {
     public class Physics
     {
+        public int Jumpheight { get; set; }
+        public bool Jumped { get; set; }
+        public int Jumplength { get; set; }
+        public bool ForceJump { get; set; }
+
         public enum PhysicState
         {
             Jump,
@@ -31,28 +36,28 @@ namespace DKBasicEngine_1_0
 
             do
             {
-                if (StartPositon - Parent.Y == Parent.jumpheight)
+                if (StartPositon - Parent.Y == Jumpheight)
                 {
                     //Fall(world, enemies);
-                    Parent.Jumped = false;
+                    Jumped = false;
                     return;
                 }
                 else if (colliderReference.Collision(Collider.Direction.Up))
                 {
                     Fall();
-                    Parent.Jumped = false;
+                    Jumped = false;
                     return;
                 }
-                else if (!Parent.ForceJump && StartPositon - Parent.Y > MinJump)
+                else if (!ForceJump && StartPositon - Parent.Y > MinJump)
                 {
                     Fall();
-                    Parent.Jumped = false;
+                    Jumped = false;
                     return;
                 }
 
                 else Parent.Y -= 1;
 
-                Thread.Sleep(Parent.jumplength);
+                Thread.Sleep(Jumplength);
             } while (true);
         }
 
@@ -62,10 +67,10 @@ namespace DKBasicEngine_1_0
             {
                 Parent.Y += 1;
 
-                Thread.Sleep(Parent.jumplength);
+                Thread.Sleep(Jumplength);
             } while (!colliderReference.Collision(Collider.Direction.Down));
 
-            Parent.Jumped = false;
+            Jumped = false;
         }
     }
 }

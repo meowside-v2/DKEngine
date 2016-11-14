@@ -8,8 +8,8 @@ namespace DKBasicEngine_1_0
 {
     public class Shared
     {
-        public static int RenderWidth = 640;
-        public static int RenderHeight = 360;
+        public static int RenderWidth = 1280;
+        public static int RenderHeight = 720;
 
         public static bool IsEscapeSequence(char letter)
         {
