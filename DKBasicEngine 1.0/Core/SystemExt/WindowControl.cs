@@ -34,14 +34,14 @@ namespace DKBasicEngine_1_0
             );
 
 
-        private IntPtr hConsole = GetStdHandle(-11);
-        private COORD xy = new COORD(100, 100);
-        private const int STD_OUTPUT_HANDLE = -11;
-        private const int TMPF_TRUETYPE = 4;
-        private const int LF_FACESIZE = 32;
-        private IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
+        private static IntPtr hConsole = GetStdHandle(-11);
+        private static COORD xy = new COORD(100, 100);
+        private readonly static int STD_OUTPUT_HANDLE = -11;
+        private readonly static int TMPF_TRUETYPE = 4;
+        private readonly static int LF_FACESIZE = 32;
+        private static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
 
-        public void WindowInit()
+        internal static void WindowInit()
         {
             Console.SetWindowSize(20, 20);
             Console.SetBufferSize(21, 21);
@@ -54,7 +54,7 @@ namespace DKBasicEngine_1_0
             Timer windowCheck = new Timer(WindowSizeChecker, null, 0, 100);
         }
 
-        private void WindowSizeChecker(object state)
+        private static void WindowSizeChecker(object state)
         {
             if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
             {

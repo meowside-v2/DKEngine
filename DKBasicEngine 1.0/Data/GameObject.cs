@@ -35,25 +35,25 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
 
-        public int width
+        public double width
         {
             get
             {
-                return (model == null ? 0 : (int)(model.width * ScaleX));
+                return (model == null ? 0 : model.width * ScaleX);
             }
         }
-        public int height
+        public double height
         {
             get
             {
-                return (model == null ? 0 : (int)(model.height * ScaleY));
+                return (model == null ? 0 : model.height * ScaleY);
             }
         }
-        public int depth
+        public double depth
         {
             get
             {
@@ -118,23 +118,20 @@ namespace DKBasicEngine_1_0
             this.X = 0;
             this.Y = 0;
             this.Z = 0;
+
+            this.Start();
+
+            lock (Engine.ToUpdate)
+            {
+                Engine.ToUpdate.Add(this);
+            }
         }
 
-        public GameObject(int X, int Y, int Z)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-        }
+        public virtual void Start()
+        { }
 
-        public GameObject(string TypeName, int X, int Y, int Z)
-        {
-            this.TypeName = TypeName;
-
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-        }
+        public virtual void Update()
+        { }
 
         public object DeepCopy()
         {
@@ -143,7 +140,7 @@ namespace DKBasicEngine_1_0
 
         public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
-            if (model != null) model.Render(X - x, Y - y, AnimationState, bufferData, bufferKey, ScaleX, ScaleY);
+            if (model != null) model.Render((int)(X - x), (int)(Y - y), AnimationState, bufferData, bufferKey, ScaleX, ScaleY);
         }
     }
 }

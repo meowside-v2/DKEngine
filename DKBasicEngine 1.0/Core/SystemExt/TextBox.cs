@@ -24,7 +24,7 @@ namespace DKBasicEngine_1_0
             : base(X, Y, Layer, HAlignment, VAlignment, Text)
         { }
 
-        private int _textXOffset = 0;
+        private double _textXOffset = 0;
 
         public Type AllowedChars { get; set; }
 

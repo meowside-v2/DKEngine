@@ -7,7 +7,7 @@
     <ProjectGuid>{685BB592-6FF3-43D1-AA93-DC6900601DDA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DKBasicEngine_1._0</RootNamespace>
+    <RootNamespace>DKBasicEngine_1_0</RootNamespace>
     <AssemblyName>DKBasicEngine 1.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,7 +55,7 @@
     <Compile Include="Core\Interfaces\IGraphics.cs" />
     <Compile Include="Core\SystemExt\xRectangle.cs" />
     <Compile Include="Core\SystemExt\Letter.cs" />
-    <Compile Include="Core\SystemExt\ListExtension.cs" />
+    <Compile Include="Core\SystemExt\Extensions.cs" />
     <Compile Include="Core\SystemExt\TextBlock.cs" />
     <Compile Include="Core\SystemExt\TextBox.cs" />
     <Compile Include="Core\SystemExt\WindowControl.cs" />
@@ -63,13 +63,13 @@
     <Compile Include="Data\GameObject.cs" />
     <Compile Include="Data\Predefined\Border.cs" />
     <Compile Include="Data\Scene.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Shared.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Build-in stuff\MarioFontFile.MEX" />

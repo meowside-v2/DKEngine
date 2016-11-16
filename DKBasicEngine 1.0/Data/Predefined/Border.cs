@@ -8,8 +8,8 @@ namespace DKBasicEngine_1_0
 {
     public class Border : GameObject
     {
-        public Border(int x, int y, int z)
-            :base(x, y, z)
+        public Border()
+            :base()
         {
             this.TypeName = "border";
         }

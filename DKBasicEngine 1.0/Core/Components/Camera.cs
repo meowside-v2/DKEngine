@@ -17,7 +17,7 @@ namespace DKBasicEngine_1_0
         public int Xoffset { set; get; }
         public int Yoffset { set; get; }
 
-        private const int MAX_FRAME_RATE = 60;    // Frames per Second
+        private readonly static int MAX_FRAME_RATE = 60;    // Frames per Second
         private const short sampleSize = 100;
         private int lastTime = 0;
         private int numRenders = 0;
@@ -30,15 +30,18 @@ namespace DKBasicEngine_1_0
                                                    TextBlock.VerticalAlignment.Bottom,
                                                    "0");
 
-        private byte[] toRenderData = new byte[3 * Shared.RenderWidth * Shared.RenderHeight];
+        private byte[] toRenderData = new byte[3 * Engine.Render.RenderWidth * Engine.Render.RenderHeight];
 
         public Scene sceneReference;
-        public xRectangle borderReference;
         public List<I3Dimensional> GUI = new List<I3Dimensional>();
         public List<I3Dimensional> exclusiveReference = new List<I3Dimensional>();
 
         Thread Ren;
-        Thread Buff;
+
+        public Camera()
+        {
+            Engine._baseCam = this;
+        }
 
         public void Init(int Xoffset, int Yoffset)
         {
@@ -47,9 +50,7 @@ namespace DKBasicEngine_1_0
 
             //fpsMeter.text = "";
             GUI.Add(fpsMeter);
-
-            Buff = new Thread(() => Buffering());
-            Buff.Start();
+            
             Ren = new Thread(() => Rendering());
             Ren.Start();
         }
@@ -57,50 +58,17 @@ namespace DKBasicEngine_1_0
         public void Abort()
         {
             if (Ren != null) Ren.Abort();
-            if (Buff != null) Ren.Abort();
         }
 
         private void Rendering()
         {
-            /*Size fontSize = GetConsoleFontSize();
-            Point location = new Point(0, 0);
-            Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
-
-            Rectangle imageRect = new Rectangle(location.X * fontSize.Width,
-                                                        location.Y * fontSize.Height,
-                                                        imageSize.Width * fontSize.Width,
-                                                        imageSize.Height * fontSize.Height);
 
             using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
             {
-                while (true)
-                {
-                    
-                    int beginRender = Environment.TickCount;
-                    
-                    unsafe
-                    {
-                        fixed (byte* ptr = toRenderData)
-                        {
-                            using (Bitmap outImage = new Bitmap(Shared.RenderWidth,
-                                                   Shared.RenderWidth,
-                                                   3 * imageRect.Width,
-                                                   System.Drawing.Imaging.PixelFormat.Format24bppRgb,
-                                                   new IntPtr(ptr)))
-                            {
-                                g.DrawImage(outImage, imageRect);
-                            }
-                        }
-                    }
-                    
-                    int endRender = Environment.TickCount - beginRender;
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                    Vsync(MAX_FRAME_RATE, endRender, false);
-                }
-            }*/
-
-            using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
-            {
                 while (true)
                 {
                     int beginRender = Environment.TickCount;
@@ -113,9 +81,9 @@ namespace DKBasicEngine_1_0
                         fixed (byte* ptr = toRenderData)
                         {
 
-                            using (Bitmap outFrame = new Bitmap(Shared.RenderWidth,
-                                                                Shared.RenderHeight,
-                                                                3 * Shared.RenderWidth,
+                            using (Bitmap outFrame = new Bitmap(Engine.Render.RenderWidth,
+                                                                Engine.Render.RenderHeight,
+                                                                3 * Engine.Render.RenderWidth,
                                                                 System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                                                                 new IntPtr(ptr)))
                             {
@@ -134,64 +102,53 @@ namespace DKBasicEngine_1_0
 
                     int endRender = Environment.TickCount - beginRender;
 
-                    Vsync(MAX_FRAME_RATE, endRender, false);
+                    if(_Vsync) Vsync(MAX_FRAME_RATE, endRender, false);
                 }
             }
         }
 
-        private void Buffering()
+        internal void BufferImage()
         {
-            byte[] _buffer = new byte[3 * Shared.RenderHeight * Shared.RenderWidth];
-            bool[] _rendered = new bool[Shared.RenderHeight * Shared.RenderWidth];
+            byte[] _buffer = new byte[3 * Engine.Render.RenderHeight * Engine.Render.RenderWidth];
+            bool[] _rendered = new bool[Engine.Render.RenderHeight * Engine.Render.RenderWidth];
+            
+            Array.Clear(_buffer, 0, _buffer.Length);
+            Array.Clear(_rendered, 0, _rendered.Length);
 
-            while (true)
+            lock (GUI)
             {
-                int beginRender = Environment.TickCount;
-
-                Array.Clear(_buffer, 0, _buffer.Length);
-                Array.Clear(_rendered, 0, _rendered.Length);
-
-                lock (GUI)
+                foreach (ICore item in GUI)
                 {
-                    foreach (ICore item in GUI)
-                    {
-                        item.Render(0, 0, _buffer, _rendered);
-                    }
+                    item.Render(0, 0, _buffer, _rendered);
                 }
-
-                if (borderReference != null)
-                    lock (borderReference)
-                    {
-                        borderReference.Render(Xoffset, Yoffset, _buffer, _rendered);
-                    }
-
-                lock (exclusiveReference)
-                {
-                    foreach (ICore item in exclusiveReference)
-                    {
-                        item.Render(Xoffset, Yoffset, _buffer, _rendered);
-                    }
-                }
-
-                if (sceneReference != null)
-                    lock (sceneReference)
-                    {
-                        sceneReference.Render(Xoffset, Yoffset, _buffer, _rendered);
-                    }
-
-                Buffer.BlockCopy(_buffer, 0, toRenderData, 0, _buffer.Count());
-
-                int endRender = Environment.TickCount - beginRender;
-
-                if (_Vsync) Vsync(MAX_FRAME_RATE, endRender, true);
-
-                if (numRenders == 0)
-                {
-                    lastTime = Environment.TickCount;
-                }
-
-                numRenders++;
             }
+
+            lock (exclusiveReference)
+            {
+                foreach (ICore item in exclusiveReference)
+                {
+                    item.Render(Xoffset, Yoffset, _buffer, _rendered);
+                }
+            }
+
+            if (sceneReference != null)
+                lock (sceneReference)
+                {
+                    sceneReference.Render(Xoffset, Yoffset, _buffer, _rendered);
+                }
+
+            Buffer.BlockCopy(_buffer, 0, toRenderData, 0, _buffer.Count());
+
+            int endRender = Environment.TickCount - Engine.UpdateStartTime;
+            
+            if (numRenders == 0)
+            {
+                lastTime = Environment.TickCount;
+            }
+
+            numRenders++;
+
+            if(_Vsync) Vsync(MAX_FRAME_RATE, endRender, true);
         }
 
         private void Vsync(int TargetFrameRate, int imageRenderDelay, bool renderFPS)
@@ -221,6 +178,8 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
+
+
 
 
         private static Size GetConsoleFontSize()

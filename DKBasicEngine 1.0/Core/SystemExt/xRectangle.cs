@@ -14,13 +14,13 @@ namespace DKBasicEngine_1_0
 
         List<I3Dimensional> border = new List<I3Dimensional>();
 
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
 
-        public int width { get; set; }
-        public int height { get; set; }
-        public int depth { get; set; }
+        public double width { get; set; }
+        public double height { get; set; }
+        public double depth { get; set; }
 
         public double ScaleX
         {
@@ -83,14 +83,14 @@ namespace DKBasicEngine_1_0
 
             for (int i = 0; i <= width + 8; i += 8)
             {
-                border.Add(new Border(X + i, Y, this.Z));
-                border.Add(new Border(X + i, Y + height + 8, this.Z));
+                border.Add(new Border() { X = X + i, Y = Y, Z = this.Z });
+                border.Add(new Border() { X = X + i, Y = Y + height + 8, Z = this.Z });
             }
 
             for (int i = 8; i <= height; i += 8)
             {
-                border.Add(new Border(X, Y + i, this.Z));
-                border.Add(new Border(X + width + 8, Y + i, this.Z));
+                border.Add(new Border() { X = X, Y = Y + i, Z = this.Z });
+                border.Add(new Border() { X = X + width + 8, Y = Y + i, Z = this.Z });
             }
         }
 
@@ -113,7 +113,7 @@ namespace DKBasicEngine_1_0
                 if (BufferIsFull(bufferKey))
                     return;
 
-                int tempHeight = temp.Max(item => (item).Z);
+                double tempHeight = temp.Max(item => item.Z);
                 List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
 
                 foreach (ICore item in toRender)
@@ -126,9 +126,9 @@ namespace DKBasicEngine_1_0
             //model.Render(x, y, bufferData, bufferKey);
         }
 
-        private bool Finder(I3Dimensional obj, int x, int y)
+        private bool Finder(I3Dimensional obj, double x, double y)
         {
-            return (obj.X + obj.width >= x && obj.X < x + Shared.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Shared.RenderHeight);
+            return (obj.X + obj.width >= x && obj.X < x + Engine.Render.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Engine.Render.RenderHeight);
         }
 
         private bool FindBiggerZ(I3Dimensional item1, I3Dimensional item2)

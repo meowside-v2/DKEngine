@@ -148,16 +148,16 @@ namespace DKBasicEngine_1_0
             {
                 for (double row = 0; row < this.height; row += plusY)
                 {
-                    if (y + row > Shared.RenderHeight) return;
+                    if (y + row > Engine.Render.RenderHeight) return;
 
                     for (double column = 0; column < this.width; column += plusX)
                     {
-                        if (x + column > Shared.RenderWidth) break;
+                        if (x + column > Engine.Render.RenderWidth) break;
 
                         if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            int offset = (((3 * (y + rowInBuffer)) * Shared.RenderWidth) + (3 * (x + columnInBuffer)));
-                            int keyOffset = ((y + rowInBuffer) * Shared.RenderWidth + x + columnInBuffer);
+                            int offset = (((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                            int keyOffset = ((y + rowInBuffer) * Engine.Render.RenderWidth + x + columnInBuffer);
 
                             if (!imageBufferKey[keyOffset])
                             {
@@ -189,16 +189,16 @@ namespace DKBasicEngine_1_0
             {
                 for (double row = 0; row < this.height; row += (1 / scaleY))
                 {
-                    if (y + row > Shared.RenderHeight) return;
+                    if (y + row > Engine.Render.RenderHeight) return;
 
                     for (double column = 0; column < this.width; column += (1 / scaleX))
                     {
-                        if (x + column > Shared.RenderWidth) break;
+                        if (x + column > Engine.Render.RenderWidth) break;
 
                         if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            int offset = (((3 * (y + rowInBuffer)) * Shared.RenderWidth) + (3 * (x + columnInBuffer)));
-                            int keyOffset = ((y + rowInBuffer) * Shared.RenderWidth + x + columnInBuffer);
+                            int offset = (((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                            int keyOffset = ((y + rowInBuffer) * Engine.Render.RenderWidth + x + columnInBuffer);
 
                             if (!imageBufferKey[keyOffset])
                             {
@@ -226,7 +226,7 @@ namespace DKBasicEngine_1_0
 
         private bool IsOnScreen(int x, int y)
         {
-            return x >= 0 && x < Shared.RenderWidth && y >= 0 && y < Shared.RenderHeight;
+            return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
         }
     }
 }

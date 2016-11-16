@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public class Shared
+    public static class Extensions
     {
-        public static int RenderWidth = 1280;
-        public static int RenderHeight = 720;
+        public static void AddAll<T>(this List<T> list, params T[] stuff)
+        {
+            foreach (var item in stuff)
+            {
+                list.Add(item);
+            }
+        }
 
-        public static bool IsEscapeSequence(char letter)
+        public static bool IsEscapeSequence(this char letter)
         {
             switch (letter)
             {

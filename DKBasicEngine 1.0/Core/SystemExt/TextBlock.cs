@@ -9,11 +9,11 @@ namespace DKBasicEngine_1_0
 {
     public class TextBlock : ICore, I3Dimensional
     {
-        protected int _x = 0;
-        protected int _y = 0;
+        protected double _x = 0;
+        protected double _y = 0;
 
-        protected int vertOffset = 0;
-        protected int horiOffset = 0;
+        protected double vertOffset = 0;
+        protected double horiOffset = 0;
 
         protected HorizontalAlignment _HA;
         protected VerticalAlignment _VA;
@@ -45,7 +45,7 @@ namespace DKBasicEngine_1_0
             GUI = 128
         };
 
-        public int X
+        public double X
         {
             get
             {
@@ -57,7 +57,7 @@ namespace DKBasicEngine_1_0
                 _x = value;
             }
         }
-        public int Y
+        public double Y
         {
             get
             {
@@ -69,9 +69,9 @@ namespace DKBasicEngine_1_0
                 _y = value;
             }
         }
-        public int Z { get; set; }
+        public double Z { get; set; }
 
-        public int width
+        public double width
         {
             get
             {
@@ -79,14 +79,14 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public int height
+        public double height
         {
             get
             {
-                return (int)(5 * ScaleY);
+                return 5 * ScaleY;
             }
         }
-        public int depth
+        public double depth
         {
             get
             {
@@ -170,11 +170,11 @@ namespace DKBasicEngine_1_0
                         break;
 
                     case HorizontalAlignment.Center:
-                        horiOffset = (Shared.RenderWidth - this.width) / 2;
+                        horiOffset = (Engine.Render.RenderWidth - this.width) / 2;
                         break;
 
                     case HorizontalAlignment.Right:
-                        horiOffset = Shared.RenderWidth - this.width;
+                        horiOffset = Engine.Render.RenderWidth - this.width;
                         break;
 
                     default:
@@ -195,11 +195,11 @@ namespace DKBasicEngine_1_0
                         break;
 
                     case VerticalAlignment.Center:
-                        vertOffset = (Shared.RenderHeight - this.height) / 2;
+                        vertOffset = (Engine.Render.RenderHeight - this.height) / 2;
                         break;
 
                     case VerticalAlignment.Bottom:
-                        vertOffset = Shared.RenderHeight - this.height;
+                        vertOffset = Engine.Render.RenderHeight - this.height;
                         break;
 
                     default:
@@ -317,14 +317,14 @@ namespace DKBasicEngine_1_0
 
             foreach (Letter item in _text.FindAll(obj => Finder(obj, x, y)))
             {
-                item.Render(this.X - x, this.Y - y, imageBuffer, imageBufferKey);
-                if (HasShadow) item.Render(this.X - x + 1, this.Y - y + 1, imageBuffer, imageBufferKey, Color.Black);
+                item.Render((int)(this.X - x), (int)(this.Y - y), imageBuffer, imageBufferKey);
+                if (HasShadow) item.Render((int)(this.X - x + 1), (int)(this.Y - y + 1), imageBuffer, imageBufferKey, Color.Black);
             }
         }
 
         protected bool Finder(I3Dimensional obj, int x, int y)
         {
-            return obj.X + obj.width >= x && obj.X < x + Shared.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Shared.RenderHeight;
+            return obj.X + obj.width >= x && obj.X < x + Engine.Render.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Engine.Render.RenderHeight;
         }
     }
 }

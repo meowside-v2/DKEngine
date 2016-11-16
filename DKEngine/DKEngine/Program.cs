@@ -14,7 +14,21 @@ namespace DKEngine
     {
         static void Main(string[] args)
         {
+            Engine.Init();
+            
 
+
+            Camera c = new Camera();
+            c.Init(0, 0);
+
+            Scene x = new Scene();
+
+            for (int i = 0; i < 100; i++)
+                x.Model.Add(new Test() { TypeName = "border" , Y = i * 8 });
+
+            c.sceneReference = x;
+
+            Console.ReadLine();
         }
     }
 }

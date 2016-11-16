@@ -57,10 +57,13 @@ namespace DKBasicEngine_1_0
 
                 for (int count = 0; count < temp_ModelCount; count++)
                 {
-                    Model.Add(new GameObject(br.ReadString(),
-                                         br.ReadInt32(),
-                                         br.ReadInt32(),
-                                         br.ReadInt32()));
+                    Model.Add(new GameObject()
+                                {
+                                    TypeName = br.ReadString(),
+                                    X = br.ReadInt32(),
+                                    Y = br.ReadInt32(),
+                                    Z = br.ReadInt32()
+                                });
                 }
 
                 switch (mode)
@@ -105,7 +108,7 @@ namespace DKBasicEngine_1_0
                 if (BufferIsFull(bufferKey))
                     return;
 
-                int tempHeight = temp.Max(item => (item).Z);
+                double tempHeight = temp.Max(item => item.Z);
                 List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
 
                 foreach (ICore item in toRender)
@@ -118,9 +121,9 @@ namespace DKBasicEngine_1_0
             //model.Render(x, y, bufferData, bufferKey);
         }
 
-        private bool Finder(I3Dimensional obj, int x, int y)
+        private bool Finder(I3Dimensional obj, double x, double y)
         {
-            return (obj.X + obj.width >= x && obj.X < x + Shared.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Shared.RenderHeight);
+            return (obj.X + obj.width >= x && obj.X < x + Engine.Render.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Engine.Render.RenderHeight);
         }
 
         private bool FindBiggerZ(I3Dimensional item1, I3Dimensional item2)

@@ -36,7 +36,7 @@ namespace DKBasicEngine_1_0
             this.Parent = Parent;
             this.collidableReference = collidableReference;
 
-            this.Area = new Rectangle(0, 0, Parent.width, Parent.height);
+            this.Area = new Rectangle(0, 0, (int)Parent.width, (int)Parent.height);
         }
 
         public Collider(GameObject Parent, List<I3Dimensional> collidableReference, Rectangle Area)

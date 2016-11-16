@@ -13,47 +13,47 @@ namespace DKBasicEngine_1_0
         private double _x;
         private double _y;
 
-        public int X
+        public double X
         {
             get
             {
-                return (int)(_x * Parent.ScaleX);
+                return _x * Parent.ScaleX;
             }
             set
             {
                 _x = value;
             }
         }
-        public int Y
+        public double Y
         {
             get
             {
-                return (int)(_y * Parent.ScaleY);
+                return _y * Parent.ScaleY;
             }
             set
             {
                 _y = value;
             }
         }
-        public int Z { get; set; }
+        public double Z { get; set; }
 
-        public int width
+        public double width
         {
             get
             {
-                return (int)(model.width * Parent.ScaleX);
+                return model.width * Parent.ScaleX;
             }
         }
 
-        public int height
+        public double height
         {
             get
             {
-                return (int)(model.height * Parent.ScaleY);
+                return model.height * Parent.ScaleY;
             }
         }
 
-        public int depth { get; }
+        public double depth { get; }
 
         public double ScaleX
         {
@@ -89,7 +89,7 @@ namespace DKBasicEngine_1_0
 
         public int AnimationState { get; set; }
 
-        public Letter(TextBlock Parent, int x, int y, int z, Material sourceModel)
+        public Letter(TextBlock Parent, double x, double y, double z, Material sourceModel)
         {
             model = sourceModel;
 
@@ -107,12 +107,12 @@ namespace DKBasicEngine_1_0
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
-            model.Render(X + x, Y + y, 0, imageBuffer, imageBufferKey, Parent.ScaleX, Parent.ScaleY);
+            model.Render((int)(X + x), (int)(Y + y), 0, imageBuffer, imageBufferKey, Parent.ScaleX, Parent.ScaleY);
         }
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey, Color? clr)
         {
-            model.Render(X + x, Y + y, 0, imageBuffer, imageBufferKey, ScaleX, ScaleY, clr);
+            model.Render((int)(X + x), (int)(Y + y), 0, imageBuffer, imageBufferKey, ScaleX, ScaleY, clr);
         }
     }
 }
