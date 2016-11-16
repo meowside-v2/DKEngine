@@ -1,4 +1,4 @@
-﻿using DKBasicEngine_1._0.Properties;
+﻿using DKBasicEngine_1_0.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
