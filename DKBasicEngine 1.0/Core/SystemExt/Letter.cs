@@ -9,7 +9,9 @@ namespace DKBasicEngine_1_0
 {
     public class Letter : ICore, I3Dimensional, IGraphics
     {
-        TextBlock Parent;
+
+        I3Dimensional Parent;
+
         private double _x;
         private double _y;
 
@@ -99,6 +101,16 @@ namespace DKBasicEngine_1_0
 
             this.Parent = Parent;
         }
+
+        public void Start()
+        {
+            lock (Engine.ToUpdate)
+            {
+                Engine.ToUpdate.Add(this);
+            }
+        }
+
+        public void Update() { }
 
         public object DeepCopy()
         {

@@ -8,13 +8,24 @@ using System.Threading.Tasks;
 
 namespace DKEngine
 {
-    class Test : GameObject
+    class Test : Scene
     {
-        private double Speed = 1f;
+        public Button b { get; set; }
+        public TextBox tx { get; set; }
 
-        public override void Update()
+        public Test()
+            :base()
         {
-            this.X += Speed * Engine.deltaTime;
+            b = new Button(this)
+            {
+                Text = "GG",
+                OnClick = () => Debug.WriteLine("ButtonJede")
+            };
+
+            tx = new TextBox(this)
+            {
+                Y = 20
+            };
         }
     }
 }

@@ -16,6 +16,28 @@ namespace DKBasicEngine_1_0
             }
         }
 
+        public static double FindMaxZ(this List<I3Dimensional> list)
+        {
+            return list.Max(item => item.Z);
+        }
+
+        public static List<I3Dimensional> GetGameObjectsInView(this List<I3Dimensional> list, int Width, int Height, int XOffset, int YOffset)
+        {
+            List<I3Dimensional> retValue;
+
+            lock (list)
+            {
+                retValue = list.Where(item => IsInView(item, XOffset, YOffset, Width + 5, Height + 5)).ToList();
+            }
+
+            return retValue;
+        }
+
+        public static bool IsInView(this I3Dimensional obj, double x, double y, int Width, int Height)
+        {
+            return (obj.X + obj.width >= x - 5 && obj.X < x + Width && obj.Y + obj.height >= y - 5 && obj.Y < y + Height);
+        }
+
         public static bool IsEscapeSequence(this char letter)
         {
             switch (letter)

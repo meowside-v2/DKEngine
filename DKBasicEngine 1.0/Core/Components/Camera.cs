@@ -23,16 +23,19 @@ namespace DKBasicEngine_1_0
         private int numRenders = 0;
         private bool _Vsync = true;
 
-        private TextBlock fpsMeter = new TextBlock(1,
-                                                   -1,
-                                                   "GUI",
-                                                   TextBlock.HorizontalAlignment.Left,
-                                                   TextBlock.VerticalAlignment.Bottom,
-                                                   "0");
+        private TextBlock fpsMeter = new TextBlock(null)
+        {
+            X = 1,
+            Y = -1,
+            Z = 128,
+            VAlignment = TextBlock.VerticalAlignment.Bottom,
+            HAlignment = TextBlock.HorizontalAlignment.Left,
+            Text = "0"
+        };
 
         private byte[] toRenderData = new byte[3 * Engine.Render.RenderWidth * Engine.Render.RenderHeight];
 
-        public Scene sceneReference;
+        public IPage sceneReference { get { return Engine.Page; } }
         public List<I3Dimensional> GUI = new List<I3Dimensional>();
         public List<I3Dimensional> exclusiveReference = new List<I3Dimensional>();
 
@@ -134,7 +137,7 @@ namespace DKBasicEngine_1_0
             if (sceneReference != null)
                 lock (sceneReference)
                 {
-                    sceneReference.Render(Xoffset, Yoffset, _buffer, _rendered);
+                    ((ICore)sceneReference).Render(Xoffset, Yoffset, _buffer, _rendered);
                 }
 
             Buffer.BlockCopy(_buffer, 0, toRenderData, 0, _buffer.Count());

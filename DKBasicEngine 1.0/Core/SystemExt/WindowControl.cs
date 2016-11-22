@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public class WindowControl
+    public static class WindowControl
     {
         [StructLayout(LayoutKind.Sequential)]
         private struct COORD
@@ -36,9 +36,6 @@ namespace DKBasicEngine_1_0
 
         private static IntPtr hConsole = GetStdHandle(-11);
         private static COORD xy = new COORD(100, 100);
-        private readonly static int STD_OUTPUT_HANDLE = -11;
-        private readonly static int TMPF_TRUETYPE = 4;
-        private readonly static int LF_FACESIZE = 32;
         private static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
 
         internal static void WindowInit()

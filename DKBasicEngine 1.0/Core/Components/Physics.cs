@@ -20,13 +20,14 @@ namespace DKBasicEngine_1_0
             Fall
         };
 
-        Collider colliderReference;
+        
         GameObject Parent;
+        Collider colliderReference;
 
-        public Physics(GameObject Parent, Collider colliderReference)
+        public Physics(GameObject Parent)
         {
             this.Parent = Parent;
-            this.colliderReference = colliderReference;
+            this.colliderReference = Parent.collider;
         }
 
         public void Jump()

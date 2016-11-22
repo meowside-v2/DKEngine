@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,10 @@ namespace DKBasicEngine_1_0
 {
     public class TextBlock : ICore, I3Dimensional
     {
+        //I3Dimensional Parent;
+
+        protected bool _changed = false;
+
         protected double _x = 0;
         protected double _y = 0;
 
@@ -17,8 +22,7 @@ namespace DKBasicEngine_1_0
 
         protected HorizontalAlignment _HA;
         protected VerticalAlignment _VA;
-
-        protected string _stringText = "";
+        
         protected List<Letter> _text = new List<Letter>();
 
         protected double _scaleX = 1;
@@ -144,16 +148,18 @@ namespace DKBasicEngine_1_0
 
         public bool HasShadow { get; set; }
 
+        protected string _textStr = "";
+
         public virtual string Text
         {
             set
             {
-                Task.Factory.StartNew(() => TextRasterize(value));
+                _textStr = value;
+                _changed = true;
             }
-
             get
             {
-                return _stringText;
+                return _textStr;
             }
         }
 
@@ -208,114 +214,69 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public TextBlock() { }
-        public TextBlock(int X, int Y, int Z)
-            : this()
+        public TextBlock(IPage ParentPage)
         {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
+            this.Start();
+            if(ParentPage != null)
+                ParentPage.Model.Add(this);
         }
-        public TextBlock(int X, int Y, int Z, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
-            : this(X, Y, Z)
+        
+        public virtual void Start()
         {
-            this.Text = Text;
-
-            this.HAlignment = HAlignment;
-            this.VAlignment = VAlignment;
-        }
-        public TextBlock(int X, int Y, string Layer)
-            : this()
-        {
-            this.X = X;
-            this.Y = Y;
-
-            switch (Layer)
+            lock (Engine.ToUpdate)
             {
-                case "GUI":
-                    this.Z = 100;
-                    break;
-
-                case "Background":
-                    this.Z = 0;
-                    break;
+                Engine.ToUpdate.Add(this);
             }
         }
-        public TextBlock(int X, int Y, string Layer, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
-            : this(X, Y, Layer)
+        public virtual void Update()
         {
-            this.X = X;
-            this.Y = Y;
-
-            switch (Layer)
+            if (_changed)
             {
-                case "GUI":
-                    this.Z = 100;
-                    break;
+                List<Letter> retValue = new List<Letter>();
 
-                case "Background":
-                    this.Z = 0;
-                    break;
-            }
+                int Xoffset = 0;
 
-            this.Text = Text;
-
-            this.HAlignment = HAlignment;
-            this.VAlignment = VAlignment;
-        }
-
-        protected virtual void TextRasterize(string txt)
-        {
-            _stringText = txt;
-
-            List<Letter> retValue = new List<Letter>();
-
-            int Xoffset = 0;
-
-            foreach (char letter in txt)
-            {
-                if (letter == ' ')
+                foreach (char letter in Text)
                 {
-                    Xoffset += 3;
+                    if (letter == ' ')
+                    {
+                        Xoffset += 3;
+                    }
+
+                    else
+                    {
+                        retValue.Add(new Letter(this,
+                                            Xoffset,
+                                            0,
+                                            0,
+                                            Database.letterMaterial[(int)Database.font[Char.ToUpper(letter)]]));
+
+                        Xoffset += Database.letterMaterial[(int)Database.font[Char.ToUpper(letter)]].width + 1;
+                    }
                 }
 
-                else
+                lock (_text)
                 {
-                    retValue.Add(new Letter(this,
-                                        Xoffset,
-                                        0,
-                                        0,
-                                        Database.letterMaterial[(int)Database.font[Char.ToUpper(letter)]]));
-
-                    Xoffset += Database.letterMaterial[(int)Database.font[Char.ToUpper(letter)]].width + 1;
+                    _text = retValue;
                 }
+
+                VAlignment = _VA;
+                HAlignment = _HA;
+
+                _changed = false;
             }
-
-            _text = retValue;
-
-            VAlignment = _VA;
-            HAlignment = _HA;
-        }
-
-        public object DeepCopy()
-        {
-            TextBlock retVal = (TextBlock)this.MemberwiseClone();
-
-            retVal.Text = "";
-
-            foreach (Letter letter in _text.ToList())
-            {
-                retVal._text.Add((Letter)letter.DeepCopy());
-            }
-
-            return retVal;
         }
 
         public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
         {
+            List<Letter> reference;
 
+            lock (_text)
+            {
+                reference = _text.ToList();
+            }
 
-            foreach (Letter item in _text.FindAll(obj => Finder(obj, x, y)))
+            foreach (Letter item in reference.FindAll(obj => Finder(obj, x, y)))
             {
                 item.Render((int)(this.X - x), (int)(this.Y - y), imageBuffer, imageBufferKey);
                 if (HasShadow) item.Render((int)(this.X - x + 1), (int)(this.Y - y + 1), imageBuffer, imageBufferKey, Color.Black);

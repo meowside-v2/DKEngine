@@ -7,21 +7,24 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public class Scene : ICore
+    public class Scene : ICore, IPage
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
-        public List<I3Dimensional> Model = new List<I3Dimensional>();
+        public List<I3Dimensional> Model { get; private set; } = new List<I3Dimensional>();
 
-        public int PlayerSpawnX { get; set; }
-        public int PlayerSpawnY { get; set; }
-        public int PlayerSpawnZ { get; set; }
+        /*public int PlayerSpawnX { get; set; } = 0;
+        public int PlayerSpawnY { get; set; } = 0;
+        public int PlayerSpawnZ { get; set; } = 0;*/
 
-        public Scene() { }
+        public int FocusSelection { get; set; } = 0;
+        public List<IControl> PageControls { get; } = new List<IControl>();
+
+        public Scene() { this.Start(); }
 
         public enum Mode
         {
-            Game,
+            View,
             Edit
         }
 
@@ -46,11 +49,7 @@ namespace DKBasicEngine_1_0
             try
             {
                 this.Name = br.ReadString();
-
-                this.PlayerSpawnX = br.ReadInt32();
-                this.PlayerSpawnY = br.ReadInt32();
-                this.PlayerSpawnZ = br.ReadInt32();
-
+                
                 int temp_ModelCount = br.ReadInt32();
 
                 this.Model.Clear();
@@ -68,7 +67,7 @@ namespace DKBasicEngine_1_0
 
                 switch (mode)
                 {
-                    case Mode.Game:
+                    case Mode.View:
                         break;
 
                     case Mode.Edit:
@@ -86,6 +85,32 @@ namespace DKBasicEngine_1_0
             br.Close();
         }
 
+        public void Start()
+        {
+            lock (Engine.ToUpdate)
+            {
+                Engine.ToUpdate.Add(this);
+            }
+        }
+
+        public void Update()
+        {
+            if(PageControls.Count > 1)
+            {
+                if (Engine.Input.IsKeyPressed(ConsoleKey.UpArrow))
+                {
+                    if (FocusSelection > 0)
+                        FocusSelection--;
+                }
+
+                if (Engine.Input.IsKeyPressed(ConsoleKey.DownArrow))
+                {
+                    if (FocusSelection < PageControls.Count - 1)
+                        FocusSelection++;
+                }
+            }
+        }
+
         public object DeepCopy()
         {
             Scene temp = (Scene)MemberwiseClone();
@@ -96,19 +121,14 @@ namespace DKBasicEngine_1_0
 
         public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {
-            List<I3Dimensional> temp;
-
-            lock (Model)
-            {
-                temp = Model.ToList().Where(item => Finder(item, x, y)).ToList();
-            }
-
+            List<I3Dimensional> temp = Model.GetGameObjectsInView(Engine.Render.RenderWidth, Engine.Render.RenderHeight, x, y);
+            
             while (temp.Count > 0)
             {
                 if (BufferIsFull(bufferKey))
                     return;
 
-                double tempHeight = temp.Max(item => item.Z);
+                double tempHeight = temp.FindMaxZ();
                 List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
 
                 foreach (ICore item in toRender)
@@ -118,17 +138,6 @@ namespace DKBasicEngine_1_0
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
             }
-            //model.Render(x, y, bufferData, bufferKey);
-        }
-
-        private bool Finder(I3Dimensional obj, double x, double y)
-        {
-            return (obj.X + obj.width >= x && obj.X < x + Engine.Render.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Engine.Render.RenderHeight);
-        }
-
-        private bool FindBiggerZ(I3Dimensional item1, I3Dimensional item2)
-        {
-            return (item1.Z > item2.Z);
         }
 
         private bool BufferIsFull(bool[] key)

@@ -46,13 +46,15 @@
   <ItemGroup>
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
-    <Compile Include="Core\Components\Keyboard.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
     <Compile Include="Core\Exceptions\SceneInitFailedException.cs" />
     <Compile Include="Core\Interfaces\I3Dimensional.cs" />
+    <Compile Include="Core\Interfaces\IControl.cs" />
     <Compile Include="Core\Interfaces\ICore.cs" />
     <Compile Include="Core\Interfaces\IGraphics.cs" />
+    <Compile Include="Core\Interfaces\IPage.cs" />
+    <Compile Include="Core\SystemExt\Button.cs" />
     <Compile Include="Core\SystemExt\xRectangle.cs" />
     <Compile Include="Core\SystemExt\Letter.cs" />
     <Compile Include="Core\SystemExt\Extensions.cs" />

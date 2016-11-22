@@ -1,31 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public class TextBox : TextBlock
+    public class TextBox : TextBlock, IControl
     {
-        public TextBox()
-            : base()
-        { }
-        public TextBox(int X, int Y, int Z)
-            : base(X, Y, Z)
-        { }
-        public TextBox(int X, int Y, int Z, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
-            : base(X, Y, Z, HAlignment, VAlignment, Text)
-        { }
-        public TextBox(int X, int Y, string Layer)
-            : base(X, Y, Layer)
-        { }
-        public TextBox(int X, int Y, string Layer, HorizontalAlignment HAlignment, VerticalAlignment VAlignment, string Text)
-            : base(X, Y, Layer, HAlignment, VAlignment, Text)
-        { }
+        public bool IsFocused { get; set; }
 
-        private double _textXOffset = 0;
+        private int counter = 0;
+        private const int TimeOut = 10;
 
+        public TextBox(IPage ParentPage)
+            : base(ParentPage)
+        {
+            ParentPage.PageControls.Add(this);
+        }
+        
         public Type AllowedChars { get; set; }
 
         public enum Type
@@ -42,76 +36,59 @@ namespace DKBasicEngine_1_0
             {
                 if (TextControl(value))
                 {
-                    TextRasterize(value);
+                    _textStr = value;
                 }
             }
 
             get
             {
-                return _stringText;
+                return _textStr;
             }
         }
 
-        public void RemoveLastLetter()
+        public override void Update()
         {
-            if (this.Text.Length > 0)
+            if (IsFocused)
             {
-                this.Text = Text.Remove(Text.Length - 1, 1);
+
+                if (Console.KeyAvailable)
+                {
+
+                    if (counter == 0)
+                    {
+                        char key = Console.ReadKey(true).KeyChar;
+
+                        while (Console.KeyAvailable) Console.ReadKey();
+
+                        if(key == '\b')
+                        {
+                            if (Text.Length > 0)
+                            {
+                                Text = Text.Remove(Text.Length - 1, 1);
+                                _changed = true;
+                            }
+                        }
+
+                        else if (TextControl(key))
+                        {
+                            Text += key;
+                            _changed = true;
+                        }
+                    }
+
+                    counter++;
+
+                    if (counter > TimeOut) counter = 0;
+                }
+
+                else if (counter != 0)
+                    counter = 0;
             }
+
+            base.Update();
         }
 
-        protected override void TextRasterize(string txt)
-        {
-            if (txt.Length > _stringText.Length)
-            {
-                string temp = txt.Remove(0, _stringText.Length);
-
-                foreach (char letter in temp)
-                {
-                    if (letter == ' ')
-                    {
-                        _textXOffset += 3;
-                    }
-
-                    else
-                    {
-                        _text.Add(new Letter(this,
-                                            _textXOffset,
-                                            0,
-                                            0,
-                                            Database.letterMaterial[(int)Database.font[Char.ToUpper(letter)]]));
-
-                        _textXOffset += Database.letterMaterial[(int)Database.font[Char.ToUpper(letter)]].width + 1;
-                    }
-                }
-            }
-
-            else if (txt.Length < _stringText.Length)
-            {
-                int numberOfLettersToRemove = _stringText.Length - txt.Length;
-
-                for (int i = 0; i < numberOfLettersToRemove; i++)
-                {
-                    if (_stringText[_stringText.Length - 1] == ' ')
-                    {
-                        _textXOffset -= 3;
-                    }
-
-                    else
-                    {
-                        _textXOffset -= _text[_text.Count - 1].width + 1;
-                        _text.Remove(_text[_text.Count - 1]);
-                    }
-                }
-            }
-
-            VAlignment = _VA;
-            HAlignment = _HA;
-
-            _stringText = txt;
-        }
-
-        public bool TextControl(string key)
+        private bool TextControl(string key)
         {
             if (AllowedChars == Type.All)
                 return true;
@@ -124,6 +101,26 @@ namespace DKBasicEngine_1_0
 
             else if (AllowedChars == Type.AlphaNumerical)
                 return key.All(Char.IsLetterOrDigit);
+
+            return true;
+        }
+
+        private bool TextControl(char key)
+        {
+            if (key.IsEscapeSequence())
+                return false;
+
+            if (AllowedChars == Type.All)
+                return true;
+
+            else if (AllowedChars == Type.Alpha)
+                return Char.IsLetter(key);
+
+            else if (AllowedChars == Type.Numerical)
+                return Char.IsNumber(key);
+
+            else if (AllowedChars == Type.AlphaNumerical)
+                return Char.IsLetterOrDigit(key);
 
             return true;
         }

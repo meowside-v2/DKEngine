@@ -14,6 +14,8 @@ namespace DKBasicEngine_1_0
 
         List<I3Dimensional> border = new List<I3Dimensional>();
 
+        //I3Dimensional Parent;
+
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
@@ -94,10 +96,14 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public object DeepCopy()
+        public void Start()
         {
-            return this.MemberwiseClone();
+            lock (Engine.ToUpdate)
+            {
+                Engine.ToUpdate.Add(this);
+            }
         }
+        public void Update() { }
 
         public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
         {

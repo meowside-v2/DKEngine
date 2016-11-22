@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public interface ICore
+    public interface IPage
     {
-        void Render(int x, int y, byte[] bufferData, bool[] bufferKey);
-        void Start();
-        void Update();
+        int FocusSelection { get; set; }
+        List<IControl> PageControls { get; }
+        List<I3Dimensional> Model { get; }
     }
 }

@@ -12,7 +12,7 @@ namespace DKBasicEngine_1_0
 {
     public static class Database
     {
-        public enum Font
+        internal enum Font
         {
             Num0,
             Num1,
@@ -55,7 +55,7 @@ namespace DKBasicEngine_1_0
             NumberOfTypes
         };
 
-        public static Dictionary<char, Font> font = new Dictionary<char, Font>()
+        internal static Dictionary<char, Font> font = new Dictionary<char, Font>()
         {
             { '0' , Font.Num0 },
             { '1' , Font.Num1 },
@@ -97,7 +97,7 @@ namespace DKBasicEngine_1_0
             { ' ' , Font.space }
         };
 
-        public static List<Material> letterMaterial = new List<Material>();
+        internal static List<Material> letterMaterial = new List<Material>();
 
         private static void CreateLetterReferences()
         {
@@ -122,14 +122,14 @@ namespace DKBasicEngine_1_0
 
         private static List<Material> GameObjectsMaterial = new List<Material>();
 
-        public static void InitDatabase()
+        internal static void InitDatabase()
         {
-            AddNewGameObject("border", new Material(Resources.border));
+            AddNewGameObjectMaterial("border", new Material(Resources.border));
 
             CreateLetterReferences();
         }
 
-        public static void AddNewGameObject(string ObjectName, Material Object)
+        public static void AddNewGameObjectMaterial(string ObjectName, Material Object)
         {
             GameObjects.Add(ObjectName, GameObjectsMaterial.Count);
             GameObjectsMaterial.Add(Object);
@@ -149,6 +149,32 @@ namespace DKBasicEngine_1_0
             }
 
             return retValue;
+        }
+
+        public static Material GetGameObjectMaterial(int position)
+        {
+            Material retValue = null;
+
+            try
+            {
+                retValue = GameObjectsMaterial[position];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Object not found\n" + ex);
+            }
+
+            return retValue;
+        }
+
+        public static int GetMaterialDatabasePosition(string Key)
+        {
+            return GameObjects[Key];
+        }
+
+        public static string GetMaterialDatabaseKey(int Position)
+        {
+            return GameObjects.FirstOrDefault(x => x.Value == Position).Key;
         }
     }
 }
