@@ -19,12 +19,19 @@ namespace DKEngine
             b = new Button(this)
             {
                 Text = "GG",
-                OnClick = () => Debug.WriteLine("ButtonJede")
+                OnClick = () => Debug.WriteLine("ButtonJede"),
+                width = 100,
+                height = 20,
+                ScaleX = 4f
             };
 
             tx = new TextBox(this)
             {
-                Y = 20
+                Y = 20,
+                width = 50,
+                height = 100,
+                ScaleX = 2f,
+                Foreground = System.Drawing.Color.FromArgb(0xff, 0x15, 0xfd, 0x50)
             };
         }
     }

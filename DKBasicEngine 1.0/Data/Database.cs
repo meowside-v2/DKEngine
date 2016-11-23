@@ -12,7 +12,7 @@ namespace DKBasicEngine_1_0
 {
     public static class Database
     {
-        internal enum Font
+        private enum Font
         {
             Num0,
             Num1,
@@ -25,37 +25,60 @@ namespace DKBasicEngine_1_0
             Num8,
             Num9,
             A,
+            AngleBracketLeft,
+            AngleBracketRight,
+            ArrowToLeft,
+            ArrowToRight,
+            ArrowToTop,
             B,
+            Backslash,
+            BraceLeft,
+            BraceRight,
+            BracketLeft,
+            BracketRight,
             C,
+            Comma,
             D,
+            Dot,
             E,
+            Equals,
+            ExclamationMark,
             F,
             G,
             H,
+            Hashtag,
             I,
             J,
             K,
             L,
             M,
+            Minus,
             N,
             O,
             P,
+            Percent,
             Q,
+            QuestionMark,
+            QuotationMarks,
             R,
             S,
+            Semicolon,
+            Slash,
+            StarLarge,
+            StarSmall,
             T,
             U,
+            Underscore,
             V,
             W,
             X,
             Y,
             Z,
-            minus,
-            space,
             NumberOfTypes
+                
         };
 
-        internal static Dictionary<char, Font> font = new Dictionary<char, Font>()
+        private static Dictionary<char, Font> font = new Dictionary<char, Font>()
         {
             { '0' , Font.Num0 },
             { '1' , Font.Num1 },
@@ -93,11 +116,33 @@ namespace DKBasicEngine_1_0
             { 'X' , Font.X },
             { 'Y' , Font.Y },
             { 'Z' , Font.Z },
-            { '-' , Font.minus },
-            { ' ' , Font.space }
+            { '-' , Font.Minus },
+            { '?' , Font.QuestionMark },
+            { '!' , Font.ExclamationMark },
+            { '.' , Font.Dot },
+            { ',' , Font.Comma },
+            { '[' , Font.AngleBracketLeft },
+            { ']' , Font.AngleBracketRight },
+            { '>' , Font.ArrowToRight },
+            { '<' , Font.ArrowToLeft },
+            { '^' , Font.ArrowToTop },
+            { '{' , Font.BraceLeft },
+            { '}' , Font.BraceRight },
+            { '(' , Font.BracketLeft },
+            { ')' , Font.BracketRight },
+            { '=' , Font.Equals },
+            { '#' , Font.Hashtag },
+            { '%' , Font.Percent },
+            { '"' , Font.QuotationMarks },
+            { ';' , Font.Semicolon },
+            //{ '*' , Font.StarLarge },
+            { '*' , Font.StarSmall },
+            { '_' , Font.Underscore },
+            { '/' , Font.Slash },
+            { '\\' , Font.Backslash }
         };
 
-        internal static List<Material> letterMaterial = new List<Material>();
+        private static List<Material> letterMaterial = new List<Material>();
 
         private static void CreateLetterReferences()
         {
@@ -107,8 +152,7 @@ namespace DKBasicEngine_1_0
 
                 for (int index = 0; index < lenght; index++)
                 {
-                    int temp = br.ReadInt32();
-                    byte[] byteArray = br.ReadBytes(temp);
+                    byte[] byteArray = br.ReadBytes(br.ReadInt32());
 
                     using (MemoryStream ms = new MemoryStream(byteArray))
                     {
@@ -127,6 +171,22 @@ namespace DKBasicEngine_1_0
             AddNewGameObjectMaterial("border", new Material(Resources.border));
 
             CreateLetterReferences();
+        }
+
+        public static Material GetLetter(this char ch)
+        {
+            Material retValue = null;
+
+            try
+            {
+                retValue = letterMaterial[(int)font[Char.ToUpper(ch)]];
+            }
+            catch
+            {
+                retValue = letterMaterial[(int)font['?']];
+            }
+
+            return retValue;
         }
 
         public static void AddNewGameObjectMaterial(string ObjectName, Material Object)

@@ -17,75 +17,53 @@ namespace DKBasicEngine_1_0
 
         public double X
         {
-            get
-            {
-                return _x * Parent.ScaleX;
-            }
-            set
-            {
-                _x = value;
-            }
+            get { return _x * Parent.ScaleX; }
+            set { _x = value; }
         }
         public double Y
         {
-            get
-            {
-                return _y * Parent.ScaleY;
-            }
-            set
-            {
-                _y = value;
-            }
+            get { return _y * Parent.ScaleY; }
+            set { _y = value; }
         }
         public double Z { get; set; }
 
         public double width
         {
-            get
-            {
-                return model.width * Parent.ScaleX;
-            }
+            get { return model.width * Parent.ScaleX; }
+            set { }
         }
 
         public double height
         {
-            get
-            {
-                return model.height * Parent.ScaleY;
-            }
+            get { return model.height * Parent.ScaleY; }
+            set { }
         }
 
-        public double depth { get; }
+        public double depth
+        {
+            get { return 0; }
+            set { }
+        }
 
         public double ScaleX
         {
-            get
-            {
-                return Parent.ScaleX;
-            }
-
+            get { return Parent.ScaleX; }
             set { }
         }
 
         public double ScaleY
         {
-            get
-            {
-                return Parent.ScaleY;
-            }
-
+            get { return Parent.ScaleY; }
             set { }
         }
 
         public double ScaleZ
         {
-            get
-            {
-                return Parent.ScaleZ;
-            }
-
+            get { return Parent.ScaleZ; }
             set { }
         }
+
+        public bool LockScaleRatio { get; set; } = true;
 
         public Material model { get; set; }
 

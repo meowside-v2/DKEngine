@@ -41,24 +41,18 @@ namespace DKBasicEngine_1_0
 
         public double width
         {
-            get
-            {
-                return (model == null ? 0 : model.width * ScaleX);
-            }
+            get { return (model == null ? 0 : model.width * ScaleX); }
+            set { }
         }
         public double height
         {
-            get
-            {
-                return (model == null ? 0 : model.height * ScaleY);
-            }
+            get { return (model == null ? 0 : model.height * ScaleY); }
+            set { }
         }
         public double depth
         {
-            get
-            {
-                return 0;
-            }
+            get { return 0; }
+            set { }
         }
 
         public double ScaleX
@@ -69,11 +63,20 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleX = 0.1f;
+                if(value != _scaleX)
+                {
+                    if (value < 0.1f)
+                        _scaleX = 0.1f;
 
-                else
-                    _scaleX = value;
+                    else
+                        _scaleX = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleZ = _scaleX;
+                        _scaleY = _scaleX;
+                    }
+                }
             }
         }
 
@@ -85,11 +88,20 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleY = 0.1f;
+                if(value != _scaleY)
+                {
+                    if (value < 0.1f)
+                        _scaleY = 0.1f;
 
-                else
-                    _scaleY = value;
+                    else
+                        _scaleY = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleX = _scaleY;
+                        _scaleZ = _scaleY;
+                    }
+                }
             }
         }
 
@@ -101,13 +113,24 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleZ = 0.1f;
+                if(value != _scaleZ)
+                {
+                    if (value < 0.1f)
+                        _scaleZ = 0.1f;
 
-                else
-                    _scaleZ = value;
+                    else
+                        _scaleZ = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleX = _scaleZ;
+                        _scaleY = _scaleZ;
+                    }
+                }
             }
         }
+
+        public bool LockScaleRatio { get; set; } = true;
 
         public int AnimationState { get; set; } = 0;
         

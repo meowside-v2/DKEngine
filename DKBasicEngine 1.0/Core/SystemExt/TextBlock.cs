@@ -28,6 +28,8 @@ namespace DKBasicEngine_1_0
         protected double _scaleX = 1;
         protected double _scaleY = 1;
         protected double _scaleZ = 1;
+        
+        public Color? Foreground { get; set; }
 
         public enum HorizontalAlignment
         {
@@ -51,51 +53,57 @@ namespace DKBasicEngine_1_0
 
         public double X
         {
-            get
-            {
-                return _x + horiOffset;
-            }
-
-            set
-            {
-                _x = value;
-            }
+            get { return _x + horiOffset; }
+            set { _x = value; }
         }
         public double Y
         {
-            get
-            {
-                return _y + vertOffset;
-            }
-
-            set
-            {
-                _y = value;
-            }
+            get { return _y + vertOffset; }
+            set { _y = value; }
         }
         public double Z { get; set; }
 
+        private double _width = 0;
+        private double _height = 0;
         public double width
         {
-            get
+            get { return _width * ScaleX; }
+            set
             {
-                return (_text.Count > 0 ? _text[_text.Count - 1].X + _text[_text.Count - 1].width - 1 : 0);
+                if(value != _width)
+                {
+                    if (value < 0)
+                        _width = value;
+
+                    else
+                        _width = value;
+
+                    _changed = true;
+                }
+            }
+        }
+        public double height
+        {
+            get { return _height * ScaleY; }
+            set
+            {
+                if (value != _height)
+                {
+                    if (value < 0)
+                        _height = value;
+
+                    else
+                        _height = value;
+
+                    _changed = true;
+                }
             }
         }
 
-        public double height
-        {
-            get
-            {
-                return 5 * ScaleY;
-            }
-        }
         public double depth
         {
-            get
-            {
-                return 0;
-            }
+            get { return 0; }
+            set { }
         }
 
         public double ScaleX
@@ -106,11 +114,20 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleX = 0.1f;
+                if (value != _scaleX)
+                {
+                    if (value < 0.1f)
+                        _scaleX = 0.1f;
 
-                else
-                    _scaleX = value;
+                    else
+                        _scaleX = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleZ = _scaleX;
+                        _scaleY = _scaleX;
+                    }
+                }
             }
         }
 
@@ -122,11 +139,20 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleY = 0.1f;
+                if (value != _scaleY)
+                {
+                    if (value < 0.1f)
+                        _scaleY = 0.1f;
 
-                else
-                    _scaleY = value;
+                    else
+                        _scaleY = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleX = _scaleY;
+                        _scaleZ = _scaleY;
+                    }
+                }
             }
         }
 
@@ -138,28 +164,39 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleZ = 0.1f;
+                if (value != _scaleZ)
+                {
+                    if (value < 0.1f)
+                        _scaleZ = 0.1f;
 
-                else
-                    _scaleZ = value;
+                    else
+                        _scaleZ = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleX = _scaleZ;
+                        _scaleY = _scaleZ;
+                    }
+                }
             }
         }
+
+        public bool LockScaleRatio { get; set; } = true;
 
         public bool HasShadow { get; set; }
 
         protected string _textStr = "";
-
+        
         public virtual string Text
         {
+            get { return _textStr; }
             set
             {
-                _textStr = value;
-                _changed = true;
-            }
-            get
-            {
-                return _textStr;
+                if(value.All(ch => !ch.IsUnsupportedEscapeSequence()))
+                {
+                    _textStr = value;
+                    _changed = true;
+                }
             }
         }
 
@@ -167,24 +204,29 @@ namespace DKBasicEngine_1_0
         {
             set
             {
-                _HA = value;
-
-                switch (value)
+                if(value != _HA)
                 {
-                    case HorizontalAlignment.Left:
-                        horiOffset = 0;
-                        break;
+                    _HA = value;
 
-                    case HorizontalAlignment.Center:
-                        horiOffset = (Engine.Render.RenderWidth - this.width) / 2;
-                        break;
+                    switch (value)
+                    {
+                        case HorizontalAlignment.Left:
+                            horiOffset = 0;
+                            break;
 
-                    case HorizontalAlignment.Right:
-                        horiOffset = Engine.Render.RenderWidth - this.width;
-                        break;
+                        case HorizontalAlignment.Center:
+                            horiOffset = (Engine.Render.RenderWidth - this.width) / 2;
+                            break;
 
-                    default:
-                        break;
+                        case HorizontalAlignment.Right:
+                            horiOffset = Engine.Render.RenderWidth - this.width;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    _changed = true;
                 }
             }
         }
@@ -192,24 +234,29 @@ namespace DKBasicEngine_1_0
         {
             set
             {
-                _VA = value;
-
-                switch (value)
+                if(value != _VA)
                 {
-                    case VerticalAlignment.Top:
-                        vertOffset = 0;
-                        break;
+                    _VA = value;
 
-                    case VerticalAlignment.Center:
-                        vertOffset = (Engine.Render.RenderHeight - this.height) / 2;
-                        break;
+                    switch (value)
+                    {
+                        case VerticalAlignment.Top:
+                            vertOffset = 0;
+                            break;
 
-                    case VerticalAlignment.Bottom:
-                        vertOffset = Engine.Render.RenderHeight - this.height;
-                        break;
+                        case VerticalAlignment.Center:
+                            vertOffset = (Engine.Render.RenderHeight - this.height) / 2;
+                            break;
 
-                    default:
-                        break;
+                        case VerticalAlignment.Bottom:
+                            vertOffset = Engine.Render.RenderHeight - this.height;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    _changed = true;
                 }
             }
         }
@@ -235,6 +282,7 @@ namespace DKBasicEngine_1_0
                 List<Letter> retValue = new List<Letter>();
 
                 int Xoffset = 0;
+                int Yoffset = 0;
 
                 foreach (char letter in Text)
                 {
@@ -245,13 +293,29 @@ namespace DKBasicEngine_1_0
 
                     else
                     {
+                        if(letter == '\r' || letter == '\n')
+                        {
+                            Xoffset = 0;
+                            Yoffset += 6;
+
+                            continue;
+                        }
+
+                        Material newLetterMaterial = Database.GetLetter(letter);
+
+                        if(Xoffset + newLetterMaterial.width > this.width)
+                        {
+                            Xoffset = 0;
+                            Yoffset += 6;
+                        }
+
                         retValue.Add(new Letter(this,
                                             Xoffset,
+                                            Yoffset,
                                             0,
-                                            0,
-                                            Database.letterMaterial[(int)Database.font[Char.ToUpper(letter)]]));
+                                            newLetterMaterial));
 
-                        Xoffset += Database.letterMaterial[(int)Database.font[Char.ToUpper(letter)]].width + 1;
+                        Xoffset += newLetterMaterial.width + 1;
                     }
                 }
 
@@ -278,7 +342,7 @@ namespace DKBasicEngine_1_0
 
             foreach (Letter item in reference.FindAll(obj => Finder(obj, x, y)))
             {
-                item.Render((int)(this.X - x), (int)(this.Y - y), imageBuffer, imageBufferKey);
+                item.Render((int)(this.X - x), (int)(this.Y - y), imageBuffer, imageBufferKey, Foreground ?? Color.White);
                 if (HasShadow) item.Render((int)(this.X - x + 1), (int)(this.Y - y + 1), imageBuffer, imageBufferKey, Color.Black);
             }
         }

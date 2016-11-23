@@ -32,11 +32,20 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleX = 0.1f;
+                if (value != _scaleX)
+                {
+                    if (value < 0.1f)
+                        _scaleX = 0.1f;
 
-                else
-                    _scaleX = value;
+                    else
+                        _scaleX = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleZ = _scaleX;
+                        _scaleY = _scaleX;
+                    }
+                }
             }
         }
 
@@ -48,11 +57,20 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleY = 0.1f;
+                if (value != _scaleY)
+                {
+                    if (value < 0.1f)
+                        _scaleY = 0.1f;
 
-                else
-                    _scaleY = value;
+                    else
+                        _scaleY = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleX = _scaleY;
+                        _scaleZ = _scaleY;
+                    }
+                }
             }
         }
 
@@ -64,13 +82,24 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                if (value < 0.1f)
-                    _scaleZ = 0.1f;
+                if (value != _scaleZ)
+                {
+                    if (value < 0.1f)
+                        _scaleZ = 0.1f;
 
-                else
-                    _scaleZ = value;
+                    else
+                        _scaleZ = value;
+
+                    if (LockScaleRatio)
+                    {
+                        _scaleX = _scaleZ;
+                        _scaleY = _scaleZ;
+                    }
+                }
             }
         }
+
+        public bool LockScaleRatio { get; set; } = true;
 
         public xRectangle(int x, int y, int z, int width, int height)
         {

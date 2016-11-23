@@ -204,7 +204,10 @@ namespace DKBasicEngine_1_0
                             {
                                 Color color = (Color)clr;
 
-                                if (color.A != 0)
+                                int offColumn = (int)column;
+                                int offRow = (int)row;
+
+                                if (colorMapA[offColumn, offRow, animationState] != 0)
                                 {
                                     imageBuffer[offset] = color.B;
                                     imageBuffer[offset + 1] = color.G;

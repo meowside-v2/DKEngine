@@ -8,9 +8,9 @@ namespace DKBasicEngine_1_0
 {
     public interface I3Dimensional
     {
-        double width { get; }
-        double height { get; }
-        double depth { get; }
+        double width { get; set; }
+        double height { get; set; }
+        double depth { get; set; }
 
         double X { get; set; }
         double Y { get; set; }
@@ -19,5 +19,7 @@ namespace DKBasicEngine_1_0
         double ScaleX { get; set; }
         double ScaleY { get; set; }
         double ScaleZ { get; set; }
+
+        bool LockScaleRatio { get; set; }
     }
 }

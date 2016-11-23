@@ -38,7 +38,7 @@ namespace DKBasicEngine_1_0
             return (obj.X + obj.width >= x - 5 && obj.X < x + Width && obj.Y + obj.height >= y - 5 && obj.Y < y + Height);
         }
 
-        public static bool IsEscapeSequence(this char letter)
+        public static bool IsUnsupportedEscapeSequence(this char letter)
         {
             switch (letter)
             {
@@ -54,11 +54,11 @@ namespace DKBasicEngine_1_0
                 case '\f':
                     return true;
 
-                case '\n':
-                    return true;
+                /*case '\n':
+                    return true;*/
 
-                case '\r':
-                    return true;
+                /*case '\r':
+                    return true;*/
 
                 case '\t':
                     return true;
