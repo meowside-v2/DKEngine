@@ -12,7 +12,7 @@ namespace DKBasicEngine_1_0
         public bool IsFocused { get; set; }
         private bool IsHeld { get; set; }
 
-        public Button(IPage ParentPage)
+        public Button(Scene ParentPage)
             : base(ParentPage)
         {
             ParentPage.PageControls.Add(this);
@@ -26,7 +26,7 @@ namespace DKBasicEngine_1_0
             {
                 if (IsFocused && !IsHeld)
                 {
-                    OnClick.Invoke();
+                    OnClick?.Invoke();
                     IsHeld = true;
                 }
             }

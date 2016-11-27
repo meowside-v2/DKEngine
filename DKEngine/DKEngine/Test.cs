@@ -31,7 +31,8 @@ namespace DKEngine
                 width = 50,
                 height = 100,
                 ScaleX = 2f,
-                Foreground = System.Drawing.Color.FromArgb(0xff, 0x15, 0xfd, 0x50)
+                Foreground = System.Drawing.Color.FromArgb(0xff, 0x15, 0xfd, 0x50),
+                HAlignment = TextBlock.HorizontalAlignment.Right
             };
         }
     }

@@ -8,7 +8,7 @@ namespace DKBasicEngine_1_0
 {
     public interface ICore
     {
-        void Render(int x, int y, byte[] bufferData, bool[] bufferKey);
+        void Render();
         void Start();
         void Update();
     }

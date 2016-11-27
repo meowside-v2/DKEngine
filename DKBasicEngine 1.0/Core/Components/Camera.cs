@@ -14,15 +14,18 @@ namespace DKBasicEngine_1_0
     public class Camera
     {
 
-        public int Xoffset { set; get; }
-        public int Yoffset { set; get; }
+        public double Xoffset { set; get; }
+        public double Yoffset { set; get; }
+
+        public double RenderXOffset = 0;
+        public double RenderYOffset = 0;
 
         private readonly static int MAX_FRAME_RATE = 60;    // Frames per Second
         private const short sampleSize = 100;
         private int lastTime = 0;
         private int numRenders = 0;
         private bool _Vsync = true;
-
+        
         private TextBlock fpsMeter = new TextBlock(null)
         {
             X = 1,
@@ -112,35 +115,40 @@ namespace DKBasicEngine_1_0
 
         internal void BufferImage()
         {
-            byte[] _buffer = new byte[3 * Engine.Render.RenderHeight * Engine.Render.RenderWidth];
-            bool[] _rendered = new bool[Engine.Render.RenderHeight * Engine.Render.RenderWidth];
-            
-            Array.Clear(_buffer, 0, _buffer.Length);
-            Array.Clear(_rendered, 0, _rendered.Length);
+            Array.Clear(Engine.Render.imageBuffer, 0, Engine.Render.imageBuffer.Length);
+            Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
+
+            RenderXOffset = 0;
+            RenderYOffset = 0;
 
             lock (GUI)
             {
+                
+
                 foreach (ICore item in GUI)
                 {
-                    item.Render(0, 0, _buffer, _rendered);
+                    item.Render();
                 }
             }
+
+            RenderXOffset = Xoffset;
+            RenderYOffset = Yoffset;
 
             lock (exclusiveReference)
             {
                 foreach (ICore item in exclusiveReference)
                 {
-                    item.Render(Xoffset, Yoffset, _buffer, _rendered);
+                    item.Render();
                 }
             }
 
             if (sceneReference != null)
                 lock (sceneReference)
                 {
-                    ((ICore)sceneReference).Render(Xoffset, Yoffset, _buffer, _rendered);
+                    ((ICore)sceneReference).Render();
                 }
 
-            Buffer.BlockCopy(_buffer, 0, toRenderData, 0, _buffer.Count());
+            Buffer.BlockCopy(Engine.Render.imageBuffer, 0, toRenderData, 0, Engine.Render.imageBuffer.Length);
 
             int endRender = Environment.TickCount - Engine.UpdateStartTime;
             

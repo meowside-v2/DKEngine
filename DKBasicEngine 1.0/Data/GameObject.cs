@@ -7,10 +7,18 @@ namespace DKBasicEngine_1_0
 {
     public class GameObject : ICore, I3Dimensional, IGraphics
     {
+        I3Dimensional Parent;
+
+        public bool HasShadow { get; set; }
+
         public Collider collider;
+
         protected double _scaleX = 1;
         protected double _scaleY = 1;
         protected double _scaleZ = 1;
+
+        protected double _x = 0;
+        protected double _y = 0;
 
         protected string _typeName = "";
 
@@ -35,18 +43,26 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public double X { get; set; }
-        public double Y { get; set; }
+        public double X
+        {
+            get { return (_x + Parent.X) * (Parent.ScaleX * this.ScaleX); }
+            set { _x = value; }
+        }
+        public double Y
+        {
+            get { return (_y + Parent.Y) * (Parent.ScaleY * this.ScaleY); }
+            set { _y = value; }
+        }
         public double Z { get; set; }
 
         public double width
         {
-            get { return (model == null ? 0 : model.width * ScaleX); }
+            get { return (model == null ? 0 : model.width * ScaleX * Parent.ScaleX); }
             set { }
         }
         public double height
         {
-            get { return (model == null ? 0 : model.height * ScaleY); }
+            get { return (model == null ? 0 : model.height * ScaleY * Parent.ScaleY); }
             set { }
         }
         public double depth
@@ -136,11 +152,13 @@ namespace DKBasicEngine_1_0
         
         public Material model { get; set; }
 
-        public GameObject()
+        public GameObject(I3Dimensional Parent)
         {
             this.X = 0;
             this.Y = 0;
             this.Z = 0;
+
+            this.Parent = Parent;
 
             this.Start();
 
@@ -156,14 +174,9 @@ namespace DKBasicEngine_1_0
         public virtual void Update()
         { }
 
-        public object DeepCopy()
+        public void Render()
         {
-            return this.MemberwiseClone();
-        }
-
-        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
-        {
-            if (model != null) model.Render((int)(X - x), (int)(Y - y), AnimationState, bufferData, bufferKey, ScaleX, ScaleY);
+            model?.Render(this);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace DKBasicEngine_1_0
 
                 this.Model.Clear();
 
-                for (int count = 0; count < temp_ModelCount; count++)
+                /*for (int count = 0; count < temp_ModelCount; count++)
                 {
                     Model.Add(new GameObject()
                                 {
@@ -63,7 +63,7 @@ namespace DKBasicEngine_1_0
                                     Y = br.ReadInt32(),
                                     Z = br.ReadInt32()
                                 });
-                }
+                }*/
 
                 switch (mode)
                 {
@@ -119,13 +119,13 @@ namespace DKBasicEngine_1_0
             return temp;
         }
 
-        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
+        public void Render()
         {
-            List<I3Dimensional> temp = Model.GetGameObjectsInView(Engine.Render.RenderWidth, Engine.Render.RenderHeight, x, y);
+            List<I3Dimensional> temp = Model.GetGameObjectsInView();
             
             while (temp.Count > 0)
             {
-                if (BufferIsFull(bufferKey))
+                if (BufferIsFull(Engine.Render.imageBufferKey))
                     return;
 
                 double tempHeight = temp.FindMaxZ();
@@ -133,7 +133,7 @@ namespace DKBasicEngine_1_0
 
                 foreach (ICore item in toRender)
                 {
-                    item.Render(x, y, bufferData, bufferKey);
+                    item.Render();
                 }
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);

@@ -16,7 +16,7 @@ namespace DKBasicEngine_1_0
 
         private short MaxTextLenght = 64;
 
-        public TextBox(IPage ParentPage)
+        public TextBox(Scene ParentPage)
             : base(ParentPage)
         {
             ParentPage.PageControls.Add(this);
@@ -51,15 +51,7 @@ namespace DKBasicEngine_1_0
                 return _textStr;
             }
         }
-
         
-        //
-        //  TO DO
-        //
-        //  Add cursor
-        //  Add position deletion with cursor
-        //
-
         public override void Update()
         {
             if (IsFocused)

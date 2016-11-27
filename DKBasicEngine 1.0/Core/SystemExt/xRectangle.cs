@@ -114,14 +114,14 @@ namespace DKBasicEngine_1_0
 
             for (int i = 0; i <= width + 8; i += 8)
             {
-                border.Add(new Border() { X = X + i, Y = Y, Z = this.Z });
-                border.Add(new Border() { X = X + i, Y = Y + height + 8, Z = this.Z });
+                border.Add(new Border(this) { X = i, Z = this.Z });
+                border.Add(new Border(this) { X = i, Y = height + 8, Z = this.Z });
             }
 
             for (int i = 8; i <= height; i += 8)
             {
-                border.Add(new Border() { X = X, Y = Y + i, Z = this.Z });
-                border.Add(new Border() { X = X + width + 8, Y = Y + i, Z = this.Z });
+                border.Add(new Border(this) { Y = i, Z = this.Z });
+                border.Add(new Border(this) { X = width + 8, Y = i, Z = this.Z });
             }
         }
 
@@ -134,18 +134,18 @@ namespace DKBasicEngine_1_0
         }
         public void Update() { }
 
-        public void Render(int x, int y, byte[] bufferData, bool[] bufferKey)
+        public void Render()
         {
             List<I3Dimensional> temp;
 
             lock (border)
             {
-                temp = border.Where(item => Finder(item, x, y)).ToList();
+                temp = border.Where(item => item.IsInView()).ToList();
             }
 
             while (temp.Count > 0)
             {
-                if (BufferIsFull(bufferKey))
+                if (BufferIsFull(Engine.Render.imageBufferKey))
                     return;
 
                 double tempHeight = temp.Max(item => item.Z);
@@ -153,22 +153,11 @@ namespace DKBasicEngine_1_0
 
                 foreach (ICore item in toRender)
                 {
-                    item.Render(x, y, bufferData, bufferKey);
+                    item.Render();
                 }
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
             }
-            //model.Render(x, y, bufferData, bufferKey);
-        }
-
-        private bool Finder(I3Dimensional obj, double x, double y)
-        {
-            return (obj.X + obj.width >= x && obj.X < x + Engine.Render.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Engine.Render.RenderHeight);
-        }
-
-        private bool FindBiggerZ(I3Dimensional item1, I3Dimensional item2)
-        {
-            return (item1.Z > item2.Z);
         }
 
         private bool BufferIsFull(bool[] key)

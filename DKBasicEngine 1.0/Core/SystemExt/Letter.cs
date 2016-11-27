@@ -10,19 +10,27 @@ namespace DKBasicEngine_1_0
     public class Letter : ICore, I3Dimensional, IGraphics
     {
 
-        I3Dimensional Parent;
+        TextBlock Parent;
 
-        private double _x;
-        private double _y;
+        private double _x = 0;
+        private double _y = 0;
 
+        public bool HasShadow
+        {
+            get { return Parent.HasShadow; }
+            set { }
+        }
+
+        public bool _IsVisble { get; set; }
+        
         public double X
         {
-            get { return _x * Parent.ScaleX; }
+            get { return _x * Parent.ScaleX + Parent.X; }
             set { _x = value; }
         }
         public double Y
         {
-            get { return _y * Parent.ScaleY; }
+            get { return _y * Parent.ScaleY + Parent.Y; }
             set { _y = value; }
         }
         public double Z { get; set; }
@@ -95,14 +103,14 @@ namespace DKBasicEngine_1_0
             return this.MemberwiseClone();
         }
 
-        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
+        public void Render()
         {
-            model.Render((int)(X + x), (int)(Y + y), 0, imageBuffer, imageBufferKey, Parent.ScaleX, Parent.ScaleY);
+            model?.Render(this);
         }
 
-        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey, Color? clr)
+        public void Render(Color? clr)
         {
-            model.Render((int)(X + x), (int)(Y + y), 0, imageBuffer, imageBufferKey, ScaleX, ScaleY, clr);
+            model?.Render(this, clr);
         }
     }
 }

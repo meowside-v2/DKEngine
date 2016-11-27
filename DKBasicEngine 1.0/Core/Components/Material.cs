@@ -136,13 +136,20 @@ namespace DKBasicEngine_1_0
             return this.MemberwiseClone();
         }
 
-        public void Render(int x, int y, int animationState, byte[] imageBuffer, bool[] imageBufferKey, double scaleX, double scaleY, Color? clr = null)
+        public void Render(I3Dimensional Parent, Color? clr = null)
         {
             int rowInBuffer = 0;
             int columnInBuffer = 0;
 
-            double plusX = 1 / scaleX;
-            double plusY = 1 / scaleY;
+            double plusX = 1 / Parent.ScaleX;
+            double plusY = 1 / Parent.ScaleY;
+
+            int AnimationState = ((IGraphics)Parent).AnimationState;
+            bool HasShadow = ((IGraphics)Parent).HasShadow;
+
+            double x = Parent.X;
+            double y = Parent.Y;
+
 
             if (clr == null)
             {
@@ -156,23 +163,23 @@ namespace DKBasicEngine_1_0
 
                         if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            int offset = (((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
-                            int keyOffset = ((y + rowInBuffer) * Engine.Render.RenderWidth + x + columnInBuffer);
+                            int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                            int keyOffset = (int)((y + rowInBuffer) * Engine.Render.RenderWidth + x + columnInBuffer);
 
-                            if (!imageBufferKey[keyOffset])
+                            if (!Engine.Render.imageBufferKey[keyOffset])
                             {
                                 //Color temp = colorMap[(int)column, (int)row, animationState];
 
                                 int offColumn = (int)column;
                                 int offRow = (int)row;
 
-                                if (colorMapA[offColumn, offRow, animationState] != 0)
+                                if (colorMapA[offColumn, offRow, AnimationState] != 0)
                                 {
-                                    imageBuffer[offset] = colorMapB[offColumn, offRow, animationState];
-                                    imageBuffer[offset + 1] = colorMapG[offColumn, offRow, animationState];
-                                    imageBuffer[offset + 2] = colorMapR[offColumn, offRow, animationState];
+                                    Engine.Render.imageBuffer[offset] = colorMapB[offColumn, offRow, AnimationState];
+                                    Engine.Render.imageBuffer[offset + 1] = colorMapG[offColumn, offRow, AnimationState];
+                                    Engine.Render.imageBuffer[offset + 2] = colorMapR[offColumn, offRow, AnimationState];
 
-                                    imageBufferKey[keyOffset] = true;
+                                    Engine.Render.imageBufferKey[keyOffset] = true;
                                 }
                             }
                         }
@@ -187,33 +194,74 @@ namespace DKBasicEngine_1_0
 
             else
             {
-                for (double row = 0; row < this.height; row += (1 / scaleY))
+                for (double row = 0; row < this.height; row += plusY)
                 {
                     if (y + row > Engine.Render.RenderHeight) return;
 
-                    for (double column = 0; column < this.width; column += (1 / scaleX))
+                    for (double column = 0; column < this.width; column += plusX)
                     {
                         if (x + column > Engine.Render.RenderWidth) break;
 
                         if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            int offset = (((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
-                            int keyOffset = ((y + rowInBuffer) * Engine.Render.RenderWidth + x + columnInBuffer);
+                            int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                            int keyOffset = (int)((y + rowInBuffer) * Engine.Render.RenderWidth + x + columnInBuffer);
 
-                            if (!imageBufferKey[keyOffset])
+                            if (!Engine.Render.imageBufferKey[keyOffset])
                             {
                                 Color color = (Color)clr;
 
                                 int offColumn = (int)column;
                                 int offRow = (int)row;
 
-                                if (colorMapA[offColumn, offRow, animationState] != 0)
+                                if (colorMapA[offColumn, offRow, AnimationState] != 0)
                                 {
-                                    imageBuffer[offset] = color.B;
-                                    imageBuffer[offset + 1] = color.G;
-                                    imageBuffer[offset + 2] = color.R;
+                                    Engine.Render.imageBuffer[offset] = color.B;
+                                    Engine.Render.imageBuffer[offset + 1] = color.G;
+                                    Engine.Render.imageBuffer[offset + 2] = color.R;
 
-                                    imageBufferKey[keyOffset] = true;
+                                    Engine.Render.imageBufferKey[keyOffset] = true;
+                                }
+                            }
+                        }
+
+                        columnInBuffer++;
+                    }
+
+                    rowInBuffer++;
+                    columnInBuffer = 0;
+                }
+            }
+
+            if (HasShadow)
+            {
+                for (double row = 0; row < this.height; row += plusY)
+                {
+                    if (y + row > Engine.Render.RenderHeight) return;
+
+                    for (double column = 0; column < this.width; column += plusX)
+                    {
+                        if (x + column > Engine.Render.RenderWidth) break;
+
+                        if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
+                        {
+                            int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                            int keyOffset = (int)((y + rowInBuffer) * Engine.Render.RenderWidth + x + columnInBuffer);
+
+                            if (!Engine.Render.imageBufferKey[keyOffset])
+                            {
+                                Color color = (Color)clr;
+
+                                int offColumn = (int)column;
+                                int offRow = (int)row;
+
+                                if (colorMapA[offColumn, offRow, AnimationState] != 0)
+                                {
+                                    Engine.Render.imageBuffer[offset] = color.B;
+                                    Engine.Render.imageBuffer[offset + 1] = color.G;
+                                    Engine.Render.imageBuffer[offset + 2] = color.R;
+
+                                    Engine.Render.imageBufferKey[keyOffset] = true;
                                 }
                             }
                         }
@@ -227,7 +275,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private bool IsOnScreen(int x, int y)
+        private bool IsOnScreen(double x, double y)
         {
             return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
         }

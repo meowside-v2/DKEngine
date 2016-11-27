@@ -19,6 +19,9 @@ namespace DKBasicEngine_1_0
 
             public static int RenderWidth { get { return _width; } }
             public static int RenderHeight { get { return _height; } }
+
+            internal static byte[] imageBuffer;
+            internal static bool[] imageBufferKey;
         }
 
         public static class Input
@@ -63,6 +66,9 @@ namespace DKBasicEngine_1_0
                     Database.InitDatabase();
                     WindowControl.WindowInit();
 
+                    Render.imageBuffer = new byte[3 * Render.RenderHeight * Render.RenderWidth];
+                    Render.imageBufferKey = new bool[Render.RenderHeight * Render.RenderWidth];
+
                     _deltaT = Stopwatch.StartNew();
                     ToUpdate = new List<ICore>();
                     PageControls = new List<IControl>();
@@ -95,26 +101,26 @@ namespace DKBasicEngine_1_0
                     reference = ToUpdate.ToList();
                 }
 
-                /*lock (reference)
-                {
-                    foreach (I3Dimensional obj in reference.Where(obj => obj is I3Dimensional).ToList())
-                    {
-                        if (!obj.IsInView(Engine._baseCam.Xoffset, Engine._baseCam.Yoffset, Render.RenderWidth, Render.RenderHeight))
-                            reference.Remove((ICore)obj);
-                    }
-                }*/
-
                 lock (PageControls)
                 {
                     controlReference = PageControls.ToList();
                 }
                 
-                _deltaT?.Stop();
-
                 foreach(IControl c in controlReference)
                 {
-                    c.IsFocused = Page.FocusSelection == controlReference.FindIndex(obj => ReferenceEquals(obj, c));
+                    bool result = Page.FocusSelection == controlReference.FindIndex(obj => ReferenceEquals(obj, c));
+
+                    if(c.IsFocused != result)
+                        c.IsFocused = result;
                 }
+                
+                foreach (I3Dimensional obj in reference.Where(obj => obj is I3Dimensional).ToList())
+                {
+                    if (!obj.IsInView())
+                        reference.Remove((ICore)obj);
+                }
+
+                _deltaT?.Stop();
 
                 foreach (ICore g in reference)
                 {
@@ -125,11 +131,6 @@ namespace DKBasicEngine_1_0
                 
                 _baseCam?.BufferImage();
             }
-        }
-
-        private static void IsOnScreen(I3Dimensional obj, int Width, int Height, double Xoffset, double Yoffset)
-        {
-
         }
 
         public static void PageChange(IPage Page)

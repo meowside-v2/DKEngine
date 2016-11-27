@@ -261,7 +261,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public TextBlock(IPage ParentPage)
+        public TextBlock(Scene ParentPage)
         {
             this.Start();
             if(ParentPage != null)
@@ -331,7 +331,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public void Render(int x, int y, byte[] imageBuffer, bool[] imageBufferKey)
+        public void Render()
         {
             List<Letter> reference;
 
@@ -340,16 +340,11 @@ namespace DKBasicEngine_1_0
                 reference = _text.ToList();
             }
 
-            foreach (Letter item in reference.FindAll(obj => Finder(obj, x, y)))
+            foreach (Letter item in reference.FindAll(obj => obj.IsInView()))
             {
-                item.Render((int)(this.X - x), (int)(this.Y - y), imageBuffer, imageBufferKey, Foreground ?? Color.White);
-                if (HasShadow) item.Render((int)(this.X - x + 1), (int)(this.Y - y + 1), imageBuffer, imageBufferKey, Color.Black);
+                item.Render(Foreground ?? Color.White);
+                if (HasShadow) item.Render(Color.Black);
             }
-        }
-
-        protected bool Finder(I3Dimensional obj, int x, int y)
-        {
-            return obj.X + obj.width >= x && obj.X < x + Engine.Render.RenderWidth && obj.Y + obj.height >= y && obj.Y < y + Engine.Render.RenderHeight;
         }
     }
 }

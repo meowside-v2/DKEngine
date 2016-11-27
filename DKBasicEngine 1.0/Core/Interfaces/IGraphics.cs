@@ -8,6 +8,7 @@ namespace DKBasicEngine_1_0
 {
     public interface IGraphics
     {
+        bool HasShadow { get; set; }
         int AnimationState { get; set; }
         Material model { get; set; }
     }

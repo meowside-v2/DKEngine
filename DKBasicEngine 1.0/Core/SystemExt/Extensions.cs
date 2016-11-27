@@ -21,21 +21,24 @@ namespace DKBasicEngine_1_0
             return list.Max(item => item.Z);
         }
 
-        public static List<I3Dimensional> GetGameObjectsInView(this List<I3Dimensional> list, int Width, int Height, int XOffset, int YOffset)
+        public static List<I3Dimensional> GetGameObjectsInView(this List<I3Dimensional> list)
         {
             List<I3Dimensional> retValue;
 
             lock (list)
             {
-                retValue = list.Where(item => IsInView(item, XOffset, YOffset, Width + 5, Height + 5)).ToList();
+                retValue = list.Where(item => item.IsInView()).ToList();
             }
 
             return retValue;
         }
 
-        public static bool IsInView(this I3Dimensional obj, double x, double y, int Width, int Height)
+        public static bool IsInView(this I3Dimensional obj)
         {
-            return (obj.X + obj.width >= x - 5 && obj.X < x + Width && obj.Y + obj.height >= y - 5 && obj.Y < y + Height);
+            double X = Engine._baseCam != null ? Engine._baseCam.RenderXOffset : 0;
+            double Y = Engine._baseCam != null ? Engine._baseCam.RenderYOffset : 0;
+
+            return (obj.X + obj.width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
         }
 
         public static bool IsUnsupportedEscapeSequence(this char letter)
