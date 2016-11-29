@@ -12,8 +12,11 @@ namespace DKBasicEngine_1_0
 
         TextBlock Parent;
 
-        private double _x = 0;
-        private double _y = 0;
+        internal double _x { get; private set; } = 0;
+        internal double _y { get; private set; } = 0;
+
+        internal double VertOffset = 0;
+        internal double HorOffset = 0;
 
         public bool HasShadow
         {
@@ -25,25 +28,25 @@ namespace DKBasicEngine_1_0
         
         public double X
         {
-            get { return _x * Parent.ScaleX + Parent.X; }
+            get { return HorOffset + _x * Parent.FontSize * Parent.ScaleX + Parent.X; }
             set { _x = value; }
         }
         public double Y
         {
-            get { return _y * Parent.ScaleY + Parent.Y; }
+            get { return VertOffset + _y * Parent.FontSize * Parent.ScaleY + Parent.Y; }
             set { _y = value; }
         }
         public double Z { get; set; }
 
         public double width
         {
-            get { return model.width * Parent.ScaleX; }
+            get { return model.width * Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
         public double height
         {
-            get { return model.height * Parent.ScaleY; }
+            get { return model.height * Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
@@ -55,19 +58,19 @@ namespace DKBasicEngine_1_0
 
         public double ScaleX
         {
-            get { return Parent.ScaleX; }
+            get { return Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
         public double ScaleY
         {
-            get { return Parent.ScaleY; }
+            get { return Parent.FontSize * Parent.ScaleY; }
             set { }
         }
 
         public double ScaleZ
         {
-            get { return Parent.ScaleZ; }
+            get { return Parent.FontSize * Parent.ScaleZ; }
             set { }
         }
 

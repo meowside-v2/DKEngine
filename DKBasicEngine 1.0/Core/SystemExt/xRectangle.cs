@@ -145,7 +145,7 @@ namespace DKBasicEngine_1_0
 
             while (temp.Count > 0)
             {
-                if (BufferIsFull(Engine.Render.imageBufferKey))
+                if (Engine.Render.imageBuffer.BufferIsFull(255, 4))
                     return;
 
                 double tempHeight = temp.Max(item => item.Z);

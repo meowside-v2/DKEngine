@@ -21,7 +21,6 @@ namespace DKBasicEngine_1_0
             public static int RenderHeight { get { return _height; } }
 
             internal static byte[] imageBuffer;
-            internal static bool[] imageBufferKey;
         }
 
         public static class Input
@@ -66,8 +65,7 @@ namespace DKBasicEngine_1_0
                     Database.InitDatabase();
                     WindowControl.WindowInit();
 
-                    Render.imageBuffer = new byte[3 * Render.RenderHeight * Render.RenderWidth];
-                    Render.imageBufferKey = new bool[Render.RenderHeight * Render.RenderWidth];
+                    Render.imageBuffer = new byte[4 * Render.RenderHeight * Render.RenderWidth];
 
                     _deltaT = Stopwatch.StartNew();
                     ToUpdate = new List<ICore>();
@@ -162,7 +160,7 @@ namespace DKBasicEngine_1_0
                         for (int j = 0; j < PageControls.Count - 1; j++)
                         {
                             if (((I3Dimensional)PageControls[j]).X == ((I3Dimensional)PageControls[j + 1]).X)
-                                if (((I3Dimensional)PageControls[j]).Y > ((I3Dimensional)PageControls[j + 1]).Y)
+                                if (((I3Dimensional)PageControls[j]).Y < ((I3Dimensional)PageControls[j + 1]).Y)
                                 {
                                     var temp = PageControls[j];
                                     PageControls[j] = PageControls[j + 1];

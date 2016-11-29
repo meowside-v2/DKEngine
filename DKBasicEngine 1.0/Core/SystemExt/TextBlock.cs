@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public class TextBlock : ICore, I3Dimensional
+    public class TextBlock : ICore, I3Dimensional, IText
     {
         //I3Dimensional Parent;
 
@@ -17,19 +17,30 @@ namespace DKBasicEngine_1_0
         protected double _x = 0;
         protected double _y = 0;
 
+        protected double _width = 0;
+        protected double _height = 0;
+
         protected double vertOffset = 0;
         protected double horiOffset = 0;
 
         protected HorizontalAlignment _HA;
         protected VerticalAlignment _VA;
-        
+
+        protected HorizontalAlignment _THA;
+        protected VerticalAlignment _TVA;
+
+        protected string _textStr = "";
+
         protected List<Letter> _text = new List<Letter>();
 
         protected double _scaleX = 1;
         protected double _scaleY = 1;
         protected double _scaleZ = 1;
-        
+
         public Color? Foreground { get; set; }
+        public Color? Background { get; set; }
+        
+        public double FontSize { get; set; } = 1;
 
         public enum HorizontalAlignment
         {
@@ -44,13 +55,7 @@ namespace DKBasicEngine_1_0
             Center,
             Bottom
         };
-
-        public enum Layer
-        {
-            Background = 0,
-            GUI = 128
-        };
-
+        
         public double X
         {
             get { return _x + horiOffset; }
@@ -62,9 +67,7 @@ namespace DKBasicEngine_1_0
             set { _y = value; }
         }
         public double Z { get; set; }
-
-        private double _width = 0;
-        private double _height = 0;
+        
         public double width
         {
             get { return _width * ScaleX; }
@@ -99,7 +102,6 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
-
         public double depth
         {
             get { return 0; }
@@ -130,7 +132,6 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
-
         public double ScaleY
         {
             get
@@ -155,7 +156,6 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
-
         public double ScaleZ
         {
             get
@@ -185,7 +185,6 @@ namespace DKBasicEngine_1_0
 
         public bool HasShadow { get; set; }
 
-        protected string _textStr = "";
         
         public virtual string Text
         {
@@ -261,6 +260,31 @@ namespace DKBasicEngine_1_0
             }
         }
 
+        public HorizontalAlignment TextHAlignment
+        {
+            set
+            {
+                if (value != _THA)
+                {
+                    _THA = value;
+
+                    _changed = true;
+                }
+            }
+        }
+        public VerticalAlignment TextVAlignment
+        {
+            set
+            {
+                if (value != _TVA)
+                {
+                    _TVA = value;
+
+                    _changed = true;
+                }
+            }
+        }
+
         public TextBlock(Scene ParentPage)
         {
             this.Start();
@@ -281,41 +305,109 @@ namespace DKBasicEngine_1_0
             {
                 List<Letter> retValue = new List<Letter>();
 
+                List<List<Letter>> textAligned = new List<List<Letter>>() { new List<Letter>() };
+
                 int Xoffset = 0;
                 int Yoffset = 0;
 
-                foreach (char letter in Text)
+                if(width > 0)
                 {
-                    if (letter == ' ')
+                    foreach (char letter in Text)
                     {
-                        Xoffset += 3;
+                        if (letter == ' ')
+                        {
+                            Xoffset += 3;
+                        }
+
+                        else
+                        {
+                            Material newLetterMaterial = Database.GetLetter(letter);
+
+                            if (letter == '\r' || letter == '\n')
+                            {
+                                Xoffset = 0;
+                                Yoffset += 6;
+
+                                textAligned.Add(new List<Letter>());
+
+                                continue;
+                            }
+
+                            else if (Xoffset * ScaleX * FontSize + newLetterMaterial.width * ScaleX * FontSize > this.width)
+                            {
+                                Xoffset = 0;
+                                Yoffset += 6;
+
+                                textAligned.Add(new List<Letter>());
+                            }
+
+                            textAligned[Yoffset / 6].Add(new Letter(this,
+                                                Xoffset,
+                                                Yoffset,
+                                                0,
+                                                newLetterMaterial));
+
+                            Xoffset += newLetterMaterial.width + 1;
+                        }
                     }
+                }
 
-                    else
+                double maxHeight = textAligned.Count * 6 * FontSize;
+
+                double startY = 0;
+
+                switch (_TVA)
+                {
+                    case VerticalAlignment.Top:
+                        startY = 0;
+                        break;
+                    case VerticalAlignment.Center:
+                        startY = (_height - maxHeight) / 2;
+                        break;
+                    case VerticalAlignment.Bottom:
+                        startY = _height - maxHeight;
+                        break;
+                    default:
+                        break;
+                }
+
+                foreach(List<Letter> row in textAligned)
+                {
+                    double maxWidth = 0;
+
+                    if(row.Count > 0)
+                        maxWidth = (row[row.Count - 1].model.width + row[row.Count - 1]._x) * FontSize;
+
+                    if(maxWidth != 0)
                     {
-                        if(letter == '\r' || letter == '\n')
-                        {
-                            Xoffset = 0;
-                            Yoffset += 6;
+                        double startX = 0;
 
-                            continue;
+                        switch (_THA)
+                        {
+                            case HorizontalAlignment.Left:
+                                startX = 0;
+                                break;
+
+                            case HorizontalAlignment.Center:
+                                startX = (_width - maxWidth) / 2;
+                                break;
+
+                            case HorizontalAlignment.Right:
+                                startX = _width - maxWidth;
+                                break;
                         }
 
-                        Material newLetterMaterial = Database.GetLetter(letter);
-
-                        if(Xoffset + newLetterMaterial.width > this.width)
+                        
+                        foreach (Letter letter in row)
                         {
-                            Xoffset = 0;
-                            Yoffset += 6;
+                            if (startX != 0)
+                                letter.HorOffset = startX;
+
+                            if (startY != 0)
+                                letter.VertOffset = startY;
+
+                            retValue.Add(letter);
                         }
-
-                        retValue.Add(new Letter(this,
-                                            Xoffset,
-                                            Yoffset,
-                                            0,
-                                            newLetterMaterial));
-
-                        Xoffset += newLetterMaterial.width + 1;
                     }
                 }
 
@@ -345,6 +437,8 @@ namespace DKBasicEngine_1_0
                 item.Render(Foreground ?? Color.White);
                 if (HasShadow) item.Render(Color.Black);
             }
+
+            Background?.Render(this);
         }
     }
 }

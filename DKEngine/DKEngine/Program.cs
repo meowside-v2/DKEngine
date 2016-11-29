@@ -23,8 +23,6 @@ namespace DKEngine
             Test t = new Test();
 
             Engine.PageChange(t);
-            
-            Console.ReadLine();
         }
     }
 }

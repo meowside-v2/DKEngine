@@ -41,6 +41,7 @@ namespace DKBasicEngine_1_0
                     if (TextControl(value))
                     {
                         _textStr = value;
+                        _changed = true;
                     }
                 }
                 
@@ -73,7 +74,6 @@ namespace DKBasicEngine_1_0
                             if (Text.Length > 0)
                             {
                                 Text = Text.Remove(Text.Length - 1, 1);
-                                _changed = true;
                             }
 
                             TimeOutStopwatch.Start();
@@ -82,7 +82,6 @@ namespace DKBasicEngine_1_0
                         else if (Text.Length < MaxTextLenght)
                         {
                             Text += key;
-                            _changed = true;
 
                             TimeOutStopwatch.Start();
                         }

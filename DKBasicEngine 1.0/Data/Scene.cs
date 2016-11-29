@@ -125,7 +125,7 @@ namespace DKBasicEngine_1_0
             
             while (temp.Count > 0)
             {
-                if (BufferIsFull(Engine.Render.imageBufferKey))
+                if (Engine.Render.imageBuffer.BufferIsFull(255, 4))
                     return;
 
                 double tempHeight = temp.FindMaxZ();
@@ -138,11 +138,6 @@ namespace DKBasicEngine_1_0
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
             }
-        }
-
-        private bool BufferIsFull(bool[] key)
-        {
-            return !(key.Contains(false));
         }
     }
 }

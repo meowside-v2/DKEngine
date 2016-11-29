@@ -31,12 +31,14 @@ namespace DKBasicEngine_1_0
             X = 1,
             Y = -1,
             Z = 128,
+            height = 5,
+            width = 20,
             VAlignment = TextBlock.VerticalAlignment.Bottom,
             HAlignment = TextBlock.HorizontalAlignment.Left,
             Text = "0"
         };
 
-        private byte[] toRenderData = new byte[3 * Engine.Render.RenderWidth * Engine.Render.RenderHeight];
+        private byte[] toRenderData = new byte[4 * Engine.Render.RenderWidth * Engine.Render.RenderHeight];
 
         public IPage sceneReference { get { return Engine.Page; } }
         public List<I3Dimensional> GUI = new List<I3Dimensional>();
@@ -71,9 +73,9 @@ namespace DKBasicEngine_1_0
 
             using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
             {
-                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
-                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 
                 while (true)
                 {
@@ -89,8 +91,8 @@ namespace DKBasicEngine_1_0
 
                             using (Bitmap outFrame = new Bitmap(Engine.Render.RenderWidth,
                                                                 Engine.Render.RenderHeight,
-                                                                3 * Engine.Render.RenderWidth,
-                                                                System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+                                                                4 * Engine.Render.RenderWidth,
+                                                                System.Drawing.Imaging.PixelFormat.Format32bppArgb,
                                                                 new IntPtr(ptr)))
                             {
                                 Size fontSize = GetConsoleFontSize();
@@ -116,15 +118,12 @@ namespace DKBasicEngine_1_0
         internal void BufferImage()
         {
             Array.Clear(Engine.Render.imageBuffer, 0, Engine.Render.imageBuffer.Length);
-            Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
 
             RenderXOffset = 0;
             RenderYOffset = 0;
 
             lock (GUI)
             {
-                
-
                 foreach (ICore item in GUI)
                 {
                     item.Render();
@@ -148,6 +147,8 @@ namespace DKBasicEngine_1_0
                     ((ICore)sceneReference).Render();
                 }
 
+            Engine.Render.imageBuffer.FillEach(255, 4);
+
             Buffer.BlockCopy(Engine.Render.imageBuffer, 0, toRenderData, 0, Engine.Render.imageBuffer.Length);
 
             int endRender = Environment.TickCount - Engine.UpdateStartTime;
@@ -168,7 +169,7 @@ namespace DKBasicEngine_1_0
 
             if (imageRenderDelay < targetDelay)
             {
-                Thread.Sleep(targetDelay - imageRenderDelay);
+                //Thread.Sleep(targetDelay - imageRenderDelay);
             }
 
             if (renderFPS)
