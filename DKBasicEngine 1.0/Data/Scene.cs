@@ -13,10 +13,6 @@ namespace DKBasicEngine_1_0
 
         public List<I3Dimensional> Model { get; private set; } = new List<I3Dimensional>();
 
-        /*public int PlayerSpawnX { get; set; } = 0;
-        public int PlayerSpawnY { get; set; } = 0;
-        public int PlayerSpawnZ { get; set; } = 0;*/
-
         public int FocusSelection { get; set; } = 0;
         public List<IControl> PageControls { get; } = new List<IControl>();
 
@@ -125,7 +121,7 @@ namespace DKBasicEngine_1_0
             
             while (temp.Count > 0)
             {
-                if (Engine.Render.imageBuffer.BufferIsFull(255, 4))
+                if (Engine.Render.imageBufferKey.BufferIsFull(255, 1))
                     return;
 
                 double tempHeight = temp.FindMaxZ();

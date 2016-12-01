@@ -38,7 +38,7 @@ namespace DKBasicEngine_1_0
             Text = "0"
         };
 
-        private byte[] toRenderData = new byte[4 * Engine.Render.RenderWidth * Engine.Render.RenderHeight];
+        private byte[] toRenderData = new byte[3 * Engine.Render.RenderWidth * Engine.Render.RenderHeight];
 
         public IPage sceneReference { get { return Engine.Page; } }
         public List<I3Dimensional> GUI = new List<I3Dimensional>();
@@ -91,8 +91,8 @@ namespace DKBasicEngine_1_0
 
                             using (Bitmap outFrame = new Bitmap(Engine.Render.RenderWidth,
                                                                 Engine.Render.RenderHeight,
-                                                                4 * Engine.Render.RenderWidth,
-                                                                System.Drawing.Imaging.PixelFormat.Format32bppArgb,
+                                                                3 * Engine.Render.RenderWidth,
+                                                                System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                                                                 new IntPtr(ptr)))
                             {
                                 Size fontSize = GetConsoleFontSize();
@@ -118,6 +118,7 @@ namespace DKBasicEngine_1_0
         internal void BufferImage()
         {
             Array.Clear(Engine.Render.imageBuffer, 0, Engine.Render.imageBuffer.Length);
+            Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
 
             RenderXOffset = 0;
             RenderYOffset = 0;
@@ -146,8 +147,6 @@ namespace DKBasicEngine_1_0
                 {
                     ((ICore)sceneReference).Render();
                 }
-
-            Engine.Render.imageBuffer.FillEach(255, 4);
 
             Buffer.BlockCopy(Engine.Render.imageBuffer, 0, toRenderData, 0, Engine.Render.imageBuffer.Length);
 

@@ -172,15 +172,18 @@ namespace DKBasicEngine_1_0
                 for (double row = 0; row < this.height; row += plusY)
                 {
                     if (y + row > Engine.Render.RenderHeight) return;
+                    else if (y + row < 0) continue;
+
+                    int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                    int keyOffset = (int)(((y + rowInBuffer) * Engine.Render.RenderWidth) + (x + columnInBuffer));
 
                     for (double column = 0; column < this.width; column += plusX)
                     {
                         if (x + column > Engine.Render.RenderWidth) break;
+                        else if (x + column < 0) continue;
 
                         if (Extensions.IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            int offset = (int)(((4 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (4 * (x + columnInBuffer)));
-
                             if (Engine.Render.imageBuffer[offset] != 255)
                             {
                                 //Color temp = colorMap[(int)column, (int)row, animationState];
@@ -190,16 +193,20 @@ namespace DKBasicEngine_1_0
 
                                 if (colorMapA[offColumn, offRow, AnimationState] != 0)
                                 {
-                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBuffer[offset], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 2]),
+                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
                                                           Color.FromArgb(colorMapA[offColumn, offRow, AnimationState], colorMapR[offColumn, offRow, AnimationState], colorMapG[offColumn, offRow, AnimationState], colorMapB[offColumn, offRow, AnimationState]));
 
-                                    Engine.Render.imageBuffer[offset] = temp.A;
-                                    Engine.Render.imageBuffer[offset + 1] = temp.B;
-                                    Engine.Render.imageBuffer[offset + 2] = temp.G;
-                                    Engine.Render.imageBuffer[offset + 3] = temp.R;
+                                    Engine.Render.imageBufferKey[keyOffset] = temp.A;
+
+                                    Engine.Render.imageBuffer[offset] = temp.B;
+                                    Engine.Render.imageBuffer[offset + 1] = temp.G;
+                                    Engine.Render.imageBuffer[offset + 2] = temp.R;
                                 }
                             }
                         }
+
+                        offset += 3;
+                        keyOffset++;
 
                         columnInBuffer++;
                     }
@@ -214,16 +221,19 @@ namespace DKBasicEngine_1_0
                 for (double row = 0; row < this.height; row += plusY)
                 {
                     if (y + row > Engine.Render.RenderHeight) return;
+                    else if (y + row < 0) continue;
+
+                    int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                    int keyOffset = (int)(((y + rowInBuffer) * Engine.Render.RenderWidth) + (x + columnInBuffer));
 
                     for (double column = 0; column < this.width; column += plusX)
                     {
                         if (x + column > Engine.Render.RenderWidth) break;
+                        else if (x + column < 0) continue;
 
                         if (Extensions.IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            int offset = (int)(((4 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (4 * (x + columnInBuffer)));
-
-                            if (Engine.Render.imageBuffer[offset] != 255)
+                            if (Engine.Render.imageBufferKey[keyOffset] != 255)
                             {
                                 Color color = (Color)clr;
 
@@ -232,16 +242,20 @@ namespace DKBasicEngine_1_0
 
                                 if (colorMapA[offColumn, offRow, AnimationState] != 0)
                                 {
-                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBuffer[offset], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 2]),
+                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
                                                           Color.FromArgb(colorMapA[offColumn, offRow, AnimationState], colorMapR[offColumn, offRow, AnimationState], colorMapG[offColumn, offRow, AnimationState], colorMapB[offColumn, offRow, AnimationState]));
 
-                                    Engine.Render.imageBuffer[offset] = temp.A;
-                                    Engine.Render.imageBuffer[offset + 1] = temp.B;
-                                    Engine.Render.imageBuffer[offset + 2] = temp.G;
-                                    Engine.Render.imageBuffer[offset + 3] = temp.R;
+                                    Engine.Render.imageBufferKey[keyOffset] = temp.A;
+
+                                    Engine.Render.imageBuffer[offset] = temp.B;
+                                    Engine.Render.imageBuffer[offset + 1] = temp.G;
+                                    Engine.Render.imageBuffer[offset + 2] = temp.R;
                                 }
                             }
                         }
+
+                        offset += 3;
+                        keyOffset++;
 
                         columnInBuffer++;
                     }
@@ -256,14 +270,18 @@ namespace DKBasicEngine_1_0
                 for (double row = 0; row < this.height; row += plusY)
                 {
                     if (y + row > Engine.Render.RenderHeight) return;
+                    else if (y + row < 0) continue;
+
+                    int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                    int keyOffset = (int)(((y + rowInBuffer) * Engine.Render.RenderWidth) + (x + columnInBuffer));
 
                     for (double column = 0; column < this.width; column += plusX)
                     {
                         if (x + column > Engine.Render.RenderWidth) break;
+                        else if (x + column < 0) continue;
 
                         if (Extensions.IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            int offset = (int)(((4 * (y + 1 + rowInBuffer)) * Engine.Render.RenderWidth) + (4 * (x + 1 + columnInBuffer)));
 
                             if (Engine.Render.imageBuffer[offset] != 255)
                             {
@@ -274,16 +292,20 @@ namespace DKBasicEngine_1_0
 
                                 if (colorMapA[offColumn, offRow, AnimationState] != 0)
                                 {
-                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBuffer[offset], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 2]),
+                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
                                                           Color.FromArgb(colorMapA[offColumn, offRow, AnimationState], colorMapR[offColumn, offRow, AnimationState], colorMapG[offColumn, offRow, AnimationState], colorMapB[offColumn, offRow, AnimationState]));
 
-                                    Engine.Render.imageBuffer[offset] = temp.A;
-                                    Engine.Render.imageBuffer[offset + 1] = temp.B;
-                                    Engine.Render.imageBuffer[offset + 2] = temp.G;
-                                    Engine.Render.imageBuffer[offset + 3] = temp.R;
+                                    Engine.Render.imageBufferKey[keyOffset] = temp.A;
+
+                                    Engine.Render.imageBuffer[offset] = temp.B;
+                                    Engine.Render.imageBuffer[offset + 1] = temp.G;
+                                    Engine.Render.imageBuffer[offset + 2] = temp.R;
                                 }
                             }
                         }
+
+                        offset += 3;
+                        keyOffset++;
 
                         columnInBuffer++;
                     }

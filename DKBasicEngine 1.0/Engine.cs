@@ -21,6 +21,7 @@ namespace DKBasicEngine_1_0
             public static int RenderHeight { get { return _height; } }
 
             internal static byte[] imageBuffer;
+            internal static byte[] imageBufferKey;
         }
 
         public static class Input
@@ -65,7 +66,8 @@ namespace DKBasicEngine_1_0
                     Database.InitDatabase();
                     WindowControl.WindowInit();
 
-                    Render.imageBuffer = new byte[4 * Render.RenderHeight * Render.RenderWidth];
+                    Render.imageBuffer = new byte[3 * Render.RenderHeight * Render.RenderWidth];
+                    Render.imageBufferKey = new byte[Render.RenderHeight * Render.RenderWidth];
 
                     _deltaT = Stopwatch.StartNew();
                     ToUpdate = new List<ICore>();

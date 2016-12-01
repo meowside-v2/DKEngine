@@ -136,26 +136,35 @@ namespace DKBasicEngine_1_0
                 for (double row = 0; row < Parent.height; row += plusY)
                 {
                     if (y + row > Engine.Render.RenderHeight) return;
+                    else if (y + row < 0) continue;
 
                     for (double column = 0; column < Parent.width; column += plusX)
                     {
                         if (x + column > Engine.Render.RenderWidth) break;
+                        else if (x + column < 0) continue;
+
+                        int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
+                        int keyOffset = (int)(((y + rowInBuffer) * Engine.Render.RenderWidth) + (x + columnInBuffer));
 
                         if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
                         {
-                            int offset = (int)(((4 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (4 * (x + columnInBuffer)));
+                            
 
-                            if (Engine.Render.imageBuffer[offset] != 255)
+                            if (Engine.Render.imageBuffer[offset] != byte.MaxValue)
                             {
-                                Color temp = MixPixel(Color.FromArgb(Engine.Render.imageBuffer[offset], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 2]),
+                                Color temp = MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
                                                       clr);
 
-                                Engine.Render.imageBuffer[offset] = temp.A;
-                                Engine.Render.imageBuffer[offset + 1] = temp.B;
-                                Engine.Render.imageBuffer[offset + 2] = temp.G;
-                                Engine.Render.imageBuffer[offset + 3] = temp.R;
+                                Engine.Render.imageBufferKey[keyOffset] = temp.A;
+
+                                Engine.Render.imageBuffer[offset] = temp.B;
+                                Engine.Render.imageBuffer[offset + 1] = temp.G;
+                                Engine.Render.imageBuffer[offset + 2] = temp.R;
                             }
                         }
+
+                        offset += 3;
+                        keyOffset++;
 
                         columnInBuffer++;
                     }
