@@ -376,7 +376,7 @@ namespace DKBasicEngine_1_0
                     double maxWidth = 0;
 
                     if(row.Count > 0)
-                        maxWidth = (row[row.Count - 1].model.width + row[row.Count - 1]._x) * FontSize;
+                        maxWidth = (row[row.Count - 1].modelBase.width + row[row.Count - 1]._x) * FontSize;
 
                     if(maxWidth != 0)
                     {

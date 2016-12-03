@@ -10,6 +10,7 @@ namespace DKBasicEngine_1_0
     {
         bool HasShadow { get; set; }
         int AnimationState { get; set; }
-        Material model { get; set; }
+        Material modelBase { get; set; }
+        Material modelRastered { get; }
     }
 }

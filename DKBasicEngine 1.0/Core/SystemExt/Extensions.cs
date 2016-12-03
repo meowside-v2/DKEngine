@@ -24,14 +24,16 @@ namespace DKBasicEngine_1_0
 
         public static List<I3Dimensional> GetGameObjectsInView(this List<I3Dimensional> list)
         {
-            List<I3Dimensional> retValue;
-
             lock (list)
             {
-                retValue = list.Where(item => item.IsInView()).ToList();
-            }
+                /*for(int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].IsInView())
+                        retValue.Add(list[i]);
+                }*/
 
-            return retValue;
+                return list.Where(item => item.IsInView()).ToList();
+            }
         }
 
         public static bool IsInView(this I3Dimensional obj)
@@ -183,16 +185,6 @@ namespace DKBasicEngine_1_0
 
         public static Color MixPixel(Color top, Color bottom)
         {
-            /*byte A = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);
-
-            byte bottomAlpha = (byte)(255 - top.A);
-
-            byte R = (byte)(top.R * top.A + bottom.R * A);
-            byte G = (byte)(top.G * top.G + bottom.G * A);
-            byte B = (byte)(top.B * top.B + bottom.B * A);
-
-            return Color.FromArgb(A, R, G, B);*/
-
             double opacityTop = (double)1 / 255 * top.A;
             
             byte newA = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);

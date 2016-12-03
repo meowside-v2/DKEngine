@@ -40,13 +40,13 @@ namespace DKBasicEngine_1_0
 
         public double width
         {
-            get { return model.width * Parent.FontSize * Parent.ScaleX; }
+            get { return modelBase.width * Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
         public double height
         {
-            get { return model.height * Parent.FontSize * Parent.ScaleX; }
+            get { return modelBase.height * Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
@@ -76,19 +76,36 @@ namespace DKBasicEngine_1_0
 
         public bool LockScaleRatio { get; set; } = true;
 
-        public Material model { get; set; }
+        private Material _model = null;
+
+        public Material modelBase
+        {
+            get { return _model;  }
+            set
+            {
+                _model = value;
+                _changed = true;
+            }
+        }
+        public Material modelRastered { get; private set; }
 
         public int AnimationState { get; set; }
 
+        private bool _changed = false;
+
         public Letter(TextBlock Parent, double x, double y, double z, Material sourceModel)
         {
-            model = sourceModel;
+            modelBase = sourceModel;
 
             this.X = x;
             this.Y = y;
             this.Z = z;
 
             this.Parent = Parent;
+
+            _changed = true;
+
+            this.Start();
         }
 
         public void Start()
@@ -99,21 +116,23 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public void Update() { }
-
-        public object DeepCopy()
+        public void Update()
         {
-            return this.MemberwiseClone();
+            if (_changed)
+            {
+                modelRastered = new Material(modelBase, this);
+                _changed = false;
+            }
         }
 
         public void Render()
         {
-            model?.Render(this);
+            modelRastered?.Render(this);
         }
 
         public void Render(Color? clr)
         {
-            model?.Render(this, clr);
+            modelRastered?.Render(this, clr);
         }
     }
 }

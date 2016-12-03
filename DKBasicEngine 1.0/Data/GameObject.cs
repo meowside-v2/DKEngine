@@ -21,6 +21,7 @@ namespace DKBasicEngine_1_0
         protected double _y = 0;
 
         protected string _typeName = "";
+        private bool _changed;
 
         public string TypeName
         {
@@ -34,7 +35,7 @@ namespace DKBasicEngine_1_0
 
                 try
                 {
-                    this.model = Database.GetGameObjectMaterial(value);
+                    this.modelBase = Database.GetGameObjectMaterial(value);
                 }
                 catch (Exception e)
                 {
@@ -57,12 +58,12 @@ namespace DKBasicEngine_1_0
 
         public double width
         {
-            get { return (model == null ? 0 : model.width * ScaleX * Parent.ScaleX); }
+            get { return (modelBase == null ? 0 : modelBase.width * ScaleX * Parent.ScaleX); }
             set { }
         }
         public double height
         {
-            get { return (model == null ? 0 : model.height * ScaleY * Parent.ScaleY); }
+            get { return (modelBase == null ? 0 : modelBase.height * ScaleY * Parent.ScaleY); }
             set { }
         }
         public double depth
@@ -149,8 +150,9 @@ namespace DKBasicEngine_1_0
         public bool LockScaleRatio { get; set; } = true;
 
         public int AnimationState { get; set; } = 0;
-        
-        public Material model { get; set; }
+
+        public Material modelBase { get; set; }
+        public Material modelRastered { get; set; }
 
         public GameObject(I3Dimensional Parent)
         {
@@ -172,11 +174,16 @@ namespace DKBasicEngine_1_0
         { }
 
         public virtual void Update()
-        { }
+        {
+            if (_changed)
+            {
+                modelRastered = new Material(modelBase, this);
+            }
+        }
 
         public void Render()
         {
-            model?.Render(this);
+            modelRastered?.Render(this);
         }
     }
 }

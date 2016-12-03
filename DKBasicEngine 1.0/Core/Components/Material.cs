@@ -101,20 +101,36 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public Material(int Width, int Height, Color Background)
+        public Material(Material source, I3Dimensional parent)
         {
-            width = Width;
-            height = Height;
+            /*double width = parent.width;
+            double height = parent.height;*/
+            this.Frames = source.Frames;
 
-            colorMapA = new byte[width, height, Frames];
-            colorMapB = new byte[width, height, Frames];
-            colorMapG = new byte[width, height, Frames];
-            colorMapR = new byte[width, height, Frames];
+            this.height = (int)parent.height;
+            this.width = (int)parent.width;
 
-            colorMapA.Populate(height, width, 0, Background.A);
-            colorMapB.Populate(height, width, 0, Background.B);
-            colorMapG.Populate(height, width, 0, Background.G);
-            colorMapR.Populate(height, width, 0, Background.R);
+            this.colorMapA = new byte[width, height, Frames];
+            this.colorMapR = new byte[width, height, Frames];
+            this.colorMapG = new byte[width, height, Frames];
+            this.colorMapB = new byte[width, height, Frames];
+            
+            for (int i = 0; i < Frames; i++)
+            {
+                for(int j = 0; j < height; j++)
+                {
+                    for(int k = 0; k < width; k++)
+                    {
+                        int X = (int)(k / parent.ScaleX);
+                        int Y = (int)(j / parent.ScaleY);
+
+                        colorMapA[k, j, i] = source.colorMapA[X, Y, i];
+                        colorMapA[k, j, i] = source.colorMapA[X, Y, i];
+                        colorMapA[k, j, i] = source.colorMapA[X, Y, i];
+                        colorMapA[k, j, i] = source.colorMapA[X, Y, i];
+                    }
+                }
+            }
         }
 
         public Material(Color clr, int width, int height)
