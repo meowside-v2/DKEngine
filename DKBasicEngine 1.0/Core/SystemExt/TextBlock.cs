@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,8 +37,23 @@ namespace DKBasicEngine_1_0
         protected double _scaleZ = 1;
 
         public Color? Foreground { get; set; }
-        public Color? Background { get; set; }
+
+        private Color? _bg;
+        public Color? Background
+        {
+            get { return _bg; }
+            set
+            {
+                _bg = value;
+
+                if (value != null)
+                    _Background = new Material((Color)value, this);
+            }
+        }
+
+        private Material _Background;
         
+
         public double FontSize { get; set; } = 1;
 
         public enum HorizontalAlignment
@@ -438,7 +452,7 @@ namespace DKBasicEngine_1_0
                 if (HasShadow) item.Render(Color.Black);
             }
 
-            Background?.Render(this);
+            _Background?.Render(this);
         }
     }
 }

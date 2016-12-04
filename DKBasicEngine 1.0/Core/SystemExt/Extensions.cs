@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
@@ -19,20 +16,31 @@ namespace DKBasicEngine_1_0
 
         public static double FindMaxZ(this List<I3Dimensional> list)
         {
-            return list.Max(item => item.Z);
+            double z2 = double.MinValue;
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                if (list[i].Z > z2)
+                    z2 = list[i].Z;
+            }
+
+            return z2;
         }
 
         public static List<I3Dimensional> GetGameObjectsInView(this List<I3Dimensional> list)
         {
+            List<I3Dimensional> retValue = new List<I3Dimensional>();
+
             lock (list)
             {
-                /*for(int i = 0; i < list.Count; i++)
+                for(int i = 0; i < list.Count; i++)
                 {
                     if (list[i].IsInView())
                         retValue.Add(list[i]);
-                }*/
+                }
 
-                return list.Where(item => item.IsInView()).ToList();
+                return retValue;
+                //return list.Where(item => item.IsInView()).ToList();
             }
         }
 
@@ -59,12 +67,6 @@ namespace DKBasicEngine_1_0
 
                 case '\f':
                     return true;
-
-                /*case '\n':
-                    return true;*/
-
-                /*case '\r':
-                    return true;*/
 
                 case '\t':
                     return true;
@@ -122,62 +124,6 @@ namespace DKBasicEngine_1_0
                         arr[j, i, d] = value;
         }
 
-        public static void Render(this Color clr, I3Dimensional Parent)
-        {
-            int rowInBuffer = 0;
-            int columnInBuffer = 0;
-
-            double plusX = 1 / Parent.ScaleX;
-            double plusY = 1 / Parent.ScaleY;
-
-            double x = Parent.X;
-            double y = Parent.Y;
-
-            if(clr.A != 0)
-            {
-                for (double row = 0; row < Parent.height; row += plusY)
-                {
-                    if (y + row > Engine.Render.RenderHeight) return;
-                    else if (y + row < 0) continue;
-
-                    for (double column = 0; column < Parent.width; column += plusX)
-                    {
-                        if (x + column > Engine.Render.RenderWidth) break;
-                        else if (x + column < 0) continue;
-
-                        int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
-                        int keyOffset = (int)(((y + rowInBuffer) * Engine.Render.RenderWidth) + (x + columnInBuffer));
-
-                        if (IsOnScreen(x + columnInBuffer, y + rowInBuffer))
-                        {
-                            
-
-                            if (Engine.Render.imageBuffer[offset] != byte.MaxValue)
-                            {
-                                Color temp = MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                      clr);
-
-                                Engine.Render.imageBufferKey[keyOffset] = temp.A;
-
-                                Engine.Render.imageBuffer[offset] = temp.B;
-                                Engine.Render.imageBuffer[offset + 1] = temp.G;
-                                Engine.Render.imageBuffer[offset + 2] = temp.R;
-                            }
-                        }
-
-                        offset += 3;
-                        keyOffset++;
-
-                        columnInBuffer++;
-                    }
-
-                    rowInBuffer++;
-                    columnInBuffer = 0;
-                }
-            }
-            
-        }
-
         public static bool IsOnScreen(double x, double y)
         {
             return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
@@ -197,6 +143,51 @@ namespace DKBasicEngine_1_0
             byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
 
             return Color.FromArgb(newA, R, G, B);
+        }
+
+        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            List<TSource> _source = source.ToList();
+
+            for (int i = 0; i < _source.Count; i++)
+            {
+                if (predicate(_source[i]))
+                    return _source[i];
+
+            }
+
+            return default(TSource);
+        }
+
+        public static List<T> Where<T>(this List<T> list, Func<T, bool> predicate)
+        {
+            List<T> retValue = new List<T>();
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                if (predicate(list[i]))
+                    retValue.Add(list[i]);
+            }
+
+            return retValue;
+        }
+
+        public static List<T> ToList<T>(this IEnumerable<T> source)
+        {
+            return new List<T>(source);
+        }
+
+        public static bool All<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            List<T> _source = source.ToList();
+
+            for(int i = 0; i < _source.Count; i++)
+            {
+                if (!predicate(_source[i]))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,7 +45,7 @@ namespace DKBasicEngine_1_0
             try
             {
                 this.Name = br.ReadString();
-                
+
                 int temp_ModelCount = br.ReadInt32();
 
                 this.Model.Clear();
@@ -91,7 +91,7 @@ namespace DKBasicEngine_1_0
 
         public void Update()
         {
-            if(PageControls.Count > 1)
+            if (PageControls.Count > 1)
             {
                 if (Engine.Input.IsKeyPressed(ConsoleKey.UpArrow))
                 {
@@ -107,18 +107,18 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public object DeepCopy()
+        /*public object DeepCopy()
         {
             Scene temp = (Scene)MemberwiseClone();
             temp.Model = Model.ToList();
 
             return temp;
-        }
+        }*/
 
         public void Render()
         {
             List<I3Dimensional> temp = Model.GetGameObjectsInView();
-            
+
             while (temp.Count > 0)
             {
                 if (Engine.Render.imageBufferKey.BufferIsFull(255, 1))

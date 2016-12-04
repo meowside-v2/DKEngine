@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -122,14 +121,30 @@ namespace DKBasicEngine_1_0
 
                 _deltaT?.Stop();
 
+#if DEBUG
+                DateTime Update_start = DateTime.Now;
+#endif
+
                 foreach (ICore g in reference)
                 {
                     g.Update();
                 }
 
+#if DEBUG
+                Debug.WriteLine($"Update: {DateTime.Now - Update_start}");
+#endif
+
                 _deltaT?.Restart();
-                
+
+#if DEBUG
+                DateTime Render_start = DateTime.Now;
+#endif
                 _baseCam?.BufferImage();
+
+#if DEBUG
+                Debug.WriteLine($"Render: {DateTime.Now - Render_start}");
+                Debug.WriteLine($"All: {Environment.TickCount - UpdateStartTime}");
+#endif
             }
         }
 

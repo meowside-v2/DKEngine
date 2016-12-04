@@ -21,7 +21,8 @@ namespace DKBasicEngine_1_0
         protected double _y = 0;
 
         protected string _typeName = "";
-        private bool _changed;
+        private bool _changed = false;
+        private Material _model;
 
         public string TypeName
         {
@@ -93,6 +94,8 @@ namespace DKBasicEngine_1_0
                         _scaleZ = _scaleX;
                         _scaleY = _scaleX;
                     }
+
+                    _changed = true;
                 }
             }
         }
@@ -118,6 +121,8 @@ namespace DKBasicEngine_1_0
                         _scaleX = _scaleY;
                         _scaleZ = _scaleY;
                     }
+
+                    _changed = true;
                 }
             }
         }
@@ -143,6 +148,8 @@ namespace DKBasicEngine_1_0
                         _scaleX = _scaleZ;
                         _scaleY = _scaleZ;
                     }
+
+                    _changed = true;
                 }
             }
         }
@@ -151,8 +158,16 @@ namespace DKBasicEngine_1_0
 
         public int AnimationState { get; set; } = 0;
 
-        public Material modelBase { get; set; }
-        public Material modelRastered { get; set; }
+        public Material modelBase
+        {
+            get { return _model; }
+            set
+            {
+                _model = value;
+                _changed = true;
+            }
+        }
+        public Material modelRastered { get; private set; }
 
         public GameObject(I3Dimensional Parent)
         {
@@ -168,6 +183,8 @@ namespace DKBasicEngine_1_0
             {
                 Engine.ToUpdate.Add(this);
             }
+
+            _changed = true;
         }
 
         public virtual void Start()
@@ -178,6 +195,7 @@ namespace DKBasicEngine_1_0
             if (_changed)
             {
                 modelRastered = new Material(modelBase, this);
+                _changed = false;
             }
         }
 

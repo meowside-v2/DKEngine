@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DKBasicEngine_1_0
 {
@@ -148,7 +144,7 @@ namespace DKBasicEngine_1_0
                 if (Engine.Render.imageBuffer.BufferIsFull(255, 4))
                     return;
 
-                double tempHeight = temp.Max(item => item.Z);
+                double tempHeight = temp.FindMaxZ();
                 List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
 
                 foreach (ICore item in toRender)
