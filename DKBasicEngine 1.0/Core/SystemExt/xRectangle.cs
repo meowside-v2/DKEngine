@@ -132,7 +132,7 @@ namespace DKBasicEngine_1_0
 
         public void Render()
         {
-            List<I3Dimensional> temp;
+            /*List<I3Dimensional> temp;
 
             lock (border)
             {
@@ -141,10 +141,10 @@ namespace DKBasicEngine_1_0
 
             while (temp.Count > 0)
             {
-                if (Engine.Render.imageBuffer.BufferIsFull(255, 4))
-                    return;
+                /*if (Engine.Render.imageBuffer.BufferIsFull(255, 4))
+                    return;*/
 
-                double tempHeight = temp.FindMaxZ();
+                /*double tempHeight = temp.FindMaxZ();
                 List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
 
                 foreach (ICore item in toRender)
@@ -153,7 +153,7 @@ namespace DKBasicEngine_1_0
                 }
 
                 temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
-            }
+            }*/
         }
 
         private bool BufferIsFull(bool[] key)

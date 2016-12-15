@@ -44,6 +44,7 @@ namespace DKBasicEngine_1_0
         internal static Camera _baseCam;
 
         internal static List<ICore> ToUpdate;
+        internal static List<IGraphics> ToRender;
         internal static List<IControl> PageControls;
         internal static int UpdateStartTime;
 
@@ -65,11 +66,12 @@ namespace DKBasicEngine_1_0
                     Database.InitDatabase();
                     WindowControl.WindowInit();
 
-                    Render.imageBuffer = new byte[3 * Render.RenderHeight * Render.RenderWidth];
-                    Render.imageBufferKey = new byte[Render.RenderHeight * Render.RenderWidth];
+                    Render.imageBuffer = new byte[3 * Render.RenderWidth * Render.RenderHeight];
+                    Render.imageBufferKey = new byte[Render.RenderWidth * Render.RenderHeight];
 
                     _deltaT = Stopwatch.StartNew();
                     ToUpdate = new List<ICore>();
+                    ToRender = new List<IGraphics>();
                     PageControls = new List<IControl>();
 
                     BackgroundWorks = new Thread(() => Update());
@@ -88,8 +90,18 @@ namespace DKBasicEngine_1_0
         
         private static void Update()
         {
+
+#if DEBUG
+            Stopwatch t = Stopwatch.StartNew();
+#endif
+
             while (true)
             {
+#if DEBUG
+                t.Restart();
+                long _startUpdate = t.ElapsedTicks;
+#endif
+
                 UpdateStartTime = Environment.TickCount;
                 
                 List<ICore> reference;
@@ -120,10 +132,7 @@ namespace DKBasicEngine_1_0
                 }
 
                 _deltaT?.Stop();
-
-#if DEBUG
-                DateTime Update_start = DateTime.Now;
-#endif
+                
 
                 foreach (ICore g in reference)
                 {
@@ -131,19 +140,20 @@ namespace DKBasicEngine_1_0
                 }
 
 #if DEBUG
-                Debug.WriteLine($"Update: {DateTime.Now - Update_start}");
+                long _endUpdate = t.ElapsedTicks;
 #endif
 
                 _deltaT?.Restart();
 
 #if DEBUG
-                DateTime Render_start = DateTime.Now;
+                long _startRender = t.ElapsedTicks;
 #endif
+
                 _baseCam?.BufferImage();
 
 #if DEBUG
-                Debug.WriteLine($"Render: {DateTime.Now - Render_start}");
-                Debug.WriteLine($"All: {Environment.TickCount - UpdateStartTime}");
+                long _endRender = t.ElapsedTicks;
+                Debug.WriteLine($"Update: {_endUpdate - _startUpdate}\nRender: {_endRender - _startRender}\nAll: {_endRender - _startUpdate}");
 #endif
             }
         }

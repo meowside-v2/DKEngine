@@ -11,6 +11,9 @@ namespace DKBasicEngine_1_0
     {
         public string Name { get; set; } = "";
 
+        private Stopwatch TimeOutControls = new Stopwatch();
+        private TimeSpan TimeOut = new TimeSpan(0, 0, 1);
+
         public List<I3Dimensional> Model { get; private set; } = new List<I3Dimensional>();
 
         public int FocusSelection { get; set; } = 0;
@@ -93,16 +96,26 @@ namespace DKBasicEngine_1_0
         {
             if (PageControls.Count > 1)
             {
-                if (Engine.Input.IsKeyPressed(ConsoleKey.UpArrow))
-                {
-                    if (FocusSelection > 0)
-                        FocusSelection--;
-                }
+                if(TimeOutControls.Elapsed > TimeOut)
+                    TimeOutControls.Reset();
 
-                if (Engine.Input.IsKeyPressed(ConsoleKey.DownArrow))
+                if(TimeOutControls.ElapsedMilliseconds == 0)
                 {
-                    if (FocusSelection < PageControls.Count - 1)
-                        FocusSelection++;
+                    if (Engine.Input.IsKeyPressed(ConsoleKey.UpArrow))
+                    {
+                        TimeOutControls.Start();
+
+                        if (FocusSelection > 0)
+                            FocusSelection--;
+                    }
+
+                    if (Engine.Input.IsKeyPressed(ConsoleKey.DownArrow))
+                    {
+                        TimeOutControls.Start();
+
+                        if (FocusSelection < PageControls.Count - 1)
+                            FocusSelection++;
+                    }
                 }
             }
         }
@@ -117,23 +130,7 @@ namespace DKBasicEngine_1_0
 
         public void Render()
         {
-            List<I3Dimensional> temp = Model.GetGameObjectsInView();
-
-            while (temp.Count > 0)
-            {
-                if (Engine.Render.imageBufferKey.BufferIsFull(255, 1))
-                    return;
-
-                double tempHeight = temp.FindMaxZ();
-                List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
-
-                foreach (ICore item in toRender)
-                {
-                    item.Render();
-                }
-
-                temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
-            }
+            
         }
     }
 }

@@ -163,8 +163,8 @@ namespace DKBasicEngine_1_0
         public void Render(I3Dimensional Parent, Color? clr = null)
         {
 
-            int AnimationState = Parent is IGraphics ? ((IGraphics)Parent).AnimationState : 0;
-            bool HasShadow = Parent is IGraphics ? ((IGraphics)Parent).HasShadow : false;   //((IGraphics)Parent).HasShadow;
+            int AnimationState = ((IGraphics)Parent).AnimationState;
+            bool HasShadow = ((IGraphics)Parent).HasShadow;
 
             double x = Parent.X;
             double y = Parent.Y;
@@ -172,28 +172,42 @@ namespace DKBasicEngine_1_0
 
             if (clr == null)
             {
-                Parallel.For(0, this.width * this.height, (i) =>
+                /*Parallel.For(0, this.width * this.height, (i) =>
                 {
-                    int width = i % this.width;
-                    int height = i / this.width;
+                    int column = i % this.width;
+                    int row = i / this.width;
 
-                    //i
-                });
+                    int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
+                    int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
 
-                /*for (int row = 0; row < this.height; row++)
+                    if (Extensions.IsOnScreen(x + column, y + row))
+                    {
+                        if (Engine.Render.imageBuffer[offset] != 255)
+                        {
+
+                            if (colorMapA[column, row, AnimationState] != 0)
+                            {
+                                Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
+                                                      Color.FromArgb(colorMapA[column, row, AnimationState], colorMapR[column, row, AnimationState], colorMapG[column, row, AnimationState], colorMapB[column, row, AnimationState]));
+
+                                Engine.Render.imageBufferKey[keyOffset] = temp.A;
+
+                                Engine.Render.imageBuffer[offset] = temp.B;
+                                Engine.Render.imageBuffer[offset + 1] = temp.G;
+                                Engine.Render.imageBuffer[offset + 2] = temp.R;
+                            }
+                        }
+                    }
+                });*/
+
+                for (int row = 0; row < this.height; row++)
                 {
-                    if (y + row > Engine.Render.RenderHeight) return;
-                    else if (y + row < 0) continue;
-
-                    int offset = (int)(((3 * (y + rowInBuffer)) * Engine.Render.RenderWidth) + (3 * (x + columnInBuffer)));
-                    int keyOffset = (int)(((y + rowInBuffer) * Engine.Render.RenderWidth) + (x + columnInBuffer));
-
                     for (int column = 0; column < this.width; column++)
                     {
-                        if (x + column > Engine.Render.RenderWidth) break;
-                        else if (x + column < 0) continue;
+                        int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
+                        int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
 
-                        if (Extensions.IsOnScreen(x + columnInBuffer, y + rowInBuffer))
+                        if (Extensions.IsOnScreen(x + column, y + row))
                         {
                             if (Engine.Render.imageBuffer[offset] != 255)
                             {
@@ -211,16 +225,8 @@ namespace DKBasicEngine_1_0
                                 }
                             }
                         }
-
-                        offset += 3;
-                        keyOffset++;
-
-                        columnInBuffer++;
                     }
-
-                    rowInBuffer++;
-                    columnInBuffer = 0;
-                }*/
+                }
             }
 
             else
@@ -251,9 +257,6 @@ namespace DKBasicEngine_1_0
                                 }
                             }
                         }
-
-                        offset += 3;
-                        keyOffset++;
                     }
                 }
             }
@@ -288,9 +291,6 @@ namespace DKBasicEngine_1_0
                                 }
                             }
                         }
-
-                        offset += 3;
-                        keyOffset++;
                     }
                 }
             }

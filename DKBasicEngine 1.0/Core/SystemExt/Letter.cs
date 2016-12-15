@@ -8,7 +8,6 @@ namespace DKBasicEngine_1_0
 {
     public class Letter : ICore, I3Dimensional, IGraphics
     {
-
         TextBlock Parent;
 
         internal double _x { get; private set; } = 0;
@@ -75,22 +74,16 @@ namespace DKBasicEngine_1_0
 
         public bool LockScaleRatio { get; set; } = true;
 
-        private Material _model = null;
-
-        public Material modelBase
-        {
-            get { return _model;  }
-            set
-            {
-                _model = value;
-                _changed = true;
-            }
-        }
+        public Material modelBase { get; set; }
         public Material modelRastered { get; private set; }
 
         public int AnimationState { get; set; }
 
-        private bool _changed = false;
+        public bool IsGUI
+        {
+            get { return Parent.IsGUI; }
+            set { }
+        }
 
         public Letter(TextBlock Parent, double x, double y, double z, Material sourceModel)
         {
@@ -101,37 +94,26 @@ namespace DKBasicEngine_1_0
             this.Z = z;
 
             this.Parent = Parent;
+            
 
-            _changed = true;
+            modelRastered = new Material(modelBase, this);
 
             this.Start();
         }
 
         public void Start()
         {
-            lock (Engine.ToUpdate)
-            {
-                Engine.ToUpdate.Add(this);
-            }
+            Engine.ToRender.Add(this);
         }
 
         public void Update()
         {
-            if (_changed)
-            {
-                modelRastered = new Material(modelBase, this);
-                _changed = false;
-            }
+            
         }
 
         public void Render()
         {
-            modelRastered?.Render(this);
-        }
-
-        public void Render(Color? clr)
-        {
-            modelRastered?.Render(this, clr);
+            modelRastered?.Render(this, Parent.Foreground);
         }
     }
 }

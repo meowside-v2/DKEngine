@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public class TextBlock : ICore, I3Dimensional, IText
+    public class TextBlock : ICore, I3Dimensional, IText, IGraphics
     {
         //I3Dimensional Parent;
 
@@ -47,11 +47,9 @@ namespace DKBasicEngine_1_0
                 _bg = value;
 
                 if (value != null)
-                    _Background = new Material((Color)value, this);
+                    modelRastered = new Material((Color)value, this);
             }
         }
-
-        private Material _Background;
         
 
         public double FontSize { get; set; } = 1;
@@ -299,6 +297,12 @@ namespace DKBasicEngine_1_0
             }
         }
 
+        public Material modelBase { get; set; }
+        public Material modelRastered { get; private set; }
+
+        public int AnimationState { get; set; } = 0;
+        public bool IsGUI { get; set; } = false;
+
         public TextBlock(Scene ParentPage)
         {
             this.Start();
@@ -308,10 +312,8 @@ namespace DKBasicEngine_1_0
         
         public virtual void Start()
         {
-            lock (Engine.ToUpdate)
-            {
-                Engine.ToUpdate.Add(this);
-            }
+            Engine.ToUpdate.Add(this);
+            Engine.ToRender.Add(this);
         }
         public virtual void Update()
         {
@@ -335,8 +337,6 @@ namespace DKBasicEngine_1_0
 
                         else
                         {
-                            Material newLetterMaterial = Database.GetLetter(letter);
-
                             if (letter == '\r' || letter == '\n')
                             {
                                 Xoffset = 0;
@@ -347,7 +347,9 @@ namespace DKBasicEngine_1_0
                                 continue;
                             }
 
-                            else if (Xoffset * ScaleX * FontSize + newLetterMaterial.width * ScaleX * FontSize > this.width)
+                            Material newLetterMaterial = Database.GetLetter(letter);
+
+                            if (Xoffset * ScaleX * FontSize + newLetterMaterial.width * ScaleX * FontSize > this.width)
                             {
                                 Xoffset = 0;
                                 Yoffset += 6;
@@ -358,7 +360,7 @@ namespace DKBasicEngine_1_0
                             textAligned[Yoffset / 6].Add(new Letter(this,
                                                 Xoffset,
                                                 Yoffset,
-                                                0,
+                                                this.Z + 1,
                                                 newLetterMaterial));
 
                             Xoffset += newLetterMaterial.width + 1;
@@ -425,6 +427,12 @@ namespace DKBasicEngine_1_0
                     }
                 }
 
+                lock (Engine.ToRender)
+                {
+                    for (int i = 0; i < _text.Count; i++)
+                        Engine.ToRender.Remove(_text[i]);
+                }
+
                 lock (_text)
                 {
                     _text = retValue;
@@ -439,20 +447,7 @@ namespace DKBasicEngine_1_0
 
         public void Render()
         {
-            List<Letter> reference;
-
-            lock (_text)
-            {
-                reference = _text.ToList();
-            }
-
-            foreach (Letter item in reference.FindAll(obj => obj.IsInView()))
-            {
-                item.Render(Foreground ?? Color.White);
-                if (HasShadow) item.Render(Color.Black);
-            }
-
-            _Background?.Render(this);
+            modelRastered?.Render(this);
         }
     }
 }

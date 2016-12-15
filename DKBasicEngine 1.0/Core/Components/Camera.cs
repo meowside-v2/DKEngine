@@ -15,16 +15,13 @@ namespace DKBasicEngine_1_0
 
         public double Xoffset { set; get; }
         public double Yoffset { set; get; }
-
-        public double RenderXOffset = 0;
-        public double RenderYOffset = 0;
-
+        
         private readonly static int MAX_FRAME_RATE = 60;    // Frames per Second
         private const short sampleSize = 100;
         private int lastTime = 0;
         private int numRenders = 0;
         private bool _Vsync = true;
-        
+
         private TextBlock fpsMeter = new TextBlock(null)
         {
             X = 1,
@@ -34,14 +31,13 @@ namespace DKBasicEngine_1_0
             width = 20,
             VAlignment = TextBlock.VerticalAlignment.Bottom,
             HAlignment = TextBlock.HorizontalAlignment.Left,
-            Text = "0"
+            Text = "0",
+            IsGUI = true
         };
 
         private byte[] toRenderData = new byte[3 * Engine.Render.RenderWidth * Engine.Render.RenderHeight];
 
         public IPage sceneReference { get { return Engine.Page; } }
-        public List<I3Dimensional> GUI = new List<I3Dimensional>();
-        public List<I3Dimensional> exclusiveReference = new List<I3Dimensional>();
 
         Thread Ren;
 
@@ -56,7 +52,7 @@ namespace DKBasicEngine_1_0
             this.Yoffset = Yoffset;
 
             //fpsMeter.text = "";
-            GUI.Add(fpsMeter);
+            Engine.ToRender.Add(fpsMeter);
             
             Ren = new Thread(() => Rendering());
             Ren.Start();
@@ -119,34 +115,46 @@ namespace DKBasicEngine_1_0
             Array.Clear(Engine.Render.imageBuffer, 0, Engine.Render.imageBuffer.Length);
             Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
 
-            RenderXOffset = 0;
-            RenderYOffset = 0;
+            List<I3Dimensional> Temp = null;
 
-            lock (GUI)
+            lock (Engine.ToRender)
             {
-                foreach (ICore item in GUI)
-                {
-                    item.Render();
-                }
+                Temp = Engine.ToRender.Where(item => ((I3Dimensional)item).IsInView()).ToList<I3Dimensional>(); 
             }
 
-            RenderXOffset = Xoffset;
-            RenderYOffset = Yoffset;
+            List<I3Dimensional> GUI = Temp.Where(item => ((IGraphics)item).IsGUI);
 
-            lock (exclusiveReference)
+            for (int i = 0; i < GUI.Count; i++)
+                Temp.Remove(GUI[i]);
+
+            while (GUI.Count > 0)
             {
-                foreach (ICore item in exclusiveReference)
+                double tempHeight = GUI.FindMaxZ();
+                List<I3Dimensional> toRender = GUI.Where(item => item.Z == tempHeight).ToList();
+
+                Parallel.For(0, toRender.Count, (i) =>
                 {
-                    item.Render();
-                }
+                    ((ICore)toRender[i]).Render();
+                });
+
+                for (int i = 0; i < toRender.Count; i++)
+                    GUI.Remove(toRender[i]);
             }
 
-            if (sceneReference != null)
-                lock (sceneReference)
-                {
-                    ((ICore)sceneReference).Render();
-                }
+            while(Temp.Count > 0)
+            {
+                double tempHeight = Temp.FindMaxZ();
+                List<I3Dimensional> toRender = Temp.Where(item => item.Z == tempHeight).ToList();
 
+                Parallel.For(0, toRender.Count, (i) =>
+                {
+                    ((ICore)toRender[i]).Render();
+                });
+
+                for (int i = 0; i < toRender.Count; i++)
+                    Temp.Remove(toRender[i]);
+            }
+            
             Buffer.BlockCopy(Engine.Render.imageBuffer, 0, toRenderData, 0, Engine.Render.imageBuffer.Length);
 
             int endRender = Environment.TickCount - Engine.UpdateStartTime;

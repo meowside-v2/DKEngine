@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
@@ -40,14 +42,13 @@ namespace DKBasicEngine_1_0
                 }
 
                 return retValue;
-                //return list.Where(item => item.IsInView()).ToList();
             }
         }
 
         public static bool IsInView(this I3Dimensional obj)
         {
-            double X = Engine._baseCam != null ? Engine._baseCam.RenderXOffset : 0;
-            double Y = Engine._baseCam != null ? Engine._baseCam.RenderYOffset : 0;
+            double X = 0;   /*obj is IGraphics ? 0 : Engine._baseCam.Xoffset;*/
+            double Y = 0;   /*obj is IGraphics ? 0 : Engine._baseCam.Yoffset;*/
 
             return (obj.X + obj.width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
         }
@@ -159,14 +160,15 @@ namespace DKBasicEngine_1_0
             return default(TSource);
         }
 
-        public static List<T> Where<T>(this List<T> list, Func<T, bool> predicate)
+        public static List<T> Where<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             List<T> retValue = new List<T>();
+            List<T> _source = source.ToList();
 
-            for(int i = 0; i < list.Count; i++)
+            for(int i = 0; i < _source.Count; i++)
             {
-                if (predicate(list[i]))
-                    retValue.Add(list[i]);
+                if (predicate(_source[i]))
+                    retValue.Add(_source[i]);
             }
 
             return retValue;
@@ -177,6 +179,16 @@ namespace DKBasicEngine_1_0
             return new List<T>(source);
         }
 
+        public static List<TResult> ToList<TResult>(this IEnumerable source)
+        {
+            return new List<TResult>(Cast<TResult>(source));
+        }
+
+        private static IEnumerable<TResult> Cast<TResult>(IEnumerable source)
+        {
+            foreach (TResult obj in source) yield return obj;
+        }
+        
         public static bool All<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             List<T> _source = source.ToList();
@@ -188,6 +200,26 @@ namespace DKBasicEngine_1_0
             }
 
             return true;
+        }
+
+        public static TSource[] Convert2DArryto1D<TSource>(this TSource[,] source, int width, int height)
+        {
+            TSource[] retValue = new TSource[source.Length];
+
+            for(int i = 0; i < height; i++)
+            {
+                for(int j = 0; j < width; j++)
+                {
+                    retValue[i * width + j] = source[j,i];
+                }
+            }
+
+            return retValue;
+        }
+
+        public static void SpriteChange(Material source, IGraphics destination)
+        {
+
         }
     }
 }

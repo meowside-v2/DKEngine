@@ -47,24 +47,24 @@ namespace DKBasicEngine_1_0
 
         public double X
         {
-            get { return (_x + Parent.X) * (Parent.ScaleX * this.ScaleX); }
+            get { return Parent != null ? _x + Parent.X : _x; }
             set { _x = value; }
         }
         public double Y
         {
-            get { return (_y + Parent.Y) * (Parent.ScaleY * this.ScaleY); }
+            get { return Parent != null ? _y + Parent.Y : _y; }
             set { _y = value; }
         }
         public double Z { get; set; }
 
         public double width
         {
-            get { return (modelBase == null ? 0 : modelBase.width * ScaleX * Parent.ScaleX); }
+            get { return (modelBase == null ? 0 : modelBase.width * ScaleX); }
             set { }
         }
         public double height
         {
-            get { return (modelBase == null ? 0 : modelBase.height * ScaleY * Parent.ScaleY); }
+            get { return (modelBase == null ? 0 : modelBase.height * ScaleY); }
             set { }
         }
         public double depth
@@ -168,6 +168,7 @@ namespace DKBasicEngine_1_0
             }
         }
         public Material modelRastered { get; private set; }
+        public bool IsGUI { get; set; } = false;
 
         public GameObject(I3Dimensional Parent)
         {
@@ -179,10 +180,8 @@ namespace DKBasicEngine_1_0
 
             this.Start();
 
-            lock (Engine.ToUpdate)
-            {
-                Engine.ToUpdate.Add(this);
-            }
+            Engine.ToUpdate.Add(this);
+            Engine.ToRender.Add(this);
 
             _changed = true;
         }
@@ -194,7 +193,7 @@ namespace DKBasicEngine_1_0
         {
             if (_changed)
             {
-                modelRastered = new Material(modelBase, this);
+                if(modelBase != null) modelRastered = new Material(modelBase, this);
                 _changed = false;
             }
         }

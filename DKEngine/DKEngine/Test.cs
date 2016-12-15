@@ -10,12 +10,11 @@ namespace DKEngine
 {
     class Test : Scene
     {
-        public Button b { get; set; }
-
+        
         public Test()
             :base()
         {
-            b = new Button(this)
+            new Button(this)
             {
                 Text = "GG",
                 OnClick = () => Debug.WriteLine("ButtonJede"),
@@ -27,21 +26,29 @@ namespace DKEngine
                 Background = Color.FromArgb(0x80, 0xFF, 0x00, 0XFF)
             };
 
-            for(int i = 0; i < 1000; i++)
+            for(int a = 01; a < 2; a++)
+                for(int i = 0; i < 16; i++)
+                    for (int j = 0; j < 16; j++)
+                        this.Model.Add(new GameObject(null)
+                        {
+                            X = i * 16,
+                            ScaleX = 2,
+                            Z = -a,
+                            Y = j * 16,
+                            modelBase = Database.GetGameObjectMaterial("border")
+                        });
 
-                new TextBox(this)
-                {
-                    Y = 20,
-                    width = 150,
-                    height = 100,
-                    FontSize = 2,
-                    Background = Color.FromArgb(0x70, 0x50, 0x00, 0x20),
-                    Foreground = Color.FromArgb(0x90, 0xff, 0xfd, 0x48),
-                    TextHAlignment = TextBlock.HorizontalAlignment.Center,
-                    TextVAlignment = TextBlock.VerticalAlignment.Center
-                };
-            
-
+            for (int a = 01; a < 2; a++)
+                for (int i = 1; i < 32; i++)
+                    for (int j = 1; j < 64; j++)
+                        this.Model.Add(new GameObject(null)
+                        {
+                            X = i * 1024,
+                            ScaleX = 2,
+                            Z = -a,
+                            Y = j * 16,
+                            modelBase = Database.GetGameObjectMaterial("border")
+                        });
         }
     }
 }
