@@ -44,12 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Components\Animator.cs" />
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
     <Compile Include="Core\Exceptions\SceneInitFailedException.cs" />
     <Compile Include="Core\Interfaces\I3Dimensional.cs" />
+    <Compile Include="Core\Interfaces\IAnimated.cs" />
     <Compile Include="Core\Interfaces\IControl.cs" />
     <Compile Include="Core\Interfaces\ICore.cs" />
     <Compile Include="Core\Interfaces\IGraphics.cs" />
@@ -76,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Build-in stuff\border.png" />
+    <Content Include="Build-in stuff\DKEngine_splash1.gif" />
+    <Content Include="Build-in stuff\DKEngine_splash2.gif" />
+    <Content Include="Build-in stuff\DKEngine_splash3.gif" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Build-in stuff\FontFile.MEX" />

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace DKBasicEngine_1_0
 {
@@ -11,6 +8,7 @@ namespace DKBasicEngine_1_0
 
         public bool HasShadow { get; set; }
 
+        public Animator Animator { get; set; }
         public Collider collider;
 
         protected double _scaleX = 1;
@@ -33,15 +31,7 @@ namespace DKBasicEngine_1_0
             set
             {
                 _typeName = value;
-
-                try
-                {
-                    this.modelBase = Database.GetGameObjectMaterial(value);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Object nenalezen\n " + e);
-                }
+                this.Model = Database.GetGameObjectMaterial(value);
             }
         }
 
@@ -59,12 +49,12 @@ namespace DKBasicEngine_1_0
 
         public double width
         {
-            get { return (modelBase == null ? 0 : modelBase.width * ScaleX); }
+            get { return (Model == null ? 0 : Model.width * ScaleX); }
             set { }
         }
         public double height
         {
-            get { return (modelBase == null ? 0 : modelBase.height * ScaleY); }
+            get { return (Model == null ? 0 : Model.height * ScaleY); }
             set { }
         }
         public double depth
@@ -155,10 +145,7 @@ namespace DKBasicEngine_1_0
         }
 
         public bool LockScaleRatio { get; set; } = true;
-
-        public int AnimationState { get; set; } = 0;
-
-        public Material modelBase
+        public Material Model
         {
             get { return _model; }
             set
@@ -167,16 +154,18 @@ namespace DKBasicEngine_1_0
                 _changed = true;
             }
         }
-        public Material modelRastered { get; private set; }
+        private Material modelRastered = null;
         public bool IsGUI { get; set; } = false;
 
-        public GameObject(I3Dimensional Parent)
+        public GameObject(I3Dimensional Parent = null)
         {
             this.X = 0;
             this.Y = 0;
             this.Z = 0;
 
             this.Parent = Parent;
+
+            Animator = new Animator(this);
 
             this.Start();
 
@@ -191,11 +180,24 @@ namespace DKBasicEngine_1_0
 
         public virtual void Update()
         {
+            Animator?.Update();
+
             if (_changed)
             {
-                if(modelBase != null) modelRastered = new Material(modelBase, this);
+                if(Model != null) modelRastered = new Material(Model, this);
                 _changed = false;
             }
+        }
+
+        public void Destroy()
+        {
+            this.Animator = null;
+            this.collider = null;
+            this.modelRastered = null;
+            this.Parent = null;
+
+            Engine.ToUpdate.Remove(this);
+            Engine.ToRender.Remove(this);
         }
 
         public void Render()

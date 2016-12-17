@@ -40,6 +40,7 @@ namespace DKBasicEngine_1_0
         public IPage sceneReference { get { return Engine.Page; } }
 
         Thread Ren;
+        private bool RenderAbort = false;
 
         public Camera()
         {
@@ -60,10 +61,13 @@ namespace DKBasicEngine_1_0
 
         public void Abort()
         {
-            if (Ren != null) Ren.Abort();
+            if (Ren != null)
+            {
+                RenderAbort = true;
+            }
         }
 
-        private void Rendering()
+        private unsafe void Rendering()
         {
 
             using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
@@ -72,36 +76,32 @@ namespace DKBasicEngine_1_0
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 
-                while (true)
+                while (!RenderAbort)
                 {
                     int beginRender = Environment.TickCount;
-
+                    
                     Point location = new Point(0, 0);
                     Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
-
-                    unsafe
+                    
+                    fixed (byte* ptr = toRenderData)
                     {
-                        fixed (byte* ptr = toRenderData)
+
+                        using (Bitmap outFrame = new Bitmap(Engine.Render.RenderWidth,
+                                                            Engine.Render.RenderHeight,
+                                                            3 * Engine.Render.RenderWidth,
+                                                            System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+                                                            new IntPtr(ptr)))
                         {
+                            Size fontSize = GetConsoleFontSize();
 
-                            using (Bitmap outFrame = new Bitmap(Engine.Render.RenderWidth,
-                                                                Engine.Render.RenderHeight,
-                                                                3 * Engine.Render.RenderWidth,
-                                                                System.Drawing.Imaging.PixelFormat.Format24bppRgb,
-                                                                new IntPtr(ptr)))
-                            {
-                                Size fontSize = GetConsoleFontSize();
+                            Rectangle imageRect = new Rectangle(location.X * fontSize.Width,
+                                                                location.Y * fontSize.Height,
+                                                                imageSize.Width * fontSize.Width,
+                                                                imageSize.Height * fontSize.Height);
 
-                                Rectangle imageRect = new Rectangle(location.X * fontSize.Width,
-                                                                    location.Y * fontSize.Height,
-                                                                    imageSize.Width * fontSize.Width,
-                                                                    imageSize.Height * fontSize.Height);
-
-                                g.DrawImage(outFrame, imageRect);
-                            }
+                            g.DrawImage(outFrame, imageRect);
                         }
                     }
-
 
                     int endRender = Environment.TickCount - beginRender;
 

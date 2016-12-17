@@ -14,7 +14,15 @@ namespace DKEngine
         public Test()
             :base()
         {
-            new Button(this)
+            GameObject t = new GameObject()
+            {
+                Model = new Material(Image.FromFile(@"giphy-downsized-large.gif"))
+            };
+
+
+            this.Model.Add(t);
+
+            /*new Button(this)
             {
                 Text = "GG",
                 OnClick = () => Debug.WriteLine("ButtonJede"),
@@ -48,7 +56,7 @@ namespace DKEngine
                             Z = -a,
                             Y = j * 16,
                             modelBase = Database.GetGameObjectMaterial("border")
-                        });
+                        });*/
         }
     }
 }

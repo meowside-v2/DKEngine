@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
@@ -120,13 +118,10 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        /*public object DeepCopy()
+        public void Destroy()
         {
-            Scene temp = (Scene)MemberwiseClone();
-            temp.Model = Model.ToList();
 
-            return temp;
-        }*/
+        }
 
         public void Render()
         {

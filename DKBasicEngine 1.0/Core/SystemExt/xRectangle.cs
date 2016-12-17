@@ -130,35 +130,12 @@ namespace DKBasicEngine_1_0
         }
         public void Update() { }
 
+        public void Destroy() { }
+
         public void Render()
         {
-            /*List<I3Dimensional> temp;
-
-            lock (border)
-            {
-                temp = border.Where(item => item.IsInView()).ToList();
-            }
-
-            while (temp.Count > 0)
-            {
-                /*if (Engine.Render.imageBuffer.BufferIsFull(255, 4))
-                    return;*/
-
-                /*double tempHeight = temp.FindMaxZ();
-                List<I3Dimensional> toRender = temp.Where(item => (item).Z == tempHeight).ToList();
-
-                foreach (ICore item in toRender)
-                {
-                    item.Render();
-                }
-
-                temp.RemoveAll(item => toRender.FirstOrDefault(item2 => ReferenceEquals(item, item2)) != null);
-            }*/
+            
         }
-
-        private bool BufferIsFull(bool[] key)
-        {
-            return !(key.Contains(false));
-        }
+        
     }
 }

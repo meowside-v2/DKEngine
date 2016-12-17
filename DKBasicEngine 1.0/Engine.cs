@@ -77,6 +77,8 @@ namespace DKBasicEngine_1_0
                     BackgroundWorks = new Thread(() => Update());
                     BackgroundWorks.Start();
 
+                    SplashScreen();
+
                     _isInitialised = true;
                 }
                 catch (Exception e)
@@ -211,6 +213,25 @@ namespace DKBasicEngine_1_0
         {
             if(!_deltaT.IsRunning) _deltaT?.Start();
             if(!BackgroundWorks.IsAlive) BackgroundWorks?.Start();
+        }
+
+        internal static void SplashScreen()
+        {
+            if (!_isInitialised)
+            {
+                Camera splashScreenCam = new Camera();
+                GameObject splashScreen = new GameObject()
+                {
+                    Model = new Material(Properties.Resources.DKEngine_splash2)
+                };
+
+                splashScreenCam.Init(0, 0);
+
+                SpinWait.SpinUntil(() => splashScreen.Animator.NumberOfPlays >= 1);
+
+                splashScreen.Destroy();
+                splashScreenCam.Abort();
+            }
         }
     }
 }

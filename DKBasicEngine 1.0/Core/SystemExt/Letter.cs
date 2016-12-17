@@ -38,13 +38,13 @@ namespace DKBasicEngine_1_0
 
         public double width
         {
-            get { return modelBase.width * Parent.FontSize * Parent.ScaleX; }
+            get { return Model.width * Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
         public double height
         {
-            get { return modelBase.height * Parent.FontSize * Parent.ScaleX; }
+            get { return Model.height * Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
@@ -74,10 +74,13 @@ namespace DKBasicEngine_1_0
 
         public bool LockScaleRatio { get; set; } = true;
 
-        public Material modelBase { get; set; }
-        public Material modelRastered { get; private set; }
+        public Animator Animator { get; set; }
+        public Material Model { get; set; }
+        private Material modelRastered = null;
+        
 
-        public int AnimationState { get; set; }
+        public Color? Foreground { get { return Parent.Foreground; } }
+        
 
         public bool IsGUI
         {
@@ -87,16 +90,16 @@ namespace DKBasicEngine_1_0
 
         public Letter(TextBlock Parent, double x, double y, double z, Material sourceModel)
         {
-            modelBase = sourceModel;
+            Model = sourceModel;
 
             this.X = x;
             this.Y = y;
             this.Z = z;
 
             this.Parent = Parent;
-            
 
-            modelRastered = new Material(modelBase, this);
+            Animator = new Animator(this);
+            modelRastered = new Material(Model, this);
 
             this.Start();
         }
@@ -111,9 +114,14 @@ namespace DKBasicEngine_1_0
             
         }
 
+        public void Destroy()
+        {
+
+        }
+
         public void Render()
         {
-            modelRastered?.Render(this, Parent.Foreground);
+            modelRastered?.Render(this);
         }
     }
 }

@@ -297,10 +297,10 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public Material modelBase { get; set; }
+        public Material Model { get; set; }
         public Material modelRastered { get; private set; }
+        public Animator Animator { get; set; }
 
-        public int AnimationState { get; set; } = 0;
         public bool IsGUI { get; set; } = false;
 
         public TextBlock(Scene ParentPage)
@@ -392,7 +392,7 @@ namespace DKBasicEngine_1_0
                     double maxWidth = 0;
 
                     if(row.Count > 0)
-                        maxWidth = (row[row.Count - 1].modelBase.width + row[row.Count - 1]._x) * FontSize;
+                        maxWidth = (row[row.Count - 1].Model.width + row[row.Count - 1]._x) * FontSize;
 
                     if(maxWidth != 0)
                     {
@@ -443,6 +443,11 @@ namespace DKBasicEngine_1_0
 
                 _changed = false;
             }
+        }
+
+        public void Destroy()
+        {
+
         }
 
         public void Render()

@@ -5,5 +5,6 @@
         void Render();
         void Start();
         void Update();
+        void Destroy();
     }
 }

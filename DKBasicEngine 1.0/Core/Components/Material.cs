@@ -7,23 +7,70 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
+    /// <summary>
+    /// Material represents ones texture with animations states
+    /// </summary>
     public class Material
     {
-        public int width { get; private set; }
-        public int height { get; private set; }
+        /// <summary>
+        /// Represents scaled length of image in pixels
+        /// </summary>
+        public int width { get; private set; } = 0;
 
+        /// <summary>
+        /// Represents scaled height of image in pixels
+        /// </summary>
+        public int height { get; private set; } = 0;
+
+        /// <summary>
+        /// Number of frames
+        /// </summary>
         public int Frames { get; private set; } = 1;
-        public int Duration { get; private set; } = 0;
-        public int DurationPerFrame { get; private set; } = 0;
 
+        /// <summary>
+        /// Total duration of animated image
+        /// </summary>
+        public int Duration { get; private set; } = 1;
+
+        /// <summary>
+        /// Duration between two images
+        /// </summary>
+        public int DurationPerFrame { get; private set; } = 1;
+
+        /// <summary>
+        /// Returns true if image is animated
+        /// </summary>
         public bool IsAnimated { get; private set; } = false;
+
+        /// <summary>
+        /// Returns true if image is in loop
+        /// </summary>
         public bool IsLooped { get; private set; } = false;
 
+        /// <summary>
+        /// Represents Alpha channel of image
+        /// </summary>
         public byte[,,] colorMapA { get; private set; }
-        public byte[,,] colorMapR { get; private set; }
-        public byte[,,] colorMapG { get; private set; }
-        public byte[,,] colorMapB { get; private set; }
 
+        /// <summary>
+        /// Represents Red channel of image
+        /// </summary>
+        public byte[,,] colorMapR { get; private set; }
+
+        /// <summary>
+        /// Represents Green channel of image
+        /// </summary>
+        public byte[,,] colorMapG { get; private set; }
+
+        /// <summary>
+        /// Represents Blue channel of image
+        /// </summary>
+        public byte[,,] colorMapB { get; private set; }
+        
+        /// <summary>
+        /// Loads image and creates new material
+        /// </summary>
+        /// <param name="source">Source image</param>
         public Material(Image source)
         {
             if (ImageAnimator.CanAnimate(source))
@@ -65,7 +112,7 @@ namespace DKBasicEngine_1_0
                 for (int i = 0; i < Frames; i++)
                 {
                     this_delay = BitConverter.ToInt32(source.GetPropertyItem(20736).Value, index) * 10;
-                    delay += (this_delay < 1 ? 1 : this_delay);  // Minimum delay is 100 ms
+                    delay += (this_delay < 1 ? 33 : this_delay);
                     index += 4;
                 }
 
@@ -100,7 +147,13 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public Material(Material source, I3Dimensional parent)
+        /// <summary>
+        /// Loads existing material and scales it by parent's given scales
+        /// </summary>
+        /// <param name="source">EXisting material</param>
+        /// <param name="parent">I3Dimensional used for material scale</param>
+        /// <param name="reColor">Color for material recoloration</param>
+        public Material(Material source, I3Dimensional parent, Color? reColor = null)
         {
             this.Frames = source.Frames;
 
@@ -121,15 +174,32 @@ namespace DKBasicEngine_1_0
                         int X = (int)(k / parent.ScaleX);
                         int Y = (int)(j / parent.ScaleY);
 
-                        colorMapA[k, j, i] = source.colorMapA[X, Y, i];
-                        colorMapR[k, j, i] = source.colorMapR[X, Y, i];
-                        colorMapG[k, j, i] = source.colorMapG[X, Y, i];
-                        colorMapB[k, j, i] = source.colorMapB[X, Y, i];
+                        if(reColor != null)
+                        {
+                            Color temp = (Color)reColor;
+
+                            colorMapA[k, j, i] = temp.A;
+                            colorMapR[k, j, i] = temp.R;
+                            colorMapG[k, j, i] = temp.G;
+                            colorMapB[k, j, i] = temp.B;
+                        }
+                        else
+                        {
+                            colorMapA[k, j, i] = source.colorMapA[X, Y, i];
+                            colorMapR[k, j, i] = source.colorMapR[X, Y, i];
+                            colorMapG[k, j, i] = source.colorMapG[X, Y, i];
+                            colorMapB[k, j, i] = source.colorMapB[X, Y, i];
+                        }
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Creates new material with given color and scales it by parent's given scales
+        /// </summary>
+        /// <param name="clr">Source color</param>
+        /// <param name="parent">I3Dimensional used for material scale</param>
         public Material(Color clr, I3Dimensional parent)
         {
             this.width = (int)parent.width;
@@ -152,6 +222,13 @@ namespace DKBasicEngine_1_0
             }
         }
 
+        /// <summary>
+        /// Returns color of pixel on coordinations
+        /// </summary>
+        /// <param name="x">Column coordination</param>
+        /// <param name="y">Row coordination</param>
+        /// <param name="frame">Layer/Frame coordination</param>
+        /// <returns></returns>
         public string PixelToString(int x, int y, int frame = 0)
         {
             return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", this.colorMapA[x, y, frame],
@@ -160,23 +237,24 @@ namespace DKBasicEngine_1_0
                                                               this.colorMapB[x, y, frame]);
         }
 
-        public void Render(I3Dimensional Parent, Color? clr = null)
+
+        /// <summary>
+        /// Render material into engine image buffer
+        /// </summary>
+        /// <param name="Parent">I3Dimensional for coordiantions</param>
+        public void Render(I3Dimensional Parent)
         {
 
-            int AnimationState = ((IGraphics)Parent).AnimationState;
+            int AnimationState = ((IGraphics)Parent).Animator.AnimationState;
             bool HasShadow = ((IGraphics)Parent).HasShadow;
 
             double x = Parent.X;
             double y = Parent.Y;
-
-
-            if (clr == null)
+            
+            for (int row = 0; row < this.height; row++)
             {
-                /*Parallel.For(0, this.width * this.height, (i) =>
+                for (int column = 0; column < this.width; column++)
                 {
-                    int column = i % this.width;
-                    int row = i / this.width;
-
                     int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
                     int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
 
@@ -188,73 +266,13 @@ namespace DKBasicEngine_1_0
                             if (colorMapA[column, row, AnimationState] != 0)
                             {
                                 Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                      Color.FromArgb(colorMapA[column, row, AnimationState], colorMapR[column, row, AnimationState], colorMapG[column, row, AnimationState], colorMapB[column, row, AnimationState]));
+                                                        Color.FromArgb(colorMapA[column, row, AnimationState], colorMapR[column, row, AnimationState], colorMapG[column, row, AnimationState], colorMapB[column, row, AnimationState]));
 
                                 Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
                                 Engine.Render.imageBuffer[offset] = temp.B;
                                 Engine.Render.imageBuffer[offset + 1] = temp.G;
                                 Engine.Render.imageBuffer[offset + 2] = temp.R;
-                            }
-                        }
-                    }
-                });*/
-
-                for (int row = 0; row < this.height; row++)
-                {
-                    for (int column = 0; column < this.width; column++)
-                    {
-                        int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
-                        int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
-
-                        if (Extensions.IsOnScreen(x + column, y + row))
-                        {
-                            if (Engine.Render.imageBuffer[offset] != 255)
-                            {
-
-                                if (colorMapA[column, row, AnimationState] != 0)
-                                {
-                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                          Color.FromArgb(colorMapA[column, row, AnimationState], colorMapR[column, row, AnimationState], colorMapG[column, row, AnimationState], colorMapB[column, row, AnimationState]));
-
-                                    Engine.Render.imageBufferKey[keyOffset] = temp.A;
-
-                                    Engine.Render.imageBuffer[offset] = temp.B;
-                                    Engine.Render.imageBuffer[offset + 1] = temp.G;
-                                    Engine.Render.imageBuffer[offset + 2] = temp.R;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            else
-            {
-                for (int row = 0; row < this.height; row++)
-                {
-                    for (int column = 0; column < this.width; column++)
-                    {
-                        int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
-                        int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
-
-                        if (Extensions.IsOnScreen(x + column, y + row))
-                        {
-                            if (Engine.Render.imageBufferKey[keyOffset] != 255)
-                            {
-                                Color color = (Color)clr;
-
-                                if (colorMapA[column, row, AnimationState] != 0)
-                                {
-                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                          Color.FromArgb(colorMapA[column, row, AnimationState], colorMapR[column, row, AnimationState], colorMapG[column, row, AnimationState], colorMapB[column, row, AnimationState]));
-
-                                    Engine.Render.imageBufferKey[keyOffset] = temp.A;
-
-                                    Engine.Render.imageBuffer[offset] = temp.B;
-                                    Engine.Render.imageBuffer[offset + 1] = temp.G;
-                                    Engine.Render.imageBuffer[offset + 2] = temp.R;
-                                }
                             }
                         }
                     }
@@ -276,8 +294,6 @@ namespace DKBasicEngine_1_0
 
                             if (Engine.Render.imageBuffer[offset] != 255)
                             {
-                                Color color = (Color)clr;
-
                                 if (colorMapA[column, row, AnimationState] != 0)
                                 {
                                     Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
