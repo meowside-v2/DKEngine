@@ -13,8 +13,8 @@ namespace DKBasicEngine_1_0
     public class Camera
     {
 
-        public double Xoffset { set; get; }
-        public double Yoffset { set; get; }
+        public float Xoffset { set; get; }
+        public float Yoffset { set; get; }
         
         private readonly static int MAX_FRAME_RATE = 60;    // Frames per Second
         private const short sampleSize = 100;
@@ -129,7 +129,7 @@ namespace DKBasicEngine_1_0
 
             while (GUI.Count > 0)
             {
-                double tempHeight = GUI.FindMaxZ();
+                float tempHeight = GUI.FindMaxZ();
                 List<I3Dimensional> toRender = GUI.Where(item => item.Z == tempHeight).ToList();
 
                 Parallel.For(0, toRender.Count, (i) =>
@@ -143,7 +143,7 @@ namespace DKBasicEngine_1_0
 
             while(Temp.Count > 0)
             {
-                double tempHeight = Temp.FindMaxZ();
+                float tempHeight = Temp.FindMaxZ();
                 List<I3Dimensional> toRender = Temp.Where(item => item.Z == tempHeight).ToList();
 
                 Parallel.For(0, toRender.Count, (i) =>
@@ -188,7 +188,7 @@ namespace DKBasicEngine_1_0
                     {
                         fpsMeter.Text = string.Format("{0}", sampleSize * 1000 / temp);
 #if DEBUG
-                        Debug.WriteLine(string.Format("Buff {0}", sampleSize * 1000 / temp));
+                        //Debug.WriteLine(string.Format("Buff {0}", sampleSize * 1000 / temp));
 #endif
                     }
 

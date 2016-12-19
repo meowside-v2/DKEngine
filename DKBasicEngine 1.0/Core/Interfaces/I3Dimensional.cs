@@ -2,17 +2,17 @@
 {
     public interface I3Dimensional
     {
-        double width { get; set; }
-        double height { get; set; }
-        double depth { get; set; }
+        float width { get; set; }
+        float height { get; set; }
+        float depth { get; set; }
 
-        double X { get; set; }
-        double Y { get; set; }
-        double Z { get; set; }
+        float X { get; set; }
+        float Y { get; set; }
+        float Z { get; set; }
 
-        double ScaleX { get; set; }
-        double ScaleY { get; set; }
-        double ScaleZ { get; set; }
+        float ScaleX { get; set; }
+        float ScaleY { get; set; }
+        float ScaleZ { get; set; }
 
         bool LockScaleRatio { get; set; }
     }

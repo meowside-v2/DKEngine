@@ -4,23 +4,23 @@ namespace DKBasicEngine_1_0
 {
     public class xRectangle : ICore, I3Dimensional
     {
-        private double _scaleX = 1;
-        private double _scaleY = 1;
-        private double _scaleZ = 1;
+        private float _scaleX = 1;
+        private float _scaleY = 1;
+        private float _scaleZ = 1;
 
         List<I3Dimensional> border = new List<I3Dimensional>();
 
         //I3Dimensional Parent;
 
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Z { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
 
-        public double width { get; set; }
-        public double height { get; set; }
-        public double depth { get; set; }
+        public float width { get; set; }
+        public float height { get; set; }
+        public float depth { get; set; }
 
-        public double ScaleX
+        public float ScaleX
         {
             get
             {
@@ -45,7 +45,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public double ScaleY
+        public float ScaleY
         {
             get
             {
@@ -70,7 +70,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public double ScaleZ
+        public float ScaleZ
         {
             get
             {

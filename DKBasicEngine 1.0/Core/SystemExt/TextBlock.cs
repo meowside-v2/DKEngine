@@ -13,14 +13,14 @@ namespace DKBasicEngine_1_0
 
         protected bool _changed = false;
 
-        protected double _x = 0;
-        protected double _y = 0;
+        protected float _x = 0;
+        protected float _y = 0;
 
-        protected double _width = 0;
-        protected double _height = 0;
+        protected float _width = 0;
+        protected float _height = 0;
 
-        protected double vertOffset = 0;
-        protected double horiOffset = 0;
+        protected float vertOffset = 0;
+        protected float horiOffset = 0;
 
         protected HorizontalAlignment _HA;
         protected VerticalAlignment _VA;
@@ -32,9 +32,9 @@ namespace DKBasicEngine_1_0
 
         protected List<Letter> _text = new List<Letter>();
 
-        protected double _scaleX = 1;
-        protected double _scaleY = 1;
-        protected double _scaleZ = 1;
+        protected float _scaleX = 1;
+        protected float _scaleY = 1;
+        protected float _scaleZ = 1;
 
         public Color? Foreground { get; set; }
 
@@ -52,7 +52,7 @@ namespace DKBasicEngine_1_0
         }
         
 
-        public double FontSize { get; set; } = 1;
+        public float FontSize { get; set; } = 1;
 
         public enum HorizontalAlignment
         {
@@ -68,19 +68,19 @@ namespace DKBasicEngine_1_0
             Bottom
         };
         
-        public double X
+        public float X
         {
             get { return _x + horiOffset; }
             set { _x = value; }
         }
-        public double Y
+        public float Y
         {
             get { return _y + vertOffset; }
             set { _y = value; }
         }
-        public double Z { get; set; }
+        public float Z { get; set; }
         
-        public double width
+        public float width
         {
             get { return _width * ScaleX; }
             set
@@ -97,7 +97,7 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
-        public double height
+        public float height
         {
             get { return _height * ScaleY; }
             set
@@ -114,13 +114,13 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
-        public double depth
+        public float depth
         {
             get { return 0; }
             set { }
         }
 
-        public double ScaleX
+        public float ScaleX
         {
             get
             {
@@ -144,7 +144,7 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
-        public double ScaleY
+        public float ScaleY
         {
             get
             {
@@ -168,7 +168,7 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
-        public double ScaleZ
+        public float ScaleZ
         {
             get
             {
@@ -368,9 +368,9 @@ namespace DKBasicEngine_1_0
                     }
                 }
 
-                double maxHeight = textAligned.Count * 6 * FontSize;
+                float maxHeight = textAligned.Count * 6 * FontSize;
 
-                double startY = 0;
+                float startY = 0;
 
                 switch (_TVA)
                 {
@@ -389,14 +389,14 @@ namespace DKBasicEngine_1_0
 
                 foreach(List<Letter> row in textAligned)
                 {
-                    double maxWidth = 0;
+                    float maxWidth = 0;
 
                     if(row.Count > 0)
                         maxWidth = (row[row.Count - 1].Model.width + row[row.Count - 1]._x) * FontSize;
 
                     if(maxWidth != 0)
                     {
-                        double startX = 0;
+                        float startX = 0;
 
                         switch (_THA)
                         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace DKBasicEngine_1_0
 {
     public static class Extensions
     {
+
         public static void AddAll<T>(this List<T> list, params T[] stuff)
         {
             foreach (var item in stuff)
@@ -16,9 +18,9 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public static double FindMaxZ(this List<I3Dimensional> list)
+        public static float FindMaxZ(this List<I3Dimensional> list)
         {
-            double z2 = double.MinValue;
+            float z2 = float.MinValue;
 
             for(int i = 0; i < list.Count; i++)
             {
@@ -47,8 +49,8 @@ namespace DKBasicEngine_1_0
 
         public static bool IsInView(this I3Dimensional obj)
         {
-            double X = 0;   /*obj is IGraphics ? 0 : Engine._baseCam.Xoffset;*/
-            double Y = 0;   /*obj is IGraphics ? 0 : Engine._baseCam.Yoffset;*/
+            float X = 0;   /*obj is IGraphics ? 0 : Engine._baseCam.Xoffset;*/
+            float Y = 0;   /*obj is IGraphics ? 0 : Engine._baseCam.Yoffset;*/
 
             return (obj.X + obj.width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
         }
@@ -125,30 +127,35 @@ namespace DKBasicEngine_1_0
                         arr[j, i, d] = value;
         }
 
-        public static bool IsOnScreen(double x, double y)
+        public static bool IsOnScreen(float x, float y)
         {
             return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
         }
 
         public static Color MixPixel(Color top, Color bottom)
         {
-            double opacityTop = (double)1 / 255 * top.A;
-            
-            byte newA = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);
-            byte A = (byte)(newA - top.A);
+            if(bottom.A > 0)
+            {
+                float opacityTop = (float)top.A / 255;
 
-            double opacityBottom = (double)1 / 255 * A;
+                byte newA = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);
+                byte A = (byte)(newA - top.A);
 
-            byte R = (byte)(top.R * opacityTop + bottom.R * opacityBottom);
-            byte G = (byte)(top.G * opacityTop + bottom.G * opacityBottom);
-            byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
+                float opacityBottom = (float)A / 255;
 
-            return Color.FromArgb(newA, R, G, B);
+                byte R = (byte)(top.R * opacityTop + bottom.R * opacityBottom);
+                byte G = (byte)(top.G * opacityTop + bottom.G * opacityBottom);
+                byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
+
+                return Color.FromArgb(newA, R, G, B);
+            }
+
+            return top;
         }
 
         public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            List<TSource> _source = source.ToList();
+            List<TSource> _source = new List<TSource>(source);
 
             for (int i = 0; i < _source.Count; i++)
             {

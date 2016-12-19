@@ -2,6 +2,6 @@
 {
     interface IText
     {
-        double FontSize { get; set; }
+        float FontSize { get; set; }
     }
 }

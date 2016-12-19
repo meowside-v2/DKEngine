@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace DKBasicEngine_1_0
 {
@@ -11,12 +13,12 @@ namespace DKBasicEngine_1_0
         public Animator Animator { get; set; }
         public Collider collider;
 
-        protected double _scaleX = 1;
-        protected double _scaleY = 1;
-        protected double _scaleZ = 1;
+        protected float _scaleX = 1;
+        protected float _scaleY = 1;
+        protected float _scaleZ = 1;
 
-        protected double _x = 0;
-        protected double _y = 0;
+        protected float _x = 0;
+        protected float _y = 0;
 
         protected string _typeName = "";
         private bool _changed = false;
@@ -35,35 +37,35 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public double X
+        public float X
         {
             get { return Parent != null ? _x + Parent.X : _x; }
             set { _x = value; }
         }
-        public double Y
+        public float Y
         {
             get { return Parent != null ? _y + Parent.Y : _y; }
             set { _y = value; }
         }
-        public double Z { get; set; }
+        public float Z { get; set; }
 
-        public double width
+        public float width
         {
             get { return (Model == null ? 0 : Model.width * ScaleX); }
             set { }
         }
-        public double height
+        public float height
         {
             get { return (Model == null ? 0 : Model.height * ScaleY); }
             set { }
         }
-        public double depth
+        public float depth
         {
             get { return 0; }
             set { }
         }
 
-        public double ScaleX
+        public float ScaleX
         {
             get
             {
@@ -90,7 +92,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public double ScaleY
+        public float ScaleY
         {
             get
             {
@@ -117,7 +119,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public double ScaleZ
+        public float ScaleZ
         {
             get
             {
@@ -184,20 +186,22 @@ namespace DKBasicEngine_1_0
 
             if (_changed)
             {
-                if(Model != null) modelRastered = new Material(Model, this);
+                if (Model != null)
+                    modelRastered = new Material(Model, this);
+
                 _changed = false;
             }
         }
 
         public void Destroy()
         {
+            Engine.ToUpdate.Remove(this);
+            Engine.ToRender.Remove(this);
+
             this.Animator = null;
             this.collider = null;
             this.modelRastered = null;
             this.Parent = null;
-
-            Engine.ToUpdate.Remove(this);
-            Engine.ToRender.Remove(this);
         }
 
         public void Render()

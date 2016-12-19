@@ -50,22 +50,22 @@ namespace DKBasicEngine_1_0
         /// <summary>
         /// Represents Alpha channel of image
         /// </summary>
-        public byte[,,] colorMapA { get; private set; }
+        public List<byte[,]> colorMapA { get; private set; } = new List<byte[,]>();
 
         /// <summary>
         /// Represents Red channel of image
         /// </summary>
-        public byte[,,] colorMapR { get; private set; }
+        public List<byte[,]> colorMapR { get; private set; } = new List<byte[,]>();
 
         /// <summary>
         /// Represents Green channel of image
         /// </summary>
-        public byte[,,] colorMapG { get; private set; }
+        public List<byte[,]> colorMapG { get; private set; } = new List<byte[,]>();
 
         /// <summary>
         /// Represents Blue channel of image
         /// </summary>
-        public byte[,,] colorMapB { get; private set; }
+        public List<byte[,]> colorMapB { get; private set; } = new List<byte[,]>();
         
         /// <summary>
         /// Loads image and creates new material
@@ -78,12 +78,7 @@ namespace DKBasicEngine_1_0
                 FrameDimension frameDimension = new FrameDimension(source.FrameDimensionsList[0]);
 
                 Frames = source.GetFrameCount(frameDimension);
-
-                colorMapA = new byte[source.Width, source.Height, Frames];
-                colorMapR = new byte[source.Width, source.Height, Frames];
-                colorMapG = new byte[source.Width, source.Height, Frames];
-                colorMapB = new byte[source.Width, source.Height, Frames];
-
+                
                 width = source.Width;
                 height = source.Height;
 
@@ -91,16 +86,21 @@ namespace DKBasicEngine_1_0
                 {
                     source.SelectActiveFrame(frameDimension, frame);
 
+                    colorMapA.Add(new byte[source.Width, source.Height]);
+                    colorMapR.Add(new byte[source.Width, source.Height]);
+                    colorMapG.Add(new byte[source.Width, source.Height]);
+                    colorMapB.Add(new byte[source.Width, source.Height]);
+
                     for (int row = 0; row < source.Height; row++)
                     {
                         for (int column = 0; column < source.Width; column++)
                         {
                             Color temp = ((Bitmap)source).GetPixel(column, row);
 
-                            colorMapA[column, row, frame] = temp.A;
-                            colorMapR[column, row, frame] = temp.R;
-                            colorMapG[column, row, frame] = temp.G;
-                            colorMapB[column, row, frame] = temp.B;
+                            colorMapA[frame][column, row] = temp.A;
+                            colorMapR[frame][column, row] = temp.R;
+                            colorMapG[frame][column, row] = temp.G;
+                            colorMapB[frame][column, row] = temp.B;
                         }
                     }
                 }
@@ -124,10 +124,10 @@ namespace DKBasicEngine_1_0
 
             else
             {
-                colorMapA = new byte[source.Width, source.Height, 1];
-                colorMapR = new byte[source.Width, source.Height, 1];
-                colorMapG = new byte[source.Width, source.Height, 1];
-                colorMapB = new byte[source.Width, source.Height, 1];
+                colorMapA.Add(new byte[source.Width, source.Height]);
+                colorMapR.Add(new byte[source.Width, source.Height]);
+                colorMapG.Add(new byte[source.Width, source.Height]);
+                colorMapB.Add(new byte[source.Width, source.Height]);
 
                 width = source.Width;
                 height = source.Height;
@@ -138,10 +138,10 @@ namespace DKBasicEngine_1_0
                     {
                         Color temp = ((Bitmap)source).GetPixel(column, row);
 
-                        colorMapA[column, row, 0] = temp.A;
-                        colorMapR[column, row, 0] = temp.R;
-                        colorMapG[column, row, 0] = temp.G;
-                        colorMapB[column, row, 0] = temp.B;
+                        colorMapA[0][column, row] = temp.A;
+                        colorMapR[0][column, row] = temp.R;
+                        colorMapG[0][column, row] = temp.G;
+                        colorMapB[0][column, row] = temp.B;
                     }
                 }
             }
@@ -159,15 +159,15 @@ namespace DKBasicEngine_1_0
 
             this.height = (int)parent.height;
             this.width = (int)parent.width;
-
-            this.colorMapA = new byte[width, height, Frames];
-            this.colorMapR = new byte[width, height, Frames];
-            this.colorMapG = new byte[width, height, Frames];
-            this.colorMapB = new byte[width, height, Frames];
             
             for (int i = 0; i < Frames; i++)
             {
-                for(int j = 0; j < height; j++)
+                this.colorMapA.Add(new byte[width, height]);
+                this.colorMapR.Add(new byte[width, height]);
+                this.colorMapG.Add(new byte[width, height]);
+                this.colorMapB.Add(new byte[width, height]);
+
+                for (int j = 0; j < height; j++)
                 {
                     for(int k = 0; k < width; k++)
                     {
@@ -178,17 +178,17 @@ namespace DKBasicEngine_1_0
                         {
                             Color temp = (Color)reColor;
 
-                            colorMapA[k, j, i] = temp.A;
-                            colorMapR[k, j, i] = temp.R;
-                            colorMapG[k, j, i] = temp.G;
-                            colorMapB[k, j, i] = temp.B;
+                            colorMapA[i][k, j] = temp.A;
+                            colorMapR[i][k, j] = temp.R;
+                            colorMapG[i][k, j] = temp.G;
+                            colorMapB[i][k, j] = temp.B;
                         }
                         else
                         {
-                            colorMapA[k, j, i] = source.colorMapA[X, Y, i];
-                            colorMapR[k, j, i] = source.colorMapR[X, Y, i];
-                            colorMapG[k, j, i] = source.colorMapG[X, Y, i];
-                            colorMapB[k, j, i] = source.colorMapB[X, Y, i];
+                            colorMapA[i][k, j] = source.colorMapA[i][X, Y];
+                            colorMapR[i][k, j] = source.colorMapR[i][X, Y];
+                            colorMapG[i][k, j] = source.colorMapG[i][X, Y];
+                            colorMapB[i][k, j] = source.colorMapB[i][X, Y];
                         }
                     }
                 }
@@ -205,19 +205,19 @@ namespace DKBasicEngine_1_0
             this.width = (int)parent.width;
             this.height = (int)parent.height;
 
-            colorMapA = new byte[width, height, 1];
-            colorMapR = new byte[width, height, 1];
-            colorMapG = new byte[width, height, 1];
-            colorMapB = new byte[width, height, 1];
+            colorMapA.Add(new byte[width, height]);
+            colorMapR.Add(new byte[width, height]);
+            colorMapG.Add(new byte[width, height]);
+            colorMapB.Add(new byte[width, height]);
 
             for (int row = 0; row < height; row++)
             {
                 for (int column = 0; column < width; column++)
                 {
-                    colorMapA[column, row, 0] = clr.A;
-                    colorMapR[column, row, 0] = clr.R;
-                    colorMapG[column, row, 0] = clr.G;
-                    colorMapB[column, row, 0] = clr.B;
+                    colorMapA[0][column, row] = clr.A;
+                    colorMapR[0][column, row] = clr.R;
+                    colorMapG[0][column, row] = clr.G;
+                    colorMapB[0][column, row] = clr.B;
                 }
             }
         }
@@ -231,10 +231,10 @@ namespace DKBasicEngine_1_0
         /// <returns></returns>
         public string PixelToString(int x, int y, int frame = 0)
         {
-            return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", this.colorMapA[x, y, frame],
-                                                              this.colorMapR[x, y, frame],
-                                                              this.colorMapG[x, y, frame],
-                                                              this.colorMapB[x, y, frame]);
+            return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", this.colorMapA[frame][x, y],
+                                                              this.colorMapR[frame][x, y],
+                                                              this.colorMapG[frame][x, y],
+                                                              this.colorMapB[frame][x, y]);
         }
 
 
@@ -245,28 +245,29 @@ namespace DKBasicEngine_1_0
         public void Render(I3Dimensional Parent)
         {
 
-            int AnimationState = ((IGraphics)Parent).Animator.AnimationState;
+            int AnimationState = ((IGraphics)Parent).Animator != null ? ((IGraphics)Parent).Animator.AnimationState : 0;
             bool HasShadow = ((IGraphics)Parent).HasShadow;
 
-            double x = Parent.X;
-            double y = Parent.Y;
+            float x = Parent.X;
+            float y = Parent.Y;
             
             for (int row = 0; row < this.height; row++)
             {
                 for (int column = 0; column < this.width; column++)
                 {
-                    int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
-                    int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
-
                     if (Extensions.IsOnScreen(x + column, y + row))
                     {
-                        if (Engine.Render.imageBuffer[offset] != 255)
+                        int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
+                        int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
+                        
+                        if (Engine.Render.imageBuffer[offset] != colorMapB[AnimationState][column, row] ||
+                            Engine.Render.imageBuffer[offset + 1] != colorMapG[AnimationState][column, row] ||
+                            Engine.Render.imageBuffer[offset + 2] != colorMapR[AnimationState][column, row])
                         {
-
-                            if (colorMapA[column, row, AnimationState] != 0)
+                            if (Engine.Render.imageBuffer[offset] != 255 && colorMapA[AnimationState][column, row] != 0)
                             {
                                 Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                        Color.FromArgb(colorMapA[column, row, AnimationState], colorMapR[column, row, AnimationState], colorMapG[column, row, AnimationState], colorMapB[column, row, AnimationState]));
+                                                    Color.FromArgb(colorMapA[AnimationState][column, row], colorMapR[AnimationState][column, row], colorMapG[AnimationState][column, row], colorMapB[AnimationState][column, row]));
 
                                 Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
@@ -286,25 +287,21 @@ namespace DKBasicEngine_1_0
 
                     for (int column = 0; column < this.width; column++)
                     {
-                        int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
-                        int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
-
                         if (Extensions.IsOnScreen(x + column, y + row))
                         {
-
-                            if (Engine.Render.imageBuffer[offset] != 255)
+                            int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
+                            int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
+                            
+                            if (Engine.Render.imageBuffer[offset] != 255 && colorMapA[AnimationState][column, row] != 0)
                             {
-                                if (colorMapA[column, row, AnimationState] != 0)
-                                {
-                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                          Color.FromArgb(colorMapA[column, row, AnimationState], colorMapR[column, row, AnimationState], colorMapG[column, row, AnimationState], colorMapB[column, row, AnimationState]));
+                                Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
+                                                                    Color.FromArgb(0xAA, 0x00, 0x00, 0x00));
 
-                                    Engine.Render.imageBufferKey[keyOffset] = temp.A;
+                                Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
-                                    Engine.Render.imageBuffer[offset] = temp.B;
-                                    Engine.Render.imageBuffer[offset + 1] = temp.G;
-                                    Engine.Render.imageBuffer[offset + 2] = temp.R;
-                                }
+                                Engine.Render.imageBuffer[offset] = temp.B;
+                                Engine.Render.imageBuffer[offset + 1] = temp.G;
+                                Engine.Render.imageBuffer[offset + 2] = temp.R;
                             }
                         }
                     }

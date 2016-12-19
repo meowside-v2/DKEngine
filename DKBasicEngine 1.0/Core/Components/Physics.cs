@@ -27,7 +27,7 @@ namespace DKBasicEngine_1_0
 
         public void Jump()
         {
-            double StartPositon = Parent.Y;
+            float StartPositon = Parent.Y;
             int MinJump = 10;
 
             do

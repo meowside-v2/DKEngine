@@ -10,11 +10,11 @@ namespace DKBasicEngine_1_0
     {
         TextBlock Parent;
 
-        internal double _x { get; private set; } = 0;
-        internal double _y { get; private set; } = 0;
+        internal float _x { get; private set; } = 0;
+        internal float _y { get; private set; } = 0;
 
-        internal double VertOffset = 0;
-        internal double HorOffset = 0;
+        internal float VertOffset = 0;
+        internal float HorOffset = 0;
 
         public bool HasShadow
         {
@@ -24,49 +24,49 @@ namespace DKBasicEngine_1_0
 
         public bool _IsVisble { get; set; }
         
-        public double X
+        public float X
         {
             get { return HorOffset + _x * Parent.FontSize * Parent.ScaleX + Parent.X; }
             set { _x = value; }
         }
-        public double Y
+        public float Y
         {
             get { return VertOffset + _y * Parent.FontSize * Parent.ScaleY + Parent.Y; }
             set { _y = value; }
         }
-        public double Z { get; set; }
+        public float Z { get; set; }
 
-        public double width
+        public float width
         {
             get { return Model.width * Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
-        public double height
+        public float height
         {
             get { return Model.height * Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
-        public double depth
+        public float depth
         {
             get { return 0; }
             set { }
         }
 
-        public double ScaleX
+        public float ScaleX
         {
             get { return Parent.FontSize * Parent.ScaleX; }
             set { }
         }
 
-        public double ScaleY
+        public float ScaleY
         {
             get { return Parent.FontSize * Parent.ScaleY; }
             set { }
         }
 
-        public double ScaleZ
+        public float ScaleZ
         {
             get { return Parent.FontSize * Parent.ScaleZ; }
             set { }
@@ -88,7 +88,7 @@ namespace DKBasicEngine_1_0
             set { }
         }
 
-        public Letter(TextBlock Parent, double x, double y, double z, Material sourceModel)
+        public Letter(TextBlock Parent, float x, float y, float z, Material sourceModel)
         {
             Model = sourceModel;
 

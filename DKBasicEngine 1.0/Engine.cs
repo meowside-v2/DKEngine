@@ -7,8 +7,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+
+
 namespace DKBasicEngine_1_0
 {
+
     public static class Engine
     {
         public static class Render
@@ -50,7 +53,7 @@ namespace DKBasicEngine_1_0
 
         internal static IPage Page;
 
-        public static double deltaTime { get { return _deltaT.Elapsed.TotalSeconds; } }
+        public static float deltaTime { get { return (float)_deltaT.Elapsed.TotalSeconds; } }
         
 
         public static void Init()
@@ -93,16 +96,16 @@ namespace DKBasicEngine_1_0
         private static void Update()
         {
 
-#if DEBUG
+/*#if DEBUG
             Stopwatch t = Stopwatch.StartNew();
-#endif
+#endif*/
 
             while (true)
             {
-#if DEBUG
+/*#if DEBUG
                 t.Restart();
                 long _startUpdate = t.ElapsedTicks;
-#endif
+#endif*/
 
                 UpdateStartTime = Environment.TickCount;
                 
@@ -141,22 +144,22 @@ namespace DKBasicEngine_1_0
                     g.Update();
                 }
 
-#if DEBUG
+/*#if DEBUG
                 long _endUpdate = t.ElapsedTicks;
-#endif
+#endif*/
 
                 _deltaT?.Restart();
 
-#if DEBUG
+/*#if DEBUG
                 long _startRender = t.ElapsedTicks;
-#endif
+#endif*/
 
                 _baseCam?.BufferImage();
 
-#if DEBUG
+/*#if DEBUG
                 long _endRender = t.ElapsedTicks;
                 Debug.WriteLine($"Update: {_endUpdate - _startUpdate}\nRender: {_endRender - _startRender}\nAll: {_endRender - _startUpdate}");
-#endif
+#endif*/
             }
         }
 
