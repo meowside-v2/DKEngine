@@ -16,13 +16,15 @@ namespace DKEngine
         {
             /*GameObject t = new GameObject()
             {
-                Model = new Material(Image.FromFile(@"giphy-downsized-large.gif"))
+                Model = new Material(Image.FromFile(@"giphy-downsized-large.gif")),
+
             };
 
+            t.Animator.Settings = AnimationLoop.Endless;
 
             this.Model.Add(t);*/
 
-            new Button(this)
+            /*new Button(this)
             {
                 Text = "GG",
                 OnClick = () => Debug.WriteLine("ButtonJede"),
@@ -56,7 +58,7 @@ namespace DKEngine
                             Z = -a,
                             Y = j * 16,
                             Model = Database.GetGameObjectMaterial("border")
-                        });
+                        });*/
         }
     }
 }

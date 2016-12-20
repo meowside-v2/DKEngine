@@ -13,6 +13,16 @@ namespace DKBasicEngine_1_0
     public class Material
     {
         /// <summary>
+        /// Parent of this material
+        /// </summary>
+        public IGraphics Parent;
+
+        /// <summary>
+        /// Source image used for this Material
+        /// </summary>
+        public Image SourceImage;
+
+        /// <summary>
         /// Represents scaled length of image in pixels
         /// </summary>
         public int width { get; private set; } = 0;
@@ -147,7 +157,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Loads existing material and scales it by parent's given scales
         /// </summary>
         /// <param name="source">EXisting material</param>
@@ -193,7 +203,7 @@ namespace DKBasicEngine_1_0
                     }
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// Creates new material with given color and scales it by parent's given scales
@@ -250,49 +260,70 @@ namespace DKBasicEngine_1_0
 
             float x = Parent.X;
             float y = Parent.Y;
-            
-            for (int row = 0; row < this.height; row++)
+
+            float RasteredHeight = this.height * Parent.ScaleY;
+            float RasteredWidth = this.width * Parent.ScaleX;
+
+            float NonRasteredWidthRatio = 1 / Parent.ScaleX;
+            float NonRasteredHeightRatio = 1 / Parent.ScaleY;
+
+            float NonRasteredHeight = 0;
+            float NonRasteredWidth = 0;
+
+            for (int row = 0; row < RasteredHeight; row++)
             {
-                for (int column = 0; column < this.width; column++)
+                NonRasteredWidth = 0;
+
+                for (int column = 0; column < RasteredWidth; column++)
                 {
                     if (Extensions.IsOnScreen(x + column, y + row))
                     {
+                        
                         int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
                         int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
-                        
-                        if (Engine.Render.imageBuffer[offset] != colorMapB[AnimationState][column, row] ||
-                            Engine.Render.imageBuffer[offset + 1] != colorMapG[AnimationState][column, row] ||
-                            Engine.Render.imageBuffer[offset + 2] != colorMapR[AnimationState][column, row])
+
+                        int tempColumn = (int)NonRasteredWidth;
+                        int tempRow    = (int)NonRasteredHeight;
+
+                        if (Engine.Render.imageBuffer[offset] != 255 && colorMapA[AnimationState][tempColumn, tempRow] != 0)
                         {
-                            if (Engine.Render.imageBuffer[offset] != 255 && colorMapA[AnimationState][column, row] != 0)
-                            {
-                                Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                    Color.FromArgb(colorMapA[AnimationState][column, row], colorMapR[AnimationState][column, row], colorMapG[AnimationState][column, row], colorMapB[AnimationState][column, row]));
+                            Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
+                                                Color.FromArgb(colorMapA[AnimationState][tempColumn, tempRow], colorMapR[AnimationState][tempColumn, tempRow], colorMapG[AnimationState][tempColumn, tempRow], colorMapB[AnimationState][tempColumn, tempRow]));
 
-                                Engine.Render.imageBufferKey[keyOffset] = temp.A;
+                            Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
-                                Engine.Render.imageBuffer[offset] = temp.B;
-                                Engine.Render.imageBuffer[offset + 1] = temp.G;
-                                Engine.Render.imageBuffer[offset + 2] = temp.R;
-                            }
+                            Engine.Render.imageBuffer[offset] = temp.B;
+                            Engine.Render.imageBuffer[offset + 1] = temp.G;
+                            Engine.Render.imageBuffer[offset + 2] = temp.R;
                         }
                     }
+
+                    NonRasteredWidth += NonRasteredWidthRatio;
                 }
+
+                NonRasteredHeight += NonRasteredHeightRatio;
             }
 
             if (HasShadow)
             {
-                for (int row = 0; row < this.height; row++)
-                {
+                NonRasteredHeight = 0;
+                NonRasteredWidth = 0;
 
-                    for (int column = 0; column < this.width; column++)
+                for (int row = 0; row < RasteredHeight; row++)
+                {
+                    NonRasteredWidth = 0;
+
+                    for (int column = 0; column < RasteredWidth; column++)
                     {
                         if (Extensions.IsOnScreen(x + column, y + row))
                         {
                             int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
                             int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
-                            
-                            if (Engine.Render.imageBuffer[offset] != 255 && colorMapA[AnimationState][column, row] != 0)
+
+                            int tempColumn = (int)NonRasteredWidth;
+                            int tempRow = (int)NonRasteredHeight;
+
+                            if (Engine.Render.imageBuffer[offset] != 255 && colorMapA[AnimationState][tempColumn, tempRow] != 0)
                             {
                                 Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
                                                                     Color.FromArgb(0xAA, 0x00, 0x00, 0x00));
@@ -304,7 +335,11 @@ namespace DKBasicEngine_1_0
                                 Engine.Render.imageBuffer[offset + 2] = temp.R;
                             }
                         }
+
+                        NonRasteredWidth += NonRasteredWidthRatio;
                     }
+
+                    NonRasteredHeight += NonRasteredHeightRatio;
                 }
             }
         }

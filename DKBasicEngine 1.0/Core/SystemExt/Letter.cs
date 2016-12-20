@@ -76,7 +76,6 @@ namespace DKBasicEngine_1_0
 
         public Animator Animator { get; set; }
         public Material Model { get; set; }
-        private Material modelRastered = null;
         
 
         public Color? Foreground { get { return Parent.Foreground; } }
@@ -99,7 +98,6 @@ namespace DKBasicEngine_1_0
             this.Parent = Parent;
 
             Animator = new Animator(this);
-            modelRastered = new Material(Model, this);
 
             this.Start();
         }
@@ -121,7 +119,7 @@ namespace DKBasicEngine_1_0
 
         public void Render()
         {
-            modelRastered?.Render(this);
+            Model?.Render(this);
         }
     }
 }

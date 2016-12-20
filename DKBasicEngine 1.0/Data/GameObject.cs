@@ -22,7 +22,6 @@ namespace DKBasicEngine_1_0
 
         protected string _typeName = "";
         private bool _changed = false;
-        private Material _model;
 
         public string TypeName
         {
@@ -147,16 +146,7 @@ namespace DKBasicEngine_1_0
         }
 
         public bool LockScaleRatio { get; set; } = true;
-        public Material Model
-        {
-            get { return _model; }
-            set
-            {
-                _model = value;
-                _changed = true;
-            }
-        }
-        private Material modelRastered = null;
+        public Material Model { get; set; } = null;
         public bool IsGUI { get; set; } = false;
 
         public GameObject(I3Dimensional Parent = null)
@@ -186,9 +176,6 @@ namespace DKBasicEngine_1_0
 
             if (_changed)
             {
-                if (Model != null)
-                    modelRastered = new Material(Model, this);
-
                 _changed = false;
             }
         }
@@ -200,13 +187,12 @@ namespace DKBasicEngine_1_0
 
             this.Animator = null;
             this.collider = null;
-            this.modelRastered = null;
             this.Parent = null;
         }
 
         public void Render()
         {
-            modelRastered?.Render(this);
+            Model?.Render(this);
         }
     }
 }

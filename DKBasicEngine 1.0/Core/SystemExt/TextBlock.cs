@@ -47,11 +47,10 @@ namespace DKBasicEngine_1_0
                 _bg = value;
 
                 if (value != null)
-                    modelRastered = new Material((Color)value, this);
+                    Model = new Material((Color)value, this);
             }
         }
         
-
         public float FontSize { get; set; } = 1;
 
         public enum HorizontalAlignment
@@ -298,7 +297,6 @@ namespace DKBasicEngine_1_0
         }
 
         public Material Model { get; set; }
-        public Material modelRastered { get; private set; }
         public Animator Animator { get; set; }
 
         public bool IsGUI { get; set; } = false;
@@ -452,7 +450,7 @@ namespace DKBasicEngine_1_0
 
         public void Render()
         {
-            modelRastered?.Render(this);
+            Model?.Render(this);
         }
     }
 }
