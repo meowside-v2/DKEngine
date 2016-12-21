@@ -74,8 +74,8 @@ namespace DKBasicEngine_1_0
 
         public bool LockScaleRatio { get; set; } = true;
 
-        public Animator Animator { get; set; }
-        public Material Model { get; set; }
+        public Animator Animator { get; private set; }
+        public Material Model { get; private set; }
         
 
         public Color? Foreground { get { return Parent.Foreground; } }
@@ -99,22 +99,20 @@ namespace DKBasicEngine_1_0
 
             Animator = new Animator(this);
 
-            this.Start();
-        }
-
-        public void Start()
-        {
+            Engine.ToStart.Add(this);
             Engine.ToRender.Add(this);
         }
 
-        public void Update()
-        {
-            
-        }
+        public void Start() { }
+
+        public void Update() { }
 
         public void Destroy()
         {
-
+            Engine.ToRender.Remove(this);
+            Animator = null;
+            Model = null;
+            Parent = null;
         }
 
         public void Render()

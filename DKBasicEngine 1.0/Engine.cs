@@ -47,6 +47,7 @@ namespace DKBasicEngine_1_0
         internal static Camera _baseCam;
 
         internal static List<ICore> ToUpdate;
+        internal static List<ICore> ToStart;
         internal static List<IGraphics> ToRender;
         internal static List<IControl> PageControls;
         internal static int UpdateStartTime;
@@ -66,13 +67,14 @@ namespace DKBasicEngine_1_0
                     Console.SetOut(TextWriter.Null);
                     Console.SetIn(TextReader.Null);
 
-                    Database.InitDatabase();
                     WindowControl.WindowInit();
-
+                    Database.InitDatabase();
+                    
                     Render.imageBuffer = new byte[3 * Render.RenderWidth * Render.RenderHeight];
                     Render.imageBufferKey = new byte[Render.RenderWidth * Render.RenderHeight];
 
                     _deltaT = Stopwatch.StartNew();
+                    ToStart = new List<ICore>();
                     ToUpdate = new List<ICore>();
                     ToRender = new List<IGraphics>();
                     PageControls = new List<IControl>();
@@ -121,28 +123,31 @@ namespace DKBasicEngine_1_0
                 {
                     controlReference = PageControls.ToList();
                 }
-                
-                foreach(IControl c in controlReference)
-                {
-                    bool result = Page.FocusSelection == controlReference.FindIndex(obj => ReferenceEquals(obj, c));
 
-                    if(c.IsFocused != result)
-                        c.IsFocused = result;
+                while(ToStart.Count > 0)
+                {
+                    ToStart[0].Start();
+                    ToStart.Remove(ToStart[0]);
                 }
                 
-                foreach (I3Dimensional obj in reference.Where(obj => obj is I3Dimensional).ToList())
+                for(int i = 0; i < controlReference.Count; i++)
                 {
-                    if (!obj.IsInView())
-                        reference.Remove((ICore)obj);
+                    bool result = Page.FocusSelection == controlReference.FindIndex(obj => ReferenceEquals(obj, controlReference[i]));
+
+                    if (controlReference[i].IsFocused != result)
+                        controlReference[i].IsFocused = result;
                 }
+
+                List<ICore> tempReference = reference.Where(obj => obj is I3Dimensional).ToList();
+
+                for(int i = 0; i < tempReference.Count; i++)
+                    if (!((I3Dimensional)tempReference[i]).IsInView())
+                        reference.Remove(tempReference[i]);
 
                 _deltaT?.Stop();
-                
 
-                foreach (ICore g in reference)
-                {
-                    g.Update();
-                }
+                for (int i = 0; i < reference.Count; i++)
+                    reference[i].Update();
 
 /*#if DEBUG
                 long _endUpdate = t.ElapsedTicks;
@@ -223,17 +228,14 @@ namespace DKBasicEngine_1_0
             if (!_isInitialised)
             {
                 Camera splashScreenCam = new Camera();
-                GameObject splashScreen = new GameObject()
-                {
-                    Model = new Material(Properties.Resources.DKEngine_splash2)
-                };
+                SplashScreen splash = new SplashScreen(null);
 
                 splashScreenCam.Init(0, 0);
 
-                SpinWait.SpinUntil(() => splashScreen.Animator.NumberOfPlays >= 1);
+                SpinWait.SpinUntil(() => splash.Animator.NumberOfPlays >= 1);
 
-                splashScreen.Destroy();
-                splashScreenCam.Abort();
+                splash.Destroy();
+                splashScreenCam.Destroy();
             }
         }
     }

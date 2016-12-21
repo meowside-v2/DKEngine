@@ -7,10 +7,12 @@ namespace DKBasicEngine_1_0
     public class GameObject : ICore, I3Dimensional, IGraphics
     {
         I3Dimensional Parent;
-
+        
+        public Animator Animator { get; private set; }
+        public Material Model { get; private set; } = null;
+        public bool IsGUI { get; set; } = false;
         public bool HasShadow { get; set; }
 
-        public Animator Animator { get; set; }
         public Collider collider;
 
         protected float _scaleX = 1;
@@ -21,7 +23,6 @@ namespace DKBasicEngine_1_0
         protected float _y = 0;
 
         protected string _typeName = "";
-        private bool _changed = false;
 
         public string TypeName
         {
@@ -85,8 +86,6 @@ namespace DKBasicEngine_1_0
                         _scaleZ = _scaleX;
                         _scaleY = _scaleX;
                     }
-
-                    _changed = true;
                 }
             }
         }
@@ -112,8 +111,6 @@ namespace DKBasicEngine_1_0
                         _scaleX = _scaleY;
                         _scaleZ = _scaleY;
                     }
-
-                    _changed = true;
                 }
             }
         }
@@ -139,15 +136,12 @@ namespace DKBasicEngine_1_0
                         _scaleX = _scaleZ;
                         _scaleY = _scaleZ;
                     }
-
-                    _changed = true;
                 }
             }
         }
 
         public bool LockScaleRatio { get; set; } = true;
-        public Material Model { get; set; } = null;
-        public bool IsGUI { get; set; } = false;
+        
 
         public GameObject(I3Dimensional Parent = null)
         {
@@ -159,12 +153,10 @@ namespace DKBasicEngine_1_0
 
             Animator = new Animator(this);
 
-            this.Start();
-
+            Engine.ToStart.Add(this);
             Engine.ToUpdate.Add(this);
             Engine.ToRender.Add(this);
-
-            _changed = true;
+            
         }
 
         public virtual void Start()
@@ -173,11 +165,6 @@ namespace DKBasicEngine_1_0
         public virtual void Update()
         {
             Animator?.Update();
-
-            if (_changed)
-            {
-                _changed = false;
-            }
         }
 
         public void Destroy()

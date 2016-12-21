@@ -14,17 +14,18 @@ namespace DKEngine
         public Test()
             :base()
         {
-            /*GameObject t = new GameObject()
-            {
-                Model = new Material(Image.FromFile(@"giphy-downsized-large.gif")),
+            /*Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
 
+            GameObject t = new GameObject()
+            {
+                TypeName = "animatedDemo"
             };
 
             t.Animator.Settings = AnimationLoop.Endless;
 
             this.Model.Add(t);*/
 
-            /*new Button(this)
+            new Button(this)
             {
                 Text = "GG",
                 OnClick = () => Debug.WriteLine("ButtonJede"),
@@ -45,7 +46,7 @@ namespace DKEngine
                             ScaleX = 2,
                             Z = -a,
                             Y = j * 16,
-                            Model = Database.GetGameObjectMaterial("border")
+                            TypeName = "border"
                         });
 
             for (int a = 01; a < 2; a++)
@@ -57,8 +58,8 @@ namespace DKEngine
                             ScaleX = 2,
                             Z = -a,
                             Y = j * 16,
-                            Model = Database.GetGameObjectMaterial("border")
-                        });*/
+                            TypeName = "border"
+                        });
         }
     }
 }

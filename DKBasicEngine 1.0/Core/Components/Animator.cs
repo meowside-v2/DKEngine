@@ -5,10 +5,7 @@ namespace DKBasicEngine_1_0
     public class Animator : IAnimated
     {
         IGraphics Parent;
-
-        public int MaxBufferImages = 0;
-        public int MinBufferImages = 0;
-
+        
         private bool _wasPlayed = false;
         private AnimationLoop _settings = AnimationLoop.Once;
         public AnimationLoop Settings

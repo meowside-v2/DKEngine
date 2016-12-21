@@ -59,12 +59,12 @@ namespace DKBasicEngine_1_0
             Ren.Start();
         }
 
-        public void Abort()
+        public void Destroy()
         {
             if (Ren != null)
-            {
                 RenderAbort = true;
-            }
+
+            fpsMeter.Destroy();
         }
 
         private unsafe void Rendering()
@@ -188,7 +188,7 @@ namespace DKBasicEngine_1_0
                     {
                         fpsMeter.Text = string.Format("{0}", sampleSize * 1000 / temp);
 #if DEBUG
-                        //Debug.WriteLine(string.Format("Buff {0}", sampleSize * 1000 / temp));
+                        Debug.WriteLine(string.Format("Buff {0}", sampleSize * 1000 / temp));
 #endif
                     }
 

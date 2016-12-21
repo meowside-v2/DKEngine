@@ -119,23 +119,18 @@ namespace DKBasicEngine_1_0
                 border.Add(new Border(this) { Y = i, Z = this.Z });
                 border.Add(new Border(this) { X = width + 8, Y = i, Z = this.Z });
             }
+
+            Engine.ToStart.Add(this);
+            Engine.ToUpdate.Add(this);
         }
 
-        public void Start()
-        {
-            lock (Engine.ToUpdate)
-            {
-                Engine.ToUpdate.Add(this);
-            }
-        }
+        public void Start() { }
+
         public void Update() { }
 
         public void Destroy() { }
 
-        public void Render()
-        {
-            
-        }
+        public void Render() { }
         
     }
 }

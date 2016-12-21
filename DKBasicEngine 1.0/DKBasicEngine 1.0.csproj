@@ -67,6 +67,7 @@
     <Compile Include="Data\Database.cs" />
     <Compile Include="Data\GameObject.cs" />
     <Compile Include="Data\Predefined\Border.cs" />
+    <Compile Include="Data\Predefined\SplashScreen.cs" />
     <Compile Include="Data\Scene.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

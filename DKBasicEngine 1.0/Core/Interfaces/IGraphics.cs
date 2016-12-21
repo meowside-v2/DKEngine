@@ -4,7 +4,7 @@
     {
         bool IsGUI { get; set; }
         bool HasShadow { get; set; }
-        Material Model { get; set; }
-        Animator Animator { get; set; }
+        Material Model { get; }
+        Animator Animator { get; }
     }
 }

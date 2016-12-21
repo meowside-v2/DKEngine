@@ -166,6 +166,7 @@ namespace DKBasicEngine_1_0
         internal static void InitDatabase()
         {
             AddNewGameObjectMaterial("border", new Material(Resources.border));
+            AddNewGameObjectMaterial("splashScreen", new Material(Resources.DKEngine_splash2));
 
             CreateLetterReferences();
         }

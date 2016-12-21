@@ -13,14 +13,9 @@ namespace DKBasicEngine_1_0
     public class Material
     {
         /// <summary>
-        /// Parent of this material
-        /// </summary>
-        public IGraphics Parent;
-
-        /// <summary>
         /// Source image used for this Material
         /// </summary>
-        public Image SourceImage;
+        public Image SourceImage = null;
 
         /// <summary>
         /// Represents scaled length of image in pixels
@@ -83,137 +78,91 @@ namespace DKBasicEngine_1_0
         /// <param name="source">Source image</param>
         public Material(Image source)
         {
-            if (ImageAnimator.CanAnimate(source))
+            if(source != null)
             {
-                FrameDimension frameDimension = new FrameDimension(source.FrameDimensionsList[0]);
+                SourceImage = source;
 
-                Frames = source.GetFrameCount(frameDimension);
-                
                 width = source.Width;
                 height = source.Height;
 
-                for (int frame = 0; frame < Frames; frame++)
+                if (ImageAnimator.CanAnimate(source))
                 {
-                    source.SelectActiveFrame(frameDimension, frame);
+                    FrameDimension frameDimension = new FrameDimension(source.FrameDimensionsList[0]);
 
+                    Frames = source.GetFrameCount(frameDimension);
+                    
+                    for (int frame = 0; frame < Frames; frame++)
+                    {
+                        source.SelectActiveFrame(frameDimension, frame);
+
+                        colorMapA.Add(new byte[source.Width, source.Height]);
+                        colorMapR.Add(new byte[source.Width, source.Height]);
+                        colorMapG.Add(new byte[source.Width, source.Height]);
+                        colorMapB.Add(new byte[source.Width, source.Height]);
+
+                        for (int row = 0; row < source.Height; row++)
+                        {
+                            for (int column = 0; column < source.Width; column++)
+                            {
+                                Color temp = ((Bitmap)source).GetPixel(column, row);
+
+                                colorMapA[frame][column, row] = temp.A;
+                                colorMapR[frame][column, row] = temp.R;
+                                colorMapG[frame][column, row] = temp.G;
+                                colorMapB[frame][column, row] = temp.B;
+                            }
+                        }
+                    }
+
+                    int delay = 0;
+                    int this_delay = 0;
+                    int index = 0;
+
+                    for (int i = 0; i < Frames; i++)
+                    {
+                        this_delay = BitConverter.ToInt32(source.GetPropertyItem(20736).Value, index) * 10;
+                        delay += (this_delay < 1 ? 33 : this_delay);
+                        index += 4;
+                    }
+
+                    Duration = delay;
+                    DurationPerFrame = Duration / Frames;
+                    IsAnimated = true;
+                    IsLooped = BitConverter.ToInt16(source.GetPropertyItem(20737).Value, 0) != 1;
+                }
+
+                else
+                {
                     colorMapA.Add(new byte[source.Width, source.Height]);
                     colorMapR.Add(new byte[source.Width, source.Height]);
                     colorMapG.Add(new byte[source.Width, source.Height]);
                     colorMapB.Add(new byte[source.Width, source.Height]);
-
+                    
                     for (int row = 0; row < source.Height; row++)
                     {
                         for (int column = 0; column < source.Width; column++)
                         {
                             Color temp = ((Bitmap)source).GetPixel(column, row);
 
-                            colorMapA[frame][column, row] = temp.A;
-                            colorMapR[frame][column, row] = temp.R;
-                            colorMapG[frame][column, row] = temp.G;
-                            colorMapB[frame][column, row] = temp.B;
+                            colorMapA[0][column, row] = temp.A;
+                            colorMapR[0][column, row] = temp.R;
+                            colorMapG[0][column, row] = temp.G;
+                            colorMapB[0][column, row] = temp.B;
                         }
-                    }
-                }
-
-                int delay = 0;
-                int this_delay = 0;
-                int index = 0;
-
-                for (int i = 0; i < Frames; i++)
-                {
-                    this_delay = BitConverter.ToInt32(source.GetPropertyItem(20736).Value, index) * 10;
-                    delay += (this_delay < 1 ? 33 : this_delay);
-                    index += 4;
-                }
-
-                Duration = delay;
-                DurationPerFrame = Duration / Frames;
-                IsAnimated = true;
-                IsLooped = BitConverter.ToInt16(source.GetPropertyItem(20737).Value, 0) != 1;
-            }
-
-            else
-            {
-                colorMapA.Add(new byte[source.Width, source.Height]);
-                colorMapR.Add(new byte[source.Width, source.Height]);
-                colorMapG.Add(new byte[source.Width, source.Height]);
-                colorMapB.Add(new byte[source.Width, source.Height]);
-
-                width = source.Width;
-                height = source.Height;
-                
-                for (int row = 0; row < source.Height; row++)
-                {
-                    for (int column = 0; column < source.Width; column++)
-                    {
-                        Color temp = ((Bitmap)source).GetPixel(column, row);
-
-                        colorMapA[0][column, row] = temp.A;
-                        colorMapR[0][column, row] = temp.R;
-                        colorMapG[0][column, row] = temp.G;
-                        colorMapB[0][column, row] = temp.B;
                     }
                 }
             }
         }
 
-        /*/// <summary>
-        /// Loads existing material and scales it by parent's given scales
-        /// </summary>
-        /// <param name="source">EXisting material</param>
-        /// <param name="parent">I3Dimensional used for material scale</param>
-        /// <param name="reColor">Color for material recoloration</param>
-        public Material(Material source, I3Dimensional parent, Color? reColor = null)
-        {
-            this.Frames = source.Frames;
-
-            this.height = (int)parent.height;
-            this.width = (int)parent.width;
-            
-            for (int i = 0; i < Frames; i++)
-            {
-                this.colorMapA.Add(new byte[width, height]);
-                this.colorMapR.Add(new byte[width, height]);
-                this.colorMapG.Add(new byte[width, height]);
-                this.colorMapB.Add(new byte[width, height]);
-
-                for (int j = 0; j < height; j++)
-                {
-                    for(int k = 0; k < width; k++)
-                    {
-                        int X = (int)(k / parent.ScaleX);
-                        int Y = (int)(j / parent.ScaleY);
-
-                        if(reColor != null)
-                        {
-                            Color temp = (Color)reColor;
-
-                            colorMapA[i][k, j] = temp.A;
-                            colorMapR[i][k, j] = temp.R;
-                            colorMapG[i][k, j] = temp.G;
-                            colorMapB[i][k, j] = temp.B;
-                        }
-                        else
-                        {
-                            colorMapA[i][k, j] = source.colorMapA[i][X, Y];
-                            colorMapR[i][k, j] = source.colorMapR[i][X, Y];
-                            colorMapG[i][k, j] = source.colorMapG[i][X, Y];
-                            colorMapB[i][k, j] = source.colorMapB[i][X, Y];
-                        }
-                    }
-                }
-            }
-        }*/
-
         /// <summary>
         /// Creates new material with given color and scales it by parent's given scales
         /// </summary>
         /// <param name="clr">Source color</param>
-        /// <param name="parent">I3Dimensional used for material scale</param>
-        public Material(Color clr, I3Dimensional parent)
+        /// <param name="Parent">I3Dimensional used for material scale</param>
+        public Material(Color clr, I3Dimensional Parent)
         {
-            this.width = (int)parent.width;
-            this.height = (int)parent.height;
+            this.width = (int)Parent.width;
+            this.height = (int)Parent.height;
 
             colorMapA.Add(new byte[width, height]);
             colorMapR.Add(new byte[width, height]);
@@ -278,7 +227,7 @@ namespace DKBasicEngine_1_0
                 {
                     if (Extensions.IsOnScreen(x + column, y + row))
                     {
-                        
+
                         int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
                         int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
 
