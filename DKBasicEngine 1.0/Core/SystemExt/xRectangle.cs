@@ -120,8 +120,14 @@ namespace DKBasicEngine_1_0
                 border.Add(new Border(this) { X = width + 8, Y = i, Z = this.Z });
             }
 
-            Engine.ToStart.Add(this);
-            Engine.ToUpdate.Add(this);
+            lock (Engine.ToStart)
+            {
+                lock (Engine.ToUpdate)
+                {
+                    Engine.ToStart.Add(this);
+                    Engine.ToUpdate.Add(this);
+                }
+            }
         }
 
         public void Start() { }

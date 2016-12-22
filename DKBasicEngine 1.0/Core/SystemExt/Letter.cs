@@ -99,8 +99,14 @@ namespace DKBasicEngine_1_0
 
             Animator = new Animator(this);
 
-            Engine.ToStart.Add(this);
-            Engine.ToRender.Add(this);
+            lock (Engine.ToStart)
+            {
+                lock (Engine.ToRender)
+                {
+                    Engine.ToStart.Add(this);
+                    Engine.ToRender.Add(this);
+                }
+            }
         }
 
         public void Start() { }

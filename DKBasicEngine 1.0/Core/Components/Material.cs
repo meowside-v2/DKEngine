@@ -15,62 +15,62 @@ namespace DKBasicEngine_1_0
         /// <summary>
         /// Source image used for this Material
         /// </summary>
-        public Image SourceImage = null;
+        public readonly Image SourceImage = null;
 
         /// <summary>
         /// Represents scaled length of image in pixels
         /// </summary>
-        public int width { get; private set; } = 0;
+        public readonly int width = 0;
 
         /// <summary>
         /// Represents scaled height of image in pixels
         /// </summary>
-        public int height { get; private set; } = 0;
+        public readonly int height = 0;
 
         /// <summary>
         /// Number of frames
         /// </summary>
-        public int Frames { get; private set; } = 1;
+        public readonly int Frames = 1;
 
         /// <summary>
         /// Total duration of animated image
         /// </summary>
-        public int Duration { get; private set; } = 1;
+        public readonly int Duration = 1;
 
         /// <summary>
         /// Duration between two images
         /// </summary>
-        public int DurationPerFrame { get; private set; } = 1;
+        public readonly int DurationPerFrame = 1;
 
         /// <summary>
         /// Returns true if image is animated
         /// </summary>
-        public bool IsAnimated { get; private set; } = false;
+        public readonly bool IsAnimated = false;
 
         /// <summary>
         /// Returns true if image is in loop
         /// </summary>
-        public bool IsLooped { get; private set; } = false;
+        public readonly bool IsLooped = false;
 
         /// <summary>
         /// Represents Alpha channel of image
         /// </summary>
-        public List<byte[,]> colorMapA { get; private set; } = new List<byte[,]>();
+        public readonly List<byte[,]> colorMapA = new List<byte[,]>();
 
         /// <summary>
         /// Represents Red channel of image
         /// </summary>
-        public List<byte[,]> colorMapR { get; private set; } = new List<byte[,]>();
+        public readonly List<byte[,]> colorMapR = new List<byte[,]>();
 
         /// <summary>
         /// Represents Green channel of image
         /// </summary>
-        public List<byte[,]> colorMapG { get; private set; } = new List<byte[,]>();
+        public readonly List<byte[,]> colorMapG = new List<byte[,]>();
 
         /// <summary>
         /// Represents Blue channel of image
         /// </summary>
-        public List<byte[,]> colorMapB { get; private set; } = new List<byte[,]>();
+        public readonly List<byte[,]> colorMapB = new List<byte[,]>();
         
         /// <summary>
         /// Loads image and creates new material

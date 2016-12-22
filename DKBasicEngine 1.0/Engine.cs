@@ -11,16 +11,12 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-
     public static class Engine
     {
         public static class Render
         {
-            private static int _width = 640;
-            private static int _height = 360;
-
-            public static int RenderWidth { get { return _width; } }
-            public static int RenderHeight { get { return _height; } }
+            public static readonly int RenderWidth = 640;
+            public static readonly int RenderHeight = 360;
 
             internal static byte[] imageBuffer;
             internal static byte[] imageBufferKey;
@@ -173,37 +169,34 @@ namespace DKBasicEngine_1_0
             if (_isInitialised)
             {
                 Engine.Page = Page;
+                
+                Engine.PageControls = Page.PageControls.ToList();
 
-                lock (PageControls)
+                for (int i = 0; i < PageControls.Count - 1; i++)
                 {
-                    Engine.PageControls = Page.PageControls.ToList();
-
-                    for (int i = 0; i < PageControls.Count - 1; i++)
+                    for (int j = 0; j < PageControls.Count - 1; j++)
                     {
-                        for (int j = 0; j < PageControls.Count - 1; j++)
+                        if (((I3Dimensional)PageControls[j]).X > ((I3Dimensional)PageControls[j + 1]).X)
                         {
-                            if (((I3Dimensional)PageControls[j]).X > ((I3Dimensional)PageControls[j + 1]).X)
-                            {
 
+                            var temp = PageControls[j];
+                            PageControls[j] = PageControls[j + 1];
+                            PageControls[j + 1] = temp;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < PageControls.Count - 1; i++)
+                {
+                    for (int j = 0; j < PageControls.Count - 1; j++)
+                    {
+                        if (((I3Dimensional)PageControls[j]).X == ((I3Dimensional)PageControls[j + 1]).X)
+                            if (((I3Dimensional)PageControls[j]).Y < ((I3Dimensional)PageControls[j + 1]).Y)
+                            {
                                 var temp = PageControls[j];
                                 PageControls[j] = PageControls[j + 1];
                                 PageControls[j + 1] = temp;
                             }
-                        }
-                    }
-
-                    for (int i = 0; i < PageControls.Count - 1; i++)
-                    {
-                        for (int j = 0; j < PageControls.Count - 1; j++)
-                        {
-                            if (((I3Dimensional)PageControls[j]).X == ((I3Dimensional)PageControls[j + 1]).X)
-                                if (((I3Dimensional)PageControls[j]).Y < ((I3Dimensional)PageControls[j + 1]).Y)
-                                {
-                                    var temp = PageControls[j];
-                                    PageControls[j] = PageControls[j + 1];
-                                    PageControls[j + 1] = temp;
-                                }
-                        }
                     }
                 }
             }

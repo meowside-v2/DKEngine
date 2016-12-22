@@ -303,10 +303,19 @@ namespace DKBasicEngine_1_0
 
         public TextBlock(Scene ParentPage)
         {
-            Engine.ToStart.Add(this);
-            Engine.ToUpdate.Add(this);
-            Engine.ToRender.Add(this);
-
+            lock (Engine.ToStart)
+            {
+                lock (Engine.ToUpdate)
+                {
+                    lock (Engine.ToRender)
+                    {
+                        Engine.ToStart.Add(this);
+                        Engine.ToUpdate.Add(this);
+                        Engine.ToRender.Add(this);
+                    }
+                }
+            }
+            
             if (ParentPage != null)
                 ParentPage.Model.Add(this);
         }

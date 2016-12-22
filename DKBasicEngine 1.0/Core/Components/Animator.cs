@@ -6,7 +6,7 @@ namespace DKBasicEngine_1_0
     {
         IGraphics Parent;
         
-        private bool _wasPlayed = false;
+        private bool _wasPlayed         = false;
         private AnimationLoop _settings = AnimationLoop.Once;
         public AnimationLoop Settings
         {
@@ -16,8 +16,11 @@ namespace DKBasicEngine_1_0
             }
             set
             {
-                _settings = value;
-                _wasPlayed = false;
+                if(_settings != value)
+                {
+                    _settings = value;
+                    _wasPlayed = false;
+                }
             }
         }
         public int AnimationState
