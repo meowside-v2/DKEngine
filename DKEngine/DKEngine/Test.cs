@@ -14,7 +14,7 @@ namespace DKEngine
         public Test()
             :base()
         {
-            Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
+            /*Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
 
             GameObject t = new GameObject(this, null)
             {
@@ -39,7 +39,7 @@ namespace DKEngine
                     Foreground = Color.FromArgb(i * 0x0F, i * 0x0F, 0x00, i * 0x0F),
                     Background = Color.FromArgb(i * 0x0F, i * 0x0F, i * 0x0F, i * 0x0F)
                 };
-            }
+            }*/
 
             /*new Button(this)
             {
@@ -56,7 +56,7 @@ namespace DKEngine
             for(int a = 01; a < 2; a++)
                 for(int i = 0; i < 16; i++)
                     for (int j = 0; j < 16; j++)
-                        this.Model.Add(new GameObject(null)
+                        this.Model.Add(new GameObject(this, null)
                         {
                             X = i * 16,
                             ScaleX = 2,
@@ -68,7 +68,7 @@ namespace DKEngine
             for (int a = 01; a < 2; a++)
                 for (int i = 1; i < 32; i++)
                     for (int j = 1; j < 64; j++)
-                        this.Model.Add(new GameObject(null)
+                        this.Model.Add(new GameObject(this, null)
                         {
                             X = i * 1024,
                             ScaleX = 2,

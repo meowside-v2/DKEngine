@@ -38,13 +38,13 @@ namespace DKBasicEngine_1_0
 
         public float width
         {
-            get { return Model.width * _Parent.FontSize * _Parent.ScaleX; }
+            get { return Model.Width * _Parent.FontSize * _Parent.ScaleX; }
             set { }
         }
 
         public float height
         {
-            get { return Model.height * _Parent.FontSize * _Parent.ScaleX; }
+            get { return Model.Height * _Parent.FontSize * _Parent.ScaleX; }
             set { }
         }
 

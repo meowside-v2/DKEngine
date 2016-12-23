@@ -51,12 +51,12 @@ namespace DKBasicEngine_1_0
 
         public float width
         {
-            get { return (Model == null ? 0 : Model.width * ScaleX); }
+            get { return (Model == null ? 0 : Model.Width * ScaleX); }
             set { }
         }
         public float height
         {
-            get { return (Model == null ? 0 : Model.height * ScaleY); }
+            get { return (Model == null ? 0 : Model.Height * ScaleY); }
             set { }
         }
         public float depth
@@ -153,16 +153,19 @@ namespace DKBasicEngine_1_0
 
             Animator = new Animator(this);
 
-            lock(ToAddToModel)
-                lock (Engine.ToStart)
-                    lock (Engine.ToUpdate)
-                        lock (Engine.ToRender)
-                        {
-                            Engine.ToStart.Add(this);
-                            Engine.ToUpdate.Add(this);
-                            Engine.ToRender.Add(this);
-                            ToAddToModel.Model.Add(this);
-                        }
+            if(ToAddToModel != null)
+                lock (ToAddToModel)
+                    ToAddToModel.Model.Add(this);
+
+            lock (Engine.ToStart)
+                lock (Engine.ToUpdate)
+                    lock (Engine.ToRender)
+                    {
+                        Engine.ToStart.Add(this);
+                        Engine.ToUpdate.Add(this);
+                        Engine.ToRender.Add(this);
+                            
+                    }
 
         }
 

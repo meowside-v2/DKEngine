@@ -354,7 +354,7 @@ namespace DKBasicEngine_1_0
 
                             Material newLetterMaterial = Database.GetLetter(_textStr[i]);
 
-                            if (Xoffset * ScaleX * FontSize + newLetterMaterial.width * ScaleX * FontSize > this.width)
+                            if (Xoffset * ScaleX * FontSize + newLetterMaterial.Width * ScaleX * FontSize > this.width)
                             {
                                 Xoffset = 0;
                                 Yoffset += 6;
@@ -368,7 +368,7 @@ namespace DKBasicEngine_1_0
                                                 this.Z + 1,
                                                 newLetterMaterial));
 
-                            Xoffset += newLetterMaterial.width + 1;
+                            Xoffset += newLetterMaterial.Width + 1;
                         }
                     }
                 }
@@ -397,7 +397,7 @@ namespace DKBasicEngine_1_0
                     float maxWidth = 0;
 
                     if (textAligned[i].Count > 0)
-                        maxWidth = (textAligned[i][textAligned.Count - 1].Model.width + textAligned[i][textAligned.Count - 1]._x) * FontSize;
+                        maxWidth = (textAligned[i][textAligned.Count - 1].Model.Width + textAligned[i][textAligned.Count - 1]._x) * FontSize;
 
                     if (maxWidth != 0)
                     {
@@ -478,7 +478,7 @@ namespace DKBasicEngine_1_0
 
                             Material newLetterMaterial = Database.GetLetter(_textStr[i]);
 
-                            if (Xoffset * ScaleX * FontSize + newLetterMaterial.width * ScaleX * FontSize > this.width)
+                            if (Xoffset * ScaleX * FontSize + newLetterMaterial.Width * ScaleX * FontSize > this.width)
                             {
                                 Xoffset = 0;
                                 Yoffset += 6;
@@ -492,7 +492,7 @@ namespace DKBasicEngine_1_0
                                                 this.Z + 1,
                                                 newLetterMaterial));
 
-                            Xoffset += newLetterMaterial.width + 1;
+                            Xoffset += newLetterMaterial.Width + 1;
                         }
                     }
                 }
@@ -521,7 +521,7 @@ namespace DKBasicEngine_1_0
                     float maxWidth = 0;
 
                     if(textAligned[i].Count > 0)
-                        maxWidth = (textAligned[i][textAligned.Count - 1].Model.width + textAligned[i][textAligned.Count - 1]._x) * FontSize;
+                        maxWidth = (textAligned[i][textAligned.Count - 1].Model.Width + textAligned[i][textAligned.Count - 1]._x) * FontSize;
 
                     if(maxWidth != 0)
                     {

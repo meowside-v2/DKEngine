@@ -15,7 +15,7 @@ namespace DKBasicEngine_1_0
     {
         public static class Render
         {
-            public static readonly int RenderWidth = 640;
+            public static readonly int RenderWidth  = 640;
             public static readonly int RenderHeight = 360;
 
             internal static byte[] imageBuffer;
@@ -65,14 +65,14 @@ namespace DKBasicEngine_1_0
                     WindowControl.WindowInit();
                     Database.InitDatabase();
                     
-                    Render.imageBuffer = new byte[3 * Render.RenderWidth * Render.RenderHeight];
-                    Render.imageBufferKey = new byte[Render.RenderWidth * Render.RenderHeight];
+                    Render.imageBuffer      = new byte[3 * Render.RenderWidth * Render.RenderHeight];
+                    Render.imageBufferKey   = new byte[Render.RenderWidth * Render.RenderHeight];
 
-                    _deltaT = Stopwatch.StartNew();
-                    ToStart = new List<ICore>();
-                    ToUpdate = new List<ICore>();
-                    ToRender = new List<IGraphics>();
-                    PageControls = new List<IControl>();
+                    _deltaT         = Stopwatch.StartNew();
+                    ToStart         = new List<ICore>();
+                    ToUpdate        = new List<ICore>();
+                    ToRender        = new List<IGraphics>();
+                    PageControls    = new List<IControl>();
 
                     BackgroundWorks = new Thread(() => Update());
                     BackgroundWorks.Start();
@@ -194,9 +194,9 @@ namespace DKBasicEngine_1_0
         {
             if (!_isInitialised)
             {
-                Camera splashScreenCam = new Camera();
-                SplashScreen splash = new SplashScreen(null, null);
-
+                Camera splashScreenCam  = new Camera();
+                SplashScreen splash     = new SplashScreen(null, null);
+                
                 splashScreenCam.Init(0, 0);
 
                 SpinWait.SpinUntil(() => splash.Animator.NumberOfPlays >= 1);
