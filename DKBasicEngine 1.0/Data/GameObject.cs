@@ -6,7 +6,7 @@ namespace DKBasicEngine_1_0
 {
     public class GameObject : ICore, I3Dimensional, IGraphics
     {
-        I3Dimensional Parent;
+        public I3Dimensional Parent { get; private set; }
         
         public Animator Animator { get; private set; }
         public Material Model { get; private set; } = null;
@@ -143,7 +143,7 @@ namespace DKBasicEngine_1_0
         public bool LockScaleRatio { get; set; } = true;
         
 
-        public GameObject(I3Dimensional Parent = null)
+        public GameObject(Scene ToAddToModel, I3Dimensional Parent)
         {
             this.X = 0;
             this.Y = 0;
@@ -153,18 +153,16 @@ namespace DKBasicEngine_1_0
 
             Animator = new Animator(this);
 
-            lock (Engine.ToStart)
-            {
-                lock (Engine.ToUpdate)
-                {
-                    lock (Engine.ToRender)
-                    {
-                        Engine.ToStart.Add(this);
-                        Engine.ToUpdate.Add(this);
-                        Engine.ToRender.Add(this);
-                    }
-                }
-            }
+            lock(ToAddToModel)
+                lock (Engine.ToStart)
+                    lock (Engine.ToUpdate)
+                        lock (Engine.ToRender)
+                        {
+                            Engine.ToStart.Add(this);
+                            Engine.ToUpdate.Add(this);
+                            Engine.ToRender.Add(this);
+                            ToAddToModel.Model.Add(this);
+                        }
 
         }
 

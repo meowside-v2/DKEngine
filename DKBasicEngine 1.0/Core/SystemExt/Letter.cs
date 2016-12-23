@@ -8,8 +8,8 @@ namespace DKBasicEngine_1_0
 {
     public class Letter : ICore, I3Dimensional, IGraphics
     {
-        TextBlock Parent;
-
+        public I3Dimensional Parent { get { return _Parent; } }
+        public readonly TextBlock _Parent;
         internal float _x { get; private set; } = 0;
         internal float _y { get; private set; } = 0;
 
@@ -18,7 +18,7 @@ namespace DKBasicEngine_1_0
 
         public bool HasShadow
         {
-            get { return Parent.HasShadow; }
+            get { return _Parent.HasShadow; }
             set { }
         }
 
@@ -26,25 +26,25 @@ namespace DKBasicEngine_1_0
         
         public float X
         {
-            get { return HorOffset + _x * Parent.FontSize * Parent.ScaleX + Parent.X; }
+            get { return HorOffset + _x * _Parent.FontSize * _Parent.ScaleX + _Parent.X; }
             set { _x = value; }
         }
         public float Y
         {
-            get { return VertOffset + _y * Parent.FontSize * Parent.ScaleY + Parent.Y; }
+            get { return VertOffset + _y * _Parent.FontSize * _Parent.ScaleY + _Parent.Y; }
             set { _y = value; }
         }
         public float Z { get; set; }
 
         public float width
         {
-            get { return Model.width * Parent.FontSize * Parent.ScaleX; }
+            get { return Model.width * _Parent.FontSize * _Parent.ScaleX; }
             set { }
         }
 
         public float height
         {
-            get { return Model.height * Parent.FontSize * Parent.ScaleX; }
+            get { return Model.height * _Parent.FontSize * _Parent.ScaleX; }
             set { }
         }
 
@@ -56,19 +56,19 @@ namespace DKBasicEngine_1_0
 
         public float ScaleX
         {
-            get { return Parent.FontSize * Parent.ScaleX; }
+            get { return _Parent.FontSize * _Parent.ScaleX; }
             set { }
         }
 
         public float ScaleY
         {
-            get { return Parent.FontSize * Parent.ScaleY; }
+            get { return _Parent.FontSize * _Parent.ScaleY; }
             set { }
         }
 
         public float ScaleZ
         {
-            get { return Parent.FontSize * Parent.ScaleZ; }
+            get { return _Parent.FontSize * _Parent.ScaleZ; }
             set { }
         }
 
@@ -78,12 +78,12 @@ namespace DKBasicEngine_1_0
         public Material Model { get; private set; }
         
 
-        public Color? Foreground { get { return Parent.Foreground; } }
+        public Color? Foreground { get { return _Parent.Foreground; } }
         
 
         public bool IsGUI
         {
-            get { return Parent.IsGUI; }
+            get { return _Parent.IsGUI; }
             set { }
         }
 
@@ -95,7 +95,7 @@ namespace DKBasicEngine_1_0
             this.Y = y;
             this.Z = z;
 
-            this.Parent = Parent;
+            this._Parent = Parent;
 
             Animator = new Animator(this);
 
@@ -118,12 +118,11 @@ namespace DKBasicEngine_1_0
             Engine.ToRender.Remove(this);
             Animator = null;
             Model = null;
-            Parent = null;
         }
 
         public void Render()
         {
-            Model?.Render(this);
+            Model?.Render(this, Foreground);
         }
     }
 }

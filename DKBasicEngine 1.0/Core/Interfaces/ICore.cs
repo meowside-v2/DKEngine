@@ -2,6 +2,8 @@
 {
     public interface ICore
     {
+        I3Dimensional Parent { get; }
+
         void Render();
         void Start();
         void Update();

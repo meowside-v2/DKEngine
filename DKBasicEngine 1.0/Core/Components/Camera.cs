@@ -13,14 +13,13 @@ namespace DKBasicEngine_1_0
     public class Camera
     {
 
-        public float Xoffset { set; get; }
-        public float Yoffset { set; get; }
+        public float Xoffset = 0;
+        public float Yoffset = 0;
         
-        private readonly static int MAX_FRAME_RATE = 60;    // Frames per Second
         private const short sampleSize = 100;
         private int lastTime = 0;
         private int numRenders = 0;
-        private bool _Vsync = true;
+        private bool renderFPS = true;
 
         private TextBlock fpsMeter = new TextBlock(null)
         {
@@ -78,8 +77,6 @@ namespace DKBasicEngine_1_0
 
                 while (!RenderAbort)
                 {
-                    int beginRender = Environment.TickCount;
-                    
                     Point location = new Point(0, 0);
                     Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
                     
@@ -102,10 +99,6 @@ namespace DKBasicEngine_1_0
                             g.DrawImage(outFrame, imageRect);
                         }
                     }
-
-                    int endRender = Environment.TickCount - beginRender;
-
-                    if(_Vsync) Vsync(MAX_FRAME_RATE, endRender, false);
                 }
             }
         }
@@ -156,8 +149,6 @@ namespace DKBasicEngine_1_0
             }
             
             Buffer.BlockCopy(Engine.Render.imageBuffer, 0, toRenderData, 0, Engine.Render.imageBuffer.Length);
-
-            int endRender = Environment.TickCount - Engine.UpdateStartTime;
             
             if (numRenders == 0)
             {
@@ -165,18 +156,6 @@ namespace DKBasicEngine_1_0
             }
 
             numRenders++;
-
-            if(_Vsync) Vsync(MAX_FRAME_RATE, endRender, true);
-        }
-
-        private void Vsync(int TargetFrameRate, int imageRenderDelay, bool renderFPS)
-        {
-            int targetDelay = 1000 / TargetFrameRate;
-
-            if (imageRenderDelay < targetDelay)
-            {
-                //Thread.Sleep(targetDelay - imageRenderDelay);
-            }
 
             if (renderFPS)
             {
@@ -196,26 +175,11 @@ namespace DKBasicEngine_1_0
                 }
             }
         }
-
-
-
+        
 
         private static Size GetConsoleFontSize()
         {
-            // getting the console out buffer handle
-            IntPtr outHandle = CreateFile("CONOUT$",
-                                           GENERIC_READ | GENERIC_WRITE,
-                                           FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                           IntPtr.Zero,
-                                           OPEN_EXISTING,
-                                           0,
-                                           IntPtr.Zero);
-
-            int errorCode = Marshal.GetLastWin32Error();
-            if (outHandle.ToInt32() == INVALID_HANDLE_VALUE)
-            {
-                throw new IOException("Unable to open CONOUT$", errorCode);
-            }
+            IntPtr outHandle = GetStdHandle(-11);
 
             ConsoleFontInfo cfi = new ConsoleFontInfo();
 
@@ -231,20 +195,17 @@ namespace DKBasicEngine_1_0
         private static extern IntPtr GetConsoleWindow();
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr CreateFile(
-            string lpFileName,
-            int dwDesiredAccess,
-            int dwShareMode,
-            IntPtr lpSecurityAttributes,
-            int dwCreationDisposition,
-            int dwFlagsAndAttributes,
-            IntPtr hTemplateFile);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool GetCurrentConsoleFont(
             IntPtr hConsoleOutput,
             bool bMaximumWindow,
             [Out][MarshalAs(UnmanagedType.LPStruct)]ConsoleFontInfo lpConsoleCurrentFont);
+
+        [DllImport("kernel32.dll",
+         EntryPoint = "GetStdHandle",
+         SetLastError = true,
+         CharSet = CharSet.Auto,
+         CallingConvention = CallingConvention.StdCall)]
+         private static extern IntPtr GetStdHandle(int nStdHandle);
 
         [StructLayout(LayoutKind.Sequential)]
         internal class ConsoleFontInfo
@@ -261,13 +222,6 @@ namespace DKBasicEngine_1_0
             [FieldOffset(2)]
             internal short Y;
         }
-
-        private const int GENERIC_READ = unchecked((int)0x80000000);
-        private const int GENERIC_WRITE = 0x40000000;
-        private const int FILE_SHARE_READ = 1;
-        private const int FILE_SHARE_WRITE = 2;
-        private const int INVALID_HANDLE_VALUE = -1;
-        private const int OPEN_EXISTING = 3;
     }
 
 }

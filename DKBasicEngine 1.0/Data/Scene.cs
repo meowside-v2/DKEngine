@@ -7,7 +7,9 @@ namespace DKBasicEngine_1_0
 {
     public class Scene : ICore, IPage
     {
-        public string Name { get; set; } = "";
+        public I3Dimensional Parent { get; private set; } = null;
+
+        public string Name = "";
 
         private Stopwatch TimeOutControls = new Stopwatch();
         private TimeSpan TimeOut = new TimeSpan(0, 0, 1);

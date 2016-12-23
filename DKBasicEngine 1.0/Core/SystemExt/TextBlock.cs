@@ -9,7 +9,7 @@ namespace DKBasicEngine_1_0
 {
     public class TextBlock : ICore, I3Dimensional, IText, IGraphics
     {
-        //I3Dimensional Parent;
+        public I3Dimensional Parent { get; private set; } = null;
 
         protected bool _changed = false;
 

@@ -49,8 +49,8 @@ namespace DKBasicEngine_1_0
 
         public static bool IsInView(this I3Dimensional obj)
         {
-            float X = 0;   /*obj is IGraphics ? 0 : Engine._baseCam.Xoffset;*/
-            float Y = 0;   /*obj is IGraphics ? 0 : Engine._baseCam.Yoffset;*/
+            float X = Engine._baseCam != null ? Engine._baseCam.Xoffset : 0;  /*obj is IGraphics ? 0 : Engine._baseCam.Xoffset;*/
+            float Y = Engine._baseCam != null ? Engine._baseCam.Yoffset : 0;  /*obj is IGraphics ? 0 : Engine._baseCam.Yoffset;*/
 
             return (obj.X + obj.width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
         }
@@ -106,27 +106,6 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public static void Populate<T>(this T[] arr, T value)
-        {
-            for (int i = 0; i < arr.Length; i++)
-                arr[i] = value;
-        }
-
-        public static void Populate<T>(this T[,] arr, int arrHeight, int arrWidth, T value)
-        {
-            for (int i = 0; i < arrHeight; i++)
-                for (int j = 0; j < arrWidth; j++)
-                    arr[j, i] = value;
-        }
-
-        public static void Populate<T>(this T[,,] arr, int arrHeight, int arrWidth, int arrDepth, T value)
-        {
-            for (int d = 0; d < arrDepth; d++)
-                for (int i = 0; i < arrHeight; i++)
-                    for (int j = 0; j < arrWidth; j++)
-                        arr[j, i, d] = value;
-        }
-
         public static bool IsOnScreen(float x, float y)
         {
             return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
@@ -134,23 +113,24 @@ namespace DKBasicEngine_1_0
 
         public static Color MixPixel(Color top, Color bottom)
         {
-            if(bottom.A > 0)
-            {
-                float opacityTop = (float)top.A / 255;
+            if (top.A == 0)
+                return bottom;
 
-                byte newA = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);
-                byte A = (byte)(newA - top.A);
+            if (bottom.A == 0)
+                return top;
+            
+            float opacityTop = (float)top.A / 255;
 
-                float opacityBottom = (float)A / 255;
+            byte newA = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);
+            byte A = (byte)(newA - top.A);
 
-                byte R = (byte)(top.R * opacityTop + bottom.R * opacityBottom);
-                byte G = (byte)(top.G * opacityTop + bottom.G * opacityBottom);
-                byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
+            float opacityBottom = (float)A / 255;
 
-                return Color.FromArgb(newA, R, G, B);
-            }
+            byte R = (byte)(top.R * opacityTop + bottom.R * opacityBottom);
+            byte G = (byte)(top.G * opacityTop + bottom.G * opacityBottom);
+            byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
 
-            return top;
+            return Color.FromArgb(newA, R, G, B);
         }
 
         public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -222,11 +202,6 @@ namespace DKBasicEngine_1_0
             }
 
             return retValue;
-        }
-
-        public static void SpriteChange(Material source, IGraphics destination)
-        {
-
         }
     }
 }

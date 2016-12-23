@@ -16,14 +16,30 @@ namespace DKEngine
         {
             Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
 
-            GameObject t = new GameObject()
+            GameObject t = new GameObject(this, null)
             {
-                TypeName = "animatedDemo"
+                TypeName = "animatedDemo",
+                Z = -1
             };
 
             t.Animator.Settings = AnimationLoop.Endless;
 
-            this.Model.Add(t);
+            for(int i = 0; i < 10; i++)
+            {
+                string tx = i.ToString();
+
+                new Button(this)
+                {
+                    Text = tx + " Button",
+                    OnClick = () => Debug.WriteLine(tx + " Button clicked"),
+                    Y = i * 15,
+                    width = 100,
+                    height = 8,
+                    FontSize = 2,
+                    Foreground = Color.FromArgb(i * 0x0F, i * 0x0F, 0x00, i * 0x0F),
+                    Background = Color.FromArgb(i * 0x0F, i * 0x0F, i * 0x0F, i * 0x0F)
+                };
+            }
 
             /*new Button(this)
             {

@@ -46,7 +46,6 @@ namespace DKBasicEngine_1_0
         internal static List<ICore> ToStart;
         internal static List<IGraphics> ToRender;
         internal static List<IControl> PageControls;
-        internal static int UpdateStartTime;
 
         internal static IPage Page;
 
@@ -93,20 +92,8 @@ namespace DKBasicEngine_1_0
         
         private static void Update()
         {
-
-/*#if DEBUG
-            Stopwatch t = Stopwatch.StartNew();
-#endif*/
-
             while (true)
             {
-/*#if DEBUG
-                t.Restart();
-                long _startUpdate = t.ElapsedTicks;
-#endif*/
-
-                UpdateStartTime = Environment.TickCount;
-                
                 List<ICore> reference;
                 List<IControl> controlReference;
 
@@ -144,23 +131,10 @@ namespace DKBasicEngine_1_0
 
                 for (int i = 0; i < reference.Count; i++)
                     reference[i].Update();
-
-/*#if DEBUG
-                long _endUpdate = t.ElapsedTicks;
-#endif*/
-
+                
                 _deltaT?.Restart();
-
-/*#if DEBUG
-                long _startRender = t.ElapsedTicks;
-#endif*/
-
+                
                 _baseCam?.BufferImage();
-
-/*#if DEBUG
-                long _endRender = t.ElapsedTicks;
-                Debug.WriteLine($"Update: {_endUpdate - _startUpdate}\nRender: {_endRender - _startRender}\nAll: {_endRender - _startUpdate}");
-#endif*/
             }
         }
 
@@ -170,9 +144,9 @@ namespace DKBasicEngine_1_0
             {
                 Engine.Page = Page;
                 
-                Engine.PageControls = Page.PageControls.ToList();
+                Engine.PageControls = Page.PageControls;
 
-                for (int i = 0; i < PageControls.Count - 1; i++)
+                /*for (int i = 0; i < PageControls.Count - 1; i++)
                 {
                     for (int j = 0; j < PageControls.Count - 1; j++)
                     {
@@ -198,7 +172,7 @@ namespace DKBasicEngine_1_0
                                 PageControls[j + 1] = temp;
                             }
                     }
-                }
+                }*/
             }
             else
                 throw new Exception("Engine not initialised \n Can't change page");
@@ -221,7 +195,7 @@ namespace DKBasicEngine_1_0
             if (!_isInitialised)
             {
                 Camera splashScreenCam = new Camera();
-                SplashScreen splash = new SplashScreen(null);
+                SplashScreen splash = new SplashScreen(null, null);
 
                 splashScreenCam.Init(0, 0);
 

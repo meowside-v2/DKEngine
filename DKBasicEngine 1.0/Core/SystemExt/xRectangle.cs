@@ -10,7 +10,7 @@ namespace DKBasicEngine_1_0
 
         List<I3Dimensional> border = new List<I3Dimensional>();
 
-        //I3Dimensional Parent;
+        public I3Dimensional Parent { get; private set; } = null;
 
         public float X { get; set; }
         public float Y { get; set; }
@@ -110,14 +110,14 @@ namespace DKBasicEngine_1_0
 
             for (int i = 0; i <= width + 8; i += 8)
             {
-                border.Add(new Border(this) { X = i, Z = this.Z });
-                border.Add(new Border(this) { X = i, Y = height + 8, Z = this.Z });
+                border.Add(new Border(null, this) { X = i, Z = this.Z });
+                border.Add(new Border(null, this) { X = i, Y = height + 8, Z = this.Z });
             }
 
             for (int i = 8; i <= height; i += 8)
             {
-                border.Add(new Border(this) { Y = i, Z = this.Z });
-                border.Add(new Border(this) { X = width + 8, Y = i, Z = this.Z });
+                border.Add(new Border(null, this) { Y = i, Z = this.Z });
+                border.Add(new Border(null, this) { X = width + 8, Y = i, Z = this.Z });
             }
 
             lock (Engine.ToStart)

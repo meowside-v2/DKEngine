@@ -2,8 +2,8 @@
 {
     public class Border : GameObject
     {
-        public Border(I3Dimensional Parent)
-            :base(Parent)
+        public Border(Scene ToParentToAdd, I3Dimensional Parent)
+            :base(ToParentToAdd, Parent)
         {
             this.TypeName = "border";
         }
