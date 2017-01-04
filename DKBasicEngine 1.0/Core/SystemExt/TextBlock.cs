@@ -87,7 +87,7 @@ namespace DKBasicEngine_1_0
                 if(value != _width)
                 {
                     if (value < 0)
-                        _width = value;
+                        _width = 0;
 
                     else
                         _width = value;
@@ -104,7 +104,7 @@ namespace DKBasicEngine_1_0
                 if (value != _height)
                 {
                     if (value < 0)
-                        _height = value;
+                        _height = 0;
 
                     else
                         _height = value;
@@ -194,9 +194,17 @@ namespace DKBasicEngine_1_0
 
         public bool LockScaleRatio { get; set; } = true;
 
-        public bool HasShadow { get; set; }
 
-        
+        public bool HasShadow { get; set; }
+        public Material Model { get; set; }
+        public Animator Animator { get; set; }
+        private bool _IsGUI = false;
+        public bool IsGUI
+        {
+            get { return Parent != null ? ((IGraphics)Parent).IsGUI : _IsGUI; }
+            set { _IsGUI = value; }
+        }
+
         public virtual string Text
         {
             get { return _textStr; }
@@ -296,28 +304,24 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public Material Model { get; set; }
-        public Animator Animator { get; set; }
-
-        public bool IsGUI { get; set; } = false;
-
-        public TextBlock(Scene ParentPage)
+        
+        public TextBlock(Scene ToAddToModel, I3Dimensional Parent)
         {
             lock (Engine.ToStart)
-            {
                 lock (Engine.ToUpdate)
-                {
                     lock (Engine.ToRender)
                     {
                         Engine.ToStart.Add(this);
                         Engine.ToUpdate.Add(this);
                         Engine.ToRender.Add(this);
                     }
-                }
-            }
-            
-            if (ParentPage != null)
-                ParentPage.Model.Add(this);
+
+            if (Parent != null)
+                this.Parent = Parent;
+
+            if (ToAddToModel != null)
+                lock (ToAddToModel)
+                    ToAddToModel.Model.Add(this);
         }
         
         public virtual void Start()
@@ -372,9 +376,8 @@ namespace DKBasicEngine_1_0
                         }
                     }
                 }
-
-                float maxHeight = textAligned.Count * 6 * FontSize;
-
+                int textAlignedCount = textAligned.Count;
+                float maxHeight = textAlignedCount * 6 * FontSize;
                 float startY = 0;
 
                 switch (_TVA)
@@ -392,12 +395,14 @@ namespace DKBasicEngine_1_0
                         break;
                 }
 
-                for (int i = 0; i < textAligned.Count; i++)//foreach(List<Letter> row in textAligned)
+                
+                for (int i = 0; i < textAlignedCount; i++)
                 {
                     float maxWidth = 0;
+                    int textAlignedRowCount = textAligned[i].Count;
 
-                    if (textAligned[i].Count > 0)
-                        maxWidth = (textAligned[i][textAligned.Count - 1].Model.Width + textAligned[i][textAligned.Count - 1]._x) * FontSize;
+                    if (textAlignedRowCount > 0)
+                        maxWidth = (textAligned[i][textAlignedCount - 1].Model.Width + textAligned[i][textAlignedCount - 1]._x) * FontSize;
 
                     if (maxWidth != 0)
                     {
@@ -419,7 +424,7 @@ namespace DKBasicEngine_1_0
                         }
 
 
-                        for (int j = 0; j < textAligned[i].Count; j++)//foreach (Letter letter in row)
+                        for (int j = 0; j < textAlignedRowCount; j++)//foreach (Letter letter in row)
                         {
                             if (startX != 0)
                                 textAligned[i][j].HorOffset = startX;
@@ -432,7 +437,9 @@ namespace DKBasicEngine_1_0
                     }
                 }
 
-                for (int i = 0; i < _text.Count; i++)
+                int _textCount = _text.Count;
+
+                for (int i = 0; i < _textCount; i++)
                     Engine.ToRender.Remove(_text[i]);
 
                 _text = retValue;
@@ -455,9 +462,9 @@ namespace DKBasicEngine_1_0
                 int Xoffset = 0;
                 int Yoffset = 0;
 
-                if(width > 0)
+                if (width > 0)
                 {
-                    for(int i = 0; i < _textStr.Length; i++)// (char letter in Text)
+                    for (int i = 0; i < _textStr.Length; i++)// (char letter in Text)
                     {
                         if (_textStr[i] == ' ')
                         {
@@ -497,8 +504,8 @@ namespace DKBasicEngine_1_0
                     }
                 }
 
-                float maxHeight = textAligned.Count * 6 * FontSize;
-
+                int textAlignedCount = textAligned.Count;
+                float maxHeight = textAlignedCount * 6 * FontSize;
                 float startY = 0;
 
                 switch (_TVA)
@@ -516,14 +523,16 @@ namespace DKBasicEngine_1_0
                         break;
                 }
 
-                for(int i = 0; i < textAligned.Count; i++)//foreach(List<Letter> row in textAligned)
+                
+                for (int i = 0; i < textAlignedCount; i++)
                 {
                     float maxWidth = 0;
+                    int textAlignedRowCount = textAligned[i].Count;
 
-                    if(textAligned[i].Count > 0)
-                        maxWidth = (textAligned[i][textAligned.Count - 1].Model.Width + textAligned[i][textAligned.Count - 1]._x) * FontSize;
+                    if (textAlignedRowCount > 0)
+                        maxWidth = (textAligned[i][textAlignedCount - 1].Model.Width + textAligned[i][textAlignedCount - 1]._x) * FontSize;
 
-                    if(maxWidth != 0)
+                    if (maxWidth != 0)
                     {
                         float startX = 0;
 
@@ -542,8 +551,8 @@ namespace DKBasicEngine_1_0
                                 break;
                         }
 
-                        
-                        for(int j = 0; j < textAligned[i].Count; j++)//foreach (Letter letter in row)
+
+                        for (int j = 0; j < textAlignedRowCount; j++)//foreach (Letter letter in row)
                         {
                             if (startX != 0)
                                 textAligned[i][j].HorOffset = startX;
@@ -555,10 +564,12 @@ namespace DKBasicEngine_1_0
                         }
                     }
                 }
-                
-                for (int i = 0; i < _text.Count; i++)
+
+                int _textCount = _text.Count;
+
+                for (int i = 0; i < _textCount; i++)
                     Engine.ToRender.Remove(_text[i]);
-                
+
                 _text = retValue;
 
                 VAlignment = _VA;
@@ -573,7 +584,9 @@ namespace DKBasicEngine_1_0
             Engine.ToUpdate.Remove(this);
             Engine.ToRender.Remove(this);
 
-            for (int i = 0; i < _text.Count; i++)
+            int _textCount = _text.Count;
+
+            for (int i = 0; i < _textCount; i++)
                 _text[i].Destroy();
 
             Model = null;

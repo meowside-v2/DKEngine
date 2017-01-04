@@ -107,13 +107,16 @@ namespace DKBasicEngine_1_0
                     controlReference = PageControls.ToList();
                 }
 
-                while(ToStart.Count > 0)
+                int ToStartCount = ToStart.Count;
+                while(ToStartCount > 0)
                 {
                     ToStart[0].Start();
                     ToStart.Remove(ToStart[0]);
+                    ToStartCount--;
                 }
-                
-                for(int i = 0; i < controlReference.Count; i++)
+
+                int controlReferenceCount = controlReference.Count;
+                for(int i = 0; i < controlReferenceCount; i++)
                 {
                     bool result = Page.FocusSelection == controlReference.FindIndex(obj => ReferenceEquals(obj, controlReference[i]));
 
@@ -123,13 +126,15 @@ namespace DKBasicEngine_1_0
 
                 List<ICore> tempReference = reference.Where(obj => obj is I3Dimensional).ToList();
 
-                for(int i = 0; i < tempReference.Count; i++)
+                int tempReferenceCount = tempReference.Count;
+                for(int i = 0; i < tempReferenceCount; i++)
                     if (!((I3Dimensional)tempReference[i]).IsInView())
                         reference.Remove(tempReference[i]);
 
                 _deltaT?.Stop();
 
-                for (int i = 0; i < reference.Count; i++)
+                int refereceCount = reference.Count;
+                for (int i = 0; i < refereceCount; i++)
                     reference[i].Update();
                 
                 _deltaT?.Restart();
@@ -145,34 +150,6 @@ namespace DKBasicEngine_1_0
                 Engine.Page = Page;
                 
                 Engine.PageControls = Page.PageControls;
-
-                /*for (int i = 0; i < PageControls.Count - 1; i++)
-                {
-                    for (int j = 0; j < PageControls.Count - 1; j++)
-                    {
-                        if (((I3Dimensional)PageControls[j]).X > ((I3Dimensional)PageControls[j + 1]).X)
-                        {
-
-                            var temp = PageControls[j];
-                            PageControls[j] = PageControls[j + 1];
-                            PageControls[j + 1] = temp;
-                        }
-                    }
-                }
-
-                for (int i = 0; i < PageControls.Count - 1; i++)
-                {
-                    for (int j = 0; j < PageControls.Count - 1; j++)
-                    {
-                        if (((I3Dimensional)PageControls[j]).X == ((I3Dimensional)PageControls[j + 1]).X)
-                            if (((I3Dimensional)PageControls[j]).Y < ((I3Dimensional)PageControls[j + 1]).Y)
-                            {
-                                var temp = PageControls[j];
-                                PageControls[j] = PageControls[j + 1];
-                                PageControls[j + 1] = temp;
-                            }
-                    }
-                }*/
             }
             else
                 throw new Exception("Engine not initialised \n Can't change page");

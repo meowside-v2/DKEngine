@@ -8,7 +8,11 @@ namespace DKBasicEngine_1_0
 {
     public class Letter : ICore, I3Dimensional, IGraphics
     {
-        public I3Dimensional Parent { get { return _Parent; } }
+        public I3Dimensional Parent
+        {
+            get { return _Parent; }
+        }
+
         public readonly TextBlock _Parent;
         internal float _x { get; private set; } = 0;
         internal float _y { get; private set; } = 0;

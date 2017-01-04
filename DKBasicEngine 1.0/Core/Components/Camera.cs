@@ -21,7 +21,7 @@ namespace DKBasicEngine_1_0
         private int numRenders = 0;
         private bool renderFPS = true;
 
-        private TextBlock fpsMeter = new TextBlock(null)
+        private TextBlock fpsMeter = new TextBlock(null, null)
         {
             X = 1,
             Y = -1,
@@ -117,35 +117,49 @@ namespace DKBasicEngine_1_0
 
             List<I3Dimensional> GUI = Temp.Where(item => ((IGraphics)item).IsGUI);
 
-            for (int i = 0; i < GUI.Count; i++)
+            int GUICount = GUI.Count;
+
+            for (int i = 0; i < GUICount; i++)
                 Temp.Remove(GUI[i]);
 
-            while (GUI.Count > 0)
+            while (GUICount > 0)
             {
                 float tempHeight = GUI.FindMaxZ();
                 List<I3Dimensional> toRender = GUI.Where(item => item.Z == tempHeight).ToList();
 
-                Parallel.For(0, toRender.Count, (i) =>
+                int toRenderCount = toRender.Count;
+
+                Parallel.For(0, toRenderCount, (i) =>
                 {
                     ((ICore)toRender[i]).Render();
                 });
 
-                for (int i = 0; i < toRender.Count; i++)
+                for (int i = 0; i < toRenderCount; i++)
+                {
                     GUI.Remove(toRender[i]);
+                    GUICount--;
+                }
             }
 
-            while(Temp.Count > 0)
+            int TempCount = Temp.Count;
+
+            while(TempCount > 0)
             {
                 float tempHeight = Temp.FindMaxZ();
                 List<I3Dimensional> toRender = Temp.Where(item => item.Z == tempHeight).ToList();
 
-                Parallel.For(0, toRender.Count, (i) =>
+                int toRenderCount = toRender.Count;
+
+                Parallel.For(0, toRenderCount, (i) =>
                 {
                     ((ICore)toRender[i]).Render();
                 });
 
-                for (int i = 0; i < toRender.Count; i++)
+                for (int i = 0; i < toRenderCount; i++)
+                {
                     Temp.Remove(toRender[i]);
+                    TempCount--;
+                }
             }
             
             Buffer.BlockCopy(Engine.Render.imageBuffer, 0, toRenderData, 0, Engine.Render.imageBuffer.Length);

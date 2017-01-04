@@ -10,7 +10,13 @@ namespace DKBasicEngine_1_0
         
         public Animator Animator { get; private set; }
         public Material Model { get; private set; } = null;
-        public bool IsGUI { get; set; } = false;
+
+        private bool _IsGUI = false;
+        public bool IsGUI
+        {
+            get { return Parent != null ? ((IGraphics)Parent).IsGUI : _IsGUI; }
+            set { _IsGUI = value; }
+        }
         public bool HasShadow { get; set; }
 
         public Collider collider;
@@ -157,6 +163,9 @@ namespace DKBasicEngine_1_0
                 lock (ToAddToModel)
                     ToAddToModel.Model.Add(this);
 
+            if (Parent != null)
+                this.Parent = Parent;
+
             lock (Engine.ToStart)
                 lock (Engine.ToUpdate)
                     lock (Engine.ToRender)
@@ -177,7 +186,7 @@ namespace DKBasicEngine_1_0
             Animator?.Update();
         }
 
-        public void Destroy()
+        public virtual void Destroy()
         {
             Engine.ToUpdate.Remove(this);
             Engine.ToRender.Remove(this);

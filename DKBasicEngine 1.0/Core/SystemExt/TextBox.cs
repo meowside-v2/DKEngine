@@ -15,8 +15,8 @@ namespace DKBasicEngine_1_0
 
         private short MaxTextLenght = 64;
 
-        public TextBox(Scene ParentPage)
-            : base(ParentPage)
+        public TextBox(Scene ParentPage, I3Dimensional Parent)
+            : base(ParentPage, Parent)
         {
             ParentPage.PageControls.Add(this);
         }

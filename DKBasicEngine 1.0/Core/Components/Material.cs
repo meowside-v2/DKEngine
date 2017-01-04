@@ -295,8 +295,8 @@ namespace DKBasicEngine_1_0
 
                                 if (Engine.Render.imageBufferKey[keyOffset] != 255 && colorMapA[AnimationState][tempColumn, tempRow] != 0)
                                 {
-                                    Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                        Color.FromArgb(colorMapA[AnimationState][tempColumn, tempRow], colorMapR[AnimationState][tempColumn, tempRow], colorMapG[AnimationState][tempColumn, tempRow], colorMapB[AnimationState][tempColumn, tempRow]));
+                                    Color temp = MixPixel(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset],
+                                                          colorMapA[AnimationState][tempColumn, tempRow], colorMapR[AnimationState][tempColumn, tempRow], colorMapG[AnimationState][tempColumn, tempRow], colorMapB[AnimationState][tempColumn, tempRow]);
 
                                     Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
@@ -340,8 +340,8 @@ namespace DKBasicEngine_1_0
 
                             if (Engine.Render.imageBufferKey[keyOffset] != 255 && colorMapA[AnimationState][tempColumn, tempRow] != 0)
                             {
-                                Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                                 tempColor);
+                                Color temp = MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
+                                                        tempColor);
 
                                 Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
@@ -388,8 +388,8 @@ namespace DKBasicEngine_1_0
 
                             if (Engine.Render.imageBufferKey[keyOffset] != 255 && colorMapA[AnimationState][tempColumn, tempRow] != 0)
                             {
-                                Color temp = Extensions.MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
-                                                                    Color.FromArgb(0xAA, 0x00, 0x00, 0x00));
+                                Color temp = MixPixel(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset],
+                                                      0xAA, 0x00, 0x00, 0x00);
 
                                 Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
@@ -405,6 +405,50 @@ namespace DKBasicEngine_1_0
                     NonRasteredHeight += NonRasteredHeightRatio;
                 }
             }
+        }
+
+        public Color MixPixel(byte topA, byte topR, byte topG, byte topB, byte bottomA, byte bottomR, byte bottomG, byte bottomB)
+        {
+            if (topA == 0)
+                return Color.FromArgb(bottomA, bottomR, bottomG, bottomB);
+
+            if (bottomA == 0)
+                return Color.FromArgb(topA, topR, topG, topB);
+
+            float opacityTop = (float)topA / 255;
+
+            byte newA = (byte)(topA + bottomA >= 255 ? 255 : topA + bottomA);
+            byte A = (byte)(newA - topA);
+
+            float opacityBottom = (float)A / 255;
+
+            byte R = (byte)(topR * opacityTop + bottomR * opacityBottom);
+            byte G = (byte)(topG * opacityTop + bottomG * opacityBottom);
+            byte B = (byte)(topB * opacityTop + bottomB * opacityBottom);
+
+            return Color.FromArgb(newA, R, G, B);
+        }
+
+        public Color MixPixel(Color top, Color bottom)
+        {
+            if (top.A == 0)
+                return bottom;
+
+            if (bottom.A == 0)
+                return top;
+
+            float opacityTop = (float)top.A / 255;
+
+            byte newA = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);
+            byte A = (byte)(newA - top.A);
+
+            float opacityBottom = (float)A / 255;
+
+            byte R = (byte)(top.R * opacityTop + bottom.R * opacityBottom);
+            byte G = (byte)(top.G * opacityTop + bottom.G * opacityBottom);
+            byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
+
+            return Color.FromArgb(newA, R, G, B);
         }
     }
 }

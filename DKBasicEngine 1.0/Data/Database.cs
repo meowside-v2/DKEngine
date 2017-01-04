@@ -234,18 +234,5 @@ namespace DKBasicEngine_1_0
         {
             return GameObjects.FirstOrDefault(x => x.Value == Position).Key;
         }
-
-        public static bool Contains<T>(this IEnumerable<T> source, T value)
-        {
-            List<T> _source = source.ToList();
-
-            for(int i = 0; i < _source.Count; i++)
-            {
-                if (_source[i].Equals(value))
-                    return true;
-            }
-
-            return false;
-        }
     }
 }

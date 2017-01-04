@@ -22,7 +22,8 @@ namespace DKBasicEngine_1_0
         {
             float z2 = float.MinValue;
 
-            for(int i = 0; i < list.Count; i++)
+            int listCount = list.Count;
+            for(int i = 0; i < listCount; i++)
             {
                 if (list[i].Z > z2)
                     z2 = list[i].Z;
@@ -37,7 +38,8 @@ namespace DKBasicEngine_1_0
 
             lock (list)
             {
-                for(int i = 0; i < list.Count; i++)
+                int listCount = list.Count;
+                for (int i = 0; i < listCount; i++)
                 {
                     if (list[i].IsInView())
                         retValue.Add(list[i]);
@@ -111,33 +113,13 @@ namespace DKBasicEngine_1_0
             return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
         }
 
-        public static Color MixPixel(Color top, Color bottom)
-        {
-            if (top.A == 0)
-                return bottom;
-
-            if (bottom.A == 0)
-                return top;
-            
-            float opacityTop = (float)top.A / 255;
-
-            byte newA = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);
-            byte A = (byte)(newA - top.A);
-
-            float opacityBottom = (float)A / 255;
-
-            byte R = (byte)(top.R * opacityTop + bottom.R * opacityBottom);
-            byte G = (byte)(top.G * opacityTop + bottom.G * opacityBottom);
-            byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
-
-            return Color.FromArgb(newA, R, G, B);
-        }
-
+        
         public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             List<TSource> _source = new List<TSource>(source);
 
-            for (int i = 0; i < _source.Count; i++)
+            int _sourceCount = _source.Count;
+            for (int i = 0; i < _sourceCount; i++)
             {
                 if (predicate(_source[i]))
                     return _source[i];
@@ -150,9 +132,10 @@ namespace DKBasicEngine_1_0
         public static List<T> Where<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             List<T> retValue = new List<T>();
-            List<T> _source = source.ToList();
+            List<T> _source = new List<T>(source);
 
-            for(int i = 0; i < _source.Count; i++)
+            int _sourceCount = _source.Count;
+            for (int i = 0; i < _sourceCount; i++)
             {
                 if (predicate(_source[i]))
                     retValue.Add(_source[i]);
@@ -178,9 +161,10 @@ namespace DKBasicEngine_1_0
         
         public static bool All<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
-            List<T> _source = source.ToList();
+            List<T> _source = new List<T>(source);
 
-            for(int i = 0; i < _source.Count; i++)
+            int _sourceCount = _source.Count; 
+            for(int i = 0; i < _sourceCount; i++)
             {
                 if (!predicate(_source[i]))
                     return false;
@@ -202,6 +186,20 @@ namespace DKBasicEngine_1_0
             }
 
             return retValue;
+        }
+
+        public static bool Contains<T>(this IEnumerable<T> source, T value)
+        {
+            List<T> _source = new List<T>(source);
+
+            int _sourceCount = _source.Count;
+            for (int i = 0; i < _sourceCount; i++)
+            {
+                if (_source[i].Equals(value))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

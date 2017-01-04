@@ -58,6 +58,7 @@
     <Compile Include="Core\Interfaces\IPage.cs" />
     <Compile Include="Core\Interfaces\IText.cs" />
     <Compile Include="Core\SystemExt\Button.cs" />
+    <Compile Include="Core\SystemExt\Dialog.cs" />
     <Compile Include="Core\SystemExt\xRectangle.cs" />
     <Compile Include="Core\SystemExt\Letter.cs" />
     <Compile Include="Core\SystemExt\Extensions.cs" />

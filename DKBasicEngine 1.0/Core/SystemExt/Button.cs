@@ -8,8 +8,8 @@ namespace DKBasicEngine_1_0
         private bool IsHeld = false;
         public bool IsFocused { get; set; } = false;
         
-        public Button(Scene ParentPage)
-            : base(ParentPage)
+        public Button(Scene ParentPage, I3Dimensional Parent)
+            : base(ParentPage, Parent)
         {
             ParentPage.PageControls.Add(this);
         }
