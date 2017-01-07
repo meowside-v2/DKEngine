@@ -8,11 +8,15 @@ namespace DKBasicEngine_1_0
         private bool IsHeld = false;
         public bool IsFocused { get; set; } = false;
         
-        public Button(Scene ParentPage, I3Dimensional Parent)
-            : base(ParentPage, Parent)
+        public Button(Scene ParentPage)
+            : base(ParentPage)
         {
             ParentPage.PageControls.Add(this);
         }
+
+        public Button(EmptyGameObject Parent)
+            : base(Parent)
+        { }
 
         public override void Update()
         {

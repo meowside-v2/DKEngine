@@ -2,9 +2,8 @@
 {
     public interface ICore
     {
-        I3Dimensional Parent { get; }
-
-        void Render();
+        EmptyGameObject Parent { get; }
+        
         void Start();
         void Update();
         void Destroy();

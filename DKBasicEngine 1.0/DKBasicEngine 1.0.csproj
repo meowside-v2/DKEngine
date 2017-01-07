@@ -47,8 +47,12 @@
     <Compile Include="Core\Components\Animator.cs" />
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
+    <Compile Include="Core\Components\Dimensions.cs" />
+    <Compile Include="Core\Components\I3Dimensional.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
+    <Compile Include="Core\Components\Scale.cs" />
+    <Compile Include="Core\Components\Transform.cs" />
     <Compile Include="Core\Exceptions\SceneInitFailedException.cs" />
     <Compile Include="Core\Interfaces\I3Dimensional.cs" />
     <Compile Include="Core\Interfaces\IAnimated.cs" />
@@ -66,6 +70,7 @@
     <Compile Include="Core\SystemExt\TextBox.cs" />
     <Compile Include="Core\SystemExt\WindowControl.cs" />
     <Compile Include="Data\Database.cs" />
+    <Compile Include="Data\EmptyGameObject.cs" />
     <Compile Include="Data\GameObject.cs" />
     <Compile Include="Data\Predefined\Border.cs" />
     <Compile Include="Data\Predefined\SplashScreen.cs" />

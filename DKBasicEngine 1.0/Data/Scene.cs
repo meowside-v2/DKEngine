@@ -7,7 +7,7 @@ namespace DKBasicEngine_1_0
 {
     public class Scene : ICore, IPage
     {
-        public I3Dimensional Parent { get; private set; } = null;
+        public EmptyGameObject Parent { get; private set; } = null;
 
         public string Name = "";
 
@@ -88,9 +88,9 @@ namespace DKBasicEngine_1_0
             br.Close();
         }
 
-        public void Start() { }
+        public virtual void Start() { }
 
-        public void Update()
+        public virtual void Update()
         {
             if (PageControls.Count > 1)
             {

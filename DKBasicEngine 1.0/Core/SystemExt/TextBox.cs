@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
@@ -15,8 +12,8 @@ namespace DKBasicEngine_1_0
 
         private short MaxTextLenght = 64;
 
-        public TextBox(Scene ParentPage, I3Dimensional Parent)
-            : base(ParentPage, Parent)
+        public TextBox(Scene ParentPage)
+            : base(ParentPage)
         {
             ParentPage.PageControls.Add(this);
         }

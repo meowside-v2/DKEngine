@@ -9,7 +9,13 @@ namespace DKBasicEngine_1_0
     class SplashScreen : GameObject
     {
         public SplashScreen(Scene ToParentToAdd, I3Dimensional Parent)
-            : base(ToParentToAdd, Parent)
+            : base(ToParentToAdd)
+        {
+            this.TypeName = "splashScreen";
+        }
+
+        public SplashScreen(EmptyGameObject Parent)
+            : base(Parent)
         {
             this.TypeName = "splashScreen";
         }

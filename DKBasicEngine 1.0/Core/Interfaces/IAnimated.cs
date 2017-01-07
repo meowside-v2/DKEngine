@@ -8,10 +8,10 @@ namespace DKBasicEngine_1_0
 {
     public interface IAnimated
     {
-        AnimationLoop Settings { get; set; }
+        /*AnimationLoop Settings { get; set; }
         int NumberOfPlays { get; set; }
         int AnimationState { get; set; }
-        TimeSpan CurrentAnimationTime { get; }
+        TimeSpan CurrentAnimationTime { get; }*/
     }
     public enum AnimationLoop
     {

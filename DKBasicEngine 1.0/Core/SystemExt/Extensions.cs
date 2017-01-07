@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
@@ -51,8 +48,8 @@ namespace DKBasicEngine_1_0
 
         public static bool IsInView(this I3Dimensional obj)
         {
-            float X = Engine._baseCam != null ? Engine._baseCam.Xoffset : 0;  /*obj is IGraphics ? 0 : Engine._baseCam.Xoffset;*/
-            float Y = Engine._baseCam != null ? Engine._baseCam.Yoffset : 0;  /*obj is IGraphics ? 0 : Engine._baseCam.Yoffset;*/
+            float X = Engine._baseCam != null ? Engine._baseCam.Xoffset : 0;
+            float Y = Engine._baseCam != null ? Engine._baseCam.Yoffset : 0;
 
             return (obj.X + obj.width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
         }
@@ -113,7 +110,7 @@ namespace DKBasicEngine_1_0
             return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
         }
 
-        
+
         public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             List<TSource> _source = new List<TSource>(source);
@@ -140,6 +137,17 @@ namespace DKBasicEngine_1_0
                 if (predicate(_source[i]))
                     retValue.Add(_source[i]);
             }
+
+            return retValue;
+        }
+
+        public static T[] ToArray<T>(this List<T> source)
+        {
+            int size = source.Count;
+            T[] retValue = new T[size];
+
+            for (int i = 0; i < size; i++)
+                retValue[i] = source[i];
 
             return retValue;
         }

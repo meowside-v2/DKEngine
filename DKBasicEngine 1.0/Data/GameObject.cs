@@ -4,12 +4,10 @@ using System.Runtime.InteropServices;
 
 namespace DKBasicEngine_1_0
 {
-    public class GameObject : ICore, I3Dimensional, IGraphics
+    public class GameObject : EmptyGameObject, IGraphics
     {
-        public I3Dimensional Parent { get; private set; }
-        
-        public Animator Animator { get; private set; }
-        public Material Model { get; private set; } = null;
+        public Animator Animator { get; internal set; }
+        public Material Model { get; internal set; }
 
         private bool _IsGUI = false;
         public bool IsGUI
@@ -17,16 +15,9 @@ namespace DKBasicEngine_1_0
             get { return Parent != null ? ((IGraphics)Parent).IsGUI : _IsGUI; }
             set { _IsGUI = value; }
         }
-        public bool HasShadow { get; set; }
+        public virtual bool HasShadow { get; set; }
 
         public Collider collider;
-
-        protected float _scaleX = 1;
-        protected float _scaleY = 1;
-        protected float _scaleZ = 1;
-
-        protected float _x = 0;
-        protected float _y = 0;
 
         protected string _typeName = "";
 
@@ -42,151 +33,40 @@ namespace DKBasicEngine_1_0
                 this.Model = Database.GetGameObjectMaterial(value);
             }
         }
-
-        public float X
-        {
-            get { return Parent != null ? _x + Parent.X : _x; }
-            set { _x = value; }
-        }
-        public float Y
-        {
-            get { return Parent != null ? _y + Parent.Y : _y; }
-            set { _y = value; }
-        }
-        public float Z { get; set; }
-
-        public float width
-        {
-            get { return (Model == null ? 0 : Model.Width * ScaleX); }
-            set { }
-        }
-        public float height
-        {
-            get { return (Model == null ? 0 : Model.Height * ScaleY); }
-            set { }
-        }
-        public float depth
-        {
-            get { return 0; }
-            set { }
-        }
-
-        public float ScaleX
-        {
-            get
-            {
-                return _scaleX;
-            }
-            set
-            {
-                if(value != _scaleX)
-                {
-                    if (value < 0.1f)
-                        _scaleX = 0.1f;
-
-                    else
-                        _scaleX = value;
-
-                    if (LockScaleRatio)
-                    {
-                        _scaleZ = _scaleX;
-                        _scaleY = _scaleX;
-                    }
-                }
-            }
-        }
-
-        public float ScaleY
-        {
-            get
-            {
-                return _scaleY;
-            }
-            set
-            {
-                if(value != _scaleY)
-                {
-                    if (value < 0.1f)
-                        _scaleY = 0.1f;
-
-                    else
-                        _scaleY = value;
-
-                    if (LockScaleRatio)
-                    {
-                        _scaleX = _scaleY;
-                        _scaleZ = _scaleY;
-                    }
-                }
-            }
-        }
-
-        public float ScaleZ
-        {
-            get
-            {
-                return _scaleZ;
-            }
-            set
-            {
-                if(value != _scaleZ)
-                {
-                    if (value < 0.1f)
-                        _scaleZ = 0.1f;
-
-                    else
-                        _scaleZ = value;
-
-                    if (LockScaleRatio)
-                    {
-                        _scaleX = _scaleZ;
-                        _scaleY = _scaleZ;
-                    }
-                }
-            }
-        }
-
-        public bool LockScaleRatio { get; set; } = true;
         
-
-        public GameObject(Scene ToAddToModel, I3Dimensional Parent)
+        internal GameObject()
+            :base()
         {
-            this.X = 0;
-            this.Y = 0;
-            this.Z = 0;
+            Animator = new Animator(this);
+            
+            lock (Engine.ToRender)
+                Engine.ToRender.Add(this);
+        }
 
-            this.Parent = Parent;
-
+        public GameObject(Scene ToAddToModel)
+            : base(ToAddToModel)
+        {
             Animator = new Animator(this);
 
-            if(ToAddToModel != null)
-                lock (ToAddToModel)
-                    ToAddToModel.Model.Add(this);
-
-            if (Parent != null)
-                this.Parent = Parent;
-
-            lock (Engine.ToStart)
-                lock (Engine.ToUpdate)
-                    lock (Engine.ToRender)
-                    {
-                        Engine.ToStart.Add(this);
-                        Engine.ToUpdate.Add(this);
-                        Engine.ToRender.Add(this);
-                            
-                    }
-
+            lock (Engine.ToRender)
+                Engine.ToRender.Add(this);
         }
 
-        public virtual void Start()
-        { }
+        public GameObject(EmptyGameObject Parent)
+            : base(Parent)
+        {
+            Animator = new Animator(this);
 
-        public virtual void Update()
+            lock (Engine.ToRender)
+                Engine.ToRender.Add(this);
+        }
+        
+        public override void Update()
         {
             Animator?.Update();
         }
 
-        public virtual void Destroy()
+        public override void Destroy()
         {
             Engine.ToUpdate.Remove(this);
             Engine.ToRender.Remove(this);
@@ -196,7 +76,7 @@ namespace DKBasicEngine_1_0
             this.Parent = null;
         }
 
-        public void Render()
+        internal virtual void Render()
         {
             Model?.Render(this);
         }
