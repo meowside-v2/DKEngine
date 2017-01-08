@@ -42,7 +42,7 @@ namespace DKBasicEngine_1_0
             }
         }
         
-        public float FontSize { get; set; } = 1;
+        public float FontSize = 1;
 
         public enum HorizontalAlignment
         {
@@ -90,11 +90,11 @@ namespace DKBasicEngine_1_0
                             break;
 
                         case HorizontalAlignment.Center:
-                            horiOffset = (Engine.Render.RenderWidth - this.width) / 2;
+                            horiOffset = (Engine.Render.RenderWidth - this.Width) / 2;
                             break;
 
                         case HorizontalAlignment.Right:
-                            horiOffset = Engine.Render.RenderWidth - this.width;
+                            horiOffset = Engine.Render.RenderWidth - this.Width;
                             break;
 
                         default:
@@ -120,11 +120,11 @@ namespace DKBasicEngine_1_0
                             break;
 
                         case VerticalAlignment.Center:
-                            vertOffset = (Engine.Render.RenderHeight - this.height) / 2;
+                            vertOffset = (Engine.Render.RenderHeight - this.Height) / 2;
                             break;
 
                         case VerticalAlignment.Bottom:
-                            vertOffset = Engine.Render.RenderHeight - this.height;
+                            vertOffset = Engine.Render.RenderHeight - this.Height;
                             break;
 
                         default:
@@ -161,17 +161,10 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        internal TextBlock()
-            :base()
-        {
-
-        }
-
-        public TextBlock(Scene Scene)
-            : base(Scene)
+        public TextBlock()
         { }
 
-        public TextBlock(EmptyGameObject Parent)
+        public TextBlock(GameObject Parent)
             : base(Parent)
         { }
         
@@ -219,7 +212,7 @@ namespace DKBasicEngine_1_0
             int Xoffset = 0;
             int Yoffset = 0;
 
-            if (width > 0)
+            if (Width > 0)
             {
                 for (int i = 0; i < _textStr.Length; i++)// (char letter in Text)
                 {
@@ -242,7 +235,7 @@ namespace DKBasicEngine_1_0
 
                         Material newLetterMaterial = Database.GetLetter(_textStr[i]);
 
-                        if (Xoffset * ScaleX * FontSize + newLetterMaterial.Width * ScaleX * FontSize > this.width)
+                        if (Xoffset * ScaleX * FontSize + newLetterMaterial.Width * ScaleX * FontSize > this.Width)
                         {
                             Xoffset = 0;
                             Yoffset += 6;

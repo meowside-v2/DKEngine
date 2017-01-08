@@ -4,13 +4,12 @@ namespace DKBasicEngine_1_0
 {
     public class xRectangle : GameObject, ICore
     {
+        public xRectangle()
+        { }
 
-        public xRectangle(EmptyGameObject Parent)
+        public xRectangle(GameObject Parent)
             : base(Parent)
         { }
-
-        public xRectangle(Scene Scene)
-            : base(Scene)
-        { }
+        
     }
 }

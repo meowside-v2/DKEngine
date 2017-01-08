@@ -23,6 +23,8 @@ namespace DKEngine
             Test t = new Test();
 
             Engine.PageChange(t);
+
+            t.LoadStuff();
         }
     }
 }

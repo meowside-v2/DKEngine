@@ -275,11 +275,11 @@ namespace DKBasicEngine_1_0
         /// Render material into engine image buffer
         /// </summary>
         /// <param name="Parent">I3Dimensional for coordiantions</param>
-        public void Render(I3Dimensional Parent, Color? ReColor = null)
+        public void Render(GameObject Parent, Color? ReColor = null)
         {
 
-            int AnimationState = ((IGraphics)Parent).Animator != null ? ((IGraphics)Parent).Animator.AnimationState : 0;
-            bool HasShadow = ((IGraphics)Parent).HasShadow;
+            int AnimationState = Parent.Animator != null ? Parent.Animator.AnimationState : 0;
+            bool HasShadow = Parent.HasShadow;
 
             float x = Parent.X - Engine._baseCam.Xoffset;
             float y = Parent.Y - Engine._baseCam.Yoffset;
@@ -293,10 +293,10 @@ namespace DKBasicEngine_1_0
             float NonRasteredHeight = 0;
             float NonRasteredWidth = 0;
 
-            I3Dimensional ParentOfParent = ((ICore)Parent).Parent;
+            I3Dimensional ParentOfParent = Parent.Parent;
 
-            float ToMaxWidth = ParentOfParent != null ? ParentOfParent.width : Engine.Render.RenderWidth;
-            float ToMaxHeight = ParentOfParent != null ? ParentOfParent.height : Engine.Render.RenderHeight;
+            float ToMaxWidth = ParentOfParent != null ? ParentOfParent.Width : Engine.Render.RenderWidth;
+            float ToMaxHeight = ParentOfParent != null ? ParentOfParent.Height : Engine.Render.RenderHeight;
 
             if (ReColor == null)
             {
@@ -314,7 +314,7 @@ namespace DKBasicEngine_1_0
                             if (x + column >= Engine.Render.RenderWidth)
                                 break;
 
-                            if (Extensions.IsOnScreen(x + column, y + row))
+                            if (IsOnScreen(x + column, y + row))
                             {
 
                                 int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
@@ -359,7 +359,7 @@ namespace DKBasicEngine_1_0
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
-                        if (Extensions.IsOnScreen(x + column, y + row))
+                        if (IsOnScreen(x + column, y + row))
                         {
 
                             int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
@@ -408,7 +408,7 @@ namespace DKBasicEngine_1_0
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
-                        if (Extensions.IsOnScreen(x + column, y + row))
+                        if (IsOnScreen(x + column, y + row))
                         {
                             int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
                             int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
@@ -479,6 +479,11 @@ namespace DKBasicEngine_1_0
             byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
 
             return Color.FromArgb(newA, R, G, B);
+        }
+
+        private bool IsOnScreen(float x, float y)
+        {
+            return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
         }
     }
 }

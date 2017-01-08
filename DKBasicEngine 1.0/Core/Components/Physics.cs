@@ -22,7 +22,7 @@ namespace DKBasicEngine_1_0
         public Physics(GameObject Parent)
         {
             this.Parent = Parent;
-            this.colliderReference = Parent.collider;
+            this.colliderReference = Parent.Collider;
         }
 
         public void Jump()

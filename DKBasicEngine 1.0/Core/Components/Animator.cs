@@ -4,7 +4,7 @@ namespace DKBasicEngine_1_0
 {
     public class Animator : IAnimated
     {
-        IGraphics Parent;
+        GameObject Parent;
         
         private bool _wasPlayed         = false;
         private AnimationLoop _settings = AnimationLoop.Once;
@@ -31,7 +31,7 @@ namespace DKBasicEngine_1_0
             }
             set { }
         }
-        public TimeSpan CurrentAnimationTime { get; private set; } = new TimeSpan(0);
+        public TimeSpan CurrentAnimationTime = new TimeSpan(0);
 
         private int _numberOfPlays = 0;
         public int NumberOfPlays
@@ -49,7 +49,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public Animator(IGraphics Parent)
+        public Animator(GameObject Parent)
         {
             this.Parent = Parent;
         }

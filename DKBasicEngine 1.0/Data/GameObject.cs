@@ -4,21 +4,30 @@ using System.Runtime.InteropServices;
 
 namespace DKBasicEngine_1_0
 {
-    public class GameObject : EmptyGameObject, IGraphics
+    public class GameObject : I3Dimensional, ICore, IGraphics
     {
-        public Animator Animator { get; internal set; }
-        public Material Model { get; internal set; }
+        public GameObject Parent = null;
+
+        internal override float X { get { return Parent != null ? Transform.X + Parent.X : Transform.X; } }
+        internal override float Y { get { return Parent != null ? Transform.Y + Parent.Y : Transform.Y; } }
+        internal override float Z { get { return Parent != null ? Transform.Z + Parent.Z : Transform.Z; } }
+
+        internal override float ScaleX { get { return Parent != null ? Scale.X * Parent.Scale.X : Scale.X; } }
+        internal override float ScaleY { get { return Parent != null ? Scale.Y * Parent.Scale.Y : Scale.Y; } }
+        internal override float ScaleZ { get { return Parent != null ? Scale.Z * Parent.Scale.Z : Scale.Z; } }
+
+        public Animator Animator;
+        public Material Model;
+        public Collider Collider;
 
         private bool _IsGUI = false;
         public bool IsGUI
         {
-            get { return Parent != null ? ((IGraphics)Parent).IsGUI : _IsGUI; }
+            get { return Parent != null ? Parent.IsGUI : _IsGUI; }
             set { _IsGUI = value; }
         }
         public virtual bool HasShadow { get; set; }
-
-        public Collider collider;
-
+        
         protected string _typeName = "";
 
         public string TypeName
@@ -33,46 +42,62 @@ namespace DKBasicEngine_1_0
                 this.Model = Database.GetGameObjectMaterial(value);
             }
         }
-        
-        internal GameObject()
-            :base()
+
+        public GameObject()
         {
-            Animator = new Animator(this);
-            
-            lock (Engine.ToRender)
-                Engine.ToRender.Add(this);
+            this.Dimensions = new Dimensions(0, 0, 0);
+            this.Scale = new Scale(1, 1, 1);
+            this.Transform = new Transform(0, 0, 0);
+            this.Animator = new Animator(this);
+
+            lock (Engine.ToStart)
+                lock (Engine.ToUpdate)
+                    lock (Engine.ToRender)
+                    {
+                        Engine.ToRender.Add(this);
+                        Engine.ToStart.Add(this);
+                        Engine.ToUpdate.Add(this);
+                    }
+
+            if (Engine.Scene != null)
+                Engine.Scene.Model.Add(this);
         }
 
-        public GameObject(Scene ToAddToModel)
-            : base(ToAddToModel)
+        public GameObject(GameObject Parent)
         {
-            Animator = new Animator(this);
+            this.Dimensions = new Dimensions(0, 0, 0);
+            this.Scale = new Scale(1, 1, 1);
+            this.Transform = new Transform(0, 0, 0);
+            this.Animator = new Animator(this);
 
-            lock (Engine.ToRender)
-                Engine.ToRender.Add(this);
+            lock (Engine.ToStart)
+                lock (Engine.ToUpdate)
+                    lock (Engine.ToRender)
+                    {
+                        Engine.ToRender.Add(this);
+                        Engine.ToStart.Add(this);
+                        Engine.ToUpdate.Add(this);
+                    }
+
+            if (Parent != null)
+                this.Parent = Parent;
         }
 
-        public GameObject(EmptyGameObject Parent)
-            : base(Parent)
-        {
-            Animator = new Animator(this);
+        public virtual void Start()
+        { }
 
-            lock (Engine.ToRender)
-                Engine.ToRender.Add(this);
-        }
-        
-        public override void Update()
+        public virtual void Update()
         {
             Animator?.Update();
         }
 
-        public override void Destroy()
+        public virtual void Destroy()
         {
             Engine.ToUpdate.Remove(this);
             Engine.ToRender.Remove(this);
 
             this.Animator = null;
-            this.collider = null;
+            this.Collider = null;
             this.Parent = null;
         }
 
@@ -80,5 +105,8 @@ namespace DKBasicEngine_1_0
         {
             Model?.Render(this);
         }
+
+        public virtual void OnColliderEnter(Collider e)
+        { }
     }
 }

@@ -61,6 +61,11 @@
     <Compile Include="Core\Interfaces\IGraphics.cs" />
     <Compile Include="Core\Interfaces\IPage.cs" />
     <Compile Include="Core\Interfaces\IText.cs" />
+    <Compile Include="Core\Interfaces\Random\-__-\K\IWantToDie.cs" />
+    <Compile Include="Core\Interfaces\Random\O-O\K\ILovePonies.cs" />
+    <Compile Include="Core\Interfaces\Random\OwO\K\ICloseTheInternet.cs" />
+    <Compile Include="Core\Interfaces\Random\Q-Q\K\ISlepice.cs" />
+    <Compile Include="Core\Interfaces\Random\UwU\K\IDunno.cs" />
     <Compile Include="Core\SystemExt\Button.cs" />
     <Compile Include="Core\SystemExt\Dialog.cs" />
     <Compile Include="Core\SystemExt\xRectangle.cs" />
@@ -70,7 +75,6 @@
     <Compile Include="Core\SystemExt\TextBox.cs" />
     <Compile Include="Core\SystemExt\WindowControl.cs" />
     <Compile Include="Data\Database.cs" />
-    <Compile Include="Data\EmptyGameObject.cs" />
     <Compile Include="Data\GameObject.cs" />
     <Compile Include="Data\Predefined\Border.cs" />
     <Compile Include="Data\Predefined\SplashScreen.cs" />
@@ -98,6 +102,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

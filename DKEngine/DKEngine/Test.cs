@@ -12,11 +12,13 @@ namespace DKEngine
     {
         
         public Test()
-            :base()
+        { }
+
+        public void LoadStuff()
         {
             Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
 
-            GameObject t = new GameObject(this)
+            GameObject t = new GameObject()
             {
                 TypeName = "animatedDemo",
                 Transform = new Transform(200, 0, 0)
@@ -24,23 +26,23 @@ namespace DKEngine
 
             t.Animator.Settings = AnimationLoop.Endless;
 
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 string tx = i.ToString();
 
-                new Button(this)
+                new Button()
                 {
                     Text = tx + " Button",
                     OnClick = () => Debug.WriteLine(tx + " Button clicked"),
                     Transform = new Transform(0, i * 34, -20),
                     Dimensions = new Dimensions(100, 8, 1),
                     FontSize = 1,
-                    Foreground = Color.FromArgb(i * 0x0F, i * 0x0F, 0x00, i * 0x0F),
-                    Background = Color.FromArgb(i * 0x0F, i * 0x0F, i * 0x0F, i * 0x0F)
+                    Foreground = Color.FromArgb(0xFF, 0xAF, 0xAF, 0xAF),
+                    Background = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF)
                 };
             }
 
-            new Button(this)
+            new Button()
             {
                 Text = "GG",
                 Transform = new Transform(50, 0, 2),
@@ -54,20 +56,20 @@ namespace DKEngine
             for (int a = 1; a < 2; a++)
                 for (int i = 0; i < 16; i++)
                     for (int j = 0; j < 16; j++)
-                        new GameObject(this)
+                        new GameObject()
                         {
                             Transform = new Transform(i * 16, j * 16, -a),
-                            Scale = new Scale(2, 1, 1),
+                            Scale = new Scale(1, 1, 1),
                             TypeName = "border"
                         };
 
             for (int a = 1; a < 2; a++)
                 for (int i = 1; i < 32; i++)
                     for (int j = 1; j < 64; j++)
-                        new GameObject(this)
+                        new GameObject()
                         {
                             Transform = new Transform(i * 1024, j * 16, -a),
-                            Scale = new Scale(2, 1, 1),
+                            Scale = new Scale(1, 1, 1),
                             TypeName = "border"
                         };
         }

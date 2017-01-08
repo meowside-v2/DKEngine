@@ -8,61 +8,59 @@ namespace DKBasicEngine_1_0
 {
     internal class Letter : GameObject
     {
-        public override EmptyGameObject Parent { get { return _Parent; } }
-
-        public TextBlock _Parent;
+        public new TextBlock Parent;
 
         internal float VertOffset = 0;
         internal float HorOffset = 0;
 
         public override bool HasShadow
         {
-            get { return _Parent.HasShadow; }
+            get { return Parent.HasShadow; }
         }
 
         public bool _IsVisble { get; set; }
 
         internal override float X
         {
-            get { return HorOffset + Transform.X * _Parent.FontSize * _Parent.ScaleX + _Parent.X; }
+            get { return HorOffset + Transform.X * Parent.FontSize * Parent.ScaleX + Parent.X; }
         }
         internal override float Y
         {
-            get { return VertOffset + Transform.Y * _Parent.FontSize * _Parent.ScaleY + _Parent.Y; }
+            get { return VertOffset + Transform.Y * Parent.FontSize * Parent.ScaleY + Parent.Y; }
         }
-        internal override float Z { get { return _Parent.Z + Transform.Z; } }
+        internal override float Z { get { return Parent.Z + Transform.Z; } }
 
-        internal override float width
+        internal override float Width
         {
-            get { return Model.Width * _Parent.FontSize * _Parent.ScaleX; }
+            get { return Model.Width * Parent.FontSize * Parent.ScaleX; }
         }
 
-        internal override float height
+        internal override float Height
         {
-            get { return Model.Height * _Parent.FontSize * _Parent.ScaleX; }
+            get { return Model.Height * Parent.FontSize * Parent.ScaleX; }
         }
 
-        internal override float depth
+        internal override float Depth
         {
             get { return 0; }
         }
 
         internal override float ScaleX
         {
-            get { return _Parent.FontSize * _Parent.ScaleX; }
+            get { return Parent.FontSize * Parent.ScaleX; }
         }
 
         internal override float ScaleY
         {
-            get { return _Parent.FontSize * _Parent.ScaleY; }
+            get { return Parent.FontSize * Parent.ScaleY; }
         }
 
         internal override float ScaleZ
         {
-            get { return _Parent.FontSize * _Parent.ScaleZ; }
+            get { return Parent.FontSize * Parent.ScaleZ; }
         }
         
-        public Color? Foreground { get { return _Parent.Foreground; } }
+        public Color? Foreground { get { return Parent.Foreground; } }
         
 
         public Letter(TextBlock Parent, Transform Transform, Material sourceModel)
@@ -70,7 +68,7 @@ namespace DKBasicEngine_1_0
             Model = sourceModel;
 
             this.Transform = Transform;
-            this._Parent = Parent;
+            this.Parent = Parent;
 
             Animator = new Animator(this);
 
@@ -86,11 +84,12 @@ namespace DKBasicEngine_1_0
 
         public override void Destroy()
         {
+            //Engine.UpdateEvent -= this._UpdateDel;
             Engine.ToRender.Remove(this);
             Engine.ToUpdate.Remove(this);
-            _Parent._text.Remove(this);
+            Parent._text.Remove(this);
 
-            _Parent = null;
+            Parent = null;
             Animator = null;
             Model = null;
         }

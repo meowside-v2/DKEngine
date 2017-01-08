@@ -2,13 +2,12 @@
 {
     public class Border : GameObject
     {
-        public Border(Scene ToParentToAdd)
-            :base(ToParentToAdd)
+        public Border()
         {
             this.TypeName = "border";
         }
 
-        public Border(EmptyGameObject Parent)
+        public Border(GameObject Parent)
             : base(Parent)
         {
             this.TypeName = "border";

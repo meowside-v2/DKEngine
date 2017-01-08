@@ -5,25 +5,20 @@ using System.IO;
 
 namespace DKBasicEngine_1_0
 {
-    public class Scene : ICore, IPage
+    public class Scene : IPage
     {
-        public EmptyGameObject Parent { get; private set; } = null;
-
         public string Name = "";
 
         private Stopwatch TimeOutControls = new Stopwatch();
         private TimeSpan TimeOut = new TimeSpan(0, 0, 1);
 
-        public List<I3Dimensional> Model { get; private set; } = new List<I3Dimensional>();
+        public readonly List<I3Dimensional> Model = new List<I3Dimensional>();
 
-        public int FocusSelection { get; set; } = 0;
-        public List<IControl> PageControls { get; } = new List<IControl>();
+        /*public int FocusSelection { get; set; } = 0;
+        public List<IControl> PageControls { get; } = new List<IControl>();*/
 
         public Scene()
-        {
-            Engine.ToStart.Add(this);
-            Engine.ToUpdate.Add(this);
-        }
+        { }
 
         public enum Mode
         {
@@ -88,7 +83,7 @@ namespace DKBasicEngine_1_0
             br.Close();
         }
 
-        public virtual void Start() { }
+        /*public virtual void Start() { }
 
         public virtual void Update()
         {
@@ -126,6 +121,6 @@ namespace DKBasicEngine_1_0
         public void Render()
         {
             
-        }
+        }*/
     }
 }

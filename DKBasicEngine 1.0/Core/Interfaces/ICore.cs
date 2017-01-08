@@ -2,10 +2,8 @@
 {
     public interface ICore
     {
-        EmptyGameObject Parent { get; }
-        
-        void Start();
+        /*void Start();
         void Update();
-        void Destroy();
+        void Destroy();*/
     }
 }

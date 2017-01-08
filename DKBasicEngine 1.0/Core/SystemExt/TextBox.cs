@@ -6,18 +6,26 @@ namespace DKBasicEngine_1_0
     public class TextBox : TextBlock, IControl
     {
         public bool IsFocused { get; set; }
+        public int FocusElementID { get; private set; }
 
         private TimeSpan TimeOut = new TimeSpan(0, 0, 0, 0, 50);
         private Stopwatch TimeOutStopwatch = new Stopwatch();
 
         private short MaxTextLenght = 64;
 
-        public TextBox(Scene ParentPage)
-            : base(ParentPage)
+        public TextBox()
         {
-            ParentPage.PageControls.Add(this);
+            /*FocusElementID = Engine.Scene.PageControls.Count;
+            Engine.Scene.PageControls.Add(this);*/
         }
-        
+
+        public TextBox(GameObject Parent)
+            :base(Parent)
+        {
+            /*FocusElementID = Engine.Scene.PageControls.Count;
+            Engine.Scene.PageControls.Add(this);*/
+        }
+
         public Type AllowedChars { get; set; }
 
         public enum Type

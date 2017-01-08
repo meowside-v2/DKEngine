@@ -9,9 +9,9 @@ namespace DKBasicEngine_1_0
     public class I3Dimensional
     {
         public Dimensions Dimensions;
-        internal virtual float width { get { return Dimensions.Width * Scale.X; } }
-        internal virtual float height { get { return Dimensions.Height * Scale.Y; } }
-        internal virtual float depth { get { return Dimensions.Depth * Scale.Z; } }
+        internal virtual float Width { get { return Dimensions.Width * Scale.X; } }
+        internal virtual float Height { get { return Dimensions.Height * Scale.Y; } }
+        internal virtual float Depth { get { return Dimensions.Depth * Scale.Z; } }
 
         public Transform Transform;
         internal virtual float X { get; }

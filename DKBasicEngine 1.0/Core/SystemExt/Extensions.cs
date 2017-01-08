@@ -15,7 +15,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public static float FindMaxZ(this List<I3Dimensional> list)
+        public static float FindMaxZ(this List<GameObject> list) //where T : I3Dimensional
         {
             float z2 = float.MinValue;
 
@@ -29,21 +29,18 @@ namespace DKBasicEngine_1_0
             return z2;
         }
 
-        public static List<I3Dimensional> GetGameObjectsInView(this List<I3Dimensional> list)
+        public static List<GameObject> GetGameObjectsInView(this List<GameObject> list)
         {
-            List<I3Dimensional> retValue = new List<I3Dimensional>();
-
-            lock (list)
+            List<GameObject> retValue = new List<GameObject>();
+            
+            int listCount = list.Count;
+            for (int i = 0; i < listCount; i++)
             {
-                int listCount = list.Count;
-                for (int i = 0; i < listCount; i++)
-                {
-                    if (list[i].IsInView())
-                        retValue.Add(list[i]);
-                }
-
-                return retValue;
+                if (list[i].IsInView())
+                    retValue.Add(list[i]);
             }
+
+            return retValue;
         }
 
         public static bool IsInView(this I3Dimensional obj)
@@ -51,7 +48,7 @@ namespace DKBasicEngine_1_0
             float X = Engine._baseCam != null ? Engine._baseCam.Xoffset : 0;
             float Y = Engine._baseCam != null ? Engine._baseCam.Yoffset : 0;
 
-            return (obj.X + obj.width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
+            return (obj.X + obj.Width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.Height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
         }
 
         public static bool IsUnsupportedEscapeSequence(this char letter)
@@ -85,35 +82,10 @@ namespace DKBasicEngine_1_0
 
             return false;
         }
-
-        public static bool BufferIsFull(this byte[] buffer, byte value, int EachIndex)
+        
+        public static T FirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
-            for (int i = 0; i < buffer.Length; i += EachIndex)
-            {
-                if (buffer[i] != value)
-                    return false;
-            }
-
-            return true;
-        }
-
-        public static void FillEach(this byte[] buffer, byte value, int EachIndex)
-        {
-            for(int i = 0; i < buffer.Length; i+= EachIndex)
-            {
-                buffer[i] = value;
-            }
-        }
-
-        public static bool IsOnScreen(float x, float y)
-        {
-            return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
-        }
-
-
-        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            List<TSource> _source = new List<TSource>(source);
+            List<T> _source = new List<T>(source);
 
             int _sourceCount = _source.Count;
             for (int i = 0; i < _sourceCount; i++)
@@ -123,7 +95,7 @@ namespace DKBasicEngine_1_0
 
             }
 
-            return default(TSource);
+            return default(T);
         }
 
         public static List<T> Where<T>(this IEnumerable<T> source, Func<T, bool> predicate)
@@ -157,14 +129,14 @@ namespace DKBasicEngine_1_0
             return new List<T>(source);
         }
 
-        public static List<TResult> ToList<TResult>(this IEnumerable source)
+        public static List<T> ToList<T>(this IEnumerable source)
         {
-            return new List<TResult>(Cast<TResult>(source));
+            return new List<T>(Cast<T>(source));
         }
 
-        private static IEnumerable<TResult> Cast<TResult>(IEnumerable source)
+        private static IEnumerable<T> Cast<T>(IEnumerable source)
         {
-            foreach (TResult obj in source) yield return obj;
+            foreach (T obj in source) yield return obj;
         }
         
         public static bool All<T>(this IEnumerable<T> source, Func<T, bool> predicate)
@@ -179,21 +151,6 @@ namespace DKBasicEngine_1_0
             }
 
             return true;
-        }
-
-        public static TSource[] Convert2DArryto1D<TSource>(this TSource[,] source, int width, int height)
-        {
-            TSource[] retValue = new TSource[source.Length];
-
-            for(int i = 0; i < height; i++)
-            {
-                for(int j = 0; j < width; j++)
-                {
-                    retValue[i * width + j] = source[j,i];
-                }
-            }
-
-            return retValue;
         }
 
         public static bool Contains<T>(this IEnumerable<T> source, T value)

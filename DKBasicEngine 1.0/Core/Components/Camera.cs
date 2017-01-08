@@ -38,7 +38,7 @@ namespace DKBasicEngine_1_0
 
             lock (Engine.ToRender)
             {
-                Temp = Engine.ToRender.Where(item => ((I3Dimensional)item).IsInView()).ToList(); 
+                Temp = Engine.ToRender.Where(item => item.IsInView()).ToList(); 
             }
 
             List<GameObject> GUI = Temp.Where(item => item.IsGUI);
@@ -50,7 +50,7 @@ namespace DKBasicEngine_1_0
 
             while (GUICount > 0)
             {
-                float tempHeight = GUI.ToList<I3Dimensional>().FindMaxZ();
+                float tempHeight = GUI.FindMaxZ();
                 List<GameObject> toRender = GUI.Where(item => item.Z == tempHeight).ToList();
 
                 int toRenderCount = toRender.Count;
@@ -71,7 +71,7 @@ namespace DKBasicEngine_1_0
 
             while(TempCount > 0)
             {
-                float tempHeight = Temp.ToList<I3Dimensional>().FindMaxZ();
+                float tempHeight = Temp.FindMaxZ();
                 List<GameObject> toRender = Temp.Where(item => item.Z == tempHeight).ToList();
 
                 int toRenderCount = toRender.Count;

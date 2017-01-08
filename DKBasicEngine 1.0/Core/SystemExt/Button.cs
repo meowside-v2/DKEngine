@@ -7,16 +7,19 @@ namespace DKBasicEngine_1_0
         public Action OnClick = null;
         private bool IsHeld = false;
         public bool IsFocused { get; set; } = false;
-        
-        public Button(Scene ParentPage)
-            : base(ParentPage)
+        public int FocusElementID { get; private set; }
+
+        public Button()
         {
-            ParentPage.PageControls.Add(this);
+            //Engine.Scene.PageControls.Add(this);
         }
 
-        public Button(EmptyGameObject Parent)
+        public Button(GameObject Parent)
             : base(Parent)
-        { }
+        {
+            /*FocusElementID = Engine.Scene.PageControls.Count;
+            Engine.Scene.PageControls.Add(this);*/
+        }
 
         public override void Update()
         {
