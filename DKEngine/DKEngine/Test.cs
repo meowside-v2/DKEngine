@@ -16,7 +16,7 @@ namespace DKEngine
 
         public void LoadStuff()
         {
-            Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
+            /*Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
 
             GameObject t = new GameObject()
             {
@@ -71,7 +71,24 @@ namespace DKEngine
                             Transform = new Transform(i * 1024, j * 16, -a),
                             Scale = new Scale(1, 1, 1),
                             TypeName = "border"
-                        };
+                        };*/
+                        
+            for (int i = 0; i < 1000; i++)
+            {
+                GameObject t1 = new GameObject();
+                t1.Model = new Material(Color.AliceBlue, t1);
+                t1.Position = new Position(0, i, 0);
+                t1.Collider = new Collider(t1);
+                t1.Scale = new Scale(10, 10, 10);
+                t1.HasShadow = true;
+            }
+            
+
+            Template t2 = new Template();
+            
+            Camera c = new Camera();
+            c.Position = new Position(0, -100, 0);
+            c.Parent = t2;
         }
     }
 }

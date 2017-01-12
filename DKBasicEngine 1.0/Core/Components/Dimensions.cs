@@ -11,7 +11,7 @@ namespace DKBasicEngine_1_0
         public float Width;
         public float Height;
         public float Depth;
-
+        
         public Dimensions(float Width, float Height, float Depth)
         {
             this.Width  = Width  < 0 ? 0 : Width;

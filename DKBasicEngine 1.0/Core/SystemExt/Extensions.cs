@@ -43,10 +43,10 @@ namespace DKBasicEngine_1_0
             return retValue;
         }
 
-        public static bool IsInView(this I3Dimensional obj)
+        public static bool IsInView(this GameObject obj)
         {
-            float X = Engine._baseCam != null ? Engine._baseCam.Xoffset : 0;
-            float Y = Engine._baseCam != null ? Engine._baseCam.Yoffset : 0;
+            float X = obj.IsGUI ? 0 : Engine._baseCam != null ? Engine._baseCam.X : 0;
+            float Y = obj.IsGUI ? 0 : Engine._baseCam != null ? Engine._baseCam.Y : 0;
 
             return (obj.X + obj.Width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.Height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
         }
@@ -165,6 +165,14 @@ namespace DKBasicEngine_1_0
             }
 
             return false;
+        }
+
+        public static void InitCollider(this Collider Collider, Collider newCollider)
+        {
+            if (Collider != null)
+                Engine.Collidable.Remove(Collider);
+
+            Collider = newCollider;
         }
     }
 }

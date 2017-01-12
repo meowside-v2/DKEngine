@@ -51,7 +51,7 @@ namespace DKBasicEngine_1_0
                     return;
                 }
 
-                else Parent.Transform.Y -= 1;
+                else Parent.Position.Y -= 1;
 
                 Thread.Sleep(Jumplength);
             } while (true);
@@ -61,7 +61,7 @@ namespace DKBasicEngine_1_0
         {
             do
             {
-                Parent.Transform.Y += 1;
+                Parent.Position.Y += 1;
 
                 Thread.Sleep(Jumplength);
             } while (!colliderReference.Collision(Collider.Direction.Down));

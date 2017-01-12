@@ -10,7 +10,7 @@ namespace DKBasicEngine_1_0.Core.SystemExt
     {
 
         public TextBlock Caption;
-        public readonly List<I3Dimensional> Content = new List<I3Dimensional>();
+        public readonly List<Transform> Content = new List<Transform>();
 
         public Dialog(string Caption)
         {
@@ -18,7 +18,7 @@ namespace DKBasicEngine_1_0.Core.SystemExt
             this.Caption.Text = Caption;
         }
 
-        public void ChangeContent(params I3Dimensional[] stuff)
+        public void ChangeContent(params Transform[] stuff)
         {
 
         }

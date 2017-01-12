@@ -26,7 +26,6 @@ namespace DKBasicEngine_1_0
         protected string _textStr = "";
 
         internal List<Letter> _text = new List<Letter>();
-        
         public Color? Foreground { get; set; }
 
         private Color? _bg;
@@ -57,10 +56,11 @@ namespace DKBasicEngine_1_0
             Center,
             Bottom
         };
-        
-        internal override float X { get { return Transform.X + horiOffset; } }
-        internal override float Y { get { return Transform.Y + vertOffset; } }
-        internal override float Z { get { return Transform.Z; } }
+
+        public bool TextShadow = false;
+        internal override float X { get { return Position.X + horiOffset; } }
+        internal override float Y { get { return Position.Y + vertOffset; } }
+        internal override float Z { get { return Position.Z; } }
         
         public virtual string Text
         {
@@ -244,7 +244,7 @@ namespace DKBasicEngine_1_0
                         }
 
                         textAligned[Yoffset / 6].Add(new Letter(this,
-                                                                new Transform(Xoffset, Yoffset, 1),
+                                                                new Position(Xoffset, Yoffset, 1),
                                                                 newLetterMaterial));
 
                         Xoffset += newLetterMaterial.Width + 1;
@@ -278,7 +278,7 @@ namespace DKBasicEngine_1_0
                 int textAlignedRowCount = textAligned[i].Count;
 
                 if (textAlignedRowCount > 0)
-                    maxWidth = (textAligned[i][textAlignedCount - 1].Model.Width + textAligned[i][textAlignedCount - 1].Transform.X) * FontSize;
+                    maxWidth = (textAligned[i][textAlignedCount - 1].Model.Width + textAligned[i][textAlignedCount - 1].Position.X) * FontSize;
 
                 if (maxWidth != 0)
                 {

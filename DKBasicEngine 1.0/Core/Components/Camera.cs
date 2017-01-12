@@ -9,24 +9,27 @@ namespace DKBasicEngine_1_0
 {
     public class Camera
     {
-        public float Xoffset = 0;
-        public float Yoffset = 0;
+        public Position Position;
+
+        internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.X + Position.X : Position.X; } }
+        internal float Y { get { return RenderingGUI ? 0 : Parent != null ? Parent.Y + Position.Y : Position.Y; } }
+
+        public GameObject Parent = null;
+
+        private bool RenderingGUI = false;
 
         public Camera()
         {
+            this.Position = new Position(0, 0, 0);
             Engine._baseCam = this;
-        }
-
-        public void Init(int Xoffset, int Yoffset)
-        {
-            this.Xoffset = Xoffset;
-            this.Yoffset = Yoffset;
         }
 
         public void Destroy()
         {
             if (Engine._baseCam == this)
                 Engine._baseCam = null;
+
+            Parent = null;
         }
         
         internal void BufferImage()
@@ -41,10 +44,9 @@ namespace DKBasicEngine_1_0
                 Temp = Engine.ToRender.Where(item => item.IsInView()).ToList(); 
             }
 
+            RenderingGUI = true;
             List<GameObject> GUI = Temp.Where(item => item.IsGUI);
-
             int GUICount = GUI.Count;
-
             for (int i = 0; i < GUICount; i++)
                 Temp.Remove(GUI[i]);
 
@@ -54,11 +56,13 @@ namespace DKBasicEngine_1_0
                 List<GameObject> toRender = GUI.Where(item => item.Z == tempHeight).ToList();
 
                 int toRenderCount = toRender.Count;
+                for (int i = 0; i < toRenderCount; i++)
+                    toRender[i].Render();
 
-                Parallel.For(0, toRenderCount, (i) =>
+                /*Parallel.For(0, toRenderCount, (i) =>
                 {
                     toRender[i].Render();
-                });
+                });*/
 
                 for (int i = 0; i < toRenderCount; i++)
                 {
@@ -66,6 +70,8 @@ namespace DKBasicEngine_1_0
                     GUICount--;
                 }
             }
+
+            RenderingGUI = false;
 
             int TempCount = Temp.Count;
 
@@ -75,11 +81,13 @@ namespace DKBasicEngine_1_0
                 List<GameObject> toRender = Temp.Where(item => item.Z == tempHeight).ToList();
 
                 int toRenderCount = toRender.Count;
+                for (int i = 0; i < toRenderCount; i++)
+                    toRender[i].Render();
 
-                Parallel.For(0, toRenderCount, (i) =>
+                /*Parallel.For(0, toRenderCount, (i) =>
                 {
                     toRender[i].Render();
-                });
+                });*/
 
                 for (int i = 0; i < toRenderCount; i++)
                 {

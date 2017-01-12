@@ -6,17 +6,23 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public struct Transform
+    public class Transform : I3Dimensional
     {
-        public float X;
-        public float Y;
-        public float Z;
-        
-        public Transform(float X, float Y, float Z)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-        }
+        public Dimensions Dimensions;
+        internal virtual float Width { get { return Dimensions.Width * Scale.X; } }
+        internal virtual float Height { get { return Dimensions.Height * Scale.Y; } }
+        internal virtual float Depth { get { return Dimensions.Depth * Scale.Z; } }
+
+        public Position Position;
+        internal virtual float X { get; }
+        internal virtual float Y { get; }
+        internal virtual float Z { get; }
+
+        public Scale Scale;
+        internal virtual float ScaleX { get; }
+        internal virtual float ScaleY { get; }
+        internal virtual float ScaleZ { get; }
+
+        public bool LockScaleRatio;
     }
 }

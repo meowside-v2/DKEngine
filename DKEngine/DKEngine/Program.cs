@@ -16,15 +16,11 @@ namespace DKEngine
         static void Main(string[] args)
         {
             Engine.Init();
-
-            Camera c = new Camera();
-            c.Init(0, 0);
             
             Test t = new Test();
+            t.LoadStuff();
 
             Engine.PageChange(t);
-
-            t.LoadStuff();
         }
     }
 }

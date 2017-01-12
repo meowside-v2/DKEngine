@@ -12,7 +12,7 @@ namespace DKBasicEngine_1_0
         private Stopwatch TimeOutControls = new Stopwatch();
         private TimeSpan TimeOut = new TimeSpan(0, 0, 1);
 
-        public readonly List<I3Dimensional> Model = new List<I3Dimensional>();
+        public readonly List<Transform> Model = new List<Transform>();
 
         /*public int FocusSelection { get; set; } = 0;
         public List<IControl> PageControls { get; } = new List<IControl>();*/

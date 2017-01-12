@@ -1,13 +1,13 @@
 ﻿namespace DKBasicEngine_1_0
 {
-    public interface _I3Dimensional
+    public interface I3Dimensional
     {
-        Dimensions Dimensions { get; set; }
+        /*Dimensions Dimensions { get; set; }
         float width { get; }
         float height { get; }
         float depth { get; }
 
-        Transform Transform { get; set; }
+        Position Transform { get; set; }
         float X { get; }
         float Y { get; }
         float Z { get; }
@@ -17,6 +17,6 @@
         float ScaleY { get; }
         float ScaleZ { get; }
 
-        bool LockScaleRatio { get; set; }
+        bool LockScaleRatio { get; set; }*/
     }
 }

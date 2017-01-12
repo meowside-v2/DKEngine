@@ -4,11 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-
 
 namespace DKBasicEngine_1_0
 {
@@ -62,7 +59,8 @@ namespace DKBasicEngine_1_0
 
         internal static Scene Scene;
 
-        public static float deltaTime { get { return (float)_deltaT.Elapsed.TotalSeconds; } }
+        private static float deltaT = 0;
+        public static float deltaTime { get { return deltaT; } }
 
         /*internal static event BackgroundWorker UpdateEvent;
         internal static event BackgroundWorker StartEvent;
@@ -86,15 +84,15 @@ namespace DKBasicEngine_1_0
                     WindowControl.WindowInit();
                     Database.InitDatabase();
                     
-                    Render.imageBuffer      = new byte[Render.ImageBufferSize];
-                    Render.imageBufferKey   = new byte[Render.ImageKeyBufferSize];
+                    Render.imageBuffer    = new byte[Render.ImageBufferSize];
+                    Render.imageBufferKey = new byte[Render.ImageKeyBufferSize];
 
-                    _deltaT         = Stopwatch.StartNew();
+                    _deltaT    = Stopwatch.StartNew();
 
-                    ToStart         = new List<GameObject>();
-                    ToUpdate        = new List<GameObject>();
-                    ToRender        = new List<GameObject>();
-                    Collidable      = new List<Collider>();
+                    ToStart    = new List<GameObject>();
+                    ToUpdate   = new List<GameObject>();
+                    ToRender   = new List<GameObject>();
+                    Collidable = new List<Collider>();
 
                     BackgroundWorks = new Thread(Update);
                     RenderWorker    = new Thread(RenderImage);
@@ -103,12 +101,15 @@ namespace DKBasicEngine_1_0
 
                     fpsMeter = new TextBlock()
                     {
-                        Transform = new Transform(1, -1, 128),
-                        Dimensions = new Dimensions(20, 5, 1),
+                        Position = new Position(1, -1, 128),
+                        Dimensions = new Dimensions(25, 5, 1),
+                        Scale = new Scale(2, 2, 1),
                         VAlignment = TextBlock.VerticalAlignment.Bottom,
                         HAlignment = TextBlock.HorizontalAlignment.Left,
                         Text = "0",
-                        IsGUI = true
+                        IsGUI = true,
+                        TextShadow = true,
+                        Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF)
                     };
 
                     //Engine.ToRender.Add(fpsMeter);
@@ -162,10 +163,8 @@ namespace DKBasicEngine_1_0
         {
             if (!_isInitialised)
             {
-                Camera splashScreenCam  = new Camera();
                 SplashScreen splash     = new SplashScreen();
-                
-                splashScreenCam.Init(0, 0);
+                Camera splashScreenCam = new Camera();
 
                 SpinWait.SpinUntil(() => splash.Animator.NumberOfPlays >= 1);
 
@@ -174,12 +173,10 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private static void Update()
+        private static async void Update()
         {
             while (true)
             {
-                List<GameObject> reference = ToUpdate.GetGameObjectsInView();
-
                 /*int referenceCount = reference.Count;
                 for(int i = referenceCount - 1; i >= 0; i--)
                 {
@@ -200,25 +197,31 @@ namespace DKBasicEngine_1_0
                 {
                     ToStartCount--;
                     ToStart[ToStartCount].Start();
+                    ToUpdate.Add(ToStart[ToStartCount]);
                     ToStart.Remove(ToStart[ToStartCount]);
                 }
-                
-                _deltaT?.Stop();
+
+                List<GameObject> reference = ToUpdate.GetGameObjectsInView();
+
+                deltaT = (float)_deltaT.Elapsed.TotalSeconds;
+                _deltaT?.Restart();
 
                 int refereceCount = reference.Count;
                 for (int i = 0; i < refereceCount; i++)
                     reference[i].Update();
                 
-                _deltaT?.Restart();
-
+                List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false);
+                List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false);
+                int TriggersCount = Triggers.Count;
+                for (int i = 0; i < TriggersCount; i++)
+                    Triggers[i].Collider.TriggerCheck(VisibleWithCollider);
+                
                 _baseCam?.BufferImage();
 
                 Array.Copy(Render.imageBuffer, Render.ImageOutData, Render.ImageBufferSize);
 
                 if (Render.numRenders == 0)
-                {
                     Render.lastTime = Environment.TickCount;
-                }
 
                 Render.numRenders++;
 
@@ -233,7 +236,6 @@ namespace DKBasicEngine_1_0
                         //Debug.WriteLine(string.Format("Buff {0}", Render.sampleSize * 1000 / temp));
 #endif
                     }
-
                     Render.numRenders = 0;
                 }
             }
@@ -241,34 +243,44 @@ namespace DKBasicEngine_1_0
 
         private static unsafe void RenderImage()
         {
+            IntPtr ConsoleWindow = GetConsoleWindow();
 
-            using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
+            using (Graphics g = Graphics.FromHwnd(ConsoleWindow))
             {
                 g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
-                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-
-                Point location = new Point(0, 0);
-
+                g.PixelOffsetMode    = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+                g.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                
+                Rectangle Screen = System.Windows.Forms.Screen.FromHandle(ConsoleWindow).Bounds;
+                int Width        = Screen.Width;
+                int Height       = Screen.Height;
+                
                 while (!Render.AbortRender)
                 {
-                    Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
+                    Rectangle ScreenResCheck = System.Windows.Forms.Screen.FromHandle(ConsoleWindow).Bounds;
+
+                    if (ScreenResCheck != Screen)
+                    {
+                        Width  = ScreenResCheck.Width;
+                        Height = ScreenResCheck.Height;
+                    }
+                    //Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
 
                     fixed (byte* ptr = Render.ImageOutData)
                     {
 
-                        using (Bitmap outFrame = new Bitmap(Engine.Render.RenderWidth,
-                                                            Engine.Render.RenderHeight,
-                                                            3 * Engine.Render.RenderWidth,
+                        using (Bitmap outFrame = new Bitmap(Render.RenderWidth,
+                                                            Render.RenderHeight,
+                                                            3 * Render.RenderWidth,
                                                             System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                                                             new IntPtr(ptr)))
                         {
-                            Size fontSize = GetConsoleFontSize();
+                            //Size fontSize = GetConsoleFontSize();
 
-                            Rectangle imageRect = new Rectangle(location.X * fontSize.Width,
-                                                                location.Y * fontSize.Height,
-                                                                imageSize.Width * fontSize.Width,
-                                                                imageSize.Height * fontSize.Height);
+                            Rectangle imageRect = new Rectangle(0,
+                                                                0,
+                                                                Width, //imageSize.Width * fontSize.Width,
+                                                                Height); //imageSize.Height * fontSize.Height);
 
                             g.DrawImage(outFrame, imageRect);
                         }
@@ -277,24 +289,21 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private static Size GetConsoleFontSize()
+        /*private static Size GetConsoleFontSize()
         {
             IntPtr outHandle = GetStdHandle(-11);
-
             ConsoleFontInfo cfi = new ConsoleFontInfo();
 
             if (!GetCurrentConsoleFont(outHandle, false, cfi))
-            {
                 throw new InvalidOperationException("Unable to get font information.");
-            }
 
             return new Size(cfi.dwFontSize.X, cfi.dwFontSize.Y);
-        }
+        }*/
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern IntPtr GetConsoleWindow();
 
-        [DllImport("kernel32.dll", SetLastError = true)]
+        /*[DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool GetCurrentConsoleFont(
             IntPtr hConsoleOutput,
             bool bMaximumWindow,
@@ -321,6 +330,6 @@ namespace DKBasicEngine_1_0
             internal short X;
             [FieldOffset(2)]
             internal short Y;
-        }
+        }*/
     }
 }

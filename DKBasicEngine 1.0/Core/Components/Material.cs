@@ -222,7 +222,7 @@ namespace DKBasicEngine_1_0
         /// </summary>
         /// <param name="clr">Source color</param>
         /// <param name="Parent">I3Dimensional used for material scale</param>
-        public Material(Color clr, I3Dimensional Parent)
+        public Material(Color clr, Transform Parent)
         {
             this.Width = (int)Parent.Dimensions.Width;
             this.Height = (int)Parent.Dimensions.Height;
@@ -281,8 +281,8 @@ namespace DKBasicEngine_1_0
             int AnimationState = Parent.Animator != null ? Parent.Animator.AnimationState : 0;
             bool HasShadow = Parent.HasShadow;
 
-            float x = Parent.X - Engine._baseCam.Xoffset;
-            float y = Parent.Y - Engine._baseCam.Yoffset;
+            int x = (int)(Parent.X - Engine._baseCam.X);
+            int y = (int)(Parent.Y - Engine._baseCam.Y);
 
             float RasteredHeight = this.Height * Parent.ScaleY;
             float RasteredWidth = this.Width * Parent.ScaleX;
@@ -293,7 +293,7 @@ namespace DKBasicEngine_1_0
             float NonRasteredHeight = 0;
             float NonRasteredWidth = 0;
 
-            I3Dimensional ParentOfParent = Parent.Parent;
+            Transform ParentOfParent = Parent.Parent;
 
             float ToMaxWidth = ParentOfParent != null ? ParentOfParent.Width : Engine.Render.RenderWidth;
             float ToMaxHeight = ParentOfParent != null ? ParentOfParent.Height : Engine.Render.RenderHeight;
@@ -393,17 +393,17 @@ namespace DKBasicEngine_1_0
                 NonRasteredHeight = 0;
                 NonRasteredWidth = 0;
 
-                RasteredHeight++;
-                RasteredWidth++;
+                x++;
+                y++;
 
-                for (int row = 1; row < RasteredHeight && row < ToMaxHeight; row++)
+                for (int row = 0; row < RasteredHeight && row < ToMaxHeight; row++)
                 {
                     NonRasteredWidth = 0;
 
                     if (y + row >= Engine.Render.RenderHeight)
                         break;
 
-                    for (int column = 1; column < RasteredWidth && column < ToMaxWidth; column++)
+                    for (int column = 0; column < RasteredWidth && column < ToMaxWidth; column++)
                     {
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
@@ -419,7 +419,7 @@ namespace DKBasicEngine_1_0
                             if (Engine.Render.imageBufferKey[keyOffset] != 255 && colorMapA[AnimationState][tempRow][tempColumn] != 0)
                             {
                                 Color temp = MixPixel(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset],
-                                                      0xAA, 0x00, 0x00, 0x00);
+                                                      0xBB, 0x00, 0x00, 0x00);
 
                                 Engine.Render.imageBufferKey[keyOffset] = temp.A;
 

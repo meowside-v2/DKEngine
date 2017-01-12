@@ -35,24 +35,20 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Components\Animator.cs" />
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
     <Compile Include="Core\Components\Dimensions.cs" />
-    <Compile Include="Core\Components\I3Dimensional.cs" />
+    <Compile Include="Core\Components\Transform.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
     <Compile Include="Core\Components\Scale.cs" />
-    <Compile Include="Core\Components\Transform.cs" />
+    <Compile Include="Core\Components\Position.cs" />
     <Compile Include="Core\Exceptions\SceneInitFailedException.cs" />
     <Compile Include="Core\Interfaces\I3Dimensional.cs" />
     <Compile Include="Core\Interfaces\IAnimated.cs" />
