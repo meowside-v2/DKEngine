@@ -80,7 +80,6 @@ namespace DKEngine
                 t1.Position = new Position(0, i, 0);
                 t1.Collider = new Collider(t1);
                 t1.Scale = new Scale(10, 10, 10);
-                t1.HasShadow = true;
             }
             
 

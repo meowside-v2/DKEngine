@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DKBasicEngine_1_0
 {
@@ -17,7 +18,8 @@ namespace DKBasicEngine_1_0
 
         public static float FindMaxZ(this List<GameObject> list) //where T : I3Dimensional
         {
-            float z2 = float.MinValue;
+            return list.Max(obj => obj.Z);
+            /*float z2 = float.MinValue;
 
             int listCount = list.Count;
             for(int i = 0; i < listCount; i++)
@@ -26,12 +28,13 @@ namespace DKBasicEngine_1_0
                     z2 = list[i].Z;
             }
 
-            return z2;
+            return z2;*/
         }
 
         public static List<GameObject> GetGameObjectsInView(this List<GameObject> list)
         {
-            List<GameObject> retValue = new List<GameObject>();
+            return list.Where(obj => obj.IsInView()).ToList();
+            /*List<GameObject> retValue = new List<GameObject>();
             
             int listCount = list.Count;
             for (int i = 0; i < listCount; i++)
@@ -40,7 +43,7 @@ namespace DKBasicEngine_1_0
                     retValue.Add(list[i]);
             }
 
-            return retValue;
+            return retValue;*/
         }
 
         public static bool IsInView(this GameObject obj)
@@ -83,7 +86,7 @@ namespace DKBasicEngine_1_0
             return false;
         }
         
-        public static T FirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        /*public static T FirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             List<T> _source = new List<T>(source);
 
@@ -173,6 +176,6 @@ namespace DKBasicEngine_1_0
                 Engine.Collidable.Remove(Collider);
 
             Collider = newCollider;
-        }
+        }*/
     }
 }

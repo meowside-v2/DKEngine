@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,18 +100,16 @@ namespace DKBasicEngine_1_0
                     BackgroundWorks.Start();
                     RenderWorker.Start();
 
-                    fpsMeter = new TextBlock()
-                    {
-                        Position = new Position(1, -1, 128),
-                        Dimensions = new Dimensions(25, 5, 1),
-                        Scale = new Scale(2, 2, 1),
-                        VAlignment = TextBlock.VerticalAlignment.Bottom,
-                        HAlignment = TextBlock.HorizontalAlignment.Left,
-                        Text = "0",
-                        IsGUI = true,
-                        TextShadow = true,
-                        Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF)
-                    };
+                    fpsMeter = new TextBlock();
+                    fpsMeter.Position = new Position(1, -1, 128);
+                    fpsMeter.Dimensions = new Dimensions(25, 5, 1);
+                    fpsMeter.Scale = new Scale(2, 2, 1);
+                    fpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
+                    fpsMeter.HAlignment = TextBlock.HorizontalAlignment.Left;
+                    fpsMeter.Text = "0";
+                    fpsMeter.IsGUI = true;
+                    fpsMeter.TextShadow = true;
+                    fpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
 
                     //Engine.ToRender.Add(fpsMeter);
 
@@ -173,7 +172,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private static async void Update()
+        private static void Update()
         {
             while (true)
             {
@@ -210,8 +209,8 @@ namespace DKBasicEngine_1_0
                 for (int i = 0; i < refereceCount; i++)
                     reference[i].Update();
                 
-                List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false);
-                List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false);
+                List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
+                List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();
                 int TriggersCount = Triggers.Count;
                 for (int i = 0; i < TriggersCount; i++)
                     Triggers[i].Collider.TriggerCheck(VisibleWithCollider);
