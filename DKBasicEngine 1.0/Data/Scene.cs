@@ -11,7 +11,7 @@ namespace DKBasicEngine_1_0
 
         private Stopwatch TimeOutControls = new Stopwatch();
         private TimeSpan TimeOut = new TimeSpan(0, 0, 1);
-
+        
         public readonly List<GameObject> Model = new List<GameObject>();
 
         /*public int FocusSelection { get; set; } = 0;
@@ -31,7 +31,7 @@ namespace DKBasicEngine_1_0
             this.Name = Name;
         }
 
-        public void Init(string path, Mode mode)
+        internal void Init(string path, Mode mode)
         {
             BinaryReader br;
 
@@ -47,9 +47,7 @@ namespace DKBasicEngine_1_0
             try
             {
                 this.Name = br.ReadString();
-
                 int temp_ModelCount = br.ReadInt32();
-
                 this.Model.Clear();
 
                 /*for (int count = 0; count < temp_ModelCount; count++)
@@ -82,6 +80,9 @@ namespace DKBasicEngine_1_0
 
             br.Close();
         }
+
+        protected internal virtual void Init()
+        { }
 
         /*public virtual void Start() { }
 

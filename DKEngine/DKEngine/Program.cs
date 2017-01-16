@@ -18,9 +18,7 @@ namespace DKEngine
             Engine.Init();
             
             Test t = new Test();
-            t.LoadStuff();
-
-            Engine.PageChange(t);
+            Engine.ChangeScene(t);
         }
     }
 }

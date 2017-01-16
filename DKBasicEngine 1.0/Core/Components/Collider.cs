@@ -8,8 +8,8 @@ namespace DKBasicEngine_1_0
 {
     public class Collider
     {
-        public event CollisionEnterHandler CollisionEvent;
-        public delegate void CollisionEnterHandler(Collider m);
+        internal event CollisionEnterHandler CollisionEvent;
+        internal delegate void CollisionEnterHandler(Collider m);
         /// <summary>
         /// Parent of collider
         /// </summary>
@@ -18,17 +18,17 @@ namespace DKBasicEngine_1_0
         /// <summary>
         /// Determines size and position of collider
         /// </summary>
-        public Rectangle Area;
+        public RectangleF Area;
 
         /// <summary>
         /// If is TRUE => Triggers OnColliderEnter once another GameObject enter this collider
         /// </summary>
         public bool IsTrigger = false;
 
-        private float X { get { return Parent.X + Area.X; } }
-        private float Y { get { return Parent.Y + Area.Y; } }
-        private float Width { get { return Area.Width; } }
-        private float Height { get { return Area.Height; } }
+        private float X { get { return Parent.Transform.Position.X + Area.X; } }
+        private float Y { get { return Parent.Transform.Position.Y + Area.Y; } }
+        private float Width { get { return Parent.Transform.Scale.X * Area.Width; } }
+        private float Height { get { return Parent.Transform.Scale.Y * Area.Height; } }
 
         /// <summary>
         /// Creates new Instance of Collider class
@@ -39,10 +39,10 @@ namespace DKBasicEngine_1_0
         /// <param name="Yoffset"></param>
         /// <param name="Width"></param>
         /// <param name="Height"></param>
-        public Collider(GameObject Parent, int Xoffset, int Yoffset, int Width, int Height)
+        public Collider(GameObject Parent, float Xoffset, float Yoffset, float Width, float Height)
         {
             this.Parent = Parent;
-            this.Area = new Rectangle(Xoffset, Yoffset, Width, Height);
+            this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
             lock (Engine.Collidable)
                 Engine.Collidable.Add(this);
 
@@ -56,7 +56,7 @@ namespace DKBasicEngine_1_0
         public Collider(GameObject Parent)
         {
             this.Parent = Parent;
-            this.Area = new Rectangle(0, 0, (int)Parent.Width, (int)Parent.Height);
+            this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.Width, Parent.Transform.Dimensions.Height);
             lock (Engine.Collidable)
                 Engine.Collidable.Add(this);
 
@@ -68,7 +68,7 @@ namespace DKBasicEngine_1_0
         /// </summary>
         /// <param name="Parent">Parent of collider</param>
         /// <param name="Area">Determines size and position of collider</param>
-        public Collider(GameObject Parent, Rectangle Area)
+        public Collider(GameObject Parent, RectangleF Area)
         {
             this.Parent = Parent;
             this.Area = Area;
@@ -84,10 +84,10 @@ namespace DKBasicEngine_1_0
         /// <param name="Parent">Parent of collider</param>
         /// <param name="Coordinates">Determines position of collider</param>
         /// <param name="Size">Determines size of collider</param>
-        public Collider(GameObject Parent, Point Coordinates, Size Size)
+        public Collider(GameObject Parent, PointF Coordinates, SizeF Size)
         {
             this.Parent = Parent;
-            this.Area = new Rectangle(Coordinates, Size);
+            this.Area = new RectangleF(Coordinates, Size);
             lock (Engine.Collidable)
                 Engine.Collidable.Add(this);
 
@@ -114,11 +114,6 @@ namespace DKBasicEngine_1_0
             Left,
             Down,
             Right
-        }
-
-        public Rectangle GetCollider()
-        {
-            return Area;
         }
 
         /// <summary>

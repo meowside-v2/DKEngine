@@ -63,7 +63,6 @@
     <Compile Include="Core\Interfaces\Random\Q-Q\K\ISlepice.cs" />
     <Compile Include="Core\Interfaces\Random\UwU\K\IDunno.cs" />
     <Compile Include="Core\SystemExt\Button.cs" />
-    <Compile Include="Core\SystemExt\Dialog.cs" />
     <Compile Include="Core\SystemExt\xRectangle.cs" />
     <Compile Include="Core\SystemExt\Letter.cs" />
     <Compile Include="Core\SystemExt\Extensions.cs" />

@@ -18,7 +18,7 @@ namespace DKBasicEngine_1_0
 
         public static float FindMaxZ(this List<GameObject> list) //where T : I3Dimensional
         {
-            return list.Max(obj => obj.Z);
+            return list.Max(obj => obj.Transform.Position.Z);
             /*float z2 = float.MinValue;
 
             int listCount = list.Count;
@@ -48,13 +48,13 @@ namespace DKBasicEngine_1_0
 
         public static bool IsInView(this GameObject obj)
         {
-            float X = obj.IsGUI ? 0 : Engine._baseCam != null ? Engine._baseCam.X : 0;
-            float Y = obj.IsGUI ? 0 : Engine._baseCam != null ? Engine._baseCam.Y : 0;
+            float X = obj.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.X : 0;
+            float Y = obj.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
 
-            return (obj.X + obj.Width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.Height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
+            return (obj.Transform.Position.X + obj.Transform.Dimensions.Width >= X && obj.Transform.Position.X < X + Engine.Render.RenderWidth && obj.Transform.Position.Y + obj.Transform.Dimensions.Height >= Y && obj.Transform.Position.Y < Y + Engine.Render.RenderHeight);
         }
 
-        public static bool IsUnsupportedEscapeSequence(this char letter)
+        /*public static bool IsUnsupportedEscapeSequence(this char letter)
         {
             switch (letter)
             {
@@ -84,7 +84,7 @@ namespace DKBasicEngine_1_0
             }
 
             return false;
-        }
+        }*/
         
         /*public static T FirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {

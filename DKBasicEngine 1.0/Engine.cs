@@ -44,14 +44,15 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private static bool _isInitialised = false;
+        private static bool _LoadingNewPage = false;
+        private static bool _IsInitialised = false;
 
         private static Thread BackgroundWorks;
         private static Thread RenderWorker;
 
-        private static TextBlock fpsMeter;
-        private static Stopwatch _deltaT;
-        internal static Camera _baseCam;
+        private static TextBlock FpsMeter;
+        private static Stopwatch DeltaT;
+        internal static Camera BaseCam;
 
         internal static List<Collider> Collidable;
         internal static List<GameObject> ToUpdate;
@@ -62,6 +63,9 @@ namespace DKBasicEngine_1_0
 
         private static float deltaT = 0;
         public static float deltaTime { get { return deltaT; } }
+
+        internal static event UpdateHandler AnimationUpdate;
+        internal delegate void UpdateHandler();
 
         /*internal static event BackgroundWorker UpdateEvent;
         internal static event BackgroundWorker StartEvent;
@@ -74,7 +78,7 @@ namespace DKBasicEngine_1_0
 
         public static void Init()
         {
-            if (!_isInitialised)
+            if (!_IsInitialised)
             {
                 try
                 {
@@ -88,7 +92,7 @@ namespace DKBasicEngine_1_0
                     Render.imageBuffer    = new byte[Render.ImageBufferSize];
                     Render.imageBufferKey = new byte[Render.ImageKeyBufferSize];
 
-                    _deltaT    = Stopwatch.StartNew();
+                    DeltaT    = Stopwatch.StartNew();
 
                     ToStart    = new List<GameObject>();
                     ToUpdate   = new List<GameObject>();
@@ -100,22 +104,20 @@ namespace DKBasicEngine_1_0
                     BackgroundWorks.Start();
                     RenderWorker.Start();
 
-                    fpsMeter = new TextBlock();
-                    fpsMeter.Position = new Position(1, -1, 128);
-                    fpsMeter.Dimensions = new Dimensions(25, 5, 1);
-                    fpsMeter.Scale = new Scale(2, 2, 1);
-                    fpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
-                    fpsMeter.HAlignment = TextBlock.HorizontalAlignment.Left;
-                    fpsMeter.Text = "0";
-                    fpsMeter.IsGUI = true;
-                    fpsMeter.TextShadow = true;
-                    fpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
-
-                    //Engine.ToRender.Add(fpsMeter);
-
+                    FpsMeter = new TextBlock();
+                    FpsMeter.Transform.Position = new Position(0, 0, 128);
+                    FpsMeter.Transform.Dimensions = new Dimensions(50, 5, 1);
+                    FpsMeter.Transform.Scale = new Scale(2, 2, 1);
+                    FpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
+                    FpsMeter.HAlignment = TextBlock.HorizontalAlignment.Left;
+                    FpsMeter.Text = "0";
+                    FpsMeter.IsGUI = true;
+                    FpsMeter.TextShadow = true;
+                    FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
+                    
                     SplashScreen();
 
-                    _isInitialised = true;
+                    _IsInitialised = true;
                 }
                 catch (Exception e)
                 {
@@ -126,11 +128,15 @@ namespace DKBasicEngine_1_0
                 throw new Exception("Engine is being initialised second time");
         }
         
-        public static void PageChange(Scene Scene)
+        public static void ChangeScene(Scene Scene)
         {
-            if (_isInitialised)
+            if (_IsInitialised)
             {
+                Engine._LoadingNewPage = true;
                 Engine.Scene = Scene;
+                Scene.Init();
+
+                Engine._LoadingNewPage = false;
             }
             else
                 throw new Exception("Engine not initialised \n Can't change page");
@@ -138,7 +144,7 @@ namespace DKBasicEngine_1_0
 
         public static void Pause()
         {
-            if (_deltaT.IsRunning) _deltaT?.Stop();
+            if (DeltaT.IsRunning) DeltaT?.Stop();
             if (BackgroundWorks.IsAlive) BackgroundWorks?.Abort();
             if (RenderWorker.IsAlive)
             {
@@ -149,7 +155,7 @@ namespace DKBasicEngine_1_0
 
         public static void Resume()
         {
-            if(!_deltaT.IsRunning) _deltaT?.Start();
+            if(!DeltaT.IsRunning) DeltaT?.Start();
             if(!BackgroundWorks.IsAlive) BackgroundWorks?.Start();
             if (!RenderWorker.IsAlive)
             {
@@ -160,7 +166,7 @@ namespace DKBasicEngine_1_0
 
         private static void SplashScreen()
         {
-            if (!_isInitialised)
+            if (!_IsInitialised)
             {
                 SplashScreen splash     = new SplashScreen();
                 Camera splashScreenCam = new Camera();
@@ -190,32 +196,40 @@ namespace DKBasicEngine_1_0
                     for (int i = 0; i < controlReferenceCount; i++)
                         Page.PageControls[i].IsFocused = i == Page.PageControls[i].FocusElementID;
                 }*/
-                
-                int ToStartCount = ToStart.Count;
-                while (ToStartCount > 0)
+
+                if (Engine._LoadingNewPage)
                 {
-                    ToStartCount--;
-                    ToStart[ToStartCount].Start();
-                    ToUpdate.Add(ToStart[ToStartCount]);
-                    ToStart.Remove(ToStart[ToStartCount]);
+                    SpinWait.SpinUntil(() => !Engine._LoadingNewPage);
                 }
+
+                int ToStartCount = ToStart.Count;
+                lock(ToStart)
+                    while (ToStartCount > 0)
+                    {
+                        ToStartCount--;
+                        ToStart[0].Start();
+                        ToUpdate.Add(ToStart[0]);
+                        ToStart.Remove(ToStart[0]);
+                    }
 
                 List<GameObject> reference = ToUpdate.GetGameObjectsInView();
 
-                deltaT = (float)_deltaT.Elapsed.TotalSeconds;
-                _deltaT?.Restart();
+                deltaT = (float)DeltaT.Elapsed.TotalSeconds;
+                DeltaT?.Restart();
 
                 int refereceCount = reference.Count;
                 for (int i = 0; i < refereceCount; i++)
                     reference[i].Update();
-                
+
+                AnimationUpdate?.Invoke();
+
                 List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
                 List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();
                 int TriggersCount = Triggers.Count;
                 for (int i = 0; i < TriggersCount; i++)
                     Triggers[i].Collider.TriggerCheck(VisibleWithCollider);
                 
-                _baseCam?.BufferImage();
+                BaseCam?.BufferImage();
 
                 Array.Copy(Render.imageBuffer, Render.ImageOutData, Render.ImageBufferSize);
 
@@ -230,7 +244,7 @@ namespace DKBasicEngine_1_0
 
                     if (temp > 0)
                     {
-                        fpsMeter.Text = string.Format("{0}", Render.sampleSize * 1000 / temp);
+                        FpsMeter.Text = string.Format("{0}", Render.sampleSize * 1000 / temp);
 #if DEBUG
                         //Debug.WriteLine(string.Format("Buff {0}", Render.sampleSize * 1000 / temp));
 #endif

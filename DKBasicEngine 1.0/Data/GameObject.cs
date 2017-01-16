@@ -1,24 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace DKBasicEngine_1_0
 {
-    public class GameObject : Transform, ICore, IGraphics
+    public class GameObject : ICore, IGraphics
     {
-        public GameObject Parent = null;
+        public GameObject Parent  = null;
+        protected Material _Model = null;
+        public Animator Animator  = null;
+        public Collider Collider  = null;
 
-        internal override float X { get { return Parent != null ? Position.X + Parent.X : Position.X; } }
-        internal override float Y { get { return Parent != null ? Position.Y + Parent.Y : Position.Y; } }
-        internal override float Z { get { return Parent != null ? Position.Z + Parent.Z : Position.Z; } }
+        public Transform Transform { get; }
+        
+        public Material Model
+        {
+            get { return _Model; }
+            set
+            {
+                if(value != _Model && value != null)
+                {
+                    _Model = value;
+                    this.Transform.Dimensions = new Dimensions(value.Width, value.Height, 1);
+                }
+            }
+        }
 
-        internal override float ScaleX { get { return Parent != null ? Scale.X * Parent.Scale.X : Scale.X; } }
-        internal override float ScaleY { get { return Parent != null ? Scale.Y * Parent.Scale.Y : Scale.Y; } }
-        internal override float ScaleZ { get { return Parent != null ? Scale.Z * Parent.Scale.Z : Scale.Z; } }
-
-        public Animator Animator;
-        public Material Model;
-        public Collider Collider;
+        public readonly List<GameObject> Child = new List<GameObject>();
 
         protected bool _IsGUI = false;
         public bool IsGUI
@@ -32,10 +41,7 @@ namespace DKBasicEngine_1_0
         protected string _typeName = "";
         public string TypeName
         {
-            get
-            {
-                return _typeName;
-            }
+            get { return _typeName; }
             set
             {
                 _typeName = value;
@@ -45,17 +51,17 @@ namespace DKBasicEngine_1_0
 
         public GameObject()
         {
-            this.Dimensions = new Dimensions(1, 1, 1);
-            this.Scale = new Scale(1, 1, 1);
-            this.Position = new Position(0, 0, 0);
-            this.Animator = new Animator(this);
+            this.Transform            = new Transform(this);
+            this.Transform.Dimensions = new Dimensions(1, 1, 1);
+            this.Transform.Scale      = new Scale(1, 1, 1);
+            this.Transform.Position   = new Position(0, 0, 0);
+            this.Animator             = new Animator(this);
 
             lock (Engine.ToStart)
-                    lock (Engine.ToRender)
-                    {
-                        Engine.ToRender.Add(this);
-                        Engine.ToStart.Add(this);
-                    }
+                Engine.ToStart.Add(this);
+
+            lock (Engine.ToRender)
+                Engine.ToRender.Add(this);
 
             if (Engine.Scene != null)
                 Engine.Scene.Model.Add(this);
@@ -63,29 +69,34 @@ namespace DKBasicEngine_1_0
 
         public GameObject(GameObject Parent)
         {
-            this.Dimensions = new Dimensions(0, 0, 0);
-            this.Scale = new Scale(1, 1, 1);
-            this.Position = new Position(0, 0, 0);
-            this.Animator = new Animator(this);
+            this.Transform            = new Transform(this);
+            this.Transform.Dimensions = new Dimensions(1, 1, 1);
+            this.Transform.Scale      = new Scale(1, 1, 1);
+            this.Transform.Position   = new Position(0, 0, 0);
+            this.Animator             = new Animator(this);
 
             lock (Engine.ToStart)
-                    lock (Engine.ToRender)
-                    {
-                        Engine.ToRender.Add(this);
-                        Engine.ToStart.Add(this);
-                    }
+                Engine.ToStart.Add(this);
+
+            lock (Engine.ToRender)
+                Engine.ToRender.Add(this);
 
             if (Parent != null)
+            {
                 this.Parent = Parent;
+                Parent.Child.Add(this);
+            }
+                
+
+            else if (Engine.Scene != null)
+                Engine.Scene.Model.Add(this);
         }
 
         public virtual void Start()
         { }
 
         public virtual void Update()
-        {
-            Animator?.Update();
-        }
+        { }
 
         public virtual void Destroy()
         {
@@ -98,9 +109,7 @@ namespace DKBasicEngine_1_0
         }
 
         internal virtual void Render()
-        {
-            Model?.Render(this);
-        }
+        { Model?.Render(this); }
 
         public virtual void OnColliderEnter(Collider e)
         { }

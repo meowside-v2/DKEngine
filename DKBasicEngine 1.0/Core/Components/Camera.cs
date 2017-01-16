@@ -12,8 +12,8 @@ namespace DKBasicEngine_1_0
     {
         public Position Position;
 
-        internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.X + Position.X : Position.X; } }
-        internal float Y { get { return RenderingGUI ? 0 : Parent != null ? Parent.Y + Position.Y : Position.Y; } }
+        internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.X + Position.X : Position.X; } }
+        internal float Y { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.Y + Position.Y : Position.Y; } }
 
         public GameObject Parent = null;
 
@@ -22,13 +22,13 @@ namespace DKBasicEngine_1_0
         public Camera()
         {
             this.Position = new Position(0, 0, 0);
-            Engine._baseCam = this;
+            Engine.BaseCam = this;
         }
 
         public void Destroy()
         {
-            if (Engine._baseCam == this)
-                Engine._baseCam = null;
+            if (Engine.BaseCam == this)
+                Engine.BaseCam = null;
 
             Parent = null;
         }
@@ -54,7 +54,7 @@ namespace DKBasicEngine_1_0
             while (GUICount > 0)
             {
                 float tempHeight = GUI.FindMaxZ();
-                List<GameObject> toRender = GUI.Where(item => item.Z == tempHeight).ToList();
+                List<GameObject> toRender = GUI.Where(item => item.Transform.Position.Z == tempHeight).ToList();
 
                 int toRenderCount = toRender.Count;
                 for (int i = 0; i < toRenderCount; i++)
@@ -79,7 +79,7 @@ namespace DKBasicEngine_1_0
             while(TempCount > 0)
             {
                 float tempHeight = Temp.FindMaxZ();
-                List<GameObject> toRender = Temp.Where(item => item.Z == tempHeight).ToList();
+                List<GameObject> toRender = Temp.Where(item => item.Transform.Position.Z == tempHeight).ToList();
 
                 int toRenderCount = toRender.Count;
                 for (int i = 0; i < toRenderCount; i++)

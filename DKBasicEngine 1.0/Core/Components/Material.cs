@@ -222,10 +222,10 @@ namespace DKBasicEngine_1_0
         /// </summary>
         /// <param name="clr">Source color</param>
         /// <param name="Parent">I3Dimensional used for material scale</param>
-        public Material(Color clr, Transform Parent)
+        public Material(Color clr, GameObject Parent)
         {
-            this.Width = (int)Parent.Dimensions.Width;
-            this.Height = (int)Parent.Dimensions.Height;
+            this.Width = (int)Parent.Transform.Dimensions.Width;
+            this.Height = (int)Parent.Transform.Dimensions.Height;
 
             colorMapA = new byte[Frames][][];
             colorMapR = new byte[Frames][][];
@@ -281,34 +281,31 @@ namespace DKBasicEngine_1_0
             int AnimationState = Parent.Animator != null ? Parent.Animator.AnimationState : 0;
             bool HasShadow = Parent.HasShadow;
 
-            int x = (int)(Parent.X - Engine._baseCam.X);
-            int y = (int)(Parent.Y - Engine._baseCam.Y);
+            float CamX = Engine.BaseCam != null ? Engine.BaseCam.X : 0;
+            float CamY = Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
 
-            float RasteredHeight = this.Height * Parent.ScaleY;
-            float RasteredWidth = this.Width * Parent.ScaleX;
+            int x = (int)(Parent.Transform.Position.X - CamX);
+            int y = (int)(Parent.Transform.Position.Y - CamY);
 
-            float NonRasteredWidthRatio = 1 / Parent.ScaleX;
-            float NonRasteredHeightRatio = 1 / Parent.ScaleY;
+            float RasteredHeight = this.Height * Parent.Transform.Scale.Y;
+            float RasteredWidth = this.Width * Parent.Transform.Scale.X;
+
+            float NonRasteredWidthRatio = 1 / Parent.Transform.Scale.X;
+            float NonRasteredHeightRatio = 1 / Parent.Transform.Scale.Y;
 
             float NonRasteredHeight = 0;
             float NonRasteredWidth = 0;
-
-            Transform ParentOfParent = Parent.Parent;
-
-            float ToMaxWidth = ParentOfParent != null ? ParentOfParent.Width : Engine.Render.RenderWidth;
-            float ToMaxHeight = ParentOfParent != null ? ParentOfParent.Height : Engine.Render.RenderHeight;
-
             if (ReColor == null)
             {
                 if(AnimationState <= BufferImages)
-                    for (int row = 0; row < RasteredHeight && row < ToMaxHeight; row++)
+                    for (int row = 0; row < RasteredHeight; row++)
                     {
                         NonRasteredWidth = 0;
 
                         if (y + row >= Engine.Render.RenderHeight)
                             break;
 
-                        for (int column = 0; column < RasteredWidth && column < ToMaxWidth; column++)
+                        for (int column = 0; column < RasteredWidth; column++)
                         {
 
                             if (x + column >= Engine.Render.RenderWidth)
@@ -346,14 +343,14 @@ namespace DKBasicEngine_1_0
             {
                 Color tempColor = (Color)ReColor;
 
-                for (int row = 0; row < RasteredHeight && row < ToMaxHeight; row++)
+                for (int row = 0; row < RasteredHeight; row++)
                 {
                     NonRasteredWidth = 0;
 
                     if (y + row >= Engine.Render.RenderHeight)
                         break;
 
-                    for (int column = 0; column < RasteredWidth && column < ToMaxWidth; column++)
+                    for (int column = 0; column < RasteredWidth; column++)
                     {
 
                         if (x + column >= Engine.Render.RenderWidth)
@@ -396,14 +393,14 @@ namespace DKBasicEngine_1_0
                 x++;
                 y++;
 
-                for (int row = 0; row < RasteredHeight && row < ToMaxHeight; row++)
+                for (int row = 0; row < RasteredHeight; row++)
                 {
                     NonRasteredWidth = 0;
 
                     if (y + row >= Engine.Render.RenderHeight)
                         break;
 
-                    for (int column = 0; column < RasteredWidth && column < ToMaxWidth; column++)
+                    for (int column = 0; column < RasteredWidth; column++)
                     {
                         if (x + column >= Engine.Render.RenderWidth)
                             break;

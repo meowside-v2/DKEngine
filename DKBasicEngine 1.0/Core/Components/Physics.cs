@@ -27,12 +27,12 @@ namespace DKBasicEngine_1_0
 
         public void Jump()
         {
-            float StartPositon = Parent.Y;
+            float StartPositon = Parent.Transform.Position.Y;
             int MinJump = 10;
 
             do
             {
-                if (StartPositon - Parent.Y == Jumpheight)
+                if (StartPositon - Parent.Transform.Position.Y == Jumpheight)
                 {
                     //Fall(world, enemies);
                     Jumped = false;
@@ -44,14 +44,14 @@ namespace DKBasicEngine_1_0
                     Jumped = false;
                     return;
                 }
-                else if (!ForceJump && StartPositon - Parent.Y > MinJump)
+                else if (!ForceJump && StartPositon - Parent.Transform.Position.Y > MinJump)
                 {
                     Fall();
                     Jumped = false;
                     return;
                 }
 
-                else Parent.Position.Y -= 1;
+                //else Parent.Transform.Position.Y -= 1;
 
                 Thread.Sleep(Jumplength);
             } while (true);
@@ -61,7 +61,7 @@ namespace DKBasicEngine_1_0
         {
             do
             {
-                Parent.Position.Y += 1;
+                //Parent.Transform.Position.Y += 1;
 
                 Thread.Sleep(Jumplength);
             } while (!colliderReference.Collision(Collider.Direction.Down));

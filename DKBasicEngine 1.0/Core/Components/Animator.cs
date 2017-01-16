@@ -5,7 +5,8 @@ namespace DKBasicEngine_1_0
     public class Animator : IAnimated
     {
         GameObject Parent;
-        
+
+        private Engine.UpdateHandler UpdateDel;
         private bool _wasPlayed         = false;
         private AnimationLoop _settings = AnimationLoop.Once;
         public AnimationLoop Settings
@@ -52,9 +53,11 @@ namespace DKBasicEngine_1_0
         public Animator(GameObject Parent)
         {
             this.Parent = Parent;
+            UpdateDel = new Engine.UpdateHandler(this.Update);
+            Engine.AnimationUpdate += UpdateDel;
         }
 
-        internal void Update()
+        protected void Update()
         {
             if (Parent.Model?.Frames > 1 && !_wasPlayed)
             {
@@ -73,6 +76,11 @@ namespace DKBasicEngine_1_0
             _wasPlayed = false;
             CurrentAnimationTime = new TimeSpan(0);
             NumberOfPlays = 0;
+        }
+
+        public void Destroy()
+        {
+            Engine.AnimationUpdate -= UpdateDel;
         }
     }
 }

@@ -41,13 +41,10 @@ namespace DKBasicEngine_1_0
         {
             set
             {
-                if (value.All(ch => !ch.IsUnsupportedEscapeSequence()))
+                if (TextControl(value))
                 {
-                    if (TextControl(value))
-                    {
-                        _textStr = value;
-                        _changed = true;
-                    }
+                    _textStr = value;
+                    _changed = true;
                 }
                 
             }
@@ -119,9 +116,6 @@ namespace DKBasicEngine_1_0
 
         private bool TextControl(char key)
         {
-            if (key.IsUnsupportedEscapeSequence())
-                return false;
-
             if (AllowedChars == Type.All)
                 return true;
 

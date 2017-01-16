@@ -8,20 +8,15 @@ namespace DKBasicEngine_1_0
     {
         protected bool _changed = false;
         
-        protected float _width = 0;
-        protected float _height = 0;
-
         protected float vertOffset = 0;
         protected float horiOffset = 0;
 
-        protected HorizontalAlignment _HA;
-        protected VerticalAlignment _VA;
-
-        protected HorizontalAlignment _THA;
-        protected VerticalAlignment _TVA;
+        protected HorizontalAlignment _HA  = HorizontalAlignment.Left;
+        protected VerticalAlignment _VA    = VerticalAlignment.Top;
+        protected HorizontalAlignment _THA = HorizontalAlignment.Left;
+        protected VerticalAlignment _TVA   = VerticalAlignment.Top;
 
         protected string _textStr = "";
-
         internal List<Letter> _text = new List<Letter>();
         public Color? Foreground { get; set; }
 
@@ -55,20 +50,14 @@ namespace DKBasicEngine_1_0
         };
 
         public bool TextShadow = false;
-        internal override float X { get { return Position.X + horiOffset; } }
-        internal override float Y { get { return Position.Y + vertOffset; } }
-        internal override float Z { get { return Position.Z; } }
         
         public virtual string Text
         {
             get { return _textStr; }
             set
             {
-                if(value.All(ch => !ch.IsUnsupportedEscapeSequence()))
-                {
-                    _textStr = value;
-                    _changed = true;
-                }
+                _textStr = value;
+                _changed = true;
             }
         }
 
@@ -76,9 +65,11 @@ namespace DKBasicEngine_1_0
         {
             set
             {
-                if(value != _HA)
+                _HA = value;
+
+                if (_IsGUI)
                 {
-                    _HA = value;
+                    this.Transform.Position -= new Position(horiOffset, 0, 0);
 
                     switch (value)
                     {
@@ -87,28 +78,29 @@ namespace DKBasicEngine_1_0
                             break;
 
                         case HorizontalAlignment.Center:
-                            horiOffset = (Engine.Render.RenderWidth - this.Width) / 2;
+                            horiOffset = (Engine.Render.RenderWidth - this.Transform.Dimensions.Width * Transform.Scale.X) / 2;
                             break;
 
                         case HorizontalAlignment.Right:
-                            horiOffset = Engine.Render.RenderWidth - this.Width;
-                            break;
-
-                        default:
+                            horiOffset = Engine.Render.RenderWidth - this.Transform.Dimensions.Width * Transform.Scale.X;
                             break;
                     }
 
-                    _changed = true;
+                    this.Transform.Position += new Position(horiOffset, 0, 0);
                 }
+                    
+                _changed = true;
             }
         }
         public VerticalAlignment VAlignment
         {
             set
             {
-                if(value != _VA)
+                _VA = value;
+
+                if (_IsGUI)
                 {
-                    _VA = value;
+                    this.Transform.Position -= new Position(0, vertOffset, 0);
 
                     switch (value)
                     {
@@ -117,19 +109,19 @@ namespace DKBasicEngine_1_0
                             break;
 
                         case VerticalAlignment.Center:
-                            vertOffset = (Engine.Render.RenderHeight - this.Height) / 2;
+                            vertOffset = (Engine.Render.RenderHeight - this.Transform.Dimensions.Height * Transform.Scale.Y) / 2;
                             break;
 
                         case VerticalAlignment.Bottom:
-                            vertOffset = Engine.Render.RenderHeight - this.Height;
-                            break;
-
-                        default:
+                            vertOffset = Engine.Render.RenderHeight - this.Transform.Dimensions.Height * Transform.Scale.Y;
                             break;
                     }
 
-                    _changed = true;
+                    this.Transform.Position += new Position(0, vertOffset, 0);
                 }
+                    
+
+                _changed = true;
             }
         }
 
@@ -137,24 +129,16 @@ namespace DKBasicEngine_1_0
         {
             set
             {
-                if (value != _THA)
-                {
-                    _THA = value;
-
-                    _changed = true;
-                }
+                _THA = value;
+                _changed = true;
             }
         }
         public VerticalAlignment TextVAlignment
         {
             set
             {
-                if (value != _TVA)
-                {
-                    _TVA = value;
-
-                    _changed = true;
-                }
+                _TVA = value;
+                _changed = true;
             }
         }
 
@@ -198,24 +182,26 @@ namespace DKBasicEngine_1_0
         private void TextControl()
         {
             int _textCount = _text.Count;
+            for (int i = _textCount - 1; i >= 0; i--)
+                _text[i].Destroy();
 
-            for (int i = 0; i < _textCount; i++)
-                _text[0].Destroy();
+            VAlignment = _VA;
+            HAlignment = _HA;
 
             List<Letter> retValue = new List<Letter>();
-
             List<List<Letter>> textAligned = new List<List<Letter>>() { new List<Letter>() };
 
-            int Xoffset = 0;
-            int Yoffset = 0;
+            float Xoffset = 0; //this.Transform.Position.X + horiOffset;
+            float Yoffset = 0; //this.Transform.Position.Y + vertOffset;
+            int rows = 0;
 
-            if (Width > 0)
+            if (Transform.Dimensions.Width > 0)
             {
                 for (int i = 0; i < _textStr.Length; i++)// (char letter in Text)
                 {
                     if (_textStr[i] == ' ')
                     {
-                        Xoffset += 3;
+                        Xoffset += 3 * Transform.Scale.X * FontSize;
                     }
 
                     else
@@ -223,7 +209,8 @@ namespace DKBasicEngine_1_0
                         if (_textStr[i] == '\r' || _textStr[i] == '\n')
                         {
                             Xoffset = 0;
-                            Yoffset += 6;
+                            Yoffset += 6 * Transform.Scale.Y * FontSize;
+                            rows++;
 
                             textAligned.Add(new List<Letter>());
 
@@ -232,25 +219,33 @@ namespace DKBasicEngine_1_0
 
                         Material newLetterMaterial = Database.GetLetter(_textStr[i]);
 
-                        if (Xoffset * ScaleX * FontSize + newLetterMaterial.Width * ScaleX * FontSize > this.Width)
+                        if (Xoffset + newLetterMaterial.Width * FontSize > this.Transform.Dimensions.Width)
                         {
                             Xoffset = 0;
-                            Yoffset += 6;
+                            Yoffset += 6 * Transform.Scale.Y * FontSize;
+                            rows++;
 
                             textAligned.Add(new List<Letter>());
                         }
 
-                        textAligned[Yoffset / 6].Add(new Letter(this,
+                        /*textAligned[Yoffset / 6].Add(new Letter(this,
                                                                 new Position(Xoffset, Yoffset, 1),
-                                                                newLetterMaterial));
+                                                                newLetterMaterial));*/
 
-                        Xoffset += newLetterMaterial.Width + 1;
+                        Letter l = new Letter(this, newLetterMaterial);
+                        l.Transform.Position = new Position(Xoffset + this.Transform.Position.X,
+                                                            Yoffset + this.Transform.Position.Y,
+                                                            1);
+                        l.Transform.Scale = this.Transform.Scale;
+                        textAligned[rows].Add(l);
+
+                        Xoffset += (newLetterMaterial.Width + 1) * Transform.Scale.X * FontSize;
                     }
                 }
             }
 
             int textAlignedCount = textAligned.Count;
-            float maxHeight = textAlignedCount * 6 * FontSize;
+            float maxHeight = textAlignedCount * 6 * FontSize * Transform.Scale.Y;
             float startY = 0;
 
             switch (_TVA)
@@ -259,10 +254,10 @@ namespace DKBasicEngine_1_0
                     startY = 0;
                     break;
                 case VerticalAlignment.Center:
-                    startY = (_height - maxHeight) / 2;
+                    startY = (this.Transform.Dimensions.Height * this.Transform.Scale.Y * FontSize - maxHeight) / 2;
                     break;
                 case VerticalAlignment.Bottom:
-                    startY = _height - maxHeight;
+                    startY = this.Transform.Dimensions.Height * this.Transform.Scale.Y * FontSize - maxHeight;
                     break;
                 default:
                     break;
@@ -275,7 +270,7 @@ namespace DKBasicEngine_1_0
                 int textAlignedRowCount = textAligned[i].Count;
 
                 if (textAlignedRowCount > 0)
-                    maxWidth = (textAligned[i][textAlignedCount - 1].Model.Width + textAligned[i][textAlignedCount - 1].Position.X) * FontSize;
+                    maxWidth = textAligned[i][textAlignedRowCount - 1].Model.Width * this.Transform.Scale.X * FontSize + textAligned[i][textAlignedRowCount - 1].Transform.Position.X - textAligned[i][0].Transform.Position.X;
 
                 if (maxWidth != 0)
                 {
@@ -288,11 +283,11 @@ namespace DKBasicEngine_1_0
                             break;
 
                         case HorizontalAlignment.Center:
-                            startX = (_width - maxWidth) / 2;
+                            startX = (this.Transform.Dimensions.Width * this.Transform.Scale.X - maxWidth) / 2;
                             break;
 
                         case HorizontalAlignment.Right:
-                            startX = _width - maxWidth;
+                            startX = this.Transform.Dimensions.Width * this.Transform.Scale.X - maxWidth;
                             break;
                     }
 
@@ -300,10 +295,10 @@ namespace DKBasicEngine_1_0
                     for (int j = 0; j < textAlignedRowCount; j++)//foreach (Letter letter in row)
                     {
                         if (startX != 0)
-                            textAligned[i][j].HorOffset = startX;
+                            textAligned[i][j].Transform.Position += new Position(startX, 0, 0);
 
                         if (startY != 0)
-                            textAligned[i][j].VertOffset = startY;
+                            textAligned[i][j].Transform.Position += new Position(0, startY, 0);
 
                         retValue.Add(textAligned[i][j]);
                     }
@@ -311,10 +306,7 @@ namespace DKBasicEngine_1_0
             }
 
             _text = retValue;
-
-            VAlignment = _VA;
-            HAlignment = _HA;
-
+            
             _changed = false;
         }
     }
