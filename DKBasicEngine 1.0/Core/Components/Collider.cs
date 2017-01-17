@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -145,7 +149,7 @@ namespace DKBasicEngine_1_0
             {
                 if (Left(VisibleObjects[i].Collider))
                 {
-                    Debug.WriteLine("Left");
+                    //Debug.WriteLine("Left");
                     CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
                     continue;
@@ -153,7 +157,7 @@ namespace DKBasicEngine_1_0
                 }
                 else if (Right(VisibleObjects[i].Collider))
                 {
-                    Debug.WriteLine("Right");
+                    //Debug.WriteLine("Right");
                     CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
                     continue;
@@ -161,7 +165,7 @@ namespace DKBasicEngine_1_0
 
                 else if (Up(VisibleObjects[i].Collider))
                 {
-                    Debug.WriteLine("Up");
+                    //Debug.WriteLine("Up");
                     CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
                     continue;
@@ -169,7 +173,7 @@ namespace DKBasicEngine_1_0
 
                 else if (Down(VisibleObjects[i].Collider))
                 {
-                    Debug.WriteLine("Down");
+                    //Debug.WriteLine("Down");
                     CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
                     continue;

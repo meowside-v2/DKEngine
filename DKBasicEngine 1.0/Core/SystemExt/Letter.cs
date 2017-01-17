@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -6,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    internal class Letter : GameObject
+    internal sealed class Letter : GameObject
     {
         /*internal float VertOffset = 0;
         internal float HorOffset = 0;*/
 
-        public override bool HasShadow { get { return ((TextBlock)Parent).TextShadow; } }
+        public override sealed bool HasShadow { get { return ((TextBlock)Parent).TextShadow; } }
         
         /*internal override float X { get { return HorOffset + Position.X * _Parent.FontSize * Parent.ScaleX + Parent.X; } }
         internal override float Y { get { return VertOffset + Position.Y * _Parent.FontSize * Parent.ScaleY + Parent.Y; } }
@@ -36,21 +40,21 @@ namespace DKBasicEngine_1_0
             Animator = new Animator(this);
         }
 
-        public override void Destroy()
+        public override sealed void Destroy()
         {
             Engine.ToRender.Remove(this);
-            Engine.ToUpdate.Remove(this);
+            Engine.UpdateEvent -= this.UpdateHandler;
             Parent.Child.Remove(this);
             ((TextBlock)Parent)._text.Remove(this);
+
+            Animator.Destroy();
 
             Parent = null;
             Animator = null;
             Model = null;
         }
 
-        internal override void Render()
-        {
-            Model?.Render(this, Foreground);
-        }
+        internal override sealed void Render()
+        { Model?.Render(this, Foreground); }
     }
 }

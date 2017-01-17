@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -314,8 +318,8 @@ namespace DKBasicEngine_1_0
                             if (IsOnScreen(x + column, y + row))
                             {
 
-                                int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
-                                int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
+                                int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
+                                int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
                                 int tempColumn = (int)NonRasteredWidth;
                                 int tempRow = (int)NonRasteredHeight;
@@ -359,8 +363,8 @@ namespace DKBasicEngine_1_0
                         if (IsOnScreen(x + column, y + row))
                         {
 
-                            int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
-                            int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
+                            int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
+                            int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
                             int tempColumn = (int)NonRasteredWidth;
                             int tempRow = (int)NonRasteredHeight;
@@ -407,8 +411,8 @@ namespace DKBasicEngine_1_0
 
                         if (IsOnScreen(x + column, y + row))
                         {
-                            int offset = (int)(((3 * (y + row)) * Engine.Render.RenderWidth) + (3 * (x + column)));
-                            int keyOffset = (int)(((y + row) * Engine.Render.RenderWidth) + (x + column));
+                            int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
+                            int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
                             int tempColumn = (int)NonRasteredWidth;
                             int tempRow = (int)NonRasteredHeight;

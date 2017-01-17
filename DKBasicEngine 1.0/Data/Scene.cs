@@ -41,7 +41,7 @@ namespace DKBasicEngine_1_0
             }
             catch (IOException e)
             {
-                throw new SceneInitFailedException(path + "\nWorld wasn't found", e);
+                throw new Exception(path + "\nWorld wasn't found", e);
             }
 
             try
@@ -75,7 +75,7 @@ namespace DKBasicEngine_1_0
             }
             catch (Exception e)
             {
-                throw new SceneInitFailedException("World loading failed", e);
+                throw new Exception("World loading failed", e);
             }
 
             br.Close();

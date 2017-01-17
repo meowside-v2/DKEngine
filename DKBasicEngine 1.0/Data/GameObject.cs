@@ -7,12 +7,25 @@ namespace DKBasicEngine_1_0
 {
     public class GameObject : ICore, IGraphics
     {
+        public bool IsInView
+        {
+            get
+            {
+                float X = this.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.X : 0;
+                float Y = this.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
+
+                return (this.Transform.Position.X + this.Transform.Dimensions.Width >= X && this.Transform.Position.X < X + Engine.Render.RenderWidth && this.Transform.Position.Y + this.Transform.Dimensions.Height >= Y && this.Transform.Position.Y < Y + Engine.Render.RenderHeight);
+            }
+        }
+
+        internal Engine.UpdateHandler UpdateHandler;
+
         public GameObject Parent  = null;
         protected Material _Model = null;
         public Animator Animator  = null;
         public Collider Collider  = null;
 
-        public Transform Transform { get; }
+        public readonly Transform Transform;
         
         public Material Model
         {
@@ -65,6 +78,8 @@ namespace DKBasicEngine_1_0
 
             if (Engine.Scene != null)
                 Engine.Scene.Model.Add(this);
+
+            UpdateHandler = new Engine.UpdateHandler(this.Update);
         }
 
         public GameObject(GameObject Parent)
@@ -87,9 +102,10 @@ namespace DKBasicEngine_1_0
                 Parent.Child.Add(this);
             }
                 
-
             else if (Engine.Scene != null)
                 Engine.Scene.Model.Add(this);
+
+            UpdateHandler = new Engine.UpdateHandler(this.Update);
         }
 
         public virtual void Start()
@@ -100,7 +116,7 @@ namespace DKBasicEngine_1_0
 
         public virtual void Destroy()
         {
-            Engine.ToUpdate.Remove(this);
+            Engine.UpdateEvent -= this.UpdateHandler;
             Engine.ToRender.Remove(this);
 
             this.Animator = null;

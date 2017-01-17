@@ -1,4 +1,8 @@
-﻿using System.Threading;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System.Threading;
 
 namespace DKBasicEngine_1_0
 {

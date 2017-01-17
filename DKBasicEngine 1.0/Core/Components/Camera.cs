@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -14,6 +18,9 @@ namespace DKBasicEngine_1_0
 
         internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.X + Position.X : Position.X; } }
         internal float Y { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.Y + Position.Y : Position.Y; } }
+
+        public float MinRenderDepth { get; set; }
+        public float MaxRenderDepth { get; set; }
 
         public GameObject Parent = null;
 
@@ -33,17 +40,20 @@ namespace DKBasicEngine_1_0
             Parent = null;
         }
         
-        internal void BufferImage()
+        internal void BufferImage(List<GameObject> GameObjectsInView)
         {
             Array.Clear(Engine.Render.imageBuffer, 0, Engine.Render.imageBuffer.Length);
             Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
 
+            
             List<GameObject> Temp = null;
 
-            lock (Engine.ToRender)
-            {
-                Temp = Engine.ToRender.Where(item => item.IsInView()).ToList(); 
-            }
+
+            if (GameObjectsInView != null)
+                Temp = GameObjectsInView;
+
+            else
+                Temp = Engine.ToRender.Where(obj => obj.IsInView && obj.Transform.Position.Z > MinRenderDepth && obj.Transform.Position.Z < MaxRenderDepth).ToList(); 
 
             RenderingGUI = true;
             List<GameObject> GUI = Temp.Where(item => item.IsGUI).ToList();

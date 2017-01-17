@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +37,7 @@ namespace DKBasicEngine_1_0
 
         public static List<GameObject> GetGameObjectsInView(this List<GameObject> list)
         {
-            return list.Where(obj => obj.IsInView()).ToList();
+            return list.Where(obj => obj.IsInView).ToList();
             /*List<GameObject> retValue = new List<GameObject>();
             
             int listCount = list.Count;
@@ -46,13 +50,13 @@ namespace DKBasicEngine_1_0
             return retValue;*/
         }
 
-        public static bool IsInView(this GameObject obj)
+        /*public static bool IsInView(this GameObject obj)
         {
             float X = obj.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.X : 0;
             float Y = obj.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
 
             return (obj.Transform.Position.X + obj.Transform.Dimensions.Width >= X && obj.Transform.Position.X < X + Engine.Render.RenderWidth && obj.Transform.Position.Y + obj.Transform.Dimensions.Height >= Y && obj.Transform.Position.Y < Y + Engine.Render.RenderHeight);
-        }
+        }*/
 
         /*public static bool IsUnsupportedEscapeSequence(this char letter)
         {

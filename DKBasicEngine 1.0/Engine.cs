@@ -1,4 +1,17 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+/**
+* For the brave souls who get this far: You are the chosen ones,
+* the valiant knights of programming who toil away, without rest,
+* fixing our most awful code. To you, true saviors, kings of men,
+* I say this: never gonna give you up, never gonna let you down,
+* never gonna run around and desert you. Never gonna make you cry,
+* never gonna say goodbye. Never gonna tell a lie and hurt you.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -55,7 +68,6 @@ namespace DKBasicEngine_1_0
         internal static Camera BaseCam;
 
         internal static List<Collider> Collidable;
-        internal static List<GameObject> ToUpdate;
         internal static List<GameObject> ToStart;
         internal static List<GameObject> ToRender;
 
@@ -64,7 +76,7 @@ namespace DKBasicEngine_1_0
         private static float deltaT = 0;
         public static float deltaTime { get { return deltaT; } }
 
-        internal static event UpdateHandler AnimationUpdate;
+        internal static event UpdateHandler UpdateEvent;
         internal delegate void UpdateHandler();
 
         /*internal static event BackgroundWorker UpdateEvent;
@@ -95,7 +107,6 @@ namespace DKBasicEngine_1_0
                     DeltaT    = Stopwatch.StartNew();
 
                     ToStart    = new List<GameObject>();
-                    ToUpdate   = new List<GameObject>();
                     ToRender   = new List<GameObject>();
                     Collidable = new List<Collider>();
 
@@ -208,20 +219,22 @@ namespace DKBasicEngine_1_0
                     {
                         ToStartCount--;
                         ToStart[0].Start();
-                        ToUpdate.Add(ToStart[0]);
+                        UpdateEvent += ToStart[0].UpdateHandler;
                         ToStart.Remove(ToStart[0]);
                     }
 
-                List<GameObject> reference = ToUpdate.GetGameObjectsInView();
+                //List<GameObject> reference = ToUpdate.GetGameObjectsInView();
 
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;
                 DeltaT?.Restart();
 
-                int refereceCount = reference.Count;
-                for (int i = 0; i < refereceCount; i++)
-                    reference[i].Update();
+                UpdateEvent?.Invoke();
 
-                AnimationUpdate?.Invoke();
+                /*int refereceCount = reference.Count;
+                for (int i = 0; i < refereceCount; i++)
+                    reference[i].Update();*/
+
+                List<GameObject> reference = ToRender.GetGameObjectsInView();
 
                 List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
                 List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();
@@ -229,7 +242,7 @@ namespace DKBasicEngine_1_0
                 for (int i = 0; i < TriggersCount; i++)
                     Triggers[i].Collider.TriggerCheck(VisibleWithCollider);
                 
-                BaseCam?.BufferImage();
+                BaseCam?.BufferImage(reference);
 
                 Array.Copy(Render.imageBuffer, Render.ImageOutData, Render.ImageBufferSize);
 
@@ -246,7 +259,7 @@ namespace DKBasicEngine_1_0
                     {
                         FpsMeter.Text = string.Format("{0}", Render.sampleSize * 1000 / temp);
 #if DEBUG
-                        //Debug.WriteLine(string.Format("Buff {0}", Render.sampleSize * 1000 / temp));
+                        Debug.WriteLine(string.Format("Buff {0}", Render.sampleSize * 1000 / temp));
 #endif
                     }
                     Render.numRenders = 0;

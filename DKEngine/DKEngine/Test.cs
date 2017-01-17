@@ -16,76 +16,80 @@ namespace DKEngine
 
         protected sealed override void Init()
         {
-            /*Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
+            Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
 
-            GameObject t = new GameObject()
-            {
+            GameObject t = new GameObject();
+            /*{
                 TypeName = "animatedDemo",
                 Transform = new Transform(200, 0, 0)
-            };
+            };*/
 
+            t.TypeName = "animatedDemo";
+            t.Transform.Position = new Position(200, 0, 0);
             t.Animator.Settings = AnimationLoop.Endless;
 
             for (int i = 0; i < 100; i++)
             {
                 string tx = i.ToString();
 
-                new Button()
-                {
-                    Text = tx + " Button",
-                    OnClick = () => Debug.WriteLine(tx + " Button clicked"),
-                    Transform = new Transform(0, i * 34, -20),
-                    Dimensions = new Dimensions(100, 8, 1),
-                    FontSize = 1,
-                    Foreground = Color.FromArgb(0xFF, 0xAF, 0xAF, 0xAF),
-                    Background = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF)
-                };
+                Button b1 = new Button();
+                //{
+                b1.Text = tx + " Button";
+                b1.OnClick = () => Debug.WriteLine(tx + " Button clicked");
+                b1.Transform.Position = new Position(0, i * 34, -20);
+                b1.Transform.Dimensions = new Dimensions(100, 8, 1);
+                b1.FontSize = 1;
+                b1.Foreground = Color.FromArgb(0xFF, 0xAF, 0xAF, 0xAF);
+                b1.Background = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
+                //};
             }
 
-            new Button()
-            {
-                Text = "GG",
-                Transform = new Transform(50, 0, 2),
-                Dimensions = new Dimensions(100, 50, 1),
-                OnClick = () => Debug.WriteLine("ButtonJede"),
-                FontSize = 4,
-                Foreground = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF),
-                Background = Color.FromArgb(0x80, 0xFF, 0x00, 0XFF)
-            };
+            Button b = new Button();
+            //{
+            b.Text = "GG";
+                b.Transform.Position = new Position(50, 0, 2);
+                b.Transform.Dimensions = new Dimensions(100, 50, 1);
+                b.OnClick = () => Debug.WriteLine("ButtonJede");
+                b.FontSize = 4;
+                b.Foreground = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
+                b.Background = Color.FromArgb(0x80, 0xFF, 0x00, 0XFF);
+            //};
 
             for (int a = 1; a < 2; a++)
                 for (int i = 0; i < 16; i++)
                     for (int j = 0; j < 16; j++)
-                        new GameObject()
-                        {
-                            Transform = new Transform(i * 16, j * 16, -a),
-                            Scale = new Scale(1, 1, 1),
-                            TypeName = "border"
-                        };
+                    {
+                        GameObject g = new GameObject();
+                        //{
+                        g.Transform.Position = new Position(i * 16, j * 16, -a);
+                        g.TypeName = "border";
+                        //};
+                    }
+
 
             for (int a = 1; a < 2; a++)
                 for (int i = 1; i < 32; i++)
                     for (int j = 1; j < 64; j++)
-                        new GameObject()
-                        {
-                            Transform = new Transform(i * 1024, j * 16, -a),
-                            Scale = new Scale(1, 1, 1),
-                            TypeName = "border"
-                        };*/
+                    {
+                        GameObject g = new GameObject();
+                        g.Transform.Position = new Position(i * 1024, j * 16, -a);
+                        g.TypeName = "border";
+                    }
+                        
                         
             /*for (int i = 0; i < 1000; i++)
             {
                 GameObject t1 = new GameObject();
-                t1.Model = new Material(Color.AliceBlue, t1);
+                t1.Model = new MaterialExt(Color.AliceBlue, t1);
                 t1.Transform.Position = new Position(0, i, 0);
                 t1.Collider = new Collider(t1);
                 t1.Transform.Scale = new Scale(10, 10, 10);
             }
             
-            Template t2 = new Template();
+            Template t2 = new Template();*/
             
             Camera c = new Camera();
-            c.Position = new Position(-300, -100, 0);
+            /*c.Position = new Position(-300, -100, 0);
             c.Parent = t2;*/
         }
     }

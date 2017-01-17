@@ -44,12 +44,12 @@
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
     <Compile Include="Core\Components\Dimensions.cs" />
+    <Compile Include="Core\Components\Unreleased\MaterialExt.cs" />
     <Compile Include="Core\Components\Transform.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\Physics.cs" />
     <Compile Include="Core\Components\Scale.cs" />
     <Compile Include="Core\Components\Position.cs" />
-    <Compile Include="Core\Exceptions\SceneInitFailedException.cs" />
     <Compile Include="Core\Interfaces\I3Dimensional.cs" />
     <Compile Include="Core\Interfaces\IAnimated.cs" />
     <Compile Include="Core\Interfaces\IControl.cs" />
@@ -97,7 +97,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\Exceptions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

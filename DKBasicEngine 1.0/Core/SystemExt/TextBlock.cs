@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
 namespace DKBasicEngine_1_0
 {
-    public class TextBlock : GameObject, ICore, IText, IGraphics
+    public class TextBlock : GameObject, IText
     {
         protected bool _changed = false;
         
@@ -167,7 +171,7 @@ namespace DKBasicEngine_1_0
 
         public override void Destroy()
         {
-            Engine.ToUpdate.Remove(this);
+            Engine.UpdateEvent -= this.UpdateHandler;
             Engine.ToRender.Remove(this);
 
             int _textCount = _text.Count;

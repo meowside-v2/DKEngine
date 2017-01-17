@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 
 namespace DKBasicEngine_1_0
 {
@@ -54,7 +58,7 @@ namespace DKBasicEngine_1_0
         {
             this.Parent = Parent;
             UpdateDel = new Engine.UpdateHandler(this.Update);
-            Engine.AnimationUpdate += UpdateDel;
+            Engine.UpdateEvent += UpdateDel;
         }
 
         protected void Update()
@@ -80,7 +84,7 @@ namespace DKBasicEngine_1_0
 
         public void Destroy()
         {
-            Engine.AnimationUpdate -= UpdateDel;
+            Engine.UpdateEvent -= UpdateDel;
         }
     }
 }
