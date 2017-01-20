@@ -16,13 +16,11 @@ namespace DKEngine
 
         protected sealed override void Init()
         {
-            Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
+            /*Database.AddNewGameObjectMaterial("animatedDemo", new Material(Image.FromFile(@"giphy-downsized-large.gif")));
 
             GameObject t = new GameObject();
-            /*{
-                TypeName = "animatedDemo",
-                Transform = new Transform(200, 0, 0)
-            };*/
+            t.TypeName = "animatedDemo";
+            t.Transform.Position = new Position(200, 0, 0);
 
             t.TypeName = "animatedDemo";
             t.Transform.Position = new Position(200, 0, 0);
@@ -42,20 +40,20 @@ namespace DKEngine
                 b1.Foreground = Color.FromArgb(0xFF, 0xAF, 0xAF, 0xAF);
                 b1.Background = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
                 //};
-            }
+            }*/
 
-            Button b = new Button();
+            /*Button b = new Button();
             //{
             b.Text = "GG";
-                b.Transform.Position = new Position(50, 0, 2);
-                b.Transform.Dimensions = new Dimensions(100, 50, 1);
+                b.Transform.Position = new Vector3(50, 0, 2);
+                b.Transform.Dimensions = new Vector3(100, 50, 1);
                 b.OnClick = () => Debug.WriteLine("ButtonJede");
                 b.FontSize = 4;
                 b.Foreground = Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
                 b.Background = Color.FromArgb(0x80, 0xFF, 0x00, 0XFF);
-            //};
+            //};*/
 
-            for (int a = 1; a < 2; a++)
+            /*for (int a = 1; a < 2; a++)
                 for (int i = 0; i < 16; i++)
                     for (int j = 0; j < 16; j++)
                     {
@@ -74,23 +72,25 @@ namespace DKEngine
                         GameObject g = new GameObject();
                         g.Transform.Position = new Position(i * 1024, j * 16, -a);
                         g.TypeName = "border";
-                    }
+                    }*/
                         
                         
-            /*for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10; i++)
             {
                 GameObject t1 = new GameObject();
-                t1.Model = new MaterialExt(Color.AliceBlue, t1);
-                t1.Transform.Position = new Position(0, i, 0);
+                t1.Model = new Material(Color.AliceBlue, t1);
+                t1.Transform.Position = new Vector3(0, i * 10, 0);
                 t1.Collider = new Collider(t1);
-                t1.Transform.Scale = new Scale(10, 10, 10);
+                t1.Transform.Scale = new Vector3(5, 5, 5);
             }
             
-            Template t2 = new Template();*/
+            GameObject t2 = new GameObject();
+            t2.Scripts.Add(new TemplateScript(t2));
+            t2.Transform.Position = new Vector3(0, -10, 0);
             
             Camera c = new Camera();
-            /*c.Position = new Position(-300, -100, 0);
-            c.Parent = t2;*/
+            c.Position = new Vector3(-300, -100, 0);
+            c.Parent = t2;
         }
     }
 }

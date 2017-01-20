@@ -14,13 +14,13 @@ namespace DKBasicEngine_1_0
     {
         GameObject Parent;
 
-        private Dimensions _Dimensions = new Dimensions();
-        public Dimensions Dimensions
+        private Vector3 _Dimensions = new Vector3();
+        public Vector3 Dimensions
         {
             get { return _Dimensions; }
             set
             {
-                Dimensions tmp = value - _Dimensions;
+                Vector3 tmp = value - _Dimensions;
                 _Dimensions = value;
 
                 int childCount = Parent.Child.Count;
@@ -29,13 +29,13 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private Position _Position = new Position();
-        public Position Position
+        private Vector3 _Position = new Vector3();
+        public Vector3 Position
         {
             get { return _Position; }
             set
             {
-                Position tmp = value - _Position;
+                Vector3 tmp = value - _Position;
                 _Position = value;
 
                 int childCount = Parent.Child.Count;
@@ -44,13 +44,13 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private Scale _Scale = new Scale();
-        public Scale Scale
+        private Vector3 _Scale = new Vector3();
+        public Vector3 Scale
         {
             get { return _Scale; }
             set
             {
-                Scale tmp = value / _Scale;
+                Vector3 tmp = value / _Scale;
                 _Scale = value;
 
                 int childCount = Parent.Child.Count;
@@ -64,22 +64,5 @@ namespace DKBasicEngine_1_0
         {
             this.Parent = Parent;
         }
-
-        /*public Dimensions Dimensions;
-        internal virtual float Width { get { return Dimensions.Width * Scale.X; } }
-        internal virtual float Height { get { return Dimensions.Height * Scale.Y; } }
-        internal virtual float Depth { get { return Dimensions.Depth * Scale.Z; } }
-
-        public Position Position;
-        internal virtual float X { get; }
-        internal virtual float Y { get; }
-        internal virtual float Z { get; }
-
-        public Scale Scale;
-        internal virtual float ScaleX { get; }
-        internal virtual float ScaleY { get; }
-        internal virtual float ScaleZ { get; }
-
-        public bool LockScaleRatio;*/
     }
 }

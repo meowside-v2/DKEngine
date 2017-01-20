@@ -57,7 +57,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private static bool _LoadingNewPage = false;
+        //private static bool _LoadingNewPage = false;
         private static bool _IsInitialised = false;
 
         private static Thread BackgroundWorks;
@@ -116,19 +116,19 @@ namespace DKBasicEngine_1_0
                     RenderWorker.Start();
 
                     FpsMeter = new TextBlock();
-                    FpsMeter.Transform.Position = new Position(0, 0, 128);
-                    FpsMeter.Transform.Dimensions = new Dimensions(50, 5, 1);
-                    FpsMeter.Transform.Scale = new Scale(2, 2, 1);
+                    FpsMeter.Transform.Position = new Vector3(0, 0, 128);
+                    FpsMeter.Transform.Dimensions = new Vector3(50, 5, 1);
+                    FpsMeter.Transform.Scale = new Vector3(2, 2, 1);
                     FpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
                     FpsMeter.HAlignment = TextBlock.HorizontalAlignment.Left;
                     FpsMeter.Text = "0";
                     FpsMeter.IsGUI = true;
                     FpsMeter.TextShadow = true;
                     FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
+                    FpsMeter.Start();
+                    ToRender.Add(FpsMeter);
                     
                     SplashScreen();
-
-                    _IsInitialised = true;
                 }
                 catch (Exception e)
                 {
@@ -143,11 +143,17 @@ namespace DKBasicEngine_1_0
         {
             if (_IsInitialised)
             {
-                Engine._LoadingNewPage = true;
+                //Engine._LoadingNewPage = true;
+                int SceneModelCount = Scene.Model.Count;
+                for (int i = 0; i < SceneModelCount; i++)
+                    Scene.Model[i].Destroy();
+
                 Engine.Scene = Scene;
                 Scene.Init();
 
-                Engine._LoadingNewPage = false;
+                Engine.ToStart = Scene.NewlyGenerated;
+
+                //Engine._LoadingNewPage = false;
             }
             else
                 throw new Exception("Engine not initialised \n Can't change page");
@@ -179,6 +185,9 @@ namespace DKBasicEngine_1_0
         {
             if (!_IsInitialised)
             {
+                _IsInitialised = true;
+
+                Engine.ChangeScene(new Scene());
                 SplashScreen splash     = new SplashScreen();
                 Camera splashScreenCam = new Camera();
 
@@ -208,20 +217,19 @@ namespace DKBasicEngine_1_0
                         Page.PageControls[i].IsFocused = i == Page.PageControls[i].FocusElementID;
                 }*/
 
-                if (Engine._LoadingNewPage)
+                /*if (Engine._LoadingNewPage)
                 {
                     SpinWait.SpinUntil(() => !Engine._LoadingNewPage);
-                }
+                }*/
 
                 int ToStartCount = ToStart.Count;
-                lock(ToStart)
-                    while (ToStartCount > 0)
-                    {
-                        ToStartCount--;
-                        ToStart[0].Start();
-                        UpdateEvent += ToStart[0].UpdateHandler;
-                        ToStart.Remove(ToStart[0]);
-                    }
+                while (ToStartCount > 0)
+                {
+                    ToStart[0].Start();
+                    ToRender.Add(ToStart[0]);
+                    ToStart.Remove(ToStart[0]);
+                    ToStartCount--;
+                }
 
                 //List<GameObject> reference = ToUpdate.GetGameObjectsInView();
 

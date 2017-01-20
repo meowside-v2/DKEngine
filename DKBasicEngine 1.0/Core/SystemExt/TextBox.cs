@@ -13,13 +13,9 @@ namespace DKBasicEngine_1_0
         public bool IsFocused { get; set; }
         public int FocusElementID { get; private set; }
 
-        private TimeSpan TimeOut = new TimeSpan(0, 0, 0, 0, 50);
-        private Stopwatch TimeOutStopwatch = new Stopwatch();
-
-        private short MaxTextLenght = 64;
-
         public TextBox()
         {
+            this.Scripts.Add(new TextBoxScript(this));
             /*FocusElementID = Engine.Scene.PageControls.Count;
             Engine.Scene.PageControls.Add(this);*/
         }
@@ -27,6 +23,7 @@ namespace DKBasicEngine_1_0
         public TextBox(GameObject Parent)
             :base(Parent)
         {
+            this.Scripts.Add(new TextBoxScript(this));
             /*FocusElementID = Engine.Scene.PageControls.Count;
             Engine.Scene.PageControls.Add(this);*/
         }
@@ -57,48 +54,6 @@ namespace DKBasicEngine_1_0
             {
                 return _textStr;
             }
-        }
-        
-        public override void Update()
-        {
-            if (IsFocused)
-            {
-
-                if (Console.KeyAvailable)
-                {
-                    if (TimeOut < TimeOutStopwatch.Elapsed)
-                        TimeOutStopwatch.Reset();
-
-                    if (TimeOutStopwatch.ElapsedMilliseconds == 0)
-                    {
-                        char key = Console.ReadKey(true).KeyChar;
-
-                        while (Console.KeyAvailable) Console.ReadKey();
-
-                        if (key == '\b')
-                        {
-                            if (Text.Length > 0)
-                            {
-                                Text = Text.Remove(Text.Length - 1, 1);
-                            }
-
-                            TimeOutStopwatch.Start();
-                        }
-
-                        else if (Text.Length < MaxTextLenght)
-                        {
-                            Text += key;
-
-                            TimeOutStopwatch.Start();
-                        }
-                    }
-                }
-
-                else if (TimeOutStopwatch.IsRunning)
-                  TimeOutStopwatch.Reset();
-            }
-
-            base.Update();
         }
 
         private bool TextControl(string key)

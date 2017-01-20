@@ -14,7 +14,7 @@ namespace DKBasicEngine_1_0
 {
     public class Camera
     {
-        public Position Position;
+        public Vector3 Position;
 
         internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.X + Position.X : Position.X; } }
         internal float Y { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.Y + Position.Y : Position.Y; } }
@@ -28,7 +28,7 @@ namespace DKBasicEngine_1_0
 
         public Camera()
         {
-            this.Position = new Position(0, 0, 0);
+            this.Position = new Vector3(0, 0, 0);
             Engine.BaseCam = this;
         }
 

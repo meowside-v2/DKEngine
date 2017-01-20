@@ -130,8 +130,8 @@ namespace DKBasicEngine_1_0
         /// <param name="Parent">I3Dimensional used for material scale</param>
         public MaterialExt(Color clr, GameObject Parent)
         {
-            this.Width = (int)Parent.Transform.Dimensions.Width;
-            this.Height = (int)Parent.Transform.Dimensions.Height;
+            this.Width = (int)Parent.Transform.Dimensions.X;
+            this.Height = (int)Parent.Transform.Dimensions.Y;
 
             Frames = 1;
             SourceImage = new Bitmap[Frames];

@@ -14,6 +14,7 @@ namespace DKBasicEngine_1_0
     {
         internal event CollisionEnterHandler CollisionEvent;
         internal delegate void CollisionEnterHandler(Collider m);
+
         /// <summary>
         /// Parent of collider
         /// </summary>
@@ -49,8 +50,6 @@ namespace DKBasicEngine_1_0
             this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
             lock (Engine.Collidable)
                 Engine.Collidable.Add(this);
-
-            CollisionEvent += new CollisionEnterHandler(Parent.OnColliderEnter);
         }
 
         /// <summary>
@@ -60,11 +59,9 @@ namespace DKBasicEngine_1_0
         public Collider(GameObject Parent)
         {
             this.Parent = Parent;
-            this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.Width, Parent.Transform.Dimensions.Height);
+            this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
             lock (Engine.Collidable)
                 Engine.Collidable.Add(this);
-
-            CollisionEvent += new CollisionEnterHandler(Parent.OnColliderEnter);
         }
 
         /// <summary>
@@ -78,8 +75,6 @@ namespace DKBasicEngine_1_0
             this.Area = Area;
             lock (Engine.Collidable)
                 Engine.Collidable.Add(this);
-
-            CollisionEvent += new CollisionEnterHandler(Parent.OnColliderEnter);
         }
 
         /// <summary>
@@ -94,8 +89,6 @@ namespace DKBasicEngine_1_0
             this.Area = new RectangleF(Coordinates, Size);
             lock (Engine.Collidable)
                 Engine.Collidable.Add(this);
-
-            CollisionEvent += new CollisionEnterHandler(Parent.OnColliderEnter);
         }
 
 #if DEBUG
@@ -150,32 +143,36 @@ namespace DKBasicEngine_1_0
                 if (Left(VisibleObjects[i].Collider))
                 {
                     //Debug.WriteLine("Left");
-                    CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
+                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
                     continue;
 
                 }
                 else if (Right(VisibleObjects[i].Collider))
                 {
                     //Debug.WriteLine("Right");
-                    CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
+                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
                     continue;
                 }
 
                 else if (Up(VisibleObjects[i].Collider))
                 {
                     //Debug.WriteLine("Up");
-                    CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
+                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
                     continue;
                 }
 
                 else if (Down(VisibleObjects[i].Collider))
                 {
                     //Debug.WriteLine("Down");
-                    CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
+                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
                     continue;
                 }
             }

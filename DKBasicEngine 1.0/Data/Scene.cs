@@ -12,7 +12,8 @@ namespace DKBasicEngine_1_0
         private Stopwatch TimeOutControls = new Stopwatch();
         private TimeSpan TimeOut = new TimeSpan(0, 0, 1);
         
-        public readonly List<GameObject> Model = new List<GameObject>();
+        internal readonly List<GameObject> Model            = new List<GameObject>();
+        internal readonly List<GameObject> NewlyGenerated   = new List<GameObject>();
 
         /*public int FocusSelection { get; set; } = 0;
         public List<IControl> PageControls { get; } = new List<IControl>();*/

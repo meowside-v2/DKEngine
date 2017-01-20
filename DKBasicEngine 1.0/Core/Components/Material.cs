@@ -228,8 +228,8 @@ namespace DKBasicEngine_1_0
         /// <param name="Parent">I3Dimensional used for material scale</param>
         public Material(Color clr, GameObject Parent)
         {
-            this.Width = (int)Parent.Transform.Dimensions.Width;
-            this.Height = (int)Parent.Transform.Dimensions.Height;
+            this.Width = (int)Parent.Transform.Dimensions.X;
+            this.Height = (int)Parent.Transform.Dimensions.Y;
 
             colorMapA = new byte[Frames][][];
             colorMapR = new byte[Frames][][];
