@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

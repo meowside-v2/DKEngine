@@ -1,10 +1,12 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,216 +14,98 @@ namespace DKBasicEngine_1_0
 {
     public class Camera
     {
+        public Vector3 Position;
 
-        public float Xoffset = 0;
-        public float Yoffset = 0;
-        
-        private const short sampleSize = 100;
-        private int lastTime = 0;
-        private int numRenders = 0;
-        private bool renderFPS = true;
+        internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.X + Position.X : Position.X; } }
+        internal float Y { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.Y + Position.Y : Position.Y; } }
 
-        private TextBlock fpsMeter = new TextBlock(null)
-        {
-            X = 1,
-            Y = -1,
-            Z = 128,
-            height = 5,
-            width = 20,
-            VAlignment = TextBlock.VerticalAlignment.Bottom,
-            HAlignment = TextBlock.HorizontalAlignment.Left,
-            Text = "0",
-            IsGUI = true
-        };
+        public float MinRenderDepth { get; set; }
+        public float MaxRenderDepth { get; set; }
 
-        private byte[] toRenderData = new byte[3 * Engine.Render.RenderWidth * Engine.Render.RenderHeight];
+        public GameObject Parent = null;
 
-        public IPage sceneReference { get { return Engine.Page; } }
-
-        Thread Ren;
-        private bool RenderAbort = false;
+        private bool RenderingGUI = false;
 
         public Camera()
         {
-            Engine._baseCam = this;
-        }
-
-        public void Init(int Xoffset, int Yoffset)
-        {
-            this.Xoffset = Xoffset;
-            this.Yoffset = Yoffset;
-
-            //fpsMeter.text = "";
-            Engine.ToRender.Add(fpsMeter);
-            
-            Ren = new Thread(() => Rendering());
-            Ren.Start();
+            this.Position = new Vector3(0, 0, 0);
+            Engine.BaseCam = this;
         }
 
         public void Destroy()
         {
-            if (Ren != null)
-                RenderAbort = true;
+            if (Engine.BaseCam == this)
+                Engine.BaseCam = null;
 
-            fpsMeter.Destroy();
+            Parent = null;
         }
-
-        private unsafe void Rendering()
-        {
-
-            using (Graphics g = Graphics.FromHwnd(GetConsoleWindow()))
-            {
-                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-                while (!RenderAbort)
-                {
-                    Point location = new Point(0, 0);
-                    Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
-                    
-                    fixed (byte* ptr = toRenderData)
-                    {
-
-                        using (Bitmap outFrame = new Bitmap(Engine.Render.RenderWidth,
-                                                            Engine.Render.RenderHeight,
-                                                            3 * Engine.Render.RenderWidth,
-                                                            System.Drawing.Imaging.PixelFormat.Format24bppRgb,
-                                                            new IntPtr(ptr)))
-                        {
-                            Size fontSize = GetConsoleFontSize();
-
-                            Rectangle imageRect = new Rectangle(location.X * fontSize.Width,
-                                                                location.Y * fontSize.Height,
-                                                                imageSize.Width * fontSize.Width,
-                                                                imageSize.Height * fontSize.Height);
-
-                            g.DrawImage(outFrame, imageRect);
-                        }
-                    }
-                }
-            }
-        }
-
-        internal void BufferImage()
+        
+        internal void BufferImage(List<GameObject> GameObjectsInView)
         {
             Array.Clear(Engine.Render.imageBuffer, 0, Engine.Render.imageBuffer.Length);
             Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
 
-            List<I3Dimensional> Temp = null;
+            
+            List<GameObject> Temp = null;
 
-            lock (Engine.ToRender)
-            {
-                Temp = Engine.ToRender.Where(item => ((I3Dimensional)item).IsInView()).ToList<I3Dimensional>(); 
-            }
 
-            List<I3Dimensional> GUI = Temp.Where(item => ((IGraphics)item).IsGUI);
+            if (GameObjectsInView != null)
+                Temp = GameObjectsInView;
 
-            for (int i = 0; i < GUI.Count; i++)
+            else
+                Temp = Engine.ToRender.Where(obj => obj.IsInView && obj.Transform.Position.Z > MinRenderDepth && obj.Transform.Position.Z < MaxRenderDepth).ToList(); 
+
+            RenderingGUI = true;
+            List<GameObject> GUI = Temp.Where(item => item.IsGUI).ToList();
+            int GUICount = GUI.Count;
+            for (int i = 0; i < GUICount; i++)
                 Temp.Remove(GUI[i]);
 
-            while (GUI.Count > 0)
+            while (GUICount > 0)
             {
                 float tempHeight = GUI.FindMaxZ();
-                List<I3Dimensional> toRender = GUI.Where(item => item.Z == tempHeight).ToList();
+                List<GameObject> toRender = GUI.Where(item => item.Transform.Position.Z == tempHeight).ToList();
 
-                Parallel.For(0, toRender.Count, (i) =>
+                int toRenderCount = toRender.Count;
+                for (int i = 0; i < toRenderCount; i++)
+                    toRender[i].Render();
+
+                /*Parallel.For(0, toRenderCount, (i) =>
                 {
-                    ((ICore)toRender[i]).Render();
-                });
+                    toRender[i].Render();
+                });*/
 
-                for (int i = 0; i < toRender.Count; i++)
+                for (int i = 0; i < toRenderCount; i++)
+                {
                     GUI.Remove(toRender[i]);
+                    GUICount--;
+                }
             }
 
-            while(Temp.Count > 0)
+            RenderingGUI = false;
+
+            int TempCount = Temp.Count;
+
+            while(TempCount > 0)
             {
                 float tempHeight = Temp.FindMaxZ();
-                List<I3Dimensional> toRender = Temp.Where(item => item.Z == tempHeight).ToList();
+                List<GameObject> toRender = Temp.Where(item => item.Transform.Position.Z == tempHeight).ToList();
 
-                Parallel.For(0, toRender.Count, (i) =>
+                int toRenderCount = toRender.Count;
+                for (int i = 0; i < toRenderCount; i++)
+                    toRender[i].Render();
+
+                /*Parallel.For(0, toRenderCount, (i) =>
                 {
-                    ((ICore)toRender[i]).Render();
-                });
+                    toRender[i].Render();
+                });*/
 
-                for (int i = 0; i < toRender.Count; i++)
+                for (int i = 0; i < toRenderCount; i++)
+                {
                     Temp.Remove(toRender[i]);
-            }
-            
-            Buffer.BlockCopy(Engine.Render.imageBuffer, 0, toRenderData, 0, Engine.Render.imageBuffer.Length);
-            
-            if (numRenders == 0)
-            {
-                lastTime = Environment.TickCount;
-            }
-
-            numRenders++;
-
-            if (renderFPS)
-            {
-                if (numRenders == sampleSize)
-                {
-                    int temp = Environment.TickCount - lastTime;
-
-                    if (temp > 0)
-                    {
-                        fpsMeter.Text = string.Format("{0}", sampleSize * 1000 / temp);
-#if DEBUG
-                        Debug.WriteLine(string.Format("Buff {0}", sampleSize * 1000 / temp));
-#endif
-                    }
-
-                    numRenders = 0;
+                    TempCount--;
                 }
             }
         }
-        
-
-        private static Size GetConsoleFontSize()
-        {
-            IntPtr outHandle = GetStdHandle(-11);
-
-            ConsoleFontInfo cfi = new ConsoleFontInfo();
-
-            if (!GetCurrentConsoleFont(outHandle, false, cfi))
-            {
-                throw new InvalidOperationException("Unable to get font information.");
-            }
-
-            return new Size(cfi.dwFontSize.X, cfi.dwFontSize.Y);
-        }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr GetConsoleWindow();
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool GetCurrentConsoleFont(
-            IntPtr hConsoleOutput,
-            bool bMaximumWindow,
-            [Out][MarshalAs(UnmanagedType.LPStruct)]ConsoleFontInfo lpConsoleCurrentFont);
-
-        [DllImport("kernel32.dll",
-         EntryPoint = "GetStdHandle",
-         SetLastError = true,
-         CharSet = CharSet.Auto,
-         CallingConvention = CallingConvention.StdCall)]
-         private static extern IntPtr GetStdHandle(int nStdHandle);
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal class ConsoleFontInfo
-        {
-            internal int nFont;
-            internal Coord dwFontSize;
-        }
-
-        [StructLayout(LayoutKind.Explicit)]
-        internal struct Coord
-        {
-            [FieldOffset(0)]
-            internal short X;
-            [FieldOffset(2)]
-            internal short Y;
-        }
     }
-
 }

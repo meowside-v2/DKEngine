@@ -2,11 +2,8 @@
 {
     public interface ICore
     {
-        I3Dimensional Parent { get; }
-
-        void Render();
-        void Start();
+        /*void Start();
         void Update();
-        void Destroy();
+        void Destroy();*/
     }
 }

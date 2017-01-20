@@ -2,18 +2,21 @@
 {
     public interface I3Dimensional
     {
-        float width { get; set; }
-        float height { get; set; }
-        float depth { get; set; }
+        /*Dimensions Dimensions { get; set; }
+        float width { get; }
+        float height { get; }
+        float depth { get; }
 
-        float X { get; set; }
-        float Y { get; set; }
-        float Z { get; set; }
+        Position Transform { get; set; }
+        float X { get; }
+        float Y { get; }
+        float Z { get; }
 
-        float ScaleX { get; set; }
-        float ScaleY { get; set; }
-        float ScaleZ { get; set; }
+        Scale Scale { get; set; }
+        float ScaleX { get; }
+        float ScaleY { get; }
+        float ScaleZ { get; }
 
-        bool LockScaleRatio { get; set; }
+        bool LockScaleRatio { get; set; }*/
     }
 }

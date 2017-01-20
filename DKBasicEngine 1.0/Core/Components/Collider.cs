@@ -1,17 +1,41 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace DKBasicEngine_1_0
 {
     public class Collider
     {
-        List<I3Dimensional> collidableReference;
-        GameObject Parent;
+        internal event CollisionEnterHandler CollisionEvent;
+        internal delegate void CollisionEnterHandler(Collider m);
 
-        Rectangle Area;
+        /// <summary>
+        /// Parent of collider
+        /// </summary>
+        public GameObject Parent;
+        
+        /// <summary>
+        /// Determines size and position of collider
+        /// </summary>
+        public RectangleF Area;
+
+        /// <summary>
+        /// If is TRUE => Triggers OnColliderEnter once another GameObject enter this collider
+        /// </summary>
+        public bool IsTrigger = false;
+
+        public bool IsCollidable = false;
+
+        private float X { get { return Parent.Transform.Position.X + Area.X; } }
+        private float Y { get { return Parent.Transform.Position.Y + Area.Y; } }
+        private float Width { get { return Parent.Transform.Scale.X * Area.Width; } }
+        private float Height { get { return Parent.Transform.Scale.Y * Area.Height; } }
 
         /// <summary>
         /// Creates new Instance of Collider class
@@ -22,36 +46,51 @@ namespace DKBasicEngine_1_0
         /// <param name="Yoffset"></param>
         /// <param name="Width"></param>
         /// <param name="Height"></param>
-        public Collider(GameObject Parent, List<I3Dimensional> collidableReference, int Xoffset, int Yoffset, int Width, int Height)
+        public Collider(GameObject Parent, float Xoffset, float Yoffset, float Width, float Height)
         {
             this.Parent = Parent;
-            this.collidableReference = collidableReference;
-
-            this.Area = new Rectangle(Xoffset, Yoffset, Width, Height);
+            this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
+            lock (Engine.Collidable)
+                Engine.Collidable.Add(this);
         }
 
-        public Collider(GameObject Parent, List<I3Dimensional> collidableReference)
+        /// <summary>
+        /// Creates new Instance of Collider class
+        /// </summary>
+        /// <param name="Parent">Parent of collider (determines size of collider)</param>
+        public Collider(GameObject Parent)
         {
             this.Parent = Parent;
-            this.collidableReference = collidableReference;
-
-            this.Area = new Rectangle(0, 0, (int)Parent.width, (int)Parent.height);
+            this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
+            lock (Engine.Collidable)
+                Engine.Collidable.Add(this);
         }
 
-        public Collider(GameObject Parent, List<I3Dimensional> collidableReference, Rectangle Area)
+        /// <summary>
+        /// Creates new Instance of Collider class
+        /// </summary>
+        /// <param name="Parent">Parent of collider</param>
+        /// <param name="Area">Determines size and position of collider</param>
+        public Collider(GameObject Parent, RectangleF Area)
         {
             this.Parent = Parent;
-            this.collidableReference = collidableReference;
-
             this.Area = Area;
+            lock (Engine.Collidable)
+                Engine.Collidable.Add(this);
         }
 
-        public Collider(GameObject Parent, List<I3Dimensional> collidableReference, Point Coordinates, Size _Size)
+        /// <summary>
+        /// Creates new Instance of Collider class
+        /// </summary>
+        /// <param name="Parent">Parent of collider</param>
+        /// <param name="Coordinates">Determines position of collider</param>
+        /// <param name="Size">Determines size of collider</param>
+        public Collider(GameObject Parent, PointF Coordinates, SizeF Size)
         {
             this.Parent = Parent;
-            this.collidableReference = collidableReference;
-
-            this.Area = new Rectangle(Coordinates, _Size);
+            this.Area = new RectangleF(Coordinates, Size);
+            lock (Engine.Collidable)
+                Engine.Collidable.Add(this);
         }
 
 #if DEBUG
@@ -76,11 +115,6 @@ namespace DKBasicEngine_1_0
             Right
         }
 
-        public Rectangle GetCollider()
-        {
-            return Area;
-        }
-
         /// <summary>
         /// Collision check in specified direction.
         /// </summary>
@@ -88,62 +122,103 @@ namespace DKBasicEngine_1_0
         /// <returns></returns>
         public bool Collision(Direction direction)
         {
-            I3Dimensional nearestObject = null;
-
             switch (direction)
             {
                 case Direction.Up:
-                    nearestObject = collidableReference.Find(obj2 => FindUp(Parent, obj2));
-                    break;
+                    return Engine.Collidable.FirstOrDefault(obj2 => Up(obj2)) != null;
                 case Direction.Left:
-                    nearestObject = collidableReference.Find(obj2 => FindLeft(Parent, obj2));
-                    break;
+                    return Engine.Collidable.FirstOrDefault(obj2 => Left(obj2)) != null;
                 case Direction.Down:
-                    nearestObject = collidableReference.Find(obj2 => FindDown(Parent, obj2));
-                    break;
+                    return Engine.Collidable.FirstOrDefault(obj2 => Down(obj2)) != null;
                 case Direction.Right:
-                    nearestObject = collidableReference.Find(obj2 => FindRight(Parent, obj2));
-                    break;
+                    return Engine.Collidable.FirstOrDefault(obj2 => Right(obj2)) != null;
                 default:
-                    break;
+                    throw new Exception("WTF jak se ti to povedlo");
             }
+        }
 
-            if (nearestObject != null)
-                return true;
+        internal void TriggerCheck(List<GameObject> VisibleObjects)
+        {
+            int VisibleObjectsCount = VisibleObjects.Count;
+            for (int i = 0; i < VisibleObjectsCount; i++)
+            {
+                if (Left(VisibleObjects[i].Collider))
+                {
+                    //Debug.WriteLine("Left");
+                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
+                    //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
+                    continue;
+
+                }
+                else if (Right(VisibleObjects[i].Collider))
+                {
+                    //Debug.WriteLine("Right");
+                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
+                    //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
+                    continue;
+                }
+
+                else if (Up(VisibleObjects[i].Collider))
+                {
+                    //Debug.WriteLine("Up");
+                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
+                    //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
+                    continue;
+                }
+
+                else if (Down(VisibleObjects[i].Collider))
+                {
+                    //Debug.WriteLine("Down");
+                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
+                    //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
+                    continue;
+                }
+            }
+        }
+
+        private bool Left(Collider obj)
+        {
+            if (this != obj && obj.IsCollidable)
+                return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X <= obj.X + obj.Width && this.X >= obj.X); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
 
             return false;
         }
 
-        private bool FindLeft(I3Dimensional obj1, I3Dimensional obj2)
+        private bool Right(Collider obj)
         {
-            if (Parent.collider != null)
-                return (obj1.Y < obj2.Y + obj2.width && obj1.Y + obj1.width > obj2.Y && obj1.X <= obj2.X + obj2.width && obj1.X > obj2.X && obj1 != obj2);
+            if (this != obj && obj.IsCollidable)
+                return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X + this.Width >= obj.X && this.X <= obj.X);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
 
             return false;
         }
 
-        private bool FindRight(I3Dimensional obj1, I3Dimensional obj2)
+        private bool Up(Collider obj)
         {
-            if (Parent.collider != null)
-                return (obj1.Y < obj2.Y + obj2.width && obj1.Y + obj1.width > obj2.Y && obj1.X + obj1.width >= obj2.X && obj1.X < obj2.X && obj1 != obj2);
-
-            return false;
-        }
-        private bool FindUp(I3Dimensional obj1, I3Dimensional obj2)
-        {
-            if (Parent.collider != null)
-                return (obj1.X < obj2.X + obj2.width && obj1.X + obj1.width > obj2.X && obj1.Y <= obj2.Y + obj2.width && obj1.Y > obj2.Y && obj1 != obj2);
+            if (this != obj && obj.IsCollidable)
+                return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
 
             return false;
         }
 
-        private bool FindDown(I3Dimensional obj1, I3Dimensional obj2)
+        private bool Down(Collider obj)
         {
-            if (Parent.collider != null)
-                return (obj1.X < obj2.X + obj2.width && obj1.X + obj1.width > obj2.X && obj1.Y + obj1.width >= obj2.Y && obj1.Y < obj2.Y && obj1 != obj2);
+            if (this != obj && obj.IsCollidable)
+                return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y + this.Height >= obj.Y && this.Y <= obj.Y);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
 
             return false;
+        }
 
+        public void Destroy()
+        {
+            Engine.Collidable.Remove(this);
+            if(Parent.Collider == this)
+                Parent.Collider = null;
+
+            Parent = null;
         }
     }
 }

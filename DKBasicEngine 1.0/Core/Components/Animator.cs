@@ -1,11 +1,16 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 
 namespace DKBasicEngine_1_0
 {
     public class Animator : IAnimated
     {
-        IGraphics Parent;
-        
+        GameObject Parent;
+
+        private Engine.UpdateHandler UpdateDel;
         private bool _wasPlayed         = false;
         private AnimationLoop _settings = AnimationLoop.Once;
         public AnimationLoop Settings
@@ -31,7 +36,7 @@ namespace DKBasicEngine_1_0
             }
             set { }
         }
-        public TimeSpan CurrentAnimationTime { get; private set; } = new TimeSpan(0);
+        public TimeSpan CurrentAnimationTime = new TimeSpan(0);
 
         private int _numberOfPlays = 0;
         public int NumberOfPlays
@@ -49,12 +54,14 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public Animator(IGraphics Parent)
+        public Animator(GameObject Parent)
         {
             this.Parent = Parent;
+            UpdateDel = new Engine.UpdateHandler(this.Update);
+            Engine.UpdateEvent += UpdateDel;
         }
 
-        internal void Update()
+        protected void Update()
         {
             if (Parent.Model?.Frames > 1 && !_wasPlayed)
             {
@@ -73,6 +80,11 @@ namespace DKBasicEngine_1_0
             _wasPlayed = false;
             CurrentAnimationTime = new TimeSpan(0);
             NumberOfPlays = 0;
+        }
+
+        public void Destroy()
+        {
+            Engine.UpdateEvent -= UpdateDel;
         }
     }
 }

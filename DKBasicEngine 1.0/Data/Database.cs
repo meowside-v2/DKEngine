@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace DKBasicEngine_1_0
@@ -233,19 +234,6 @@ namespace DKBasicEngine_1_0
         public static string GetMaterialDatabaseKey(int Position)
         {
             return GameObjects.FirstOrDefault(x => x.Value == Position).Key;
-        }
-
-        public static bool Contains<T>(this IEnumerable<T> source, T value)
-        {
-            List<T> _source = source.ToList();
-
-            for(int i = 0; i < _source.Count; i++)
-            {
-                if (_source[i].Equals(value))
-                    return true;
-            }
-
-            return false;
         }
     }
 }

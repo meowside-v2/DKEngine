@@ -5,25 +5,21 @@ using System.IO;
 
 namespace DKBasicEngine_1_0
 {
-    public class Scene : ICore, IPage
+    public class Scene : IPage
     {
-        public I3Dimensional Parent { get; private set; } = null;
-
         public string Name = "";
 
         private Stopwatch TimeOutControls = new Stopwatch();
         private TimeSpan TimeOut = new TimeSpan(0, 0, 1);
+        
+        internal readonly List<GameObject> Model            = new List<GameObject>();
+        internal readonly List<GameObject> NewlyGenerated   = new List<GameObject>();
 
-        public List<I3Dimensional> Model { get; private set; } = new List<I3Dimensional>();
-
-        public int FocusSelection { get; set; } = 0;
-        public List<IControl> PageControls { get; } = new List<IControl>();
+        /*public int FocusSelection { get; set; } = 0;
+        public List<IControl> PageControls { get; } = new List<IControl>();*/
 
         public Scene()
-        {
-            Engine.ToStart.Add(this);
-            Engine.ToUpdate.Add(this);
-        }
+        { }
 
         public enum Mode
         {
@@ -36,7 +32,7 @@ namespace DKBasicEngine_1_0
             this.Name = Name;
         }
 
-        public void Init(string path, Mode mode)
+        internal void Init(string path, Mode mode)
         {
             BinaryReader br;
 
@@ -46,15 +42,13 @@ namespace DKBasicEngine_1_0
             }
             catch (IOException e)
             {
-                throw new SceneInitFailedException(path + "\nWorld wasn't found", e);
+                throw new Exception(path + "\nWorld wasn't found", e);
             }
 
             try
             {
                 this.Name = br.ReadString();
-
                 int temp_ModelCount = br.ReadInt32();
-
                 this.Model.Clear();
 
                 /*for (int count = 0; count < temp_ModelCount; count++)
@@ -82,15 +76,18 @@ namespace DKBasicEngine_1_0
             }
             catch (Exception e)
             {
-                throw new SceneInitFailedException("World loading failed", e);
+                throw new Exception("World loading failed", e);
             }
 
             br.Close();
         }
 
-        public void Start() { }
+        protected internal virtual void Init()
+        { }
 
-        public void Update()
+        /*public virtual void Start() { }
+
+        public virtual void Update()
         {
             if (PageControls.Count > 1)
             {
@@ -126,6 +123,6 @@ namespace DKBasicEngine_1_0
         public void Render()
         {
             
-        }
+        }*/
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace DKBasicEngine_1_0
 {
-    interface IText
+    public interface IText
     {
-        float FontSize { get; set; }
+        //float FontSize { get; set; }
     }
 }

@@ -1,35 +1,59 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace DKBasicEngine_1_0
 {
-    public class GameObject : ICore, I3Dimensional, IGraphics
+    public class GameObject : ICore, IGraphics
     {
-        public I3Dimensional Parent { get; private set; }
-        
-        public Animator Animator { get; private set; }
-        public Material Model { get; private set; } = null;
-        public bool IsGUI { get; set; } = false;
-        public bool HasShadow { get; set; }
-
-        public Collider collider;
-
-        protected float _scaleX = 1;
-        protected float _scaleY = 1;
-        protected float _scaleZ = 1;
-
-        protected float _x = 0;
-        protected float _y = 0;
-
-        protected string _typeName = "";
-
-        public string TypeName
+        public bool IsInView
         {
             get
             {
-                return _typeName;
+                float X = this.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.X : 0;
+                float Y = this.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
+
+                return (this.Transform.Position.X + this.Transform.Dimensions.X >= X && this.Transform.Position.X < X + Engine.Render.RenderWidth && this.Transform.Position.Y + this.Transform.Dimensions.Y >= Y && this.Transform.Position.Y < Y + Engine.Render.RenderHeight);
             }
+        }
+
+        protected Material _Model = null;
+        public GameObject Parent  = null;
+        public Animator Animator  = null;
+        public Collider Collider  = null;
+
+        public readonly Transform Transform;
+        public readonly List<Script> Scripts;
+
+        public Material Model
+        {
+            get { return _Model; }
+            set
+            {
+                if(value != _Model && value != null)
+                {
+                    _Model = value;
+                    this.Transform.Dimensions = new Vector3(value.Width, value.Height, 1);
+                }
+            }
+        }
+
+        public readonly List<GameObject> Child;
+
+        protected bool _IsGUI = false;
+        public bool IsGUI
+        {
+            get { return Parent != null ? Parent.IsGUI : _IsGUI; }
+            set { _IsGUI = value; }
+        }
+
+        public virtual bool HasShadow { get; set; }
+        
+        protected string _typeName = "";
+        public string TypeName
+        {
+            get { return _typeName; }
             set
             {
                 _typeName = value;
@@ -37,159 +61,78 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public float X
-        {
-            get { return Parent != null ? _x + Parent.X : _x; }
-            set { _x = value; }
-        }
-        public float Y
-        {
-            get { return Parent != null ? _y + Parent.Y : _y; }
-            set { _y = value; }
-        }
-        public float Z { get; set; }
+        public string Name { get; set; }
 
-        public float width
+        public GameObject()
         {
-            get { return (Model == null ? 0 : Model.Width * ScaleX); }
-            set { }
-        }
-        public float height
-        {
-            get { return (Model == null ? 0 : Model.Height * ScaleY); }
-            set { }
-        }
-        public float depth
-        {
-            get { return 0; }
-            set { }
-        }
+            this.Child                = new List<GameObject>();
+            this.Scripts              = new List<Script>();
+            this.Transform            = new Transform(this);
+            this.Transform.Dimensions = new Vector3(1, 1, 1);
+            this.Transform.Scale      = new Vector3(1, 1, 1);
+            this.Transform.Position   = new Vector3(0, 0, 0);
+            this.Animator             = new Animator(this);
+            this.Collider             = new Collider(this);
 
-        public float ScaleX
-        {
-            get
+            if (Engine.Scene != null)
             {
-                return _scaleX;
-            }
-            set
-            {
-                if(value != _scaleX)
-                {
-                    if (value < 0.1f)
-                        _scaleX = 0.1f;
-
-                    else
-                        _scaleX = value;
-
-                    if (LockScaleRatio)
-                    {
-                        _scaleZ = _scaleX;
-                        _scaleY = _scaleX;
-                    }
-                }
+                Engine.Scene.Model.Add(this);
+                Engine.Scene.NewlyGenerated.Add(this);
             }
         }
 
-        public float ScaleY
+        public GameObject(GameObject Parent)
         {
-            get
-            {
-                return _scaleY;
-            }
-            set
-            {
-                if(value != _scaleY)
-                {
-                    if (value < 0.1f)
-                        _scaleY = 0.1f;
+            this.Child = new List<GameObject>();
+            this.Scripts = new List<Script>();
+            this.Transform = new Transform(this);
+            this.Transform.Dimensions = new Vector3(1, 1, 1);
+            this.Transform.Scale = new Vector3(1, 1, 1);
+            this.Transform.Position = new Vector3(0, 0, 0);
+            this.Animator = new Animator(this);
+            this.Collider = new Collider(this);
 
-                    else
-                        _scaleY = value;
+            if (Parent != null)
+            {
+                this.Parent = Parent;
+                Parent.Child.Add(this);
 
-                    if (LockScaleRatio)
-                    {
-                        _scaleX = _scaleY;
-                        _scaleZ = _scaleY;
-                    }
-                }
+                if (Engine.Scene != null)
+                    Engine.Scene.NewlyGenerated.Add(this);
             }
+                
+            else if (Engine.Scene != null)
+                Engine.Scene.Model.Add(this);
         }
 
-        public float ScaleZ
+        internal void Start()
         {
-            get
+            int ScriptsCount = this.Scripts.Count;
+            for (int i = 0; i < ScriptsCount; i++)
             {
-                return _scaleZ;
-            }
-            set
-            {
-                if(value != _scaleZ)
-                {
-                    if (value < 0.1f)
-                        _scaleZ = 0.1f;
-
-                    else
-                        _scaleZ = value;
-
-                    if (LockScaleRatio)
-                    {
-                        _scaleX = _scaleZ;
-                        _scaleY = _scaleZ;
-                    }
-                }
+                Scripts[i].Start();
+                Engine.UpdateEvent += Scripts[i].Update;
             }
         }
 
-        public bool LockScaleRatio { get; set; } = true;
-        
-
-        public GameObject(Scene ToAddToModel, I3Dimensional Parent)
+        public virtual void Destroy()
         {
-            this.X = 0;
-            this.Y = 0;
-            this.Z = 0;
-
-            this.Parent = Parent;
-
-            Animator = new Animator(this);
-
-            if(ToAddToModel != null)
-                lock (ToAddToModel)
-                    ToAddToModel.Model.Add(this);
-
-            lock (Engine.ToStart)
-                lock (Engine.ToUpdate)
-                    lock (Engine.ToRender)
-                    {
-                        Engine.ToStart.Add(this);
-                        Engine.ToUpdate.Add(this);
-                        Engine.ToRender.Add(this);
-                            
-                    }
-
-        }
-
-        public virtual void Start()
-        { }
-
-        public virtual void Update()
-        {
-            Animator?.Update();
-        }
-
-        public void Destroy()
-        {
-            Engine.ToUpdate.Remove(this);
             Engine.ToRender.Remove(this);
 
+            int ScriptsCount = this.Scripts.Count;
+            for (int i = 0; i < ScriptsCount; i++)
+                Scripts[i].Destroy();
+
+            int ChildCount = this.Child.Count;
+            for (int i = 0; i < ChildCount; i++)
+                Child[i].Destroy();
+
             this.Animator = null;
-            this.collider = null;
+            this.Collider = null;
             this.Parent = null;
         }
 
-        public void Render()
-        {
-            Model?.Render(this);
-        }
+        internal virtual void Render()
+        { Model?.Render(this); }
     }
 }

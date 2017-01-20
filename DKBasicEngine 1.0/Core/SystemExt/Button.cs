@@ -1,36 +1,29 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 
 namespace DKBasicEngine_1_0
 {
     public class Button : TextBlock, IControl
     {
         public Action OnClick = null;
-        private bool IsHeld = false;
         public bool IsFocused { get; set; } = false;
-        
-        public Button(Scene ParentPage)
-            : base(ParentPage)
+        public int FocusElementID { get; private set; }
+
+        public Button()
         {
-            ParentPage.PageControls.Add(this);
+            this.Scripts.Add(new ButtonScript(this));
+            //Engine.Scene.PageControls.Add(this);
         }
 
-        public override void Update()
+        public Button(GameObject Parent)
+            : base(Parent)
         {
-            base.Update();
-
-            if (Engine.Input.IsKeyPressed(ConsoleKey.Enter))
-            {
-                if (IsFocused && !IsHeld)
-                {
-                    OnClick?.Invoke();
-                    IsHeld = true;
-                }
-            }
-
-            else if (IsHeld)
-            {
-                IsHeld = false;
-            }
+            this.Scripts.Add(new ButtonScript(this));
+            /*FocusElementID = Engine.Scene.PageControls.Count;
+            Engine.Scene.PageControls.Add(this);*/
         }
     }
 }

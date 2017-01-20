@@ -1,44 +1,42 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    public class TextBlock : ICore, I3Dimensional, IText, IGraphics
+    public class TextBlock : GameObject, IText
     {
-        public I3Dimensional Parent { get; private set; } = null;
+        internal bool _changed = false;
+        
+        internal float vertOffset = 0;
+        internal float horiOffset = 0;
 
-        protected bool _changed = false;
+        internal HorizontalAlignment _HA  = HorizontalAlignment.Left;
+        internal VerticalAlignment _VA    = VerticalAlignment.Top;
+        internal HorizontalAlignment _THA = HorizontalAlignment.Left;
+        internal VerticalAlignment _TVA   = VerticalAlignment.Top;
 
-        protected float _x = 0;
-        protected float _y = 0;
+        public bool TextShadow = false;
 
-        protected float _width = 0;
-        protected float _height = 0;
+        public virtual string Text
+        {
+            get { return _textStr; }
+            set
+            {
+                _textStr = value;
+                _changed = true;
+            }
+        }
 
-        protected float vertOffset = 0;
-        protected float horiOffset = 0;
-
-        protected HorizontalAlignment _HA;
-        protected VerticalAlignment _VA;
-
-        protected HorizontalAlignment _THA;
-        protected VerticalAlignment _TVA;
-
-        protected string _textStr = "";
-
-        protected List<Letter> _text = new List<Letter>();
-
-        protected float _scaleX = 1;
-        protected float _scaleY = 1;
-        protected float _scaleZ = 1;
+        internal string _textStr = "";
+        internal List<Letter> _text = new List<Letter>();
 
         public Color? Foreground { get; set; }
 
-        private Color? _bg;
+        internal Color? _bg;
         public Color? Background
         {
             get { return _bg; }
@@ -50,8 +48,25 @@ namespace DKBasicEngine_1_0
                     Model = new Material((Color)value, this);
             }
         }
-        
-        public float FontSize { get; set; } = 1;
+
+        protected float _FontSize = 1;
+        public float FontSize
+        {
+            get { return _FontSize; }
+            set
+            {
+                if (value <= 0)
+                {
+                    _FontSize = 0.01f;
+                    _changed = true;
+                }
+                else
+                {
+                    _FontSize = value;
+                    _changed = true;
+                }
+            }
+        }
 
         public enum HorizontalAlignment
         {
@@ -59,7 +74,6 @@ namespace DKBasicEngine_1_0
             Center,
             Right
         };
-
         public enum VerticalAlignment
         {
             Top,
@@ -67,156 +81,15 @@ namespace DKBasicEngine_1_0
             Bottom
         };
         
-        public float X
-        {
-            get { return _x + horiOffset; }
-            set { _x = value; }
-        }
-        public float Y
-        {
-            get { return _y + vertOffset; }
-            set { _y = value; }
-        }
-        public float Z { get; set; }
-        
-        public float width
-        {
-            get { return _width * ScaleX; }
-            set
-            {
-                if(value != _width)
-                {
-                    if (value < 0)
-                        _width = value;
-
-                    else
-                        _width = value;
-
-                    _changed = true;
-                }
-            }
-        }
-        public float height
-        {
-            get { return _height * ScaleY; }
-            set
-            {
-                if (value != _height)
-                {
-                    if (value < 0)
-                        _height = value;
-
-                    else
-                        _height = value;
-
-                    _changed = true;
-                }
-            }
-        }
-        public float depth
-        {
-            get { return 0; }
-            set { }
-        }
-
-        public float ScaleX
-        {
-            get
-            {
-                return _scaleX;
-            }
-            set
-            {
-                if (value != _scaleX)
-                {
-                    if (value < 0.1f)
-                        _scaleX = 0.1f;
-
-                    else
-                        _scaleX = value;
-
-                    if (LockScaleRatio)
-                    {
-                        _scaleZ = _scaleX;
-                        _scaleY = _scaleX;
-                    }
-                }
-            }
-        }
-        public float ScaleY
-        {
-            get
-            {
-                return _scaleY;
-            }
-            set
-            {
-                if (value != _scaleY)
-                {
-                    if (value < 0.1f)
-                        _scaleY = 0.1f;
-
-                    else
-                        _scaleY = value;
-
-                    if (LockScaleRatio)
-                    {
-                        _scaleX = _scaleY;
-                        _scaleZ = _scaleY;
-                    }
-                }
-            }
-        }
-        public float ScaleZ
-        {
-            get
-            {
-                return _scaleZ;
-            }
-            set
-            {
-                if (value != _scaleZ)
-                {
-                    if (value < 0.1f)
-                        _scaleZ = 0.1f;
-
-                    else
-                        _scaleZ = value;
-
-                    if (LockScaleRatio)
-                    {
-                        _scaleX = _scaleZ;
-                        _scaleY = _scaleZ;
-                    }
-                }
-            }
-        }
-
-        public bool LockScaleRatio { get; set; } = true;
-
-        public bool HasShadow { get; set; }
-
-        
-        public virtual string Text
-        {
-            get { return _textStr; }
-            set
-            {
-                if(value.All(ch => !ch.IsUnsupportedEscapeSequence()))
-                {
-                    _textStr = value;
-                    _changed = true;
-                }
-            }
-        }
-
         public HorizontalAlignment HAlignment
         {
             set
             {
-                if(value != _HA)
+                _HA = value;
+
+                if (_IsGUI)
                 {
-                    _HA = value;
+                    this.Transform.Position -= new Vector3(horiOffset, 0, 0);
 
                     switch (value)
                     {
@@ -225,28 +98,29 @@ namespace DKBasicEngine_1_0
                             break;
 
                         case HorizontalAlignment.Center:
-                            horiOffset = (Engine.Render.RenderWidth - this.width) / 2;
+                            horiOffset = (Engine.Render.RenderWidth - this.Transform.Dimensions.X * Transform.Scale.X) / 2;
                             break;
 
                         case HorizontalAlignment.Right:
-                            horiOffset = Engine.Render.RenderWidth - this.width;
-                            break;
-
-                        default:
+                            horiOffset = Engine.Render.RenderWidth - this.Transform.Dimensions.X * Transform.Scale.X;
                             break;
                     }
 
-                    _changed = true;
+                    this.Transform.Position += new Vector3(horiOffset, 0, 0);
                 }
+                    
+                _changed = true;
             }
         }
         public VerticalAlignment VAlignment
         {
             set
             {
-                if(value != _VA)
+                _VA = value;
+
+                if (_IsGUI)
                 {
-                    _VA = value;
+                    this.Transform.Position -= new Vector3(0, vertOffset, 0);
 
                     switch (value)
                     {
@@ -255,19 +129,19 @@ namespace DKBasicEngine_1_0
                             break;
 
                         case VerticalAlignment.Center:
-                            vertOffset = (Engine.Render.RenderHeight - this.height) / 2;
+                            vertOffset = (Engine.Render.RenderHeight - this.Transform.Dimensions.Y * Transform.Scale.Y) / 2;
                             break;
 
                         case VerticalAlignment.Bottom:
-                            vertOffset = Engine.Render.RenderHeight - this.height;
-                            break;
-
-                        default:
+                            vertOffset = Engine.Render.RenderHeight - this.Transform.Dimensions.Y * Transform.Scale.Y;
                             break;
                     }
 
-                    _changed = true;
+                    this.Transform.Position += new Vector3(0, vertOffset, 0);
                 }
+                    
+
+                _changed = true;
             }
         }
 
@@ -275,314 +149,46 @@ namespace DKBasicEngine_1_0
         {
             set
             {
-                if (value != _THA)
-                {
-                    _THA = value;
-
-                    _changed = true;
-                }
+                _THA = value;
+                _changed = true;
             }
         }
         public VerticalAlignment TextVAlignment
         {
             set
             {
-                if (value != _TVA)
-                {
-                    _TVA = value;
-
-                    _changed = true;
-                }
+                _TVA = value;
+                _changed = true;
             }
         }
 
-        public Material Model { get; set; }
-        public Animator Animator { get; set; }
-
-        public bool IsGUI { get; set; } = false;
-
-        public TextBlock(Scene ParentPage)
+        public TextBlock()
         {
-            lock (Engine.ToStart)
-            {
-                lock (Engine.ToUpdate)
-                {
-                    lock (Engine.ToRender)
-                    {
-                        Engine.ToStart.Add(this);
-                        Engine.ToUpdate.Add(this);
-                        Engine.ToRender.Add(this);
-                    }
-                }
-            }
-            
-            if (ParentPage != null)
-                ParentPage.Model.Add(this);
-        }
-        
-        public virtual void Start()
-        {
-            if (Text.Length > 0)
-            {
-                List<Letter> retValue = new List<Letter>();
-
-                List<List<Letter>> textAligned = new List<List<Letter>>() { new List<Letter>() };
-
-                int Xoffset = 0;
-                int Yoffset = 0;
-
-                if (width > 0)
-                {
-                    for (int i = 0; i < _textStr.Length; i++)// (char letter in Text)
-                    {
-                        if (_textStr[i] == ' ')
-                        {
-                            Xoffset += 3;
-                        }
-
-                        else
-                        {
-                            if (_textStr[i] == '\r' || _textStr[i] == '\n')
-                            {
-                                Xoffset = 0;
-                                Yoffset += 6;
-
-                                textAligned.Add(new List<Letter>());
-
-                                continue;
-                            }
-
-                            Material newLetterMaterial = Database.GetLetter(_textStr[i]);
-
-                            if (Xoffset * ScaleX * FontSize + newLetterMaterial.Width * ScaleX * FontSize > this.width)
-                            {
-                                Xoffset = 0;
-                                Yoffset += 6;
-
-                                textAligned.Add(new List<Letter>());
-                            }
-
-                            textAligned[Yoffset / 6].Add(new Letter(this,
-                                                Xoffset,
-                                                Yoffset,
-                                                this.Z + 1,
-                                                newLetterMaterial));
-
-                            Xoffset += newLetterMaterial.Width + 1;
-                        }
-                    }
-                }
-
-                float maxHeight = textAligned.Count * 6 * FontSize;
-
-                float startY = 0;
-
-                switch (_TVA)
-                {
-                    case VerticalAlignment.Top:
-                        startY = 0;
-                        break;
-                    case VerticalAlignment.Center:
-                        startY = (_height - maxHeight) / 2;
-                        break;
-                    case VerticalAlignment.Bottom:
-                        startY = _height - maxHeight;
-                        break;
-                    default:
-                        break;
-                }
-
-                for (int i = 0; i < textAligned.Count; i++)//foreach(List<Letter> row in textAligned)
-                {
-                    float maxWidth = 0;
-
-                    if (textAligned[i].Count > 0)
-                        maxWidth = (textAligned[i][textAligned.Count - 1].Model.Width + textAligned[i][textAligned.Count - 1]._x) * FontSize;
-
-                    if (maxWidth != 0)
-                    {
-                        float startX = 0;
-
-                        switch (_THA)
-                        {
-                            case HorizontalAlignment.Left:
-                                startX = 0;
-                                break;
-
-                            case HorizontalAlignment.Center:
-                                startX = (_width - maxWidth) / 2;
-                                break;
-
-                            case HorizontalAlignment.Right:
-                                startX = _width - maxWidth;
-                                break;
-                        }
-
-
-                        for (int j = 0; j < textAligned[i].Count; j++)//foreach (Letter letter in row)
-                        {
-                            if (startX != 0)
-                                textAligned[i][j].HorOffset = startX;
-
-                            if (startY != 0)
-                                textAligned[i][j].VertOffset = startY;
-
-                            retValue.Add(textAligned[i][j]);
-                        }
-                    }
-                }
-
-                for (int i = 0; i < _text.Count; i++)
-                    Engine.ToRender.Remove(_text[i]);
-
-                _text = retValue;
-
-                VAlignment = _VA;
-                HAlignment = _HA;
-
-                _changed = false;
-            }
+            this.Scripts.Add(new TextControlScript(this));
         }
 
-        public virtual void Update()
+        public TextBlock(GameObject Parent)
+            : base(Parent)
         {
-            if (_changed)
-            {
-                List<Letter> retValue = new List<Letter>();
-
-                List<List<Letter>> textAligned = new List<List<Letter>>() { new List<Letter>() };
-
-                int Xoffset = 0;
-                int Yoffset = 0;
-
-                if(width > 0)
-                {
-                    for(int i = 0; i < _textStr.Length; i++)// (char letter in Text)
-                    {
-                        if (_textStr[i] == ' ')
-                        {
-                            Xoffset += 3;
-                        }
-
-                        else
-                        {
-                            if (_textStr[i] == '\r' || _textStr[i] == '\n')
-                            {
-                                Xoffset = 0;
-                                Yoffset += 6;
-
-                                textAligned.Add(new List<Letter>());
-
-                                continue;
-                            }
-
-                            Material newLetterMaterial = Database.GetLetter(_textStr[i]);
-
-                            if (Xoffset * ScaleX * FontSize + newLetterMaterial.Width * ScaleX * FontSize > this.width)
-                            {
-                                Xoffset = 0;
-                                Yoffset += 6;
-
-                                textAligned.Add(new List<Letter>());
-                            }
-
-                            textAligned[Yoffset / 6].Add(new Letter(this,
-                                                Xoffset,
-                                                Yoffset,
-                                                this.Z + 1,
-                                                newLetterMaterial));
-
-                            Xoffset += newLetterMaterial.Width + 1;
-                        }
-                    }
-                }
-
-                float maxHeight = textAligned.Count * 6 * FontSize;
-
-                float startY = 0;
-
-                switch (_TVA)
-                {
-                    case VerticalAlignment.Top:
-                        startY = 0;
-                        break;
-                    case VerticalAlignment.Center:
-                        startY = (_height - maxHeight) / 2;
-                        break;
-                    case VerticalAlignment.Bottom:
-                        startY = _height - maxHeight;
-                        break;
-                    default:
-                        break;
-                }
-
-                for(int i = 0; i < textAligned.Count; i++)//foreach(List<Letter> row in textAligned)
-                {
-                    float maxWidth = 0;
-
-                    if(textAligned[i].Count > 0)
-                        maxWidth = (textAligned[i][textAligned.Count - 1].Model.Width + textAligned[i][textAligned.Count - 1]._x) * FontSize;
-
-                    if(maxWidth != 0)
-                    {
-                        float startX = 0;
-
-                        switch (_THA)
-                        {
-                            case HorizontalAlignment.Left:
-                                startX = 0;
-                                break;
-
-                            case HorizontalAlignment.Center:
-                                startX = (_width - maxWidth) / 2;
-                                break;
-
-                            case HorizontalAlignment.Right:
-                                startX = _width - maxWidth;
-                                break;
-                        }
-
-                        
-                        for(int j = 0; j < textAligned[i].Count; j++)//foreach (Letter letter in row)
-                        {
-                            if (startX != 0)
-                                textAligned[i][j].HorOffset = startX;
-
-                            if (startY != 0)
-                                textAligned[i][j].VertOffset = startY;
-
-                            retValue.Add(textAligned[i][j]);
-                        }
-                    }
-                }
-                
-                for (int i = 0; i < _text.Count; i++)
-                    Engine.ToRender.Remove(_text[i]);
-                
-                _text = retValue;
-
-                VAlignment = _VA;
-                HAlignment = _HA;
-
-                _changed = false;
-            }
+            this.Scripts.Add(new TextControlScript(this));
         }
 
-        public void Destroy()
+        public override void Destroy()
         {
-            Engine.ToUpdate.Remove(this);
             Engine.ToRender.Remove(this);
 
-            for (int i = 0; i < _text.Count; i++)
-                _text[i].Destroy();
+            int ScriptsCount = this.Scripts.Count;
+            for (int i = 0; i < ScriptsCount; i++)
+                Scripts[i].Destroy();
+            
+            int _textCount = _text.Count;
+            for (int i = 0; i < _textCount; i++)
+                _text[0].Destroy();
+
+            Animator.Destroy();
 
             Model = null;
             Animator = null;
-        }
-
-        public void Render()
-        {
-            Model?.Render(this);
         }
     }
 }

@@ -1,13 +1,25 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+/**
+* For the brave souls who get this far: You are the chosen ones,
+* the valiant knights of programming who toil away, without rest,
+* fixing our most awful code. To you, true saviors, kings of men,
+* I say this: never gonna give you up, never gonna let you down,
+* never gonna run around and desert you. Never gonna make you cry,
+* never gonna say goodbye. Never gonna tell a lie and hurt you.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-
 
 namespace DKBasicEngine_1_0
 {
@@ -15,11 +27,21 @@ namespace DKBasicEngine_1_0
     {
         public static class Render
         {
-            public static readonly int RenderWidth  = 640;
-            public static readonly int RenderHeight = 360;
+            public const int RenderWidth  = 640;
+            public const int RenderHeight = 360;
+            internal const int ImageBufferSize = 3 * RenderWidth * RenderHeight;
+            internal const int ImageKeyBufferSize = RenderWidth * RenderHeight;
 
             internal static byte[] imageBuffer;
             internal static byte[] imageBufferKey;
+
+            internal static readonly byte[] ImageOutData = new byte[ImageBufferSize];
+            
+            internal const short sampleSize = 100;
+            internal static int lastTime = 0;
+            internal static int numRenders = 0;
+
+            internal static bool AbortRender = false;
         }
 
         public static class Input
@@ -35,26 +57,40 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private static bool _isInitialised = false;
+        //private static bool _LoadingNewPage = false;
+        private static bool _IsInitialised = false;
 
         private static Thread BackgroundWorks;
+        private static Thread RenderWorker;
 
-        private static Stopwatch _deltaT;
-        internal static Camera _baseCam;
+        private static TextBlock FpsMeter;
+        private static Stopwatch DeltaT;
+        internal static Camera BaseCam;
 
-        internal static List<ICore> ToUpdate;
-        internal static List<ICore> ToStart;
-        internal static List<IGraphics> ToRender;
-        internal static List<IControl> PageControls;
+        internal static List<Collider> Collidable;
+        internal static List<GameObject> ToStart;
+        internal static List<GameObject> ToRender;
 
-        internal static IPage Page;
+        internal static Scene Scene;
 
-        public static float deltaTime { get { return (float)_deltaT.Elapsed.TotalSeconds; } }
-        
+        private static float deltaT = 0;
+        public static float deltaTime { get { return deltaT; } }
+
+        internal static event UpdateHandler UpdateEvent;
+        internal delegate void UpdateHandler();
+
+        /*internal static event BackgroundWorker UpdateEvent;
+        internal static event BackgroundWorker StartEvent;
+        internal static event BackgroundWorker RenderEvent;
+        internal static event BackgroundWorker GUIRenderEvent;
+        internal static event CollisionCheck CollisionCheckEvent;
+
+        internal delegate void BackgroundWorker();
+        internal delegate void CollisionCheck(Collider e);*/
 
         public static void Init()
         {
-            if (!_isInitialised)
+            if (!_IsInitialised)
             {
                 try
                 {
@@ -65,21 +101,34 @@ namespace DKBasicEngine_1_0
                     WindowControl.WindowInit();
                     Database.InitDatabase();
                     
-                    Render.imageBuffer      = new byte[3 * Render.RenderWidth * Render.RenderHeight];
-                    Render.imageBufferKey   = new byte[Render.RenderWidth * Render.RenderHeight];
+                    Render.imageBuffer    = new byte[Render.ImageBufferSize];
+                    Render.imageBufferKey = new byte[Render.ImageKeyBufferSize];
 
-                    _deltaT         = Stopwatch.StartNew();
-                    ToStart         = new List<ICore>();
-                    ToUpdate        = new List<ICore>();
-                    ToRender        = new List<IGraphics>();
-                    PageControls    = new List<IControl>();
+                    DeltaT    = Stopwatch.StartNew();
 
-                    BackgroundWorks = new Thread(() => Update());
+                    ToStart    = new List<GameObject>();
+                    ToRender   = new List<GameObject>();
+                    Collidable = new List<Collider>();
+
+                    BackgroundWorks = new Thread(Update);
+                    RenderWorker    = new Thread(RenderImage);
                     BackgroundWorks.Start();
+                    RenderWorker.Start();
 
+                    FpsMeter = new TextBlock();
+                    FpsMeter.Transform.Position = new Vector3(0, 0, 128);
+                    FpsMeter.Transform.Dimensions = new Vector3(50, 5, 1);
+                    FpsMeter.Transform.Scale = new Vector3(2, 2, 1);
+                    FpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
+                    FpsMeter.HAlignment = TextBlock.HorizontalAlignment.Left;
+                    FpsMeter.Text = "0";
+                    FpsMeter.IsGUI = true;
+                    FpsMeter.TextShadow = true;
+                    FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
+                    FpsMeter.Start();
+                    ToRender.Add(FpsMeter);
+                    
                     SplashScreen();
-
-                    _isInitialised = true;
                 }
                 catch (Exception e)
                 {
@@ -90,89 +139,21 @@ namespace DKBasicEngine_1_0
                 throw new Exception("Engine is being initialised second time");
         }
         
-        private static void Update()
+        public static void ChangeScene(Scene Scene)
         {
-            while (true)
+            if (_IsInitialised)
             {
-                List<ICore> reference;
-                List<IControl> controlReference;
+                //Engine._LoadingNewPage = true;
+                int SceneModelCount = Scene.Model.Count;
+                for (int i = 0; i < SceneModelCount; i++)
+                    Scene.Model[i].Destroy();
 
-                lock (ToUpdate)
-                {
-                    reference = ToUpdate.ToList();
-                }
+                Engine.Scene = Scene;
+                Scene.Init();
 
-                lock (PageControls)
-                {
-                    controlReference = PageControls.ToList();
-                }
+                Engine.ToStart = Scene.NewlyGenerated;
 
-                while(ToStart.Count > 0)
-                {
-                    ToStart[0].Start();
-                    ToStart.Remove(ToStart[0]);
-                }
-                
-                for(int i = 0; i < controlReference.Count; i++)
-                {
-                    bool result = Page.FocusSelection == controlReference.FindIndex(obj => ReferenceEquals(obj, controlReference[i]));
-
-                    if (controlReference[i].IsFocused != result)
-                        controlReference[i].IsFocused = result;
-                }
-
-                List<ICore> tempReference = reference.Where(obj => obj is I3Dimensional).ToList();
-
-                for(int i = 0; i < tempReference.Count; i++)
-                    if (!((I3Dimensional)tempReference[i]).IsInView())
-                        reference.Remove(tempReference[i]);
-
-                _deltaT?.Stop();
-
-                for (int i = 0; i < reference.Count; i++)
-                    reference[i].Update();
-                
-                _deltaT?.Restart();
-                
-                _baseCam?.BufferImage();
-            }
-        }
-
-        public static void PageChange(IPage Page)
-        {
-            if (_isInitialised)
-            {
-                Engine.Page = Page;
-                
-                Engine.PageControls = Page.PageControls;
-
-                /*for (int i = 0; i < PageControls.Count - 1; i++)
-                {
-                    for (int j = 0; j < PageControls.Count - 1; j++)
-                    {
-                        if (((I3Dimensional)PageControls[j]).X > ((I3Dimensional)PageControls[j + 1]).X)
-                        {
-
-                            var temp = PageControls[j];
-                            PageControls[j] = PageControls[j + 1];
-                            PageControls[j + 1] = temp;
-                        }
-                    }
-                }
-
-                for (int i = 0; i < PageControls.Count - 1; i++)
-                {
-                    for (int j = 0; j < PageControls.Count - 1; j++)
-                    {
-                        if (((I3Dimensional)PageControls[j]).X == ((I3Dimensional)PageControls[j + 1]).X)
-                            if (((I3Dimensional)PageControls[j]).Y < ((I3Dimensional)PageControls[j + 1]).Y)
-                            {
-                                var temp = PageControls[j];
-                                PageControls[j] = PageControls[j + 1];
-                                PageControls[j + 1] = temp;
-                            }
-                    }
-                }*/
+                //Engine._LoadingNewPage = false;
             }
             else
                 throw new Exception("Engine not initialised \n Can't change page");
@@ -180,24 +161,35 @@ namespace DKBasicEngine_1_0
 
         public static void Pause()
         {
-            if (_deltaT.IsRunning) _deltaT?.Stop();
+            if (DeltaT.IsRunning) DeltaT?.Stop();
             if (BackgroundWorks.IsAlive) BackgroundWorks?.Abort();
+            if (RenderWorker.IsAlive)
+            {
+                RenderWorker.Abort();
+                Render.AbortRender = true;
+            }
         }
 
         public static void Resume()
         {
-            if(!_deltaT.IsRunning) _deltaT?.Start();
+            if(!DeltaT.IsRunning) DeltaT?.Start();
             if(!BackgroundWorks.IsAlive) BackgroundWorks?.Start();
+            if (!RenderWorker.IsAlive)
+            {
+                Render.AbortRender = false;
+                RenderWorker.Start();
+            }
         }
 
-        internal static void SplashScreen()
+        private static void SplashScreen()
         {
-            if (!_isInitialised)
+            if (!_IsInitialised)
             {
-                Camera splashScreenCam  = new Camera();
-                SplashScreen splash     = new SplashScreen(null, null);
-                
-                splashScreenCam.Init(0, 0);
+                _IsInitialised = true;
+
+                Engine.ChangeScene(new Scene());
+                SplashScreen splash     = new SplashScreen();
+                Camera splashScreenCam = new Camera();
 
                 SpinWait.SpinUntil(() => splash.Animator.NumberOfPlays >= 1);
 
@@ -205,5 +197,173 @@ namespace DKBasicEngine_1_0
                 splashScreenCam.Destroy();
             }
         }
+
+        private static void Update()
+        {
+            while (true)
+            {
+                /*int referenceCount = reference.Count;
+                for(int i = referenceCount - 1; i >= 0; i--)
+                {
+                    if (reference[i] is I3Dimensional)
+                        if (!((I3Dimensional)reference[i]).IsInView())
+                            reference.Remove(reference[i]);
+                }*/
+
+                /*if(Page != null)
+                {
+                    int controlReferenceCount = Page.PageControls.Count;
+                    for (int i = 0; i < controlReferenceCount; i++)
+                        Page.PageControls[i].IsFocused = i == Page.PageControls[i].FocusElementID;
+                }*/
+
+                /*if (Engine._LoadingNewPage)
+                {
+                    SpinWait.SpinUntil(() => !Engine._LoadingNewPage);
+                }*/
+
+                int ToStartCount = ToStart.Count;
+                while (ToStartCount > 0)
+                {
+                    ToStart[0].Start();
+                    ToRender.Add(ToStart[0]);
+                    ToStart.Remove(ToStart[0]);
+                    ToStartCount--;
+                }
+
+                //List<GameObject> reference = ToUpdate.GetGameObjectsInView();
+
+                deltaT = (float)DeltaT.Elapsed.TotalSeconds;
+                DeltaT?.Restart();
+
+                UpdateEvent?.Invoke();
+
+                /*int refereceCount = reference.Count;
+                for (int i = 0; i < refereceCount; i++)
+                    reference[i].Update();*/
+
+                List<GameObject> reference = ToRender.GetGameObjectsInView();
+
+                List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
+                List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? obj.Collider.IsCollidable : false).ToList();
+                int TriggersCount = Triggers.Count;
+                for (int i = 0; i < TriggersCount; i++)
+                    Triggers[i].Collider.TriggerCheck(VisibleWithCollider);
+                
+                BaseCam?.BufferImage(reference);
+
+                Array.Copy(Render.imageBuffer, Render.ImageOutData, Render.ImageBufferSize);
+
+                if (Render.numRenders == 0)
+                    Render.lastTime = Environment.TickCount;
+
+                Render.numRenders++;
+
+                if (Render.numRenders == Render.sampleSize)
+                {
+                    int temp = Environment.TickCount - Render.lastTime;
+
+                    if (temp > 0)
+                    {
+                        FpsMeter.Text = string.Format("{0}", Render.sampleSize * 1000 / temp);
+#if DEBUG
+                        Debug.WriteLine(string.Format("Buff {0}", Render.sampleSize * 1000 / temp));
+#endif
+                    }
+                    Render.numRenders = 0;
+                }
+            }
+        }
+
+        private static unsafe void RenderImage()
+        {
+            IntPtr ConsoleWindow = GetConsoleWindow();
+
+            using (Graphics g = Graphics.FromHwnd(ConsoleWindow))
+            {
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+                g.PixelOffsetMode    = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+                g.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                
+                Rectangle Screen = System.Windows.Forms.Screen.FromHandle(ConsoleWindow).Bounds;
+                int Width        = Screen.Width;
+                int Height       = Screen.Height;
+                
+                while (!Render.AbortRender)
+                {
+                    Rectangle ScreenResCheck = System.Windows.Forms.Screen.FromHandle(ConsoleWindow).Bounds;
+
+                    if (ScreenResCheck != Screen)
+                    {
+                        Width  = ScreenResCheck.Width;
+                        Height = ScreenResCheck.Height;
+                    }
+                    //Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
+
+                    fixed (byte* ptr = Render.ImageOutData)
+                    {
+
+                        using (Bitmap outFrame = new Bitmap(Render.RenderWidth,
+                                                            Render.RenderHeight,
+                                                            3 * Render.RenderWidth,
+                                                            System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+                                                            new IntPtr(ptr)))
+                        {
+                            //Size fontSize = GetConsoleFontSize();
+
+                            Rectangle imageRect = new Rectangle(0,
+                                                                0,
+                                                                Width, //imageSize.Width * fontSize.Width,
+                                                                Height); //imageSize.Height * fontSize.Height);
+
+                            g.DrawImage(outFrame, imageRect);
+                        }
+                    }
+                }
+            }
+        }
+
+        /*private static Size GetConsoleFontSize()
+        {
+            IntPtr outHandle = GetStdHandle(-11);
+            ConsoleFontInfo cfi = new ConsoleFontInfo();
+
+            if (!GetCurrentConsoleFont(outHandle, false, cfi))
+                throw new InvalidOperationException("Unable to get font information.");
+
+            return new Size(cfi.dwFontSize.X, cfi.dwFontSize.Y);
+        }*/
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetConsoleWindow();
+
+        /*[DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool GetCurrentConsoleFont(
+            IntPtr hConsoleOutput,
+            bool bMaximumWindow,
+            [Out][MarshalAs(UnmanagedType.LPStruct)]ConsoleFontInfo lpConsoleCurrentFont);
+
+        [DllImport("kernel32.dll",
+         EntryPoint = "GetStdHandle",
+         SetLastError = true,
+         CharSet = CharSet.Auto,
+         CallingConvention = CallingConvention.StdCall)]
+        private static extern IntPtr GetStdHandle(int nStdHandle);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private class ConsoleFontInfo
+        {
+            public int nFont;
+            public Coord dwFontSize;
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        private struct Coord
+        {
+            [FieldOffset(0)]
+            internal short X;
+            [FieldOffset(2)]
+            internal short Y;
+        }*/
     }
 }

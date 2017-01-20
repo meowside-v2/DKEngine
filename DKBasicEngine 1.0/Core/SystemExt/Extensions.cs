@@ -1,9 +1,11 @@
-﻿using System;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace DKBasicEngine_1_0
 {
@@ -18,44 +20,45 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public static float FindMaxZ(this List<I3Dimensional> list)
+        public static float FindMaxZ(this List<GameObject> list) //where T : I3Dimensional
         {
-            float z2 = float.MinValue;
+            return list.Max(obj => obj.Transform.Position.Z);
+            /*float z2 = float.MinValue;
 
-            for(int i = 0; i < list.Count; i++)
+            int listCount = list.Count;
+            for(int i = 0; i < listCount; i++)
             {
                 if (list[i].Z > z2)
                     z2 = list[i].Z;
             }
 
-            return z2;
+            return z2;*/
         }
 
-        public static List<I3Dimensional> GetGameObjectsInView(this List<I3Dimensional> list)
+        public static List<GameObject> GetGameObjectsInView(this List<GameObject> list)
         {
-            List<I3Dimensional> retValue = new List<I3Dimensional>();
-
-            lock (list)
+            return list.Where(obj => obj.IsInView).ToList();
+            /*List<GameObject> retValue = new List<GameObject>();
+            
+            int listCount = list.Count;
+            for (int i = 0; i < listCount; i++)
             {
-                for(int i = 0; i < list.Count; i++)
-                {
-                    if (list[i].IsInView())
-                        retValue.Add(list[i]);
-                }
-
-                return retValue;
+                if (list[i].IsInView())
+                    retValue.Add(list[i]);
             }
+
+            return retValue;*/
         }
 
-        public static bool IsInView(this I3Dimensional obj)
+        /*public static bool IsInView(this GameObject obj)
         {
-            float X = Engine._baseCam != null ? Engine._baseCam.Xoffset : 0;  /*obj is IGraphics ? 0 : Engine._baseCam.Xoffset;*/
-            float Y = Engine._baseCam != null ? Engine._baseCam.Yoffset : 0;  /*obj is IGraphics ? 0 : Engine._baseCam.Yoffset;*/
+            float X = obj.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.X : 0;
+            float Y = obj.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
 
-            return (obj.X + obj.width >= X && obj.X < X + Engine.Render.RenderWidth && obj.Y + obj.height >= Y && obj.Y < Y + Engine.Render.RenderHeight);
-        }
+            return (obj.Transform.Position.X + obj.Transform.Dimensions.Width >= X && obj.Transform.Position.X < X + Engine.Render.RenderWidth && obj.Transform.Position.Y + obj.Transform.Dimensions.Height >= Y && obj.Transform.Position.Y < Y + Engine.Render.RenderHeight);
+        }*/
 
-        public static bool IsUnsupportedEscapeSequence(this char letter)
+        /*public static bool IsUnsupportedEscapeSequence(this char letter)
         {
             switch (letter)
             {
@@ -85,78 +88,45 @@ namespace DKBasicEngine_1_0
             }
 
             return false;
-        }
-
-        public static bool BufferIsFull(this byte[] buffer, byte value, int EachIndex)
+        }*/
+        
+        /*public static T FirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
-            for (int i = 0; i < buffer.Length; i += EachIndex)
-            {
-                if (buffer[i] != value)
-                    return false;
-            }
+            List<T> _source = new List<T>(source);
 
-            return true;
-        }
-
-        public static void FillEach(this byte[] buffer, byte value, int EachIndex)
-        {
-            for(int i = 0; i < buffer.Length; i+= EachIndex)
-            {
-                buffer[i] = value;
-            }
-        }
-
-        public static bool IsOnScreen(float x, float y)
-        {
-            return x >= 0 && x < Engine.Render.RenderWidth && y >= 0 && y < Engine.Render.RenderHeight;
-        }
-
-        public static Color MixPixel(Color top, Color bottom)
-        {
-            if (top.A == 0)
-                return bottom;
-
-            if (bottom.A == 0)
-                return top;
-            
-            float opacityTop = (float)top.A / 255;
-
-            byte newA = (byte)(top.A + bottom.A >= 255 ? 255 : top.A + bottom.A);
-            byte A = (byte)(newA - top.A);
-
-            float opacityBottom = (float)A / 255;
-
-            byte R = (byte)(top.R * opacityTop + bottom.R * opacityBottom);
-            byte G = (byte)(top.G * opacityTop + bottom.G * opacityBottom);
-            byte B = (byte)(top.B * opacityTop + bottom.B * opacityBottom);
-
-            return Color.FromArgb(newA, R, G, B);
-        }
-
-        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            List<TSource> _source = new List<TSource>(source);
-
-            for (int i = 0; i < _source.Count; i++)
+            int _sourceCount = _source.Count;
+            for (int i = 0; i < _sourceCount; i++)
             {
                 if (predicate(_source[i]))
                     return _source[i];
 
             }
 
-            return default(TSource);
+            return default(T);
         }
 
         public static List<T> Where<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             List<T> retValue = new List<T>();
-            List<T> _source = source.ToList();
+            List<T> _source = new List<T>(source);
 
-            for(int i = 0; i < _source.Count; i++)
+            int _sourceCount = _source.Count;
+            for (int i = 0; i < _sourceCount; i++)
             {
                 if (predicate(_source[i]))
                     retValue.Add(_source[i]);
             }
+
+            return retValue;
+        }
+
+        public static T[] ToArray<T>(this List<T> source)
+        {
+            int size = source.Count;
+            T[] retValue = new T[size];
+
+            for (int i = 0; i < size; i++)
+                retValue[i] = source[i];
 
             return retValue;
         }
@@ -166,21 +136,22 @@ namespace DKBasicEngine_1_0
             return new List<T>(source);
         }
 
-        public static List<TResult> ToList<TResult>(this IEnumerable source)
+        public static List<T> ToList<T>(this IEnumerable source)
         {
-            return new List<TResult>(Cast<TResult>(source));
+            return new List<T>(Cast<T>(source));
         }
 
-        private static IEnumerable<TResult> Cast<TResult>(IEnumerable source)
+        private static IEnumerable<T> Cast<T>(IEnumerable source)
         {
-            foreach (TResult obj in source) yield return obj;
+            foreach (T obj in source) yield return obj;
         }
         
         public static bool All<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
-            List<T> _source = source.ToList();
+            List<T> _source = new List<T>(source);
 
-            for(int i = 0; i < _source.Count; i++)
+            int _sourceCount = _source.Count; 
+            for(int i = 0; i < _sourceCount; i++)
             {
                 if (!predicate(_source[i]))
                     return false;
@@ -189,19 +160,26 @@ namespace DKBasicEngine_1_0
             return true;
         }
 
-        public static TSource[] Convert2DArryto1D<TSource>(this TSource[,] source, int width, int height)
+        public static bool Contains<T>(this IEnumerable<T> source, T value)
         {
-            TSource[] retValue = new TSource[source.Length];
+            List<T> _source = new List<T>(source);
 
-            for(int i = 0; i < height; i++)
+            int _sourceCount = _source.Count;
+            for (int i = 0; i < _sourceCount; i++)
             {
-                for(int j = 0; j < width; j++)
-                {
-                    retValue[i * width + j] = source[j,i];
-                }
+                if (_source[i].Equals(value))
+                    return true;
             }
 
-            return retValue;
+            return false;
         }
+
+        public static void InitCollider(this Collider Collider, Collider newCollider)
+        {
+            if (Collider != null)
+                Engine.Collidable.Remove(Collider);
+
+            Collider = newCollider;
+        }*/
     }
 }

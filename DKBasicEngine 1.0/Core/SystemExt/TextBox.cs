@@ -1,26 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+* (C) 2017 David Knieradl 
+*/
+
+using System;
 using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace DKBasicEngine_1_0
 {
     public class TextBox : TextBlock, IControl
     {
         public bool IsFocused { get; set; }
+        public int FocusElementID { get; private set; }
 
-        private TimeSpan TimeOut = new TimeSpan(0, 0, 0, 0, 50);
-        private Stopwatch TimeOutStopwatch = new Stopwatch();
-
-        private short MaxTextLenght = 64;
-
-        public TextBox(Scene ParentPage)
-            : base(ParentPage)
+        public TextBox()
         {
-            ParentPage.PageControls.Add(this);
+            this.Scripts.Add(new TextBoxScript(this));
+            /*FocusElementID = Engine.Scene.PageControls.Count;
+            Engine.Scene.PageControls.Add(this);*/
         }
-        
+
+        public TextBox(GameObject Parent)
+            :base(Parent)
+        {
+            this.Scripts.Add(new TextBoxScript(this));
+            /*FocusElementID = Engine.Scene.PageControls.Count;
+            Engine.Scene.PageControls.Add(this);*/
+        }
+
         public Type AllowedChars { get; set; }
 
         public enum Type
@@ -35,13 +42,10 @@ namespace DKBasicEngine_1_0
         {
             set
             {
-                if (value.All(ch => !ch.IsUnsupportedEscapeSequence()))
+                if (TextControl(value))
                 {
-                    if (TextControl(value))
-                    {
-                        _textStr = value;
-                        _changed = true;
-                    }
+                    _textStr = value;
+                    _changed = true;
                 }
                 
             }
@@ -50,48 +54,6 @@ namespace DKBasicEngine_1_0
             {
                 return _textStr;
             }
-        }
-        
-        public override void Update()
-        {
-            if (IsFocused)
-            {
-
-                if (Console.KeyAvailable)
-                {
-                    if (TimeOut < TimeOutStopwatch.Elapsed)
-                        TimeOutStopwatch.Reset();
-
-                    if (TimeOutStopwatch.ElapsedMilliseconds == 0)
-                    {
-                        char key = Console.ReadKey(true).KeyChar;
-
-                        while (Console.KeyAvailable) Console.ReadKey();
-
-                        if (key == '\b')
-                        {
-                            if (Text.Length > 0)
-                            {
-                                Text = Text.Remove(Text.Length - 1, 1);
-                            }
-
-                            TimeOutStopwatch.Start();
-                        }
-
-                        else if (Text.Length < MaxTextLenght)
-                        {
-                            Text += key;
-
-                            TimeOutStopwatch.Start();
-                        }
-                    }
-                }
-
-                else if (TimeOutStopwatch.IsRunning)
-                  TimeOutStopwatch.Reset();
-            }
-
-            base.Update();
         }
 
         private bool TextControl(string key)
@@ -113,9 +75,6 @@ namespace DKBasicEngine_1_0
 
         private bool TextControl(char key)
         {
-            if (key.IsUnsupportedEscapeSequence())
-                return false;
-
             if (AllowedChars == Type.All)
                 return true;
 
