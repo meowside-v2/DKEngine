@@ -245,7 +245,7 @@ namespace DKBasicEngine_1_0
                 List<GameObject> reference = ToRender.GetGameObjectsInView();
 
                 List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
-                List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();
+                List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? obj.Collider.IsCollidable : false).ToList();
                 int TriggersCount = Triggers.Count;
                 for (int i = 0; i < TriggersCount; i++)
                     Triggers[i].Collider.TriggerCheck(VisibleWithCollider);

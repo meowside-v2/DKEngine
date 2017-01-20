@@ -30,6 +30,8 @@ namespace DKBasicEngine_1_0
         /// </summary>
         public bool IsTrigger = false;
 
+        public bool IsCollidable = false;
+
         private float X { get { return Parent.Transform.Position.X + Area.X; } }
         private float Y { get { return Parent.Transform.Position.Y + Area.Y; } }
         private float Width { get { return Parent.Transform.Scale.X * Area.Width; } }
@@ -180,7 +182,7 @@ namespace DKBasicEngine_1_0
 
         private bool Left(Collider obj)
         {
-            if (this != obj && !obj.IsTrigger)
+            if (this != obj && obj.IsCollidable)
                 return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X <= obj.X + obj.Width && this.X >= obj.X); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
 
             return false;
@@ -188,7 +190,7 @@ namespace DKBasicEngine_1_0
 
         private bool Right(Collider obj)
         {
-            if (this != obj && !obj.IsTrigger)
+            if (this != obj && obj.IsCollidable)
                 return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X + this.Width >= obj.X && this.X <= obj.X);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
 
             return false;
@@ -196,7 +198,7 @@ namespace DKBasicEngine_1_0
 
         private bool Up(Collider obj)
         {
-            if (this != obj && !obj.IsTrigger)
+            if (this != obj && obj.IsCollidable)
                 return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
 
             return false;
@@ -204,7 +206,7 @@ namespace DKBasicEngine_1_0
 
         private bool Down(Collider obj)
         {
-            if (this != obj && !obj.IsTrigger)
+            if (this != obj && obj.IsCollidable)
                 return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y + this.Height >= obj.Y && this.Y <= obj.Y);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
 
             return false;
