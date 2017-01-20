@@ -21,34 +21,7 @@ namespace DKBasicEngine_1_0
         protected Material _Model = null;
         public GameObject Parent  = null;
         public Animator Animator  = null;
-        private Collider _Collider = null;
-        public Collider Collider
-        {
-            get { return _Collider; }
-            set
-            {
-                if (value == null)
-                {
-                    int ScriptCount = this.Scripts.Count;
-                    for (int i = 0; i < ScriptCount; i++)
-                    {
-                        _Collider.CollisionEvent -= Scripts[i].ColliderDel;
-                    }
-
-                    _Collider = value;
-                }
-                else
-                {
-                    _Collider = value;
-
-                    int ScriptCount = this.Scripts.Count;
-                    for (int i = 0; i < ScriptCount; i++)
-                    {
-                        _Collider.CollisionEvent += Scripts[i].ColliderDel;
-                    }
-                }
-            }
-        }
+        public Collider Collider  = null;
 
         public readonly Transform Transform;
         public readonly List<Script> Scripts;
@@ -66,7 +39,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public readonly List<GameObject> Child = new List<GameObject>();
+        public readonly List<GameObject> Child;
 
         protected bool _IsGUI = false;
         public bool IsGUI
@@ -92,13 +65,15 @@ namespace DKBasicEngine_1_0
 
         public GameObject()
         {
+            this.Child                = new List<GameObject>();
             this.Scripts              = new List<Script>();
             this.Transform            = new Transform(this);
             this.Transform.Dimensions = new Vector3(1, 1, 1);
             this.Transform.Scale      = new Vector3(1, 1, 1);
             this.Transform.Position   = new Vector3(0, 0, 0);
             this.Animator             = new Animator(this);
-            
+            this.Collider             = new Collider(this);
+
             if (Engine.Scene != null)
             {
                 Engine.Scene.Model.Add(this);
@@ -108,13 +83,15 @@ namespace DKBasicEngine_1_0
 
         public GameObject(GameObject Parent)
         {
+            this.Child = new List<GameObject>();
             this.Scripts = new List<Script>();
-            this.Transform            = new Transform(this);
+            this.Transform = new Transform(this);
             this.Transform.Dimensions = new Vector3(1, 1, 1);
-            this.Transform.Scale      = new Vector3(1, 1, 1);
-            this.Transform.Position   = new Vector3(0, 0, 0);
-            this.Animator             = new Animator(this);
-            
+            this.Transform.Scale = new Vector3(1, 1, 1);
+            this.Transform.Position = new Vector3(0, 0, 0);
+            this.Animator = new Animator(this);
+            this.Collider = new Collider(this);
+
             if (Parent != null)
             {
                 this.Parent = Parent;
@@ -134,7 +111,7 @@ namespace DKBasicEngine_1_0
             for (int i = 0; i < ScriptsCount; i++)
             {
                 Scripts[i].Start();
-                Engine.UpdateEvent += Scripts[i].UpdateDel;
+                Engine.UpdateEvent += Scripts[i].Update;
             }
         }
 

@@ -75,13 +75,13 @@ namespace DKEngine
                     }*/
                         
                         
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 GameObject t1 = new GameObject();
                 t1.Model = new Material(Color.AliceBlue, t1);
-                t1.Transform.Position = new Vector3(0, i * 10, 0);
+                t1.Transform.Position = new Vector3(0, i, 0);
                 t1.Collider = new Collider(t1);
-                t1.Transform.Scale = new Vector3(5, 5, 5);
+                t1.Transform.Scale = new Vector3(10, 10, 10);
             }
             
             GameObject t2 = new GameObject();
