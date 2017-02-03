@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DKBasicEngine_1_0.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

@@ -3,28 +3,32 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DKBasicEngine_1_0
 {
-    public class Animator : IAnimated
+    public sealed class Animator : IAnimated
     {
-        GameObject Parent;
-
         private Engine.UpdateHandler UpdateDel;
-        private bool _wasPlayed         = false;
-        private AnimationLoop _settings = AnimationLoop.Once;
-        public AnimationLoop Settings
+
+        public GameObject Parent;
+        public TimeSpan CurrentAnimationTime;
+        public Dictionary<string, AnimationNode> Animations;
+        private AnimationNode _current;
+
+        public int NumberOfPlays { get; private set; } = 0;
+        internal AnimationNode Current
         {
-            get
-            {
-                return _settings;
-            }
+            get { return _current; }
             set
             {
-                if(_settings != value)
+                if(value != _current)
                 {
-                    _settings = value;
-                    _wasPlayed = false;
+                    _current = value;
+                    Parent.Model = _current.Animation;
+                    NumberOfPlays = 0;
+                    CurrentAnimationTime = new TimeSpan(0);
                 }
             }
         }
@@ -34,36 +38,27 @@ namespace DKBasicEngine_1_0
             {
                 return (int)(CurrentAnimationTime.TotalMilliseconds / Parent.Model.DurationPerFrame % Parent.Model.Frames);
             }
-            set { }
         }
-        public TimeSpan CurrentAnimationTime = new TimeSpan(0);
-
-        private int _numberOfPlays = 0;
-        public int NumberOfPlays
-        {
-            get { return _numberOfPlays; }
-            set
-            {
-                if(value >= 0 && value != _numberOfPlays)
-                {
-                    _numberOfPlays = value;
-
-                    if (Settings == AnimationLoop.Once && value > 0)
-                        _wasPlayed = true;
-                }
-            }
-        }
-
+       
         public Animator(GameObject Parent)
         {
-            this.Parent = Parent;
-            UpdateDel = new Engine.UpdateHandler(this.Update);
+            this.Parent               = Parent;
+            this.CurrentAnimationTime = new TimeSpan(0);
+            this.Animations           = new Dictionary<string, AnimationNode>();
+            UpdateDel                 = new Engine.UpdateHandler(this.Update);
+
             Engine.UpdateEvent += UpdateDel;
+
+            /*if(Parent.Model != null)
+            {
+                Animations.Add("default", new AnimationNode("default", Parent.Model));
+                this.Play("default");
+            }*/
         }
 
-        protected void Update()
+        private void Update()
         {
-            if (Parent.Model?.Frames > 1 && !_wasPlayed)
+            if (Parent.Model?.Frames > 1)
             {
                 CurrentAnimationTime = CurrentAnimationTime.Add(new TimeSpan(0, 0, 0, 0, (int)(Engine.deltaTime * 1000)));
 
@@ -75,16 +70,29 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public void Restart()
-        {
-            _wasPlayed = false;
-            CurrentAnimationTime = new TimeSpan(0);
-            NumberOfPlays = 0;
-        }
-
         public void Destroy()
         {
             Engine.UpdateEvent -= UpdateDel;
+        }
+
+        public void Play(string AnimationName)
+        {
+            if (AnimationName != Current?.Name)
+            {
+                AnimationNode Result;
+
+                try
+                {
+                    Result = Animations[AnimationName];
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Animation \"{0}\"not found\n{1}", AnimationName, e);
+                    return;
+                }
+
+                Current = Result;
+            }
         }
     }
 }

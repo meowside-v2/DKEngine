@@ -33,9 +33,7 @@ namespace DKBasicEngine_1_0
 
         internal string _textStr = "";
         internal List<Letter> _text = new List<Letter>();
-
-        public Color? Foreground { get; set; }
-
+        
         internal Color? _bg;
         public Color? Background
         {

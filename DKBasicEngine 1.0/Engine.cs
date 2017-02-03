@@ -15,11 +15,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
@@ -27,19 +25,18 @@ namespace DKBasicEngine_1_0
     {
         public static class Render
         {
-            public const int RenderWidth  = 640;
-            public const int RenderHeight = 360;
-            internal const int ImageBufferSize = 3 * RenderWidth * RenderHeight;
+            public   const int RenderWidth        = 640;
+            public   const int RenderHeight       = 360;
+            internal const int ImageBufferSize    = 3 * RenderWidth * RenderHeight;
             internal const int ImageKeyBufferSize = RenderWidth * RenderHeight;
 
             internal static byte[] imageBuffer;
             internal static byte[] imageBufferKey;
-
-            internal static readonly byte[] ImageOutData = new byte[ImageBufferSize];
+            internal static byte[] ImageOutData;
             
-            internal const short sampleSize = 100;
-            internal static int lastTime = 0;
-            internal static int numRenders = 0;
+            /*internal const  short sampleSize = 100;
+            internal static int   lastTime   = 0;
+            internal static int   numRenders = 0;*/
 
             internal static bool AbortRender = false;
         }
@@ -48,7 +45,6 @@ namespace DKBasicEngine_1_0
         {
             [DllImport("user32.dll")]
             private static extern ushort GetKeyState(short nVirtKey);
-
             private const ushort keyDownBit = 0x80;
 
             public static bool IsKeyPressed(ConsoleKey key)
@@ -79,30 +75,18 @@ namespace DKBasicEngine_1_0
         internal static event UpdateHandler UpdateEvent;
         internal delegate void UpdateHandler();
 
-        /*internal static event BackgroundWorker UpdateEvent;
-        internal static event BackgroundWorker StartEvent;
-        internal static event BackgroundWorker RenderEvent;
-        internal static event BackgroundWorker GUIRenderEvent;
-        internal static event CollisionCheck CollisionCheckEvent;
-
-        internal delegate void BackgroundWorker();
-        internal delegate void CollisionCheck(Collider e);*/
-
         public static void Init()
         {
             if (!_IsInitialised)
             {
                 try
                 {
-                    Console.CursorVisible = false;
-                    Console.SetOut(TextWriter.Null);
-                    Console.SetIn(TextReader.Null);
-
                     WindowControl.WindowInit();
                     Database.InitDatabase();
                     
                     Render.imageBuffer    = new byte[Render.ImageBufferSize];
                     Render.imageBufferKey = new byte[Render.ImageKeyBufferSize];
+                    Render.ImageOutData   = new byte[Render.ImageBufferSize];
 
                     DeltaT    = Stopwatch.StartNew();
 
@@ -159,28 +143,6 @@ namespace DKBasicEngine_1_0
                 throw new Exception("Engine not initialised \n Can't change page");
         }
 
-        public static void Pause()
-        {
-            if (DeltaT.IsRunning) DeltaT?.Stop();
-            if (BackgroundWorks.IsAlive) BackgroundWorks?.Abort();
-            if (RenderWorker.IsAlive)
-            {
-                RenderWorker.Abort();
-                Render.AbortRender = true;
-            }
-        }
-
-        public static void Resume()
-        {
-            if(!DeltaT.IsRunning) DeltaT?.Start();
-            if(!BackgroundWorks.IsAlive) BackgroundWorks?.Start();
-            if (!RenderWorker.IsAlive)
-            {
-                Render.AbortRender = false;
-                RenderWorker.Start();
-            }
-        }
-
         private static void SplashScreen()
         {
             if (!_IsInitialised)
@@ -188,7 +150,7 @@ namespace DKBasicEngine_1_0
                 _IsInitialised = true;
 
                 Engine.ChangeScene(new Scene());
-                SplashScreen splash     = new SplashScreen();
+                SplashScreen splash    = new SplashScreen();
                 Camera splashScreenCam = new Camera();
 
                 SpinWait.SpinUntil(() => splash.Animator.NumberOfPlays >= 1);
@@ -200,27 +162,13 @@ namespace DKBasicEngine_1_0
 
         private static void Update()
         {
+            
+            int       NumberOfFrames = 0;
+            TimeSpan  timeOut        = new TimeSpan(0, 0, 0, 0, 500);
+            Stopwatch time           = Stopwatch.StartNew();
+
             while (true)
             {
-                /*int referenceCount = reference.Count;
-                for(int i = referenceCount - 1; i >= 0; i--)
-                {
-                    if (reference[i] is I3Dimensional)
-                        if (!((I3Dimensional)reference[i]).IsInView())
-                            reference.Remove(reference[i]);
-                }*/
-
-                /*if(Page != null)
-                {
-                    int controlReferenceCount = Page.PageControls.Count;
-                    for (int i = 0; i < controlReferenceCount; i++)
-                        Page.PageControls[i].IsFocused = i == Page.PageControls[i].FocusElementID;
-                }*/
-
-                /*if (Engine._LoadingNewPage)
-                {
-                    SpinWait.SpinUntil(() => !Engine._LoadingNewPage);
-                }*/
 
                 int ToStartCount = ToStart.Count;
                 while (ToStartCount > 0)
@@ -230,18 +178,12 @@ namespace DKBasicEngine_1_0
                     ToStart.Remove(ToStart[0]);
                     ToStartCount--;
                 }
-
-                //List<GameObject> reference = ToUpdate.GetGameObjectsInView();
-
+                
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
-
-                /*int refereceCount = reference.Count;
-                for (int i = 0; i < refereceCount; i++)
-                    reference[i].Update();*/
-
+                
                 List<GameObject> reference = ToRender.GetGameObjectsInView();
 
                 List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
@@ -252,25 +194,20 @@ namespace DKBasicEngine_1_0
                 
                 BaseCam?.BufferImage(reference);
 
-                Array.Copy(Render.imageBuffer, Render.ImageOutData, Render.ImageBufferSize);
-
-                if (Render.numRenders == 0)
-                    Render.lastTime = Environment.TickCount;
-
-                Render.numRenders++;
-
-                if (Render.numRenders == Render.sampleSize)
+                Buffer.BlockCopy(Render.imageBuffer, 0, Render.ImageOutData, 0, Render.ImageBufferSize);
+                //Array.Copy(Render.imageBuffer, Render.ImageOutData, Render.ImageBufferSize);
+                
+                NumberOfFrames++;
+                
+                if (time.ElapsedMilliseconds > timeOut.TotalMilliseconds)
                 {
-                    int temp = Environment.TickCount - Render.lastTime;
-
-                    if (temp > 0)
-                    {
-                        FpsMeter.Text = string.Format("{0}", Render.sampleSize * 1000 / temp);
+                    long t = NumberOfFrames * 1000 / time.ElapsedMilliseconds;
+                    FpsMeter.Text = t.ToString();
 #if DEBUG
-                        Debug.WriteLine(string.Format("Buff {0}", Render.sampleSize * 1000 / temp));
+                    Debug.WriteLine(t);
 #endif
-                    }
-                    Render.numRenders = 0;
+                    time.Restart();
+                    NumberOfFrames = 0;
                 }
             }
         }
@@ -298,7 +235,6 @@ namespace DKBasicEngine_1_0
                         Width  = ScreenResCheck.Width;
                         Height = ScreenResCheck.Height;
                     }
-                    //Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
 
                     fixed (byte* ptr = Render.ImageOutData)
                     {
@@ -309,12 +245,10 @@ namespace DKBasicEngine_1_0
                                                             System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                                                             new IntPtr(ptr)))
                         {
-                            //Size fontSize = GetConsoleFontSize();
-
                             Rectangle imageRect = new Rectangle(0,
                                                                 0,
-                                                                Width, //imageSize.Width * fontSize.Width,
-                                                                Height); //imageSize.Height * fontSize.Height);
+                                                                Width,
+                                                                Height);
 
                             g.DrawImage(outFrame, imageRect);
                         }
@@ -323,47 +257,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        /*private static Size GetConsoleFontSize()
-        {
-            IntPtr outHandle = GetStdHandle(-11);
-            ConsoleFontInfo cfi = new ConsoleFontInfo();
-
-            if (!GetCurrentConsoleFont(outHandle, false, cfi))
-                throw new InvalidOperationException("Unable to get font information.");
-
-            return new Size(cfi.dwFontSize.X, cfi.dwFontSize.Y);
-        }*/
-
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern IntPtr GetConsoleWindow();
-
-        /*[DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool GetCurrentConsoleFont(
-            IntPtr hConsoleOutput,
-            bool bMaximumWindow,
-            [Out][MarshalAs(UnmanagedType.LPStruct)]ConsoleFontInfo lpConsoleCurrentFont);
-
-        [DllImport("kernel32.dll",
-         EntryPoint = "GetStdHandle",
-         SetLastError = true,
-         CharSet = CharSet.Auto,
-         CallingConvention = CallingConvention.StdCall)]
-        private static extern IntPtr GetStdHandle(int nStdHandle);
-
-        [StructLayout(LayoutKind.Sequential)]
-        private class ConsoleFontInfo
-        {
-            public int nFont;
-            public Coord dwFontSize;
-        }
-
-        [StructLayout(LayoutKind.Explicit)]
-        private struct Coord
-        {
-            [FieldOffset(0)]
-            internal short X;
-            [FieldOffset(2)]
-            internal short Y;
-        }*/
     }
 }

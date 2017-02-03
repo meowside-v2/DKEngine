@@ -18,7 +18,7 @@ namespace DKBasicEngine_1_0
         /// <summary>
         /// Parent of collider
         /// </summary>
-        public GameObject Parent;
+        public readonly GameObject Parent;
         
         /// <summary>
         /// Determines size and position of collider
@@ -46,7 +46,7 @@ namespace DKBasicEngine_1_0
         /// <param name="Yoffset"></param>
         /// <param name="Width"></param>
         /// <param name="Height"></param>
-        public Collider(GameObject Parent, float Xoffset, float Yoffset, float Width, float Height)
+        internal Collider(GameObject Parent, float Xoffset, float Yoffset, float Width, float Height)
         {
             this.Parent = Parent;
             this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
@@ -58,7 +58,7 @@ namespace DKBasicEngine_1_0
         /// Creates new Instance of Collider class
         /// </summary>
         /// <param name="Parent">Parent of collider (determines size of collider)</param>
-        public Collider(GameObject Parent)
+        internal Collider(GameObject Parent)
         {
             this.Parent = Parent;
             this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
@@ -71,7 +71,7 @@ namespace DKBasicEngine_1_0
         /// </summary>
         /// <param name="Parent">Parent of collider</param>
         /// <param name="Area">Determines size and position of collider</param>
-        public Collider(GameObject Parent, RectangleF Area)
+        internal Collider(GameObject Parent, RectangleF Area)
         {
             this.Parent = Parent;
             this.Area = Area;
@@ -85,7 +85,7 @@ namespace DKBasicEngine_1_0
         /// <param name="Parent">Parent of collider</param>
         /// <param name="Coordinates">Determines position of collider</param>
         /// <param name="Size">Determines size of collider</param>
-        public Collider(GameObject Parent, PointF Coordinates, SizeF Size)
+        internal Collider(GameObject Parent, PointF Coordinates, SizeF Size)
         {
             this.Parent = Parent;
             this.Area = new RectangleF(Coordinates, Size);
@@ -217,8 +217,21 @@ namespace DKBasicEngine_1_0
             Engine.Collidable.Remove(this);
             if(Parent.Collider == this)
                 Parent.Collider = null;
+        }
 
-            Parent = null;
+        public static void SetNewCollider(Collider destination, RectangleF Area)
+        {
+            destination.Area = Area;
+        }
+
+        public static void SetNewCollider(Collider destination, PointF Point, SizeF Size)
+        {
+            destination.Area = new RectangleF(Point, Size);
+        }
+
+        public static void SetNewCollider(Collider destination, float X, float Y, float Width, float Height)
+        {
+            destination.Area = new RectangleF(X, Y, Width, Height);
         }
     }
 }

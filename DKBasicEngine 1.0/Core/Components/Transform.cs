@@ -14,7 +14,10 @@ namespace DKBasicEngine_1_0
     {
         GameObject Parent;
 
-        private Vector3 _Dimensions = new Vector3();
+        private Vector3 _Dimensions;
+        private Vector3 _Position;
+        private Vector3 _Scale;
+
         public Vector3 Dimensions
         {
             get { return _Dimensions; }
@@ -28,8 +31,6 @@ namespace DKBasicEngine_1_0
                     Parent.Child[i].Transform.Dimensions += tmp;
             }
         }
-
-        private Vector3 _Position = new Vector3();
         public Vector3 Position
         {
             get { return _Position; }
@@ -43,8 +44,6 @@ namespace DKBasicEngine_1_0
                     Parent.Child[i].Transform.Position += tmp;
             }
         }
-
-        private Vector3 _Scale = new Vector3();
         public Vector3 Scale
         {
             get { return _Scale; }
@@ -58,11 +57,14 @@ namespace DKBasicEngine_1_0
                     Parent.Child[i].Transform.Scale *= tmp;
             }
         }
-
-
+        
         public Transform(GameObject Parent)
         {
             this.Parent = Parent;
+
+            _Position = new Vector3();
+            _Dimensions = new Vector3();
+            _Scale = new Vector3();
         }
     }
 }

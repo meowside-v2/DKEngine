@@ -46,6 +46,7 @@
     <Compile Include="Core\Components\Animator.cs" />
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
+    <Compile Include="Core\Components\AnimationNode.cs" />
     <Compile Include="Core\Components\Unreleased\MaterialExt.cs" />
     <Compile Include="Core\Components\Transform.cs" />
     <Compile Include="Core\Components\Material.cs" />

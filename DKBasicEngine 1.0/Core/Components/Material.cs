@@ -260,7 +260,7 @@ namespace DKBasicEngine_1_0
             BufferImages++;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Returns color of pixel on coordinations
         /// </summary>
         /// <param name="x">Column coordination</param>
@@ -273,7 +273,7 @@ namespace DKBasicEngine_1_0
                                                               this.colorMapR[frame][y][x],
                                                               this.colorMapG[frame][y][x],
                                                               this.colorMapB[frame][y][x]);
-        }
+        }*/
         
         /// <summary>
         /// Render material into engine image buffer
@@ -281,8 +281,7 @@ namespace DKBasicEngine_1_0
         /// <param name="Parent">I3Dimensional for coordiantions</param>
         public void Render(GameObject Parent, Color? ReColor = null)
         {
-
-            int AnimationState = Parent.Animator != null ? Parent.Animator.AnimationState : 0;
+            int AnimationState = Parent.Animator.AnimationState;
             bool HasShadow = Parent.HasShadow;
 
             float CamX = Engine.BaseCam != null ? Engine.BaseCam.X : 0;
@@ -299,6 +298,7 @@ namespace DKBasicEngine_1_0
 
             float NonRasteredHeight = 0;
             float NonRasteredWidth = 0;
+
             if (ReColor == null)
             {
                 if(AnimationState <= BufferImages)

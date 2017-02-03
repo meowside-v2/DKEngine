@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace DKBasicEngine_1_0
 {
     public class GameObject : ICore, IGraphics
     {
+        public string Name { get; set; }
+        public bool HasShadow { get; set; }
         public bool IsInView
         {
             get
@@ -17,40 +20,11 @@ namespace DKBasicEngine_1_0
                 return (this.Transform.Position.X + this.Transform.Dimensions.X >= X && this.Transform.Position.X < X + Engine.Render.RenderWidth && this.Transform.Position.Y + this.Transform.Dimensions.Y >= Y && this.Transform.Position.Y < Y + Engine.Render.RenderHeight);
             }
         }
-
-        protected Material _Model = null;
-        public GameObject Parent  = null;
-        public Animator Animator  = null;
-        public Collider Collider  = null;
-
-        public readonly Transform Transform;
-        public readonly List<Script> Scripts;
-
-        public Material Model
-        {
-            get { return _Model; }
-            set
-            {
-                if(value != _Model && value != null)
-                {
-                    _Model = value;
-                    this.Transform.Dimensions = new Vector3(value.Width, value.Height, 1);
-                }
-            }
-        }
-
-        public readonly List<GameObject> Child;
-
-        protected bool _IsGUI = false;
         public bool IsGUI
         {
             get { return Parent != null ? Parent.IsGUI : _IsGUI; }
             set { _IsGUI = value; }
         }
-
-        public virtual bool HasShadow { get; set; }
-        
-        protected string _typeName = "";
         public string TypeName
         {
             get { return _typeName; }
@@ -60,9 +34,38 @@ namespace DKBasicEngine_1_0
                 this.Model = Database.GetGameObjectMaterial(value);
             }
         }
+        public Material Model
+        {
+            get { return _Model; }
+            set
+            {
+                if (value != _Model && value != null)
+                {
+                    _Model = value;
+                    this.Transform.Dimensions = new Vector3(value.Width, value.Height, 1);
 
-        public string Name { get; set; }
+                    if(Animator.Animations.Count == 0)
+                    {
+                        Animator.Animations.Add("default", new AnimationNode("default", _Model));
+                        Animator.Play("default");
+                    }
+                }
+            }
+        }
 
+        protected bool _IsGUI = false;
+        protected string _typeName = "";
+
+        protected Material _Model = null;
+        public GameObject Parent  = null;
+        public Animator Animator  = null;
+        public Collider Collider  = null;
+        public Color? Foreground  = null;
+
+        public readonly Transform Transform;
+        public readonly List<Script> Scripts;
+        public readonly List<GameObject> Child;
+        
         public GameObject()
         {
             this.Child                = new List<GameObject>();
@@ -96,6 +99,9 @@ namespace DKBasicEngine_1_0
             {
                 this.Parent = Parent;
                 Parent.Child.Add(this);
+
+                this.Transform.Position = Parent.Transform.Position;
+                this.Transform.Scale    = Parent.Transform.Scale;
 
                 if (Engine.Scene != null)
                     Engine.Scene.NewlyGenerated.Add(this);
@@ -132,7 +138,7 @@ namespace DKBasicEngine_1_0
             this.Parent = null;
         }
 
-        internal virtual void Render()
-        { Model?.Render(this); }
+        internal void Render()
+        { Model?.Render(this, Foreground); }
     }
 }

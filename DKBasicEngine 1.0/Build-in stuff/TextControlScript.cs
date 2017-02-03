@@ -86,13 +86,15 @@ namespace DKBasicEngine_1_0
                                                                 new Position(Xoffset, Yoffset, 1),
                                                                 newLetterMaterial));*/
 
-                        Letter l = new Letter(_Parent, newLetterMaterial);
+                        Letter l = new Letter(_Parent);
                         l.Transform.Position = new Vector3(Xoffset + _Parent.Transform.Position.X,
                                                            Yoffset + _Parent.Transform.Position.Y,
                                                            _Parent.Transform.Position.Z + 1);
-                        
+
+                        l.Model = newLetterMaterial;
                         l.Transform.Scale = _Parent.Transform.Scale * _Parent.FontSize;
                         l.Name = _Parent._textStr[i].ToString();
+                        l.HasShadow = _Parent.TextShadow;
                         textAligned[rows].Add(l);
 
                         Xoffset += (newLetterMaterial.Width + 1) * _Parent.Transform.Scale.X * _Parent.FontSize;

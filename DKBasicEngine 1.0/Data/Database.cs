@@ -160,9 +160,7 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        private static Dictionary<string, int> GameObjects = new Dictionary<string, int>();
-
-        private static List<Material> GameObjectsMaterial = new List<Material>();
+        private static Dictionary<string, Material> GameObjects = new Dictionary<string, Material>();
 
         internal static void InitDatabase()
         {
@@ -190,8 +188,19 @@ namespace DKBasicEngine_1_0
 
         public static void AddNewGameObjectMaterial(string ObjectName, Material Object)
         {
-            GameObjects.Add(ObjectName, GameObjectsMaterial.Count);
-            GameObjectsMaterial.Add(Object);
+            try
+            {
+                if (Object != null)
+                {
+                    GameObjects.Add(ObjectName, Object);
+                }
+                else
+                    throw new Exception("Material is null\n" + Object.ToString());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Object not found\n" + e);
+            }
         }
 
         public static Material GetGameObjectMaterial(string Key)
@@ -200,7 +209,7 @@ namespace DKBasicEngine_1_0
 
             try
             {
-                retValue = GameObjectsMaterial[GameObjects[Key]];
+                retValue = GameObjects[Key];
             }
             catch (Exception ex)
             {
@@ -210,13 +219,13 @@ namespace DKBasicEngine_1_0
             return retValue;
         }
 
-        public static Material GetGameObjectMaterial(int position)
+        public static Material GetGameObjectMaterial(int Position)
         {
             Material retValue = null;
 
             try
             {
-                retValue = GameObjectsMaterial[position];
+                retValue = GameObjects.ElementAtOrDefault(Position).Value;
             }
             catch (Exception ex)
             {
@@ -225,15 +234,10 @@ namespace DKBasicEngine_1_0
 
             return retValue;
         }
-
-        public static int GetMaterialDatabasePosition(string Key)
-        {
-            return GameObjects[Key];
-        }
-
+        
         public static string GetMaterialDatabaseKey(int Position)
         {
-            return GameObjects.FirstOrDefault(x => x.Value == Position).Key;
+            return GameObjects.ElementAtOrDefault(Position).Key; //.FirstOrDefault(x => x.Value == Position).Key;
         }
     }
 }
