@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0
+namespace DKBasicEngine_1_0.Core.Components
 {
-    public class Transform : I3Dimensional
+    public sealed class Transform : I3Dimensional
     {
         GameObject Parent;
 

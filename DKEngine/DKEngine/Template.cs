@@ -1,4 +1,6 @@
 ﻿using DKBasicEngine_1_0;
+using DKBasicEngine_1_0.Core;
+using DKBasicEngine_1_0.Core.Components;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -18,10 +20,10 @@ namespace DKEngine
         {
             this.Parent.Transform.Position = new Vector3(0, -5, 1);
             this.Parent.Collider.IsTrigger = true;
-            //this.Parent.Model = new Material(Color.BurlyWood, Parent);
+            this.Parent.Model = new Material(Color.BurlyWood, Parent);
             this.Parent.Transform.Scale = new Vector3(10, 10, 10);
-            this.Parent.Animator.Animations.Add("default", new AnimationNode("default", new Material(Color.BurlyWood, Parent)));
-            this.Parent.Animator.Play("default");
+            /*this.Parent.Animator.Animations.Add("default", new AnimationNode("default", new Material(Color.BurlyWood, Parent)));
+            this.Parent.Animator.Play("default");*/
         }
 
         public override void Update()

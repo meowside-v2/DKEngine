@@ -8,9 +8,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
-namespace DKBasicEngine_1_0
+namespace DKBasicEngine_1_0.Core.Components
 {
-    public class Collider
+    public sealed class Collider
     {
         internal event CollisionEnterHandler CollisionEvent;
         internal delegate void CollisionEnterHandler(Collider m);

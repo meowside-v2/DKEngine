@@ -1,20 +1,23 @@
-﻿using System;
+﻿using DKBasicEngine_1_0.Core.Components;
+using DKBasicEngine_1_0.Core.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static DKBasicEngine_1_0.TextBlock;
+using static DKBasicEngine_1_0.Core.UI.Text;
+using static DKBasicEngine_1_0.Core.UI.TextBlock;
 
-namespace DKBasicEngine_1_0
+namespace DKBasicEngine_1_0.Core.Scripts
 {
     internal sealed class TextControlScript : Script
     {
-        TextBlock _Parent;
+        public TextBlock _Parent { get { return (TextBlock)Parent; } }
 
         public TextControlScript(TextBlock Parent)
             : base(Parent)
         {
-            _Parent = Parent;
+            this.Parent = Parent;
         }
 
         public override void Start()
@@ -152,11 +155,8 @@ namespace DKBasicEngine_1_0
 
                     for (int j = 0; j < textAlignedRowCount; j++)//foreach (Letter letter in row)
                     {
-                        if (startX != 0)
-                            textAligned[i][j].Transform.Position += new Vector3(startX, 0, 0);
-
-                        if (startY != 0)
-                            textAligned[i][j].Transform.Position += new Vector3(0, startY, 0);
+                        if(startX != 0 || startY != 0)
+                            textAligned[i][j].Transform.Position += new Vector3(startX, startY, 0);
 
                         retValue.Add(textAligned[i][j]);
                     }

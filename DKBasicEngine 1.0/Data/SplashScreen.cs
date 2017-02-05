@@ -1,4 +1,5 @@
-﻿using DKBasicEngine_1_0.Properties;
+﻿using DKBasicEngine_1_0.Core;
+using DKBasicEngine_1_0.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
-    class SplashScreen : GameObject
+    sealed class SplashScreen : GameObject
     {
         public SplashScreen()
         {

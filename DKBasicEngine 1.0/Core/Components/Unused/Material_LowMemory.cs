@@ -10,17 +10,17 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0
+namespace DKBasicEngine_1_0.Core.Components.Unused
 {
     /// <summary>
     /// Low-Memory Material, unreleased stuff
     /// </summary>
-    public class MaterialExt
+    public sealed class Material_LowMemory
     {
         /// <summary>
-        /// Source image used for this Material
+        /// Source image used as Texture
         /// </summary>
-        public readonly Bitmap[] SourceImage = null;
+        public readonly Bitmap Texture = null;
 
         /// <summary>
         /// Represents scaled length of image in pixels
@@ -57,22 +57,21 @@ namespace DKBasicEngine_1_0
         /// </summary>
         public readonly bool IsLooped = false;
 
-
-        //public readonly int BytesPerPixel = -1;
+        private int SelectedLayer = 0;
+        private FrameDimension FrameDim = null;
         
         /// <summary>
         /// Loads image and creates new material
         /// </summary>
         /// <param name="source">Source image</param>
-        public MaterialExt(Image source)
+        public Material_LowMemory(Image source)
         {
             if(source != null)
             {
-                FrameDimension frameDimension = new FrameDimension(source.FrameDimensionsList[0]);
-                Frames = source.GetFrameCount(frameDimension);
+                FrameDim = new FrameDimension(source.FrameDimensionsList[0]);
+                Frames = source.GetFrameCount(FrameDim);
 
-                SourceImage = new Bitmap[Frames];
-                //SourceImage = source;
+                Texture = (Bitmap)source;
 
                 Width = source.Width;
                 Height = source.Height;
@@ -95,16 +94,6 @@ namespace DKBasicEngine_1_0
                     IsAnimated = true;
                     IsLooped = BitConverter.ToInt16(source.GetPropertyItem(20737).Value, 0) != 1;
                     
-                    for(int i = 0; i < Frames; i++)
-                    {
-                        source.SelectActiveFrame(frameDimension, i);
-                        SourceImage[i] = new Bitmap(source);
-                    }
-                }
-
-                else
-                {
-                    SourceImage[0] = (Bitmap)source;
                 }
 
                 /*switch (source.PixelFormat)
@@ -128,13 +117,12 @@ namespace DKBasicEngine_1_0
         /// </summary>
         /// <param name="clr">Source color</param>
         /// <param name="Parent">I3Dimensional used for material scale</param>
-        public MaterialExt(Color clr, GameObject Parent)
+        public Material_LowMemory(Color clr, GameObject Parent)
         {
             this.Width = (int)Parent.Transform.Dimensions.X;
             this.Height = (int)Parent.Transform.Dimensions.Y;
 
             Frames = 1;
-            SourceImage = new Bitmap[Frames];
             int BytesPerPixel = 4;
 
             int size = Width * Height * BytesPerPixel;
@@ -152,16 +140,15 @@ namespace DKBasicEngine_1_0
             {
                 fixed(byte* data = ImageData)
                 {
-                    using (Bitmap OutFrame = new Bitmap(Width,
-                                                       Height,
-                                                       Width * BytesPerPixel,
-                                                       PixelFormat.Format32bppArgb,
-                                                       new IntPtr(data)))
-                    {
-                        SourceImage[0] = new Bitmap(OutFrame);
-                    }
+                    Texture = new Bitmap(Width,
+                                             Height,
+                                             Width * BytesPerPixel,
+                                             PixelFormat.Format32bppArgb,
+                                             new IntPtr(data));
                 }
             }
+
+            FrameDim = new FrameDimension(Texture.FrameDimensionsList[0]);
         }
 
         /*/// <summary>
@@ -189,7 +176,13 @@ namespace DKBasicEngine_1_0
             int AnimationState = Parent.Animator != null ? Parent.Animator.AnimationState : 0;
             bool HasShadow = Parent.HasShadow;
 
-            BitmapData ImageData = SourceImage[AnimationState].LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, SourceImage[AnimationState].PixelFormat);
+            if(SelectedLayer != AnimationState)
+            {
+                Texture.SelectActiveFrame(FrameDim, AnimationState);
+                SelectedLayer = AnimationState;
+            }
+
+            BitmapData ImageData = Texture.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, Texture.PixelFormat);
 
             int BytesPerPixel = -1;
             switch (ImageData.PixelFormat)
@@ -209,7 +202,7 @@ namespace DKBasicEngine_1_0
             byte[] data = new byte[ImageData.Stride * ImageData.Height];
             Marshal.Copy(ImageData.Scan0, data, 0, ImageData.Stride * ImageData.Height);
 
-            SourceImage[AnimationState].UnlockBits(ImageData);
+            Texture.UnlockBits(ImageData);
 
             float CamX = Engine.BaseCam != null ? Engine.BaseCam.X : 0;
             float CamY = Engine.BaseCam != null ? Engine.BaseCam.Y : 0;

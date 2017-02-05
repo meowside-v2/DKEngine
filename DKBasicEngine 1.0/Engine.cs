@@ -1,8 +1,6 @@
-﻿/*
+﻿/**
 * (C) 2017 David Knieradl 
-*/
-
-/**
+*
 * For the brave souls who get this far: You are the chosen ones,
 * the valiant knights of programming who toil away, without rest,
 * fixing our most awful code. To you, true saviors, kings of men,
@@ -18,6 +16,10 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using DKBasicEngine_1_0.Core;
+using DKBasicEngine_1_0.Core.Components;
+using DKBasicEngine_1_0.Core.Ext;
+using DKBasicEngine_1_0.Core.UI;
 
 namespace DKBasicEngine_1_0
 {
@@ -67,7 +69,7 @@ namespace DKBasicEngine_1_0
         internal static List<GameObject> ToStart;
         internal static List<GameObject> ToRender;
 
-        internal static Scene Scene;
+        internal static Scene CurrentScene;
 
         private static float deltaT = 0;
         public static float deltaTime { get { return deltaT; } }
@@ -93,25 +95,25 @@ namespace DKBasicEngine_1_0
                     ToStart    = new List<GameObject>();
                     ToRender   = new List<GameObject>();
                     Collidable = new List<Collider>();
-
-                    BackgroundWorks = new Thread(Update);
-                    RenderWorker    = new Thread(RenderImage);
-                    BackgroundWorks.Start();
-                    RenderWorker.Start();
-
+                    
                     FpsMeter = new TextBlock();
                     FpsMeter.Transform.Position = new Vector3(0, 0, 128);
                     FpsMeter.Transform.Dimensions = new Vector3(50, 5, 1);
                     FpsMeter.Transform.Scale = new Vector3(2, 2, 1);
-                    FpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
-                    FpsMeter.HAlignment = TextBlock.HorizontalAlignment.Left;
+                    FpsMeter.VAlignment = Text.VerticalAlignment.Bottom;
+                    FpsMeter.HAlignment = Text.HorizontalAlignment.Left;
                     FpsMeter.Text = "0";
                     FpsMeter.IsGUI = true;
                     FpsMeter.TextShadow = true;
                     FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
                     FpsMeter.Start();
                     ToRender.Add(FpsMeter);
-                    
+
+                    BackgroundWorks = new Thread(Update);
+                    RenderWorker = new Thread(RenderImage);
+                    BackgroundWorks.Start();
+                    RenderWorker.Start();
+
                     SplashScreen();
                 }
                 catch (Exception e)
@@ -123,21 +125,26 @@ namespace DKBasicEngine_1_0
                 throw new Exception("Engine is being initialised second time");
         }
         
-        public static void ChangeScene(Scene Scene)
+        public static void ChangeScene(Type type)
         {
             if (_IsInitialised)
             {
-                //Engine._LoadingNewPage = true;
-                int SceneModelCount = Scene.Model.Count;
-                for (int i = 0; i < SceneModelCount; i++)
-                    Scene.Model[i].Destroy();
+                if(type.GetInterface("IPage") == typeof(IPage))
+                {
+                    if(CurrentScene != null)
+                    {
+                        int SceneModelCount = CurrentScene.Model.Count;
+                        for (int i = 0; i < SceneModelCount; i++)
+                            CurrentScene.Model[i].Destroy();
+                    }
+                    
+                    Engine.CurrentScene = (Scene)Activator.CreateInstance(type);
+                    Engine.CurrentScene.Init();
 
-                Engine.Scene = Scene;
-                Scene.Init();
+                    Engine.ToStart = CurrentScene.NewlyGenerated;
 
-                Engine.ToStart = Scene.NewlyGenerated;
-
-                //Engine._LoadingNewPage = false;
+                    //Engine._LoadingNewPage = false;
+                }
             }
             else
                 throw new Exception("Engine not initialised \n Can't change page");
@@ -149,7 +156,7 @@ namespace DKBasicEngine_1_0
             {
                 _IsInitialised = true;
 
-                Engine.ChangeScene(new Scene());
+                Engine.ChangeScene(typeof(Scene));
                 SplashScreen splash    = new SplashScreen();
                 Camera splashScreenCam = new Camera();
 
@@ -183,9 +190,9 @@ namespace DKBasicEngine_1_0
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
-                
-                List<GameObject> reference = ToRender.GetGameObjectsInView();
 
+                List<GameObject> reference = ToRender.GetGameObjectsInView();
+                
                 List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
                 List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? obj.Collider.IsCollidable : false).ToList();
                 int TriggersCount = Triggers.Count;

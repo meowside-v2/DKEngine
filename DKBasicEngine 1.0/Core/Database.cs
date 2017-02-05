@@ -1,4 +1,5 @@
-﻿using DKBasicEngine_1_0.Properties;
+﻿using DKBasicEngine_1_0.Core.Components;
+using DKBasicEngine_1_0.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace DKBasicEngine_1_0
+namespace DKBasicEngine_1_0.Core
 {
     public static class Database
     {

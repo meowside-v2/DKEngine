@@ -1,6 +1,8 @@
-﻿namespace DKBasicEngine_1_0
+﻿using DKBasicEngine_1_0.Core;
+
+namespace DKBasicEngine_1_0
 {
-    public class Border : GameObject
+    public sealed class Border : GameObject
     {
         public Border()
         {

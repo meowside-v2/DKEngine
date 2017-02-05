@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0
+namespace DKBasicEngine_1_0.Core.Components
 {
-    public class AnimationNode
+    public sealed class AnimationNode
     {
         public string Name = "";
         public Material Animation = null;

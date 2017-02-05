@@ -7,7 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace DKBasicEngine_1_0
+namespace DKBasicEngine_1_0.Core.Ext
 {
     public static class WindowControl
     {

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DKBasicEngine_1_0.Core.UI;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0
+namespace DKBasicEngine_1_0.Core.Scripts
 {
     internal sealed class TextBoxScript : Script
     {

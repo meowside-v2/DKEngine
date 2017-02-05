@@ -1,4 +1,6 @@
 ﻿using DKBasicEngine_1_0;
+using DKBasicEngine_1_0.Core;
+using DKBasicEngine_1_0.Core.Components;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -78,9 +80,9 @@ namespace DKEngine
             for (int i = 0; i < 1000; i++)
             {
                 GameObject t1 = new GameObject();
-                //t1.Model = new Material(Color.AliceBlue, t1);
-                t1.Animator.Animations.Add("default", new AnimationNode("default", new Material(Color.AliceBlue, t1)));
-                t1.Animator.Play("default");
+                t1.Model = new Material(Color.AliceBlue, t1);
+                /*t1.Animator.Animations.Add("default", new AnimationNode("default", new Material(Color.AliceBlue, t1)));
+                t1.Animator.Play("default");*/
                 t1.Transform.Position = new Vector3(0, i, 0);
                 t1.Transform.Scale = new Vector3(10, 10, 10);
             }
