@@ -14,12 +14,13 @@ namespace DKBasicEngine_1_0.Core.Components
         public enum PlayBack
         {
             PlayAfterEnd,
-            PlayNew
+            PlayNew,
+            StopOldStartNew
         }
 
         private int selection = -1;
 
-        public WaveFileReader[] Files { get; private set; }
+        public WaveStream[] Files { get; private set; }
         public WaveOut OutputDevice { get; private set; }
         
         public PlaybackState State
@@ -29,6 +30,8 @@ namespace DKBasicEngine_1_0.Core.Components
 
         public PlayBack Type { get; set; }
 
+        //private WaveStream _Last;
+
         public SoundSource()
         {
             OutputDevice = new WaveOut();
@@ -36,12 +39,10 @@ namespace DKBasicEngine_1_0.Core.Components
 
         public void Init(params WaveFileReader[] Source)
         {
-            Files = new WaveFileReader[Source.Length];
-
-            for (int i = 0; i < Source.Length; i++)
-            {
-                Files[i] = Source[i];
-            }
+            int lenght = Source.Length;
+            Files = new WaveStream[lenght];
+            for (int i = 0; i < lenght; i++)
+                Files[i] = new WaveFileReader(Source[i]);
 
             if (Source.Length == 1)
                 OutputDevice.Init(Files[0]);
@@ -49,12 +50,10 @@ namespace DKBasicEngine_1_0.Core.Components
 
         public void Init(params Mp3FileReader[] Source)
         {
-            Files = new WaveFileReader[Source.Length];
-
-            for(int i = 0; i < Source.Length; i++)
-            {
-                Files[i] = new WaveFileReader(Source[i]);
-            }
+            int lenght = Source.Length;
+            Files = new WaveStream[lenght];
+            for (int i = 0; i < lenght; i++)
+                Files[i] = new Mp3FileReader(Source[i]);
 
             if (Source.Length == 1)
                 OutputDevice.Init(Files[0]);
@@ -71,8 +70,13 @@ namespace DKBasicEngine_1_0.Core.Components
             }
             else if (Type == PlayBack.PlayNew)
             {
+                OutputDevice.Init(GetNewInstanceOfSoundFile(Files[0]));
+                OutputDevice.Play();
+            }
+            else if(Type == PlayBack.StopOldStartNew)
+            {
                 OutputDevice.Stop();
-                OutputDevice.Init(new WaveFileReader(Files[0]));
+                OutputDevice.Init(Files[0]);
                 OutputDevice.Play();
             }
         }
@@ -85,13 +89,24 @@ namespace DKBasicEngine_1_0.Core.Components
                 {
                     if (Selection != selection)
                     {
-                        OutputDevice.Init(Files[selection]);
+                        Selection = selection;
                     }
 
+                    OutputDevice.Init(Files[selection]);
                     OutputDevice.Play();
                 }
             }
             else if (Type == PlayBack.PlayNew)
+            {
+                if (Selection != selection)
+                {
+                    Selection = selection;
+                }
+
+                OutputDevice.Init(GetNewInstanceOfSoundFile(Files[selection]));
+                OutputDevice.Play();
+            }
+            else if (Type == PlayBack.StopOldStartNew)
             {
                 OutputDevice.Stop();
 
@@ -100,12 +115,12 @@ namespace DKBasicEngine_1_0.Core.Components
                     Selection = selection;
                 }
 
-                OutputDevice.Init(new WaveFileReader(Files[selection]));
+                OutputDevice.Init(Files[selection]);
                 OutputDevice.Play();
             }
         }
 
-        public void Play(WaveFileReader Source)
+        public void Play(WaveStream Source)
         {
             if (Type == PlayBack.PlayAfterEnd)
             {
@@ -117,8 +132,59 @@ namespace DKBasicEngine_1_0.Core.Components
             }
             else if (Type == PlayBack.PlayNew)
             {
+                OutputDevice.Init(GetNewInstanceOfSoundFile(Source));
+                OutputDevice.Play();
+            }
+            else if (Type == PlayBack.StopOldStartNew)
+            {
                 OutputDevice.Stop();
                 OutputDevice.Init(Source);
+                OutputDevice.Play();
+            }
+        }
+
+        public void Play(UnmanagedMemoryStream Source)
+        {
+            if (Type == PlayBack.PlayAfterEnd)
+            {
+                if (OutputDevice.PlaybackState == PlaybackState.Stopped)
+                {
+                    OutputDevice.Init(GetNewInstanceOfSoundFile(Source));
+                    OutputDevice.Play();
+                }
+            }
+            else if (Type == PlayBack.PlayNew)
+            {
+                OutputDevice.Init(GetNewInstanceOfSoundFile(Source));
+                OutputDevice.Play();
+            }
+            else if (Type == PlayBack.StopOldStartNew)
+            {
+                OutputDevice.Stop();
+                OutputDevice.Init(GetNewInstanceOfSoundFile(Source));
+                OutputDevice.Play();
+            }
+        }
+
+        public void Play(byte[] Source)
+        {
+            if (Type == PlayBack.PlayAfterEnd)
+            {
+                if (OutputDevice.PlaybackState == PlaybackState.Stopped)
+                {
+                    OutputDevice.Init(GetNewInstanceOfSoundFile(Source));
+                    OutputDevice.Play();
+                }
+            }
+            else if (Type == PlayBack.PlayNew)
+            {
+                OutputDevice.Init(GetNewInstanceOfSoundFile(Source));
+                OutputDevice.Play();
+            }
+            else if (Type == PlayBack.StopOldStartNew)
+            {
+                OutputDevice.Stop();
+                OutputDevice.Init(GetNewInstanceOfSoundFile(Source));
                 OutputDevice.Play();
             }
         }
@@ -126,6 +192,28 @@ namespace DKBasicEngine_1_0.Core.Components
         public void Stop()
         {
             OutputDevice.Stop();
+        }
+
+        private WaveStream GetNewInstanceOfSoundFile(WaveStream Source)
+        {
+            if (Source is WaveFileReader)
+                return new WaveFileReader(Source);
+
+            else if (Source is Mp3FileReader)
+                return new Mp3FileReader(Source);
+
+            else
+                return null;
+        }
+
+        private WaveStream GetNewInstanceOfSoundFile(byte[] Source)
+        {
+            return new Mp3FileReader(new MemoryStream(Source));
+        }
+
+        private WaveStream GetNewInstanceOfSoundFile(UnmanagedMemoryStream Source)
+        {
+            return new WaveFileReader(Source);
         }
     }
 }

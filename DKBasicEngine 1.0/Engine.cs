@@ -21,6 +21,8 @@ using DKBasicEngine_1_0.Core.Components;
 using DKBasicEngine_1_0.Core.Ext;
 using DKBasicEngine_1_0.Core.UI;
 using NAudio.Wave;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0
 {
@@ -44,14 +46,14 @@ namespace DKBasicEngine_1_0
             internal static bool AbortRender = false;
         }
 
-        public static class Sound
+        /*public static class Sound
         {
             public static WaveOut OutputDevice;
             public static bool IsSoundAvailable
             {
                 get { return OutputDevice != null; }
             }
-        }
+        }*/
 
         public static class Input
         {
@@ -59,9 +61,62 @@ namespace DKBasicEngine_1_0
             private static extern ushort GetKeyState(short nVirtKey);
             private const ushort keyDownBit = 0x80;
 
+            internal static bool[] KeysPressed;
+            internal static bool[] KeysDown;
+            internal static bool[] KeysUp;
+
+            internal static short NumberOfKeys;
+
             public static bool IsKeyPressed(ConsoleKey key)
             {
-                return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+                return KeysPressed[(short)key];
+                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+            }
+
+            public static bool IsKeyDown(ConsoleKey key)
+            {
+                return KeysDown[(short)key];
+                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+            }
+
+            public static bool IsKeyUp(ConsoleKey key)
+            {
+                return KeysUp[(short)key];
+                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+            }
+
+            internal static void CheckForKeys()
+            {
+                for(int key = 0; key < NumberOfKeys; key++)
+                {
+                    bool IsDown = ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+
+                    if (IsDown)
+                    {
+                        if (!KeysPressed[key] && !KeysDown[key])
+                        {
+                            KeysPressed[key] = true;
+                        }
+                        else if (KeysPressed[key])
+                        {
+                            KeysPressed[key] = false;
+                            KeysDown[key] = true;
+                        }
+                    }
+                    else
+                    {
+                        if (KeysPressed[key] || KeysDown[key])
+                        {
+                            KeysPressed[key] = false;
+                            KeysDown[key] = false;
+                            KeysUp[key] = true;
+                        }
+                        else if (KeysUp[key])
+                        {
+                            KeysUp[key] = false;
+                        }
+                    }
+                }
             }
         }
 
@@ -100,13 +155,18 @@ namespace DKBasicEngine_1_0
                     Render.imageBufferKey = new byte[Render.ImageKeyBufferSize];
                     Render.ImageOutData   = new byte[Render.ImageBufferSize];
 
+                    Input.NumberOfKeys = (short)Enum.GetNames(typeof(ConsoleKey)).Length;
+                    Input.KeysPressed = new bool[Input.NumberOfKeys];
+                    Input.KeysDown    = new bool[Input.NumberOfKeys];
+                    Input.KeysUp      = new bool[Input.NumberOfKeys];
+
                     DeltaT    = Stopwatch.StartNew();
 
                     ToStart    = new List<GameObject>();
                     ToRender   = new List<GameObject>();
                     Collidable = new List<Collider>();
 
-                    Sound.OutputDevice = new WaveOut();
+                    //Sound.OutputDevice = new WaveOut();
 
                     FpsMeter = new TextBlock();
                     FpsMeter.Transform.Position = new Vector3(0, 0, 128);
@@ -197,7 +257,9 @@ namespace DKBasicEngine_1_0
                     ToStart.Remove(ToStart[0]);
                     ToStartCount--;
                 }
-                
+
+                Input.CheckForKeys();
+
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;
                 DeltaT?.Restart();
 
