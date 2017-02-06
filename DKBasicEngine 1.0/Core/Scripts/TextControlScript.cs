@@ -115,10 +115,10 @@ namespace DKBasicEngine_1_0.Core.Scripts
                     startY = 0;
                     break;
                 case VerticalAlignment.Center:
-                    startY = (_Parent.Transform.Dimensions.Y * _Parent.Transform.Scale.Y * _Parent.FontSize - maxHeight) / 2;
+                    startY = (_Parent.Transform._ScaledDimensions.Y * _Parent.FontSize - maxHeight) / 2;
                     break;
                 case VerticalAlignment.Bottom:
-                    startY = _Parent.Transform.Dimensions.Y * _Parent.Transform.Scale.Y * _Parent.FontSize - maxHeight;
+                    startY = _Parent.Transform._ScaledDimensions.Y * _Parent.FontSize - maxHeight;
                     break;
                 default:
                     break;
@@ -131,7 +131,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
                 int textAlignedRowCount = textAligned[i].Count;
 
                 if (textAlignedRowCount > 0)
-                    maxWidth = textAligned[i][textAlignedRowCount - 1].Model.Width * _Parent.Transform.Scale.X * _Parent.FontSize + textAligned[i][textAlignedRowCount - 1].Transform.Position.X - textAligned[i][0].Transform.Position.X;
+                    maxWidth = textAligned[i][textAlignedRowCount - 1].Transform._ScaledDimensions.X + textAligned[i][textAlignedRowCount - 1].Transform.Position.X - textAligned[i][0].Transform.Position.X;
 
                 if (maxWidth != 0)
                 {

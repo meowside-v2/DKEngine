@@ -25,6 +25,7 @@ namespace DKBasicEngine_1_0.Core.Components
             {
                 Vector3 tmp = value - _Dimensions;
                 _Dimensions = value;
+                _ScaledDimensions = _Dimensions * _Scale;
 
                 int childCount = Parent.Child.Count;
                 for (int i = 0; i < childCount; i++)
@@ -51,20 +52,24 @@ namespace DKBasicEngine_1_0.Core.Components
             {
                 Vector3 tmp = value / _Scale;
                 _Scale = value;
+                _ScaledDimensions = _Dimensions * _Scale;
 
                 int childCount = Parent.Child.Count;
                 for (int i = 0; i < childCount; i++)
                     Parent.Child[i].Transform.Scale *= tmp;
             }
         }
+
+        internal Vector3 _ScaledDimensions;
         
         public Transform(GameObject Parent)
         {
             this.Parent = Parent;
 
-            _Position = new Vector3();
-            _Dimensions = new Vector3();
-            _Scale = new Vector3();
+            _Position         = new Vector3();
+            _Dimensions       = new Vector3();
+            _Scale            = new Vector3();
+            _ScaledDimensions = new Vector3();
         }
     }
 }

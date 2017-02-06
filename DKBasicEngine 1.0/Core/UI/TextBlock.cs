@@ -86,11 +86,11 @@ namespace DKBasicEngine_1_0.Core.UI
                             break;
 
                         case HorizontalAlignment.Center:
-                            horiOffset = (Engine.Render.RenderWidth - this.Transform.Dimensions.X * Transform.Scale.X) / 2;
+                            horiOffset = (Engine.Render.RenderWidth - this.Transform._ScaledDimensions.X) / 2;
                             break;
 
                         case HorizontalAlignment.Right:
-                            horiOffset = Engine.Render.RenderWidth - this.Transform.Dimensions.X * Transform.Scale.X;
+                            horiOffset = Engine.Render.RenderWidth - this.Transform._ScaledDimensions.X;
                             break;
                     }
 
@@ -117,11 +117,11 @@ namespace DKBasicEngine_1_0.Core.UI
                             break;
 
                         case VerticalAlignment.Center:
-                            vertOffset = (Engine.Render.RenderHeight - this.Transform.Dimensions.Y * Transform.Scale.Y) / 2;
+                            vertOffset = (Engine.Render.RenderHeight - this.Transform._ScaledDimensions.Y) / 2;
                             break;
 
                         case VerticalAlignment.Bottom:
-                            vertOffset = Engine.Render.RenderHeight - this.Transform.Dimensions.Y * Transform.Scale.Y;
+                            vertOffset = Engine.Render.RenderHeight - this.Transform._ScaledDimensions.Y;
                             break;
                     }
 

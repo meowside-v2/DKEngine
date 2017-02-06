@@ -85,11 +85,11 @@ namespace DKEngine
                 t1.Animator.Play("default");*/
                 t1.Transform.Position = new Vector3(0, i, 0);
                 t1.Transform.Scale = new Vector3(10, 10, 10);
+                t1.Collider.IsTrigger = true;
             }
             
             GameObject t2 = new GameObject();
             t2.Scripts.Add(new TemplateScript(t2));
-            t2.Transform.Position = new Vector3(0, -10, 0);
             
             Camera c = new Camera();
             c.Position = new Vector3(-300, -100, 0);

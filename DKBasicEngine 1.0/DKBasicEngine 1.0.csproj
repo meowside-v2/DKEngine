@@ -32,6 +32,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\DKEngine\packages\NAudio.1.8.0\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -41,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Components\Material.cs" />
+    <Compile Include="Core\Components\SoundSource.cs" />
     <Compile Include="Core\Scripts\ButtonScript.cs" />
     <Compile Include="Core\Scripts\TextBoxScript.cs" />
     <Compile Include="Core\Scripts\TextControlScript.cs" />
@@ -92,6 +97,7 @@
     <Content Include="Build-in stuff\Images\DKEngine_splash2.gif" />
     <Content Include="Build-in stuff\Images\DKEngine_splash3.gif" />
     <None Include="Core\Components\Unused\MaterialBackups" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Build-in stuff\FontFile.MEX" />

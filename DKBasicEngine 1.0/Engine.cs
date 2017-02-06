@@ -20,6 +20,7 @@ using DKBasicEngine_1_0.Core;
 using DKBasicEngine_1_0.Core.Components;
 using DKBasicEngine_1_0.Core.Ext;
 using DKBasicEngine_1_0.Core.UI;
+using NAudio.Wave;
 
 namespace DKBasicEngine_1_0
 {
@@ -41,6 +42,15 @@ namespace DKBasicEngine_1_0
             internal static int   numRenders = 0;*/
 
             internal static bool AbortRender = false;
+        }
+
+        public static class Sound
+        {
+            public static WaveOut OutputDevice;
+            public static bool IsSoundAvailable
+            {
+                get { return OutputDevice != null; }
+            }
         }
 
         public static class Input
@@ -95,7 +105,9 @@ namespace DKBasicEngine_1_0
                     ToStart    = new List<GameObject>();
                     ToRender   = new List<GameObject>();
                     Collidable = new List<Collider>();
-                    
+
+                    Sound.OutputDevice = new WaveOut();
+
                     FpsMeter = new TextBlock();
                     FpsMeter.Transform.Position = new Vector3(0, 0, 128);
                     FpsMeter.Transform.Dimensions = new Vector3(50, 5, 1);
@@ -193,11 +205,11 @@ namespace DKBasicEngine_1_0
 
                 List<GameObject> reference = ToRender.GetGameObjectsInView();
                 
-                List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
-                List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? obj.Collider.IsCollidable : false).ToList();
-                int TriggersCount = Triggers.Count;
-                for (int i = 0; i < TriggersCount; i++)
-                    Triggers[i].Collider.TriggerCheck(VisibleWithCollider);
+                List<GameObject> VisibleTriggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
+                List<GameObject> VisibleColliders = reference.Where(obj => obj.Collider != null ? obj.Collider.IsCollidable : false).ToList();
+                int ColliderCount = VisibleColliders.Count;
+                for (int i = 0; i < ColliderCount; i++)
+                    VisibleColliders[i].Collider.TriggerCheck(VisibleTriggers);
                 
                 BaseCam?.BufferImage(reference);
 

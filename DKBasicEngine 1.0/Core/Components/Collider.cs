@@ -142,36 +142,11 @@ namespace DKBasicEngine_1_0.Core.Components
             int VisibleObjectsCount = VisibleObjects.Count;
             for (int i = 0; i < VisibleObjectsCount; i++)
             {
-                if (Left(VisibleObjects[i].Collider))
+                Collider tmp = VisibleObjects[i].Collider;
+
+                if (Left(tmp) || Right(tmp) || Up(tmp) || Down(tmp))
                 {
                     //Debug.WriteLine("Left");
-                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
-                    //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
-                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
-                    continue;
-
-                }
-                else if (Right(VisibleObjects[i].Collider))
-                {
-                    //Debug.WriteLine("Right");
-                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
-                    //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
-                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
-                    continue;
-                }
-
-                else if (Up(VisibleObjects[i].Collider))
-                {
-                    //Debug.WriteLine("Up");
-                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
-                    //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
-                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
-                    continue;
-                }
-
-                else if (Down(VisibleObjects[i].Collider))
-                {
-                    //Debug.WriteLine("Down");
                     //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
                     CollisionEvent?.Invoke(VisibleObjects[i].Collider);

@@ -18,7 +18,7 @@ namespace DKBasicEngine_1_0.Core
                 float X = this.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.X : 0;
                 float Y = this.IsGUI ? 0 : Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
 
-                return (this.Transform.Position.X + this.Transform.Dimensions.X >= X && this.Transform.Position.X < X + Engine.Render.RenderWidth && this.Transform.Position.Y + this.Transform.Dimensions.Y >= Y && this.Transform.Position.Y < Y + Engine.Render.RenderHeight);
+                return (this.Transform.Position.X + this.Transform._ScaledDimensions.X >= X && this.Transform.Position.X < X + Engine.Render.RenderWidth && this.Transform.Position.Y + this.Transform._ScaledDimensions.Y >= Y && this.Transform.Position.Y < Y + Engine.Render.RenderHeight);
             }
         }
         public bool IsGUI
