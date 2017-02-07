@@ -14,6 +14,7 @@ namespace DKBasicEngine_1_0.Core.UI
             Center,
             Right
         };
+
         public enum VerticalAlignment
         {
             Top,

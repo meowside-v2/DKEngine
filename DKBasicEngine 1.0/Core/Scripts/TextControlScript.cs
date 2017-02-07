@@ -12,7 +12,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
 {
     internal sealed class TextControlScript : Script
     {
-        public TextBlock _Parent { get { return (TextBlock)Parent; } }
+        internal TextBlock _Parent { get { return (TextBlock)Parent; } }
 
         public TextControlScript(TextBlock Parent)
             : base(Parent)
@@ -90,17 +90,15 @@ namespace DKBasicEngine_1_0.Core.Scripts
                                                                 newLetterMaterial));*/
 
                         Letter l = new Letter(_Parent);
-                        l.Transform.Position = new Vector3(Xoffset + _Parent.Transform.Position.X,
-                                                           Yoffset + _Parent.Transform.Position.Y,
-                                                           _Parent.Transform.Position.Z + 1);
 
+                        l.Transform.Position += new Vector3(Xoffset, Yoffset, 1);
                         l.Model = newLetterMaterial;
-                        l.Transform.Scale = _Parent.Transform.Scale * _Parent.FontSize;
+                        l.Transform.Scale *= _Parent.FontSize;
                         l.Name = _Parent._textStr[i].ToString();
                         l.HasShadow = _Parent.TextShadow;
                         textAligned[rows].Add(l);
 
-                        Xoffset += (newLetterMaterial.Width + 1) * _Parent.Transform.Scale.X * _Parent.FontSize;
+                        Xoffset += (l.Transform.Dimensions.X + 1) * l.Transform.Scale.X;
                     }
                 }
             }
@@ -115,10 +113,10 @@ namespace DKBasicEngine_1_0.Core.Scripts
                     startY = 0;
                     break;
                 case VerticalAlignment.Center:
-                    startY = (_Parent.Transform._ScaledDimensions.Y * _Parent.FontSize - maxHeight) / 2;
+                    startY = (_Parent.Transform.Dimensions.Y * _Parent.Transform.Scale.Y * _Parent.FontSize - maxHeight) / 2;
                     break;
                 case VerticalAlignment.Bottom:
-                    startY = _Parent.Transform._ScaledDimensions.Y * _Parent.FontSize - maxHeight;
+                    startY = _Parent.Transform.Dimensions.Y * _Parent.Transform.Scale.Y * _Parent.FontSize - maxHeight;
                     break;
                 default:
                     break;
@@ -131,7 +129,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
                 int textAlignedRowCount = textAligned[i].Count;
 
                 if (textAlignedRowCount > 0)
-                    maxWidth = textAligned[i][textAlignedRowCount - 1].Transform._ScaledDimensions.X + textAligned[i][textAlignedRowCount - 1].Transform.Position.X - textAligned[i][0].Transform.Position.X;
+                    maxWidth = textAligned[i][textAlignedRowCount - 1].Model.Width * _Parent.Transform.Scale.X * _Parent.FontSize + textAligned[i][textAlignedRowCount - 1].Transform.Position.X - textAligned[i][0].Transform.Position.X;
 
                 if (maxWidth != 0)
                 {
@@ -155,7 +153,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
 
                     for (int j = 0; j < textAlignedRowCount; j++)//foreach (Letter letter in row)
                     {
-                        if(startX != 0 || startY != 0)
+                        if (startX != 0 || startY != 0)
                             textAligned[i][j].Transform.Position += new Vector3(startX, startY, 0);
 
                         retValue.Add(textAligned[i][j]);
@@ -167,5 +165,8 @@ namespace DKBasicEngine_1_0.Core.Scripts
 
             _Parent._changed = false;
         }
+
+        public override void OnColliderEnter(Collider e)
+        { }
     }
 }

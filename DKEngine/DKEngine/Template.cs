@@ -38,16 +38,16 @@ namespace DKEngine
 
         public override void Update()
         {
-            if (Engine.Input.IsKeyPressed(System.ConsoleKey.A) || Engine.Input.IsKeyDown(System.ConsoleKey.A))
+            if (Engine.Input.IsKeyDown(System.ConsoleKey.A))
                 this.Parent.Transform.Position += new Vector3(-(Speed * Engine.deltaTime), 0, 0);
 
-            if (Engine.Input.IsKeyPressed(System.ConsoleKey.D) || Engine.Input.IsKeyDown(System.ConsoleKey.D))
+            if (Engine.Input.IsKeyDown(System.ConsoleKey.D))
                 this.Parent.Transform.Position += new Vector3(Speed * Engine.deltaTime, 0, 0);
 
-            if (Engine.Input.IsKeyPressed(System.ConsoleKey.W) || Engine.Input.IsKeyDown(System.ConsoleKey.W))
+            if (Engine.Input.IsKeyDown(System.ConsoleKey.W))
                 this.Parent.Transform.Position += new Vector3(0, -(Speed * Engine.deltaTime), 0);
 
-            if (Engine.Input.IsKeyPressed(System.ConsoleKey.S) || Engine.Input.IsKeyDown(System.ConsoleKey.S))
+            if (Engine.Input.IsKeyDown(System.ConsoleKey.S))
                 this.Parent.Transform.Position += new Vector3(0, Speed * Engine.deltaTime, 0);
 
             if (Engine.Input.IsKeyPressed(System.ConsoleKey.Enter))

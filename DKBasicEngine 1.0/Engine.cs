@@ -93,14 +93,14 @@ namespace DKBasicEngine_1_0
 
                     if (IsDown)
                     {
-                        if (!KeysPressed[key] && !KeysDown[key])
+                        if (!KeysDown[key])
                         {
                             KeysPressed[key] = true;
+                            KeysDown[key] = true;
                         }
                         else if (KeysPressed[key])
                         {
                             KeysPressed[key] = false;
-                            KeysDown[key] = true;
                         }
                     }
                     else
@@ -130,6 +130,7 @@ namespace DKBasicEngine_1_0
         private static Stopwatch DeltaT;
         internal static Camera BaseCam;
 
+        internal static List<Script> InitScripts;
         internal static List<Collider> Collidable;
         internal static List<GameObject> ToStart;
         internal static List<GameObject> ToRender;
@@ -138,9 +139,9 @@ namespace DKBasicEngine_1_0
 
         private static float deltaT = 0;
         public static float deltaTime { get { return deltaT; } }
-
-        internal static event UpdateHandler UpdateEvent;
-        internal delegate void UpdateHandler();
+        
+        internal static event EngineHandler UpdateEvent;
+        internal delegate void EngineHandler();
 
         public static void Init()
         {
@@ -165,6 +166,7 @@ namespace DKBasicEngine_1_0
                     ToStart    = new List<GameObject>();
                     ToRender   = new List<GameObject>();
                     Collidable = new List<Collider>();
+                    InitScripts = new List<Script>();
 
                     //Sound.OutputDevice = new WaveOut();
 
@@ -178,7 +180,6 @@ namespace DKBasicEngine_1_0
                     FpsMeter.IsGUI = true;
                     FpsMeter.TextShadow = true;
                     FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
-                    FpsMeter.Start();
                     ToRender.Add(FpsMeter);
 
                     BackgroundWorks = new Thread(Update);
@@ -249,13 +250,19 @@ namespace DKBasicEngine_1_0
             while (true)
             {
 
-                int ToStartCount = ToStart.Count;
-                while (ToStartCount > 0)
+                int ToStartCount = ToStart.Count - 1;
+                while (ToStartCount >= 0)
                 {
-                    ToStart[0].Start();
-                    ToRender.Add(ToStart[0]);
-                    ToStart.Remove(ToStart[0]);
-                    ToStartCount--;
+                    ToRender.Add(ToStart[ToStartCount]);
+                    ToStart.Remove(ToStart[ToStartCount--]);
+                }
+
+                int InitScriptsCount = InitScripts.Count - 1;
+                while (InitScriptsCount >= 0)
+                {
+                    InitScripts[InitScriptsCount].Start();
+                    Engine.UpdateEvent += InitScripts[InitScriptsCount].UpdateHandle;
+                    InitScripts.Remove(InitScripts[InitScriptsCount--]);
                 }
 
                 Input.CheckForKeys();

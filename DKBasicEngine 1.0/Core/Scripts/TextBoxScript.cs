@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DKBasicEngine_1_0.Core.Components;
 
 namespace DKBasicEngine_1_0.Core.Scripts
 {
@@ -61,5 +62,10 @@ namespace DKBasicEngine_1_0.Core.Scripts
                     TimeOutStopwatch.Reset();
             }
         }
+
+        public override void Start()
+        { }
+        public override void OnColliderEnter(Collider e)
+        { }
     }
 }

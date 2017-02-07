@@ -10,29 +10,31 @@ namespace DKBasicEngine_1_0.Core
     public abstract class Script
     {
         protected GameObject Parent;
+        internal Engine.EngineHandler UpdateHandle;
+        internal Collider.CollisionEnterHandler CollisionHandler;
 
         public Script(GameObject Parent)
         {
             this.Parent = Parent;
+            Engine.InitScripts.Add(this);
+            UpdateHandle = new Engine.EngineHandler(Update);
+            CollisionHandler = new Collider.CollisionEnterHandler(OnColliderEnter);
             
-            Parent.Collider.CollisionEvent += OnColliderEnter;
+            Parent.Collider.CollisionEvent += CollisionHandler;
         }
 
-        public virtual void Start()
-        { }
-        public virtual void Update()
-        { }
-        public virtual void OnColliderEnter(Collider e)
-        { }
+        public abstract void Start();
+        public abstract void Update();
+        public abstract void OnColliderEnter(Collider e);
 
         internal void Destroy()
         {
-            Engine.UpdateEvent -= Update;
-            Parent.Collider.CollisionEvent -= OnColliderEnter;
+            Engine.UpdateEvent -= UpdateHandle;
+            Parent.Collider.CollisionEvent -= CollisionHandler;
 
             Parent.Scripts.Remove(this);
-
             Parent = null;
+            UpdateHandle = null;
         }
     }
 }

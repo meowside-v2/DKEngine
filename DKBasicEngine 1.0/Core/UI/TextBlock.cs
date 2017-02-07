@@ -12,18 +12,6 @@ namespace DKBasicEngine_1_0.Core.UI
 {
     public class TextBlock : GameObject, IText
     {
-        internal bool _changed = false;
-        
-        internal float vertOffset = 0;
-        internal float horiOffset = 0;
-
-        internal HorizontalAlignment _HA  = HorizontalAlignment.Left;
-        internal VerticalAlignment _VA    = VerticalAlignment.Top;
-        internal HorizontalAlignment _THA = HorizontalAlignment.Left;
-        internal VerticalAlignment _TVA   = VerticalAlignment.Top;
-
-        public bool TextShadow = false;
-
         public virtual string Text
         {
             get { return _textStr; }
@@ -33,11 +21,6 @@ namespace DKBasicEngine_1_0.Core.UI
                 _changed = true;
             }
         }
-
-        internal string _textStr = "";
-        internal List<Letter> _text = new List<Letter>();
-        
-        internal Color? _bg;
         public Color? Background
         {
             get { return _bg; }
@@ -49,8 +32,6 @@ namespace DKBasicEngine_1_0.Core.UI
                     Model = new Material((Color)value, this);
             }
         }
-
-        protected float _FontSize = 1;
         public float FontSize
         {
             get { return _FontSize; }
@@ -68,7 +49,6 @@ namespace DKBasicEngine_1_0.Core.UI
                 }
             }
         }
-        
         public HorizontalAlignment HAlignment
         {
             set
@@ -132,7 +112,6 @@ namespace DKBasicEngine_1_0.Core.UI
                 _changed = true;
             }
         }
-
         public HorizontalAlignment TextHAlignment
         {
             set
@@ -149,6 +128,22 @@ namespace DKBasicEngine_1_0.Core.UI
                 _changed = true;
             }
         }
+
+        public bool TextShadow = false;
+
+        internal List<Letter> _text = new List<Letter>();
+        internal float _FontSize = 1;
+        internal Color? _bg;
+        internal string _textStr = "";
+
+        internal HorizontalAlignment _HA = HorizontalAlignment.Left;
+        internal VerticalAlignment _VA = VerticalAlignment.Top;
+        internal HorizontalAlignment _THA = HorizontalAlignment.Left;
+        internal VerticalAlignment _TVA = VerticalAlignment.Top;
+
+        internal float vertOffset = 0;
+        internal float horiOffset = 0;
+        internal bool _changed = false;
 
         public TextBlock()
         {

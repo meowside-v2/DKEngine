@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DKBasicEngine_1_0.Core.Components;
 
 namespace DKBasicEngine_1_0.Core.Scripts
 {
@@ -34,5 +35,11 @@ namespace DKBasicEngine_1_0.Core.Scripts
                 IsHeld = false;
             }
         }
+
+        public override void Start()
+        { }
+
+        public override void OnColliderEnter(Collider e)
+        { }
     }
 }

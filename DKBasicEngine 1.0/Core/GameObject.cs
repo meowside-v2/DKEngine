@@ -66,7 +66,9 @@ namespace DKBasicEngine_1_0.Core
         public readonly Transform Transform;
         public readonly List<Script> Scripts;
         public readonly List<GameObject> Child;
-        
+
+        internal bool _IsPartOfScene = true;
+
         public GameObject()
         {
             this.Child                = new List<GameObject>();
@@ -78,11 +80,10 @@ namespace DKBasicEngine_1_0.Core
             this.Animator             = new Animator(this);
             this.Collider             = new Collider(this);
 
-            if (Engine.CurrentScene != null)
+            if (_IsPartOfScene && Engine.CurrentScene != null)
             {
                 Engine.CurrentScene.Model.Add(this);
                 Engine.CurrentScene.NewlyGenerated.Add(this);
-                //Engine.CurrentScene.AllGameObjects.Add(this);
             }
         }
 
@@ -100,28 +101,28 @@ namespace DKBasicEngine_1_0.Core
             if (Parent != null)
             {
                 this.Parent = Parent;
+                this._IsPartOfScene = Parent._IsPartOfScene;
+
                 Parent.Child.Add(this);
 
                 this.Transform.Position = Parent.Transform.Position;
                 this.Transform.Scale    = Parent.Transform.Scale;
 
-                if (Engine.CurrentScene != null)
+                if (_IsPartOfScene && Engine.CurrentScene != null)
                 {
                     Engine.CurrentScene.NewlyGenerated.Add(this);
-                    //Engine.CurrentScene.AllGameObjects.Add(this);
                 }
             }
                 
-            else if (Engine.CurrentScene != null)
+            else if (_IsPartOfScene && Engine.CurrentScene != null)
             {
                 Engine.CurrentScene.Model.Add(this);
                 Engine.CurrentScene.NewlyGenerated.Add(this);
-                //Engine.CurrentScene.AllGameObjects.Add(this);
             }
                 
         }
 
-        internal void Start()
+        /*internal void Start()
         {
             int ScriptsCount = this.Scripts.Count;
             for (int i = 0; i < ScriptsCount; i++)
@@ -129,7 +130,7 @@ namespace DKBasicEngine_1_0.Core
                 Scripts[i].Start();
                 Engine.UpdateEvent += Scripts[i].Update;
             }
-        }
+        }*/
 
         public virtual void Destroy()
         {

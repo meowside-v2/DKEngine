@@ -10,7 +10,7 @@ namespace DKBasicEngine_1_0.Core.Components
 {
     public sealed class Animator : IAnimated
     {
-        private Engine.UpdateHandler UpdateDel;
+        private Engine.EngineHandler UpdateDel;
 
         public GameObject Parent;
         public TimeSpan CurrentAnimationTime;
@@ -45,7 +45,7 @@ namespace DKBasicEngine_1_0.Core.Components
             this.Parent               = Parent;
             this.CurrentAnimationTime = new TimeSpan(0);
             this.Animations           = new Dictionary<string, AnimationNode>();
-            UpdateDel                 = new Engine.UpdateHandler(this.Update);
+            UpdateDel                 = new Engine.EngineHandler(this.Update);
 
             Engine.UpdateEvent += UpdateDel;
 

@@ -14,20 +14,6 @@ namespace DKBasicEngine_1_0.Core.UI
     {
         public bool IsFocused { get; set; }
         public int FocusElementID { get; private set; }
-
-        public TextBox()
-        {
-            this.Scripts.Add(new TextBoxScript(this));
-        }
-
-        public TextBox(GameObject Parent)
-            :base(Parent)
-        {
-            this.Scripts.Add(new TextBoxScript(this));
-        }
-
-        public InputType AllowedChars { get; set; }
-        
         public override string Text
         {
             set
@@ -40,7 +26,19 @@ namespace DKBasicEngine_1_0.Core.UI
             }
             get { return _textStr; }
         }
+        public InputType AllowedChars { get; set; }
 
+        public TextBox()
+        {
+            this.Scripts.Add(new TextBoxScript(this));
+        }
+
+        public TextBox(GameObject Parent)
+            :base(Parent)
+        {
+            this.Scripts.Add(new TextBoxScript(this));
+        }
+        
         private bool TextControl(string key)
         {
             switch (AllowedChars)

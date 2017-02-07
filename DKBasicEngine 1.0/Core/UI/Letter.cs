@@ -21,10 +21,10 @@ namespace DKBasicEngine_1_0.Core.UI
 
         public override void Destroy()
         {
-            if (Engine.CurrentScene.NewlyGenerated.Contains(this))
-                Engine.CurrentScene.NewlyGenerated.Remove(this);
             //Engine.CurrentScene.AllGameObjects.Remove(this);
-            Engine.ToRender.Remove(this);
+            //if (Engine.ToRender.Contains(this))
+                Engine.ToRender.Remove(this);
+
             Parent.Child.Remove(this);
             ((TextBlock)Parent)._text.Remove(this);
 
