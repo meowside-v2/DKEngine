@@ -10,15 +10,11 @@ using System.Linq;
 
 namespace DKBasicEngine_1_0.Core.Components
 {
-    public sealed class Collider
+    public class Collider : Component
     {
         internal event CollisionEnterHandler CollisionEvent;
         internal delegate void CollisionEnterHandler(Collider m);
-
-        /// <summary>
-        /// Parent of collider
-        /// </summary>
-        public readonly GameObject Parent;
+        
         
         /// <summary>
         /// Determines size and position of collider
@@ -40,43 +36,37 @@ namespace DKBasicEngine_1_0.Core.Components
         /// <summary>
         /// Creates new Instance of Collider class
         /// </summary>
-        /// <param name="Parent"></param>
-        /// <param name="collidableReference"></param>
-        /// <param name="Xoffset"></param>
-        /// <param name="Yoffset"></param>
-        /// <param name="Width"></param>
-        /// <param name="Height"></param>
-        internal Collider(GameObject Parent, float Xoffset, float Yoffset, float Width, float Height)
+        /// <param name="Parent">Parent of collider (determines size of collider)</param>
+        internal Collider(GameObject Parent)
+            : base(Parent)
         {
-            this.Parent = Parent;
-            this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
-            lock (Engine.Collidable)
-                Engine.Collidable.Add(this);
+            this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
         }
 
         /// <summary>
         /// Creates new Instance of Collider class
         /// </summary>
-        /// <param name="Parent">Parent of collider (determines size of collider)</param>
-        internal Collider(GameObject Parent)
+        /// <param name="Parent"></param>
+        /// <param name="collidableReference"></param>
+        /// <param name="Xoffset">Horizontal offset</param>
+        /// <param name="Yoffset">Vertical offset</param>
+        /// <param name="Width">Width of collider</param>
+        /// <param name="Height">Height of collider</param>
+        internal Collider(GameObject Parent, float Xoffset, float Yoffset, float Width, float Height)
+            :base(Parent)
         {
-            this.Parent = Parent;
-            this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
-            lock (Engine.Collidable)
-                Engine.Collidable.Add(this);
+            this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
         }
-
+        
         /// <summary>
         /// Creates new Instance of Collider class
         /// </summary>
         /// <param name="Parent">Parent of collider</param>
         /// <param name="Area">Determines size and position of collider</param>
         internal Collider(GameObject Parent, RectangleF Area)
+            : base(Parent)
         {
-            this.Parent = Parent;
             this.Area = Area;
-            lock (Engine.Collidable)
-                Engine.Collidable.Add(this);
         }
 
         /// <summary>
@@ -86,11 +76,9 @@ namespace DKBasicEngine_1_0.Core.Components
         /// <param name="Coordinates">Determines position of collider</param>
         /// <param name="Size">Determines size of collider</param>
         internal Collider(GameObject Parent, PointF Coordinates, SizeF Size)
+            : base(Parent)
         {
-            this.Parent = Parent;
             this.Area = new RectangleF(Coordinates, Size);
-            lock (Engine.Collidable)
-                Engine.Collidable.Add(this);
         }
 
 #if DEBUG
@@ -125,13 +113,13 @@ namespace DKBasicEngine_1_0.Core.Components
             switch (direction)
             {
                 case Direction.Up:
-                    return Engine.Collidable.FirstOrDefault(obj2 => Up(obj2)) != null;
+                    return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Up(obj2)) != null;
                 case Direction.Left:
-                    return Engine.Collidable.FirstOrDefault(obj2 => Left(obj2)) != null;
+                    return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Left(obj2)) != null;
                 case Direction.Down:
-                    return Engine.Collidable.FirstOrDefault(obj2 => Down(obj2)) != null;
+                    return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Down(obj2)) != null;
                 case Direction.Right:
-                    return Engine.Collidable.FirstOrDefault(obj2 => Right(obj2)) != null;
+                    return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Right(obj2)) != null;
                 default:
                     throw new Exception("WTF jak se ti to povedlo");
             }
@@ -146,7 +134,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
                 if (Left(tmp) || Right(tmp) || Up(tmp) || Down(tmp))
                 {
-                    //Debug.WriteLine("Left");
+                    Debug.WriteLine(Parent.Name);
                     //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
                     //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
                     CollisionEvent?.Invoke(VisibleObjects[i].Collider);
@@ -186,14 +174,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
             return false;
         }
-
-        public void Destroy()
-        {
-            Engine.Collidable.Remove(this);
-            if(Parent.Collider == this)
-                Parent.Collider = null;
-        }
-
+        
         public static void SetNewCollider(Collider destination, RectangleF Area)
         {
             destination.Area = Area;
@@ -207,6 +188,13 @@ namespace DKBasicEngine_1_0.Core.Components
         public static void SetNewCollider(Collider destination, float X, float Y, float Width, float Height)
         {
             destination.Area = new RectangleF(X, Y, Width, Height);
+        }
+
+        protected internal override void Destroy()
+        {
+            Engine.CurrentScene.AllGameObjectsColliders.Remove(this);
+            if (Parent.Collider == this)
+                Parent.Collider = null;
         }
     }
 }

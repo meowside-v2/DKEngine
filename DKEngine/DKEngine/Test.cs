@@ -75,21 +75,21 @@ namespace DKEngine
                         g.Transform.Position = new Position(i * 1024, j * 16, -a);
                         g.TypeName = "border";
                     }*/
-                        
-                        
+
+            GameObject t2 = new GameObject();
+            t2.InitNewScript<TemplateScript>();           
+
             for (int i = 0; i < 1000; i++)
             {
                 GameObject t1 = new GameObject();
+                t1.Name = string.Format("trigger_{0}", i);
                 t1.Model = new Material(Color.AliceBlue, t1);
-                /*t1.Animator.Animations.Add("default", new AnimationNode("default", new Material(Color.AliceBlue, t1)));
-                t1.Animator.Play("default");*/
-                t1.Transform.Position = new Vector3(0, i, 0);
+                t1.Transform.Position = new Vector3(0, i * 10, 0);
                 t1.Transform.Scale = new Vector3(10, 10, 10);
+                //t1.Collider = new Collider(t1);
+                t1.InitNewComponent<Collider>();
                 t1.Collider.IsTrigger = true;
             }
-            
-            GameObject t2 = new GameObject();
-            t2.Scripts.Add(new TemplateScript(t2));
             
             Camera c = new Camera();
             c.Position = new Vector3(-300, -100, 0);

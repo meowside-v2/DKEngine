@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DKBasicEngine_1_0.Core.Components;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,12 +11,22 @@ namespace DKBasicEngine_1_0.Core
     {
         public string Name = "";
 
-        internal readonly List<GameObject> Model          = new List<GameObject>();
-        internal readonly List<GameObject> NewlyGenerated = new List<GameObject>();
-        //internal readonly List<GameObject> AllGameObjects = new List<GameObject>();
+        internal readonly List<GameObject> Model;
+        internal readonly List<GameObject> AllGameObjects;
+        internal readonly List<GameObject> NewlyGeneratedGameObjects;
+        internal readonly List<Behavior>  AllComponents;
+        internal readonly List<Behavior>  NewlyGeneratedComponents;
+        internal readonly List<Collider>   AllGameObjectsColliders;
 
         public Scene()
-        { }
+        {
+            NewlyGeneratedGameObjects = new List<GameObject>(65536);
+            AllGameObjects            = new List<GameObject>(65536);
+            Model                     = new List<GameObject>(65536);
+            AllComponents             = new List<Behavior>(65536);
+            NewlyGeneratedComponents  = new List<Behavior>(65536);
+            AllGameObjectsColliders   = new List<Collider>(65536);
+        }
 
         public enum Mode
         {

@@ -8,14 +8,12 @@ using System.Diagnostics;
 
 namespace DKBasicEngine_1_0.Core.Components
 {
-    public sealed class Animator : IAnimated
+    public class Animator : Behavior, IAnimated
     {
-        private Engine.EngineHandler UpdateDel;
-
-        public GameObject Parent;
         public TimeSpan CurrentAnimationTime;
         public Dictionary<string, AnimationNode> Animations;
         private AnimationNode _current;
+        private GameObject _p;
 
         public int NumberOfPlays { get; private set; } = 0;
         internal AnimationNode Current
@@ -41,38 +39,16 @@ namespace DKBasicEngine_1_0.Core.Components
         }
        
         public Animator(GameObject Parent)
+            :base(Parent)
         {
-            this.Parent               = Parent;
             this.CurrentAnimationTime = new TimeSpan(0);
             this.Animations           = new Dictionary<string, AnimationNode>();
-            UpdateDel                 = new Engine.EngineHandler(this.Update);
-
-            Engine.UpdateEvent += UpdateDel;
-
+            _p = Parent;
             /*if(Parent.Model != null)
             {
                 Animations.Add("default", new AnimationNode("default", Parent.Model));
                 this.Play("default");
             }*/
-        }
-
-        private void Update()
-        {
-            if (Parent.Model?.Frames > 1)
-            {
-                CurrentAnimationTime = CurrentAnimationTime.Add(new TimeSpan(0, 0, 0, 0, (int)(Engine.deltaTime * 1000)));
-
-                if (CurrentAnimationTime.TotalMilliseconds > Parent.Model.Duration)
-                {
-                    CurrentAnimationTime = CurrentAnimationTime.Subtract(new TimeSpan(0, 0, 0, 0, Parent.Model.Duration));
-                    NumberOfPlays++;
-                }
-            }
-        }
-
-        public void Destroy()
-        {
-            Engine.UpdateEvent -= UpdateDel;
         }
 
         public void Play(string AnimationName)
@@ -93,6 +69,31 @@ namespace DKBasicEngine_1_0.Core.Components
 
                 Current = Result;
             }
+        }
+
+        protected internal override void Update()
+        {
+            if (Parent.Model?.Frames > 1)
+            {
+                CurrentAnimationTime = CurrentAnimationTime.Add(new TimeSpan(0, 0, 0, 0, (int)(Engine.deltaTime * 1000)));
+
+                if (CurrentAnimationTime.TotalMilliseconds > Parent.Model.Duration)
+                {
+                    CurrentAnimationTime = CurrentAnimationTime.Subtract(new TimeSpan(0, 0, 0, 0, Parent.Model.Duration));
+                    NumberOfPlays++;
+                }
+            }
+        }
+
+        protected internal override void Start()
+        { }
+
+        protected internal override void Destroy()
+        {
+            Engine.UpdateEvent -= UpdateHandle;
+            
+            Parent = null;
+            UpdateHandle = null;
         }
     }
 }

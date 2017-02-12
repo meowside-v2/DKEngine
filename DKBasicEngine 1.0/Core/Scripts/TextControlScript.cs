@@ -20,7 +20,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
             this.Parent = Parent;
         }
 
-        public override void Start()
+        protected internal override void Start()
         {
             if (_Parent.Text.Length > 0)
             {
@@ -28,7 +28,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
             }
         }
 
-        public override void Update()
+        protected internal override void Update()
         {
             if (_Parent._changed)
             {
@@ -166,7 +166,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
             _Parent._changed = false;
         }
 
-        public override void OnColliderEnter(Collider e)
+        protected internal override void OnColliderEnter(Collider e)
         { }
     }
 }

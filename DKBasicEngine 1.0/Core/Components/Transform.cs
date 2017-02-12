@@ -10,10 +10,8 @@ using System.Threading.Tasks;
 
 namespace DKBasicEngine_1_0.Core.Components
 {
-    public sealed class Transform : I3Dimensional
+    public sealed class Transform : Component, I3Dimensional
     {
-        GameObject Parent;
-
         private Vector3 _Dimensions;
         private Vector3 _Position;
         private Vector3 _Scale;
@@ -63,13 +61,17 @@ namespace DKBasicEngine_1_0.Core.Components
         internal Vector3 _ScaledDimensions;
         
         public Transform(GameObject Parent)
+            :base(Parent)
         {
-            this.Parent = Parent;
-
             _Position         = new Vector3();
             _Dimensions       = new Vector3();
             _Scale            = new Vector3();
             _ScaledDimensions = new Vector3();
+        }
+
+        protected internal override void Destroy()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -147,21 +147,23 @@ namespace DKBasicEngine_1_0.Core.UI
 
         public TextBlock()
         {
-            this.Scripts.Add(new TextControlScript(this));
+            this.InitNewScript<TextControlScript>();
+            //this.Scripts.Add(new TextControlScript(this));
         }
 
         public TextBlock(GameObject Parent)
             : base(Parent)
         {
-            this.Scripts.Add(new TextControlScript(this));
+            this.InitNewScript<TextControlScript>();
+            //this.Scripts.Add(new TextControlScript(this));
         }
 
         public override void Destroy()
         {
-            if (Engine.CurrentScene.NewlyGenerated.Contains(this))
-                Engine.CurrentScene.NewlyGenerated.Remove(this);
+            if (Engine.CurrentScene.NewlyGeneratedGameObjects.Contains(this))
+                Engine.CurrentScene.NewlyGeneratedGameObjects.Remove(this);
             //Engine.CurrentScene.AllGameObjects.Remove(this);
-            Engine.ToRender.Remove(this);
+            Engine.RenderGameObjects.Remove(this);
 
             int ScriptsCount = this.Scripts.Count;
             for (int i = 0; i < ScriptsCount; i++)

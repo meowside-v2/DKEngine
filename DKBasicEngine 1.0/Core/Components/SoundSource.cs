@@ -9,7 +9,7 @@ using System.IO;
 
 namespace DKBasicEngine_1_0.Core.Components
 {
-    public sealed class SoundSource
+    public class SoundSource : Component
     {
         public enum PlayBack
         {
@@ -32,7 +32,8 @@ namespace DKBasicEngine_1_0.Core.Components
 
         //private WaveStream _Last;
 
-        public SoundSource()
+        public SoundSource(GameObject Parent)
+            :base(Parent)
         {
             OutputDevice = new WaveOut();
         }
@@ -214,6 +215,11 @@ namespace DKBasicEngine_1_0.Core.Components
         private WaveStream GetNewInstanceOfSoundFile(UnmanagedMemoryStream Source)
         {
             return new WaveFileReader(Source);
+        }
+
+        protected internal override void Destroy()
+        {
+            throw new NotImplementedException();
         }
     }
 }

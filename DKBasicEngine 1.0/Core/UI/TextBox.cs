@@ -30,13 +30,15 @@ namespace DKBasicEngine_1_0.Core.UI
 
         public TextBox()
         {
-            this.Scripts.Add(new TextBoxScript(this));
+            this.InitNewScript<TextBoxScript>();
+            //this.Scripts.Add(new TextBoxScript(this));
         }
 
         public TextBox(GameObject Parent)
             :base(Parent)
         {
-            this.Scripts.Add(new TextBoxScript(this));
+            this.InitNewScript<TextBoxScript>();
+            //this.Scripts.Add(new TextBoxScript(this));
         }
         
         private bool TextControl(string key)

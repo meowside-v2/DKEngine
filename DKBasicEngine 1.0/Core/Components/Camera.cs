@@ -54,7 +54,7 @@ namespace DKBasicEngine_1_0.Core.Components
                 Temp = GameObjectsInView;
 
             else
-                Temp = Engine.ToRender.Where(obj => obj.IsInView && obj.Transform.Position.Z > MinRenderDepth && obj.Transform.Position.Z < MaxRenderDepth).ToList(); 
+                Temp = Engine.RenderGameObjects.Where(obj => obj.IsInView && obj.Transform.Position.Z > MinRenderDepth && obj.Transform.Position.Z < MaxRenderDepth).ToList(); 
 
             RenderingGUI = true;
             List<GameObject> GUI = Temp.Where(item => item.IsGUI).ToList();

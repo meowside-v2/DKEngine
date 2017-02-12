@@ -19,7 +19,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
             _Parent = Parent;
         }
 
-        public override void Update()
+        protected internal override void Update()
         {
             if (Engine.Input.IsKeyPressed(ConsoleKey.Enter))
             {
@@ -36,10 +36,10 @@ namespace DKBasicEngine_1_0.Core.Scripts
             }
         }
 
-        public override void Start()
+        protected internal override void Start()
         { }
 
-        public override void OnColliderEnter(Collider e)
+        protected internal override void OnColliderEnter(Collider e)
         { }
     }
 }

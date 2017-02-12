@@ -17,7 +17,7 @@ namespace DKEngine
         {
             Engine.Init();
             
-            Engine.ChangeScene(typeof(Test));
+            Engine.ChangeScene<Test>();
         }
     }
 }

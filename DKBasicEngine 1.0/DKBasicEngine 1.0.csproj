@@ -44,6 +44,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Components\Behavior.cs" />
+    <Compile Include="Core\Components\Component.cs" />
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\SoundSource.cs" />
     <Compile Include="Core\Scripts\ButtonScript.cs" />
