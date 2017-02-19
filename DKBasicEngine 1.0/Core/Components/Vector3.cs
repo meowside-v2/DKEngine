@@ -72,5 +72,11 @@ namespace DKBasicEngine_1_0.Core.Components
         {
             return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
         }
+
+        private static Vector3 _zero = new Vector3(0, 0, 0);
+        public static Vector3 Zero
+        {
+            get { return _zero; }
+        }
     }
 }

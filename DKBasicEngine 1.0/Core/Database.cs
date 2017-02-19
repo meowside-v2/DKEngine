@@ -1,10 +1,12 @@
 ﻿using DKBasicEngine_1_0.Core.Components;
 using DKBasicEngine_1_0.Properties;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Windows.Forms;
 
 namespace DKBasicEngine_1_0.Core
@@ -134,7 +136,7 @@ namespace DKBasicEngine_1_0.Core
             { '%' , Font.Percent },
             { '"' , Font.QuotationMarks },
             { ';' , Font.Semicolon },
-            //{ '*' , Font.StarLarge },
+            { '☼' , Font.StarLarge },
             { '*' , Font.StarSmall },
             { '_' , Font.Underscore },
             { '/' , Font.Slash },
@@ -239,6 +241,17 @@ namespace DKBasicEngine_1_0.Core
         public static string GetMaterialDatabaseKey(int Position)
         {
             return GameObjects.ElementAtOrDefault(Position).Key; //.FirstOrDefault(x => x.Value == Position).Key;
+        }
+
+        public static void LoadResources(ResourceSet source)
+        {
+            foreach(DictionaryEntry entry in source)
+            {
+                if(entry.Value is Image)
+                {
+                    AddNewGameObjectMaterial((string)entry.Key, new Material((Bitmap)entry.Value));
+                }
+            }
         }
     }
 }
