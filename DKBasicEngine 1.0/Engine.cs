@@ -63,6 +63,7 @@ namespace DKBasicEngine_1_0
 
             internal static bool[] KeysPressed;
             internal static bool[] KeysDown;
+            internal static bool[] KeysReleased;
             internal static bool[] KeysUp;
 
             internal static short NumberOfKeys;
@@ -85,6 +86,12 @@ namespace DKBasicEngine_1_0
                 //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
             }
 
+            public static bool IsKeyReleased(ConsoleKey key)
+            {
+                return KeysReleased[(short)key];
+                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+            }
+
             internal static void CheckForKeys()
             {
                 for(int key = 0; key < NumberOfKeys; key++)
@@ -95,6 +102,8 @@ namespace DKBasicEngine_1_0
                     {
                         if (!KeysDown[key])
                         {
+                            KeysUp[key] = false;
+                            KeysReleased[key] = false;
                             KeysPressed[key] = true;
                             KeysDown[key] = true;
                         }
@@ -105,15 +114,16 @@ namespace DKBasicEngine_1_0
                     }
                     else
                     {
-                        if (KeysPressed[key] || KeysDown[key])
+                        if (KeysDown[key])
                         {
                             KeysPressed[key] = false;
                             KeysDown[key] = false;
+                            KeysReleased[key] = true;
                             KeysUp[key] = true;
                         }
-                        else if (KeysUp[key])
+                        else if (KeysReleased[key])
                         {
-                            KeysUp[key] = false;
+                            KeysReleased[key] = false;
                         }
                     }
                 }
@@ -160,6 +170,7 @@ namespace DKBasicEngine_1_0
                     Input.KeysPressed  = new bool[Input.NumberOfKeys];
                     Input.KeysDown     = new bool[Input.NumberOfKeys];
                     Input.KeysUp       = new bool[Input.NumberOfKeys];
+                    Input.KeysReleased = new bool[Input.NumberOfKeys];
 
                     DeltaT = Stopwatch.StartNew();
 
@@ -189,7 +200,9 @@ namespace DKBasicEngine_1_0
                     BackgroundWorks.Start();
                     RenderWorker.Start();
 
+#if !DEBUG
                     SplashScreen();
+#endif
 
                     _IsInitialised = true;
                 }
@@ -251,6 +264,7 @@ namespace DKBasicEngine_1_0
             while (true)
             {
 
+                
                 int ToStartCount = NewGameobjects.Count - 1;
                 while (ToStartCount >= 0)
                 {
@@ -278,7 +292,7 @@ namespace DKBasicEngine_1_0
                 List<GameObject> reference = RenderGameObjects.GetGameObjectsInView();
                 
                 List<GameObject> VisibleTriggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
-                List<GameObject> VisibleColliders = reference.Where(obj => obj.Collider != null ? obj.Collider.IsCollidable : false).ToList();
+                List<GameObject> VisibleColliders = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();
                 int ColliderCount = VisibleTriggers.Count;
                 for (int i = 0; i < ColliderCount; i++)
                     VisibleTriggers[i].Collider.TriggerCheck(VisibleColliders);

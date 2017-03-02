@@ -20,12 +20,12 @@ namespace DKBasicEngine_1_0.Core
 
         public Scene()
         {
-            NewlyGeneratedGameObjects = new List<GameObject>(65536);
-            AllGameObjects            = new List<GameObject>(65536);
-            Model                     = new List<GameObject>(65536);
-            AllComponents             = new List<Behavior>(65536);
-            NewlyGeneratedComponents  = new List<Behavior>(65536);
-            AllGameObjectsColliders   = new List<Collider>(65536);
+            NewlyGeneratedGameObjects = new List<GameObject>(0xFFFF);
+            AllGameObjects            = new List<GameObject>(0xFFFF);
+            Model                     = new List<GameObject>(0xFFFF);
+            AllComponents             = new List<Behavior>(0xFFFF);
+            NewlyGeneratedComponents  = new List<Behavior>(0xFFFF);
+            AllGameObjectsColliders   = new List<Collider>(0xFFFF);
         }
 
         public enum Mode

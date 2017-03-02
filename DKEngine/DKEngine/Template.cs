@@ -26,7 +26,6 @@ namespace DKEngine
             this.Parent.Collider.IsTrigger = true;
             this.Parent.Model = new Material(Color.BurlyWood, Parent);
             this.Parent.Transform.Scale = new Vector3(10, 10, 10);
-            this.Parent.Collider.IsCollidable = true;
             this.Parent.InitNewComponent<SoundSource>();
             this.Parent.SoundSource.Type = SoundSource.PlayBack.PlayNew;
             this.Sound = Resources.glock;
@@ -38,16 +37,20 @@ namespace DKEngine
         protected override void Update()
         {
             if (Engine.Input.IsKeyDown(System.ConsoleKey.A))
-                this.Parent.Transform.Position += new Vector3(-(Speed * Engine.deltaTime), 0, 0);
+                if(!Parent.Collider.Collision(Collider.Direction.Left))
+                    this.Parent.Transform.Position += new Vector3(-(Speed * Engine.deltaTime), 0, 0);
 
             if (Engine.Input.IsKeyDown(System.ConsoleKey.D))
-                this.Parent.Transform.Position += new Vector3(Speed * Engine.deltaTime, 0, 0);
+                if (!Parent.Collider.Collision(Collider.Direction.Right))
+                    this.Parent.Transform.Position += new Vector3(Speed * Engine.deltaTime, 0, 0);
 
             if (Engine.Input.IsKeyDown(System.ConsoleKey.W))
-                this.Parent.Transform.Position += new Vector3(0, -(Speed * Engine.deltaTime), 0);
+                if (!Parent.Collider.Collision(Collider.Direction.Up))
+                    this.Parent.Transform.Position += new Vector3(0, -(Speed * Engine.deltaTime), 0);
 
             if (Engine.Input.IsKeyDown(System.ConsoleKey.S))
-                this.Parent.Transform.Position += new Vector3(0, Speed * Engine.deltaTime, 0);
+                if (!Parent.Collider.Collision(Collider.Direction.Down))
+                    this.Parent.Transform.Position += new Vector3(0, Speed * Engine.deltaTime, 0);
 
             if (Engine.Input.IsKeyPressed(System.ConsoleKey.Enter))
                 this.Parent.SoundSource.Play(Sound);

@@ -88,7 +88,6 @@ namespace DKEngine
                 t1.Transform.Scale = new Vector3(10, 10, 10);
                 //t1.Collider = new Collider(t1);
                 t1.InitNewComponent<Collider>();
-                t1.Collider.IsTrigger = true;
             }
             
             Camera c = new Camera();

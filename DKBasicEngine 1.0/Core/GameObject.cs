@@ -82,11 +82,11 @@ namespace DKBasicEngine_1_0.Core
             //this.Collider             = new Collider(this);
             //this.Animator             = new Animator(this);
 
-            if (_IsPartOfScene && Engine.CurrentScene != null)
+            if (_IsPartOfScene && Engine.LoadingScene != null)
             {
-                Engine.CurrentScene.Model.Add(this);
-                Engine.CurrentScene.NewlyGeneratedGameObjects.Add(this);
-                Engine.CurrentScene.AllGameObjects.Add(this);
+                Engine.LoadingScene.Model.Add(this);
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
+                Engine.LoadingScene.AllGameObjects.Add(this);
             }
         }
 
