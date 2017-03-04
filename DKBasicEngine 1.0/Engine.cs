@@ -190,7 +190,7 @@ namespace DKBasicEngine_1_0
                     FpsMeter.IsGUI = true;
                     FpsMeter.TextShadow = true;
                     FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
-                    FpsMeter._IsPartOfScene = false;
+                    FpsMeter.IsPartOfScene = false;
 
                     UpdateEvent += FpsMeter.Scripts[0].UpdateHandle;
                     RenderGameObjects.Add(FpsMeter);
@@ -265,22 +265,7 @@ namespace DKBasicEngine_1_0
             {
 
                 
-                int ToStartCount = NewGameobjects.Count - 1;
-                while (ToStartCount >= 0)
-                {
-                    GameObject tmp = NewGameobjects[ToStartCount--];
-                    RenderGameObjects.Add(tmp);
-                    NewGameobjects.Remove(tmp);
-                }
-
-                int InitComponentsCount = NewComponents.Count - 1;
-                while (InitComponentsCount >= 0)
-                {
-                    Behavior tmp = NewComponents[InitComponentsCount--];
-                    tmp.Start();
-                    Engine.UpdateEvent += tmp.UpdateHandle;
-                    NewComponents.Remove(tmp);
-                }
+                
 
                 Input.CheckForKeys();
 
@@ -288,6 +273,27 @@ namespace DKBasicEngine_1_0
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
+
+                int ToStartCount = NewGameobjects.Count;
+                while (ToStartCount > 0)
+                {
+                    GameObject tmp = NewGameobjects[0];
+                    ToStartCount--;
+                    NewGameobjects.Remove(tmp);
+                    RenderGameObjects.Add(tmp);
+                    
+                }
+
+                int InitComponentsCount = NewComponents.Count;
+                while (InitComponentsCount > 0)
+                {
+                    Behavior tmp = NewComponents[0];
+                    InitComponentsCount--;
+                    NewComponents.Remove(tmp);
+                    tmp.Start();
+                    Engine.UpdateEvent += tmp.UpdateHandle;
+                    
+                }
 
                 List<GameObject> reference = RenderGameObjects.GetGameObjectsInView();
                 
@@ -300,7 +306,6 @@ namespace DKBasicEngine_1_0
                 BaseCam?.BufferImage(reference);
 
                 Buffer.BlockCopy(Render.imageBuffer, 0, Render.ImageOutData, 0, Render.ImageBufferSize);
-                //Array.Copy(Render.imageBuffer, Render.ImageOutData, Render.ImageBufferSize);
                 
                 NumberOfFrames++;
                 
@@ -358,6 +363,8 @@ namespace DKBasicEngine_1_0
                             g.DrawImage(outFrame, imageRect);
                         }
                     }
+
+                    Thread.Sleep(1);
                 }
             }
         }

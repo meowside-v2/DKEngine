@@ -1,6 +1,7 @@
 ﻿using DKBasicEngine_1_0;
 using DKBasicEngine_1_0.Core;
 using DKBasicEngine_1_0.Core.Components;
+using DKBasicEngine_1_0.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -75,21 +76,31 @@ namespace DKEngine
                         g.Transform.Position = new Position(i * 1024, j * 16, -a);
                         g.TypeName = "border";
                     }*/
+            Database.AddNewGameObjectMaterial("trigger", new Material(Color.AliceBlue, new Vector3(1,1,1)));
 
             GameObject t2 = new GameObject();
             t2.InitNewScript<TemplateScript>();           
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 GameObject t1 = new GameObject();
                 t1.Name = string.Format("trigger_{0}", i);
-                t1.Model = new Material(Color.AliceBlue, t1);
-                t1.Transform.Position = new Vector3(0, i * 10, 0);
+                t1.TypeName = "trigger";
+                t1.Transform.Position = new Vector3(0, i * 20, 0);
                 t1.Transform.Scale = new Vector3(10, 10, 10);
-                //t1.Collider = new Collider(t1);
                 t1.InitNewComponent<Collider>();
             }
             
+            for(int i = 0; i < 100; i++)
+            {
+                TextBlock txt = new TextBlock();
+                txt.Text = string.Format("{0}", i * 100);
+                txt.Transform.Position = new Vector3(-150, i * 100, 1);
+                txt.Foreground = Color.LightCyan;
+                txt.FontSize = 2f;
+                txt.Transform.Dimensions = new Vector3(300, 20, 1);
+            }
+
             Camera c = new Camera();
             c.Position = new Vector3(-300, -100, 0);
             c.Parent = t2;

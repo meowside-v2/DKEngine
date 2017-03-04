@@ -18,17 +18,23 @@ namespace DKBasicEngine_1_0.Core.UI
         public Letter(TextBlock Parent)
             :base(Parent)
         {
-            Engine.NewGameobjects.Add(this);
+            //Engine.NewGameobjects.Add(this);
+            IsPartOfScene = false;
         }
 
         public override void Destroy()
         {
-            //Engine.CurrentScene.AllGameObjects.Remove(this);
+            if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
+            Engine.LoadingScene.AllGameObjects.Remove(this);
+            Engine.RenderGameObjects.Remove(this);
+
+            /*Engine.LoadingScene.AllGameObjects.Remove(this);
             //if (Engine.ToRender.Contains(this))
-                Engine.RenderGameObjects.Remove(this);
+                Engine.RenderGameObjects.Remove(this);*/
 
             Parent.Child.Remove(this);
-            ((TextBlock)Parent)._text.Remove(this);
+            //((TextBlock)Parent)._text.Remove(this);
 
             Animator?.Destroy();
 

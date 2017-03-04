@@ -146,6 +146,7 @@ namespace DKBasicEngine_1_0.Core.UI
         internal bool _changed = false;
 
         public TextBlock()
+            :base()
         {
             this.InitNewScript<TextControlScript>();
             //this.Scripts.Add(new TextControlScript(this));
@@ -157,6 +158,9 @@ namespace DKBasicEngine_1_0.Core.UI
             this.InitNewScript<TextControlScript>();
             //this.Scripts.Add(new TextControlScript(this));
         }
+
+        internal override void Render()
+        { Model?.Render(this, _bg); }
 
         public override void Destroy()
         {

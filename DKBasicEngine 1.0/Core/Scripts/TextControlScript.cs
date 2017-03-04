@@ -16,9 +16,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
 
         public TextControlScript(TextBlock Parent)
             : base(Parent)
-        {
-            this.Parent = Parent;
-        }
+        { }
 
         protected internal override void Start()
         {

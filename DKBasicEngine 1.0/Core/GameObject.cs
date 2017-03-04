@@ -63,13 +63,36 @@ namespace DKBasicEngine_1_0.Core
         public Animator Animator       = null;
         public Collider Collider       = null;
         public SoundSource SoundSource = null;
-        public Color? Foreground          = null;
+        public Color? Foreground       = null;
 
         public readonly Transform Transform;
         public readonly List<GameObject> Child;
         internal readonly List<Script> Scripts;
 
-        internal bool _IsPartOfScene = true;
+        protected bool _IsPartOfScene = true; 
+        internal bool IsPartOfScene
+        {
+            get { return _IsPartOfScene; }
+            set
+            {
+                _IsPartOfScene = value;
+                switch (_IsPartOfScene)
+                {
+                    case true:
+                        if(Engine.LoadingScene != null)
+                            if(!Engine.LoadingScene.AllGameObjects.Contains(this))
+                                Engine.LoadingScene.AllGameObjects.Add(this);
+                        break;
+                    case false:
+                        if (Engine.LoadingScene != null)
+                            if (Engine.LoadingScene.AllGameObjects.Contains(this))
+                                Engine.LoadingScene.AllGameObjects.Remove(this);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         public GameObject()
         {
@@ -104,21 +127,21 @@ namespace DKBasicEngine_1_0.Core
             if (Parent != null)
             {
                 this.Parent = Parent;
-                this._IsPartOfScene = Parent._IsPartOfScene;
 
                 Parent.Child.Add(this);
-
                 this.Transform.Position = Parent.Transform.Position;
                 this.Transform.Scale    = Parent.Transform.Scale;
 
-                if (_IsPartOfScene && Engine.LoadingScene != null)
+                if (Engine.LoadingScene != null)
                 {
                     Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
                     Engine.LoadingScene.AllGameObjects.Add(this);
                 }
+
+                this.IsPartOfScene = Parent.IsPartOfScene;
             }
                 
-            else if (_IsPartOfScene && Engine.LoadingScene != null)
+            else if (Engine.LoadingScene != null)
             {
                 Engine.LoadingScene.Model.Add(this);
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
@@ -175,9 +198,9 @@ namespace DKBasicEngine_1_0.Core
 
         public virtual void Destroy()
         {
-            if (Engine.CurrentScene.NewlyGeneratedGameObjects.Contains(this))
-                Engine.CurrentScene.NewlyGeneratedGameObjects.Remove(this);
-            Engine.CurrentScene.AllGameObjects.Remove(this);
+            if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
+            Engine.LoadingScene.AllGameObjects.Remove(this);
             Engine.RenderGameObjects.Remove(this);
 
             int ScriptsCount = this.Scripts.Count;
@@ -193,7 +216,7 @@ namespace DKBasicEngine_1_0.Core
             this.Parent = null;
         }
 
-        internal void Render()
+        internal virtual void Render()
         { Model?.Render(this, Foreground); }
     }
 }

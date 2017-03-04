@@ -120,11 +120,11 @@ namespace DKBasicEngine_1_0.Core.Components
         /// Creates new material with given color and scales it by parent's given scales
         /// </summary>
         /// <param name="clr">Source color</param>
-        /// <param name="Parent">I3Dimensional used for material scale</param>
-        public Material(Color clr, GameObject Parent)
+        /// <param name="Size">Vector3 used for material size</param>
+        public Material(Color clr, Vector3 Size)
         {
-            this.Width = (int)Parent.Transform.Dimensions.X;
-            this.Height = (int)Parent.Transform.Dimensions.Y;
+            this.Width = (int)Size.X;
+            this.Height = (int)Size.Y;
 
             Frames = 1;
 
@@ -158,6 +158,15 @@ namespace DKBasicEngine_1_0.Core.Components
 
             _FrameDim = new FrameDimension(Texture.FrameDimensionsList[0]);
         }
+
+        /// <summary>
+        /// Creates new material with given color and scales it by parent's given scales
+        /// </summary>
+        /// <param name="clr">Source color</param>
+        /// <param name="Parent">GameObject used for material size</param>
+        public Material(Color clr, GameObject Parent)
+            :this(clr, Parent.Transform.Dimensions)
+        { }
 
         /*/// <summary>
         /// Returns color of pixel on coordinations

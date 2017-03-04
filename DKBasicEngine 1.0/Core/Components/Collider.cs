@@ -112,46 +112,19 @@ namespace DKBasicEngine_1_0.Core.Components
         /// <returns></returns>
         public bool Collision(Direction direction)
         {
-            int colliderCount = Engine.CurrentScene.AllGameObjectsColliders.Count;
+            if (this.IsTrigger)
+                return false;
+
             switch (direction)
             {
                 case Direction.Up:
-                    
-                    /*for(int i = 0; i < colliderCount; i++)
-                    {
-                        if(Up(Engine.CurrentScene.AllGameObjectsColliders[i]))
-                            return true;
-                    }
-
-                    return false;*/
                     return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Up(obj2)) != null;
                 case Direction.Left:
-                    /*for (int i = 0; i < colliderCount; i++)
-                    {
-                        if (Left(Engine.CurrentScene.AllGameObjectsColliders[i]))
-                            return true;
-                    }
-
-                    return false;*/
-                return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Left(obj2)) != null;
+                    return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Left(obj2)) != null;
                 case Direction.Down:
-                    /*for (int i = 0; i < colliderCount; i++)
-                    {
-                        if (Down(Engine.CurrentScene.AllGameObjectsColliders[i]))
-                            return true;
-                    }
-
-                    return false;*/
-                return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Down(obj2)) != null;
+                    return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Down(obj2)) != null;
                 case Direction.Right:
-                    /*for (int i = 0; i < colliderCount; i++)
-                    {
-                        if (Right(Engine.CurrentScene.AllGameObjectsColliders[i]))
-                            return true;
-                    }
-
-                    return false;*/
-                return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Right(obj2)) != null;
+                    return Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Right(obj2)) != null;
                 default:
                     throw new Exception("WTF jak se ti to povedlo");
             }
@@ -177,7 +150,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
         private bool Left(Collider obj)
         {
-            if (this != obj && !this.IsTrigger && !obj.IsTrigger)
+            if (this != obj && !obj.IsTrigger)
                 return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X <= obj.X + obj.Width && this.X >= obj.X); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
 
             return false;
@@ -185,7 +158,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
         private bool Right(Collider obj)
         {
-            if (this != obj && !this.IsTrigger && !obj.IsTrigger)
+            if (this != obj && !obj.IsTrigger)
                 return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X + this.Width >= obj.X && this.X <= obj.X);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
 
             return false;
@@ -193,7 +166,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
         private bool Up(Collider obj)
         {
-            if (this != obj && !this.IsTrigger && !obj.IsTrigger)
+            if (this != obj && !obj.IsTrigger)
                 return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
 
             return false;
@@ -201,7 +174,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
         private bool Down(Collider obj)
         {
-            if (this != obj && !this.IsTrigger && !obj.IsTrigger)
+            if (this != obj && !obj.IsTrigger)
                 return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y + this.Height >= obj.Y && this.Y <= obj.Y);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
 
             return false;
