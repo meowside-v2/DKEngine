@@ -150,7 +150,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
         private bool Left(Collider obj)
         {
-            if (this != obj && !obj.IsTrigger)
+            if (!this.Equals(obj) && !obj.IsTrigger)
                 return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X <= obj.X + obj.Width && this.X >= obj.X); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
 
             return false;
@@ -158,7 +158,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
         private bool Right(Collider obj)
         {
-            if (this != obj && !obj.IsTrigger)
+            if (!this.Equals(obj) && !obj.IsTrigger)
                 return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X + this.Width >= obj.X && this.X <= obj.X);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
 
             return false;
@@ -166,7 +166,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
         private bool Up(Collider obj)
         {
-            if (this != obj && !obj.IsTrigger)
+            if (!this.Equals(obj) && !obj.IsTrigger)
                 return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
 
             return false;
@@ -174,7 +174,7 @@ namespace DKBasicEngine_1_0.Core.Components
 
         private bool Down(Collider obj)
         {
-            if (this != obj && !obj.IsTrigger)
+            if (!this.Equals(obj) && !obj.IsTrigger)
                 return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y + this.Height >= obj.Y && this.Y <= obj.Y);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
 
             return false;

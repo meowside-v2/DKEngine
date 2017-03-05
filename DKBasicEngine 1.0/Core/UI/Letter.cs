@@ -18,15 +18,14 @@ namespace DKBasicEngine_1_0.Core.UI
         public Letter(TextBlock Parent)
             :base(Parent)
         {
-            //Engine.NewGameobjects.Add(this);
             IsPartOfScene = false;
         }
 
-        public override void Destroy()
+        protected internal override void Destroy()
         {
             if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
-            Engine.LoadingScene.AllGameObjects.Remove(this);
+            Engine.LoadingScene.AllGameObjects.Remove(this.Name);
             Engine.RenderGameObjects.Remove(this);
 
             /*Engine.LoadingScene.AllGameObjects.Remove(this);

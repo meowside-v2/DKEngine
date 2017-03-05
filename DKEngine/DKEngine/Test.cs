@@ -79,14 +79,19 @@ namespace DKEngine
             Database.AddNewGameObjectMaterial("trigger", new Material(Color.AliceBlue, new Vector3(1,1,1)));
 
             GameObject t2 = new GameObject();
-            t2.InitNewScript<TemplateScript>();           
+            t2.Model = new Material(Color.BurlyWood, t2);
+            t2.Transform.Scale = new Vector3(5, 5, 5);
+            t2.Name = "Player";
+            t2.InitNewScript<PlayerControl>();
+            t2.InitNewScript<TemplateScript>();
+            t2.Transform.Position -= new Vector3(0, 20, 0);         
 
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 GameObject t1 = new GameObject();
-                t1.Name = string.Format("trigger_{0}", i);
+                t1.Name = string.Format("Trigger_{0}", i);
                 t1.TypeName = "trigger";
-                t1.Transform.Position = new Vector3(0, i * 20, 0);
+                t1.Transform.Position = new Vector3(i * 20, 0, 0);
                 t1.Transform.Scale = new Vector3(10, 10, 10);
                 t1.InitNewComponent<Collider>();
             }
@@ -94,6 +99,7 @@ namespace DKEngine
             for(int i = 0; i < 100; i++)
             {
                 TextBlock txt = new TextBlock();
+                txt.Name = string.Format("Depth_{0}", i * 100);
                 txt.Text = string.Format("{0}", i * 100);
                 txt.Transform.Position = new Vector3(-150, i * 100, 1);
                 txt.Foreground = Color.LightCyan;

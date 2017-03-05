@@ -49,6 +49,7 @@
     <Compile Include="Core\Components\Material.cs" />
     <Compile Include="Core\Components\SoundSource.cs" />
     <Compile Include="Core\Scripts\ButtonScript.cs" />
+    <Compile Include="Core\Scripts\CharacterController.cs" />
     <Compile Include="Core\Scripts\TextBoxScript.cs" />
     <Compile Include="Core\Scripts\TextControlScript.cs" />
     <Compile Include="Core\Components\Animator.cs" />

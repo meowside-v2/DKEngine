@@ -5,13 +5,14 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace DKBasicEngine_1_0.Core
 {
-    public class GameObject : ICore, IGraphics
+    public class GameObject : Component
     {
-        public string Name { get; set; }
-        public bool HasShadow { get; set; }
+        public string Name { get; set; } = "";
+        public bool HasShadow { get; set; } = false;
         public bool IsInView
         {
             get
@@ -55,13 +56,43 @@ namespace DKBasicEngine_1_0.Core
             }
         }
 
+        protected Collider _collider;
+        public Collider Collider
+        {
+            get { return _collider; }
+            set
+            {
+                if(_collider != value)
+                {
+                    _collider = value;
+                    if (value != null)
+                    {
+                        foreach (Script scr in this.Scripts)
+                        {
+                            scr.CollisionHandler = new Collider.CollisionEnterHandler(scr.OnColliderEnter);
+                            _collider.CollisionEvent += scr.CollisionHandler;
+                        }
+                    }
+                    else
+                    {
+                        foreach (Script scr in this.Scripts)
+                        {
+                            _collider.CollisionEvent -= scr.CollisionHandler;
+                            scr.CollisionHandler = null;
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+
         protected bool _IsGUI = false;
         protected string _typeName = "";
 
         public Material _Model         = null;
-        public GameObject Parent       = null;
         public Animator Animator       = null;
-        public Collider Collider       = null;
+        
         public SoundSource SoundSource = null;
         public Color? Foreground       = null;
 
@@ -69,32 +100,10 @@ namespace DKBasicEngine_1_0.Core
         public readonly List<GameObject> Child;
         internal readonly List<Script> Scripts;
 
-        protected bool _IsPartOfScene = true; 
-        internal bool IsPartOfScene
-        {
-            get { return _IsPartOfScene; }
-            set
-            {
-                _IsPartOfScene = value;
-                switch (_IsPartOfScene)
-                {
-                    case true:
-                        if(Engine.LoadingScene != null)
-                            if(!Engine.LoadingScene.AllGameObjects.Contains(this))
-                                Engine.LoadingScene.AllGameObjects.Add(this);
-                        break;
-                    case false:
-                        if (Engine.LoadingScene != null)
-                            if (Engine.LoadingScene.AllGameObjects.Contains(this))
-                                Engine.LoadingScene.AllGameObjects.Remove(this);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+        internal bool IsPartOfScene { get; set; } = true;
 
         public GameObject()
+            :base(null)
         {
             this.Child                = new List<GameObject>();
             this.Scripts              = new List<Script>();
@@ -105,15 +114,14 @@ namespace DKBasicEngine_1_0.Core
             //this.Collider             = new Collider(this);
             //this.Animator             = new Animator(this);
 
-            if (_IsPartOfScene && Engine.LoadingScene != null)
+            if (Engine.LoadingScene != null)
             {
-                Engine.LoadingScene.Model.Add(this);
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
-                Engine.LoadingScene.AllGameObjects.Add(this);
             }
         }
 
         public GameObject(GameObject Parent)
+            :base(Parent)
         {
             this.Child = new List<GameObject>();
             this.Scripts = new List<Script>();
@@ -135,7 +143,6 @@ namespace DKBasicEngine_1_0.Core
                 if (Engine.LoadingScene != null)
                 {
                     Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
-                    Engine.LoadingScene.AllGameObjects.Add(this);
                 }
 
                 this.IsPartOfScene = Parent.IsPartOfScene;
@@ -143,21 +150,21 @@ namespace DKBasicEngine_1_0.Core
                 
             else if (Engine.LoadingScene != null)
             {
-                Engine.LoadingScene.Model.Add(this);
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
-                Engine.LoadingScene.AllGameObjects.Add(this);
             }
         }
 
-        /*internal void Start()
+        internal void Init()
         {
-            int ScriptsCount = this.Scripts.Count;
-            for (int i = 0; i < ScriptsCount; i++)
-            {
-                Scripts[i].Start();
-                Engine.UpdateEvent += Scripts[i].Update;
-            }
-        }*/
+            if(Parent == null)
+                Engine.LoadingScene.Model.Add(this);
+
+            if (IsPartOfScene)
+                Engine.LoadingScene.AllGameObjects.Add(this.Name, this);
+
+            Engine.RenderGameObjects.Add(this);
+            Engine.NewGameobjects.Remove(this);
+        }
 
         public void InitNewScript<T>() where T : Script
         {
@@ -166,10 +173,13 @@ namespace DKBasicEngine_1_0.Core
 
         public void InitNewComponent<T>() where T : Component
         {
-            //this.Scripts.Add((T)Activator.CreateInstance(typeof(T), this));
             if (typeof(T) == typeof(Animator))
             {
-                this.Animator = new Animator(this);
+                if(this.Animator == null)
+                {
+                    this.Animator = new Animator(this);
+                }
+
                 return;
             }
 
@@ -181,26 +191,32 @@ namespace DKBasicEngine_1_0.Core
 
             if (typeof(T) == typeof(Collider) || typeof(T).IsSubclassOf(typeof(Collider)))
             {
-                //ConstructorInfo ctor = typeof(T).
-                Type t = typeof(T);
-                this.Collider = (Collider)t.Assembly.CreateInstance(t.FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { this }, null, null);
-                //(typeof(T).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null).Invoke(new object[] { this }));
-                //Activator.CreateInstance(typeof(T), (GameObject)this);
+                if(this.Collider == null)
+                {
+                    Type t = typeof(T);
+                    this.Collider = (Collider)t.Assembly.CreateInstance(t.FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { this }, null, null);
+                }
+
                 return;
             }
 
             if (typeof(T) == typeof(SoundSource) || typeof(T).IsSubclassOf(typeof(SoundSource)))
             {
-                this.SoundSource = (SoundSource)Activator.CreateInstance(typeof(T), (GameObject)this);
+                if(this.SoundSource == null)
+                {
+                    Type t = typeof(T);
+                    this.SoundSource = (SoundSource)t.Assembly.CreateInstance(t.FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { this, 44100, 2 }, null, null);   
+                }
+
                 return;
             }
         }
 
-        public virtual void Destroy()
+        protected internal override void Destroy()
         {
             if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
-            Engine.LoadingScene.AllGameObjects.Remove(this);
+            Engine.LoadingScene.AllGameObjects.Remove(this.Name);
             Engine.RenderGameObjects.Remove(this);
 
             int ScriptsCount = this.Scripts.Count;
@@ -218,5 +234,21 @@ namespace DKBasicEngine_1_0.Core
 
         internal virtual void Render()
         { Model?.Render(this, Foreground); }
+
+        public static GameObject Find(string Name)
+        {
+            GameObject retValue = null;
+
+            try
+            {
+                retValue = Engine.CurrentScene.AllGameObjects[Name];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Object not found\n" + ex);
+            }
+
+            return retValue;
+        }
     }
 }

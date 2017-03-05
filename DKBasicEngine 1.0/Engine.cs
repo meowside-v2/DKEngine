@@ -219,9 +219,8 @@ namespace DKBasicEngine_1_0
         {
             if (CurrentScene != null)
             {
-                int ObjectCount = Engine.CurrentScene.AllGameObjects.Count;
-                for (int i = ObjectCount - 1; i >= 0; i--)
-                    Engine.CurrentScene.AllGameObjects[i].Destroy();
+                foreach (var pair in Engine.CurrentScene.AllGameObjects)
+                    pair.Value.Destroy();
 
                 int ComponentCount = Engine.CurrentScene.AllComponents.Count;
                 for (int i = ComponentCount - 1; i >= 0; i--)
@@ -263,10 +262,6 @@ namespace DKBasicEngine_1_0
 
             while (true)
             {
-
-                
-                
-
                 Input.CheckForKeys();
 
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;
@@ -274,25 +269,19 @@ namespace DKBasicEngine_1_0
 
                 UpdateEvent?.Invoke();
 
-                int ToStartCount = NewGameobjects.Count;
-                while (ToStartCount > 0)
+                int ToStartCount = NewGameobjects.Count - 1;
+                while (ToStartCount >= 0)
                 {
-                    GameObject tmp = NewGameobjects[0];
-                    ToStartCount--;
-                    NewGameobjects.Remove(tmp);
-                    RenderGameObjects.Add(tmp);
-                    
+                    NewGameobjects[ToStartCount--].Init();
                 }
 
-                int InitComponentsCount = NewComponents.Count;
-                while (InitComponentsCount > 0)
+                int InitComponentsCount = NewComponents.Count - 1;
+                while (InitComponentsCount >= 0)
                 {
-                    Behavior tmp = NewComponents[0];
-                    InitComponentsCount--;
+                    Behavior tmp = NewComponents[InitComponentsCount--];
                     NewComponents.Remove(tmp);
                     tmp.Start();
                     Engine.UpdateEvent += tmp.UpdateHandle;
-                    
                 }
 
                 List<GameObject> reference = RenderGameObjects.GetGameObjectsInView();
