@@ -1,15 +1,15 @@
-﻿using DKBasicEngine_1_0;
-using DKBasicEngine_1_0.Core;
-using DKBasicEngine_1_0.Core.Components;
-using DKBasicEngine_1_0.Core.UI;
-using DKEngine.Properties;
+﻿using DKEngine;
+using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Core.UI;
+using DKEngine_Tester.Properties;
 using NAudio.Wave;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
-namespace DKEngine
+namespace DKEngine_Tester
 {
 
     sealed class TemplateScript : Script

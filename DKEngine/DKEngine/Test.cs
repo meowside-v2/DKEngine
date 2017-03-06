@@ -1,7 +1,7 @@
-﻿using DKBasicEngine_1_0;
-using DKBasicEngine_1_0.Core;
-using DKBasicEngine_1_0.Core.Components;
-using DKBasicEngine_1_0.Core.UI;
+﻿using DKEngine;
+using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKEngine
+namespace DKEngine_Tester
 {
     class Test : Scene
     {

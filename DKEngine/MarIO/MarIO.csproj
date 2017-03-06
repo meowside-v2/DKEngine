@@ -62,9 +62,9 @@
     <None Include="Sprites\blocks_project.psd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DKBasicEngine 1.0\DKBasicEngine 1.0.csproj">
+    <ProjectReference Include="..\..\DKBasicEngine 1.0\DKEngine.csproj">
       <Project>{685bb592-6ff3-43d1-aa93-dc6900601dda}</Project>
-      <Name>DKBasicEngine 1.0</Name>
+      <Name>DKEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

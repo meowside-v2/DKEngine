@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0.Core.Interfaces.Random.OwO.K
+namespace DKEngine.Core.Interfaces.Random.OwO.K
 {
     interface ICloseTheInternet
     {

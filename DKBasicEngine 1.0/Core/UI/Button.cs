@@ -2,10 +2,10 @@
 * (C) 2017 David Knieradl 
 */
 
-using DKBasicEngine_1_0.Core.Scripts;
+using DKEngine.Core.Scripts;
 using System;
 
-namespace DKBasicEngine_1_0.Core.UI
+namespace DKEngine.Core.UI
 {
     public class Button : TextBlock, IControl
     {

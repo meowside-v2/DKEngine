@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0.Core.Components
+namespace DKEngine.Core.Components
 {
     public abstract class Behavior : Component
     {

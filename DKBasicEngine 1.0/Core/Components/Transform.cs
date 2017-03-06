@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0.Core.Components
+namespace DKEngine.Core.Components
 {
     public sealed class Transform : Component, I3Dimensional
     {

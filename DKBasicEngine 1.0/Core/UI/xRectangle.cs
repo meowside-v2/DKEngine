@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace DKBasicEngine_1_0.Core.UI
+namespace DKEngine.Core.UI
 {
     public class xRectangle : GameObject
     {

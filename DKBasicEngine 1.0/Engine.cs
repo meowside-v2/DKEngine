@@ -16,15 +16,12 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using DKBasicEngine_1_0.Core;
-using DKBasicEngine_1_0.Core.Components;
-using DKBasicEngine_1_0.Core.Ext;
-using DKBasicEngine_1_0.Core.UI;
-using NAudio.Wave;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Core.Ext;
+using DKEngine.Core.UI;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine
 {
     public static class Engine
     {
@@ -149,7 +146,9 @@ namespace DKBasicEngine_1_0
 
         private static float deltaT = 0;
         public static float deltaTime { get { return deltaT; } }
-        
+
+        internal static long LastUpdated = 0;
+
         internal static event EngineHandler UpdateEvent;
         internal delegate void EngineHandler();
 
@@ -262,6 +261,8 @@ namespace DKBasicEngine_1_0
 
             while (true)
             {
+                Engine.LastUpdated = Environment.TickCount;
+
                 Input.CheckForKeys();
 
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;

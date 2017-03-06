@@ -1,5 +1,5 @@
-﻿using DKBasicEngine_1_0.Core.Components;
-using DKBasicEngine_1_0.Properties;
+﻿using DKEngine.Core.Components;
+using DKEngine.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Resources;
 using System.Windows.Forms;
 
-namespace DKBasicEngine_1_0.Core
+namespace DKEngine.Core
 {
     public static class Database
     {

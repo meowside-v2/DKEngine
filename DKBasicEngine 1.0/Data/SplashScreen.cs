@@ -1,13 +1,13 @@
-﻿using DKBasicEngine_1_0.Core;
-using DKBasicEngine_1_0.Core.Components;
-using DKBasicEngine_1_0.Properties;
+﻿using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine
 {
     sealed class SplashScreen : GameObject
     {

@@ -2,7 +2,7 @@
 * (C) 2017 David Knieradl 
 */
 
-using DKBasicEngine_1_0.Core.Ext;
+using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0.Core.Components
+namespace DKEngine.Core.Components
 {
     public sealed class Camera
     {

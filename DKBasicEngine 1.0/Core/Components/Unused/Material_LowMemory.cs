@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0.Core.Components.Unused
+namespace DKEngine.Core.Components.Unused
 {
     /// <summary>
     /// Low-Memory Material, unreleased stuff

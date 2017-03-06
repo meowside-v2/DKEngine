@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DKBasicEngine_1_0.Core.Components;
+using DKEngine.Core.Components;
 
-namespace DKBasicEngine_1_0.Core.Scripts
+namespace DKEngine.Core.Scripts
 {
     public class CharacterController : Script
     {
@@ -35,7 +35,7 @@ namespace DKBasicEngine_1_0.Core.Scripts
 
         protected internal override void OnColliderEnter(Collider e)
         {
-            //throw new NotImplementedException();
+
         }
 
         protected internal override void Start()
@@ -69,6 +69,10 @@ namespace DKBasicEngine_1_0.Core.Scripts
                     horiSpeed = -MovementSpeed;
                 }
             }
+            else if (CollisionLeft = Parent.Collider.Collision(Collider.Direction.Left))
+            {
+                horiSpeed = 0;
+            }
 
             if (Engine.Input.IsKeyDown(ConsoleKey.D))
             {
@@ -84,6 +88,10 @@ namespace DKBasicEngine_1_0.Core.Scripts
                 {
                     horiSpeed = MovementSpeed;
                 }
+            }
+            else if (CollisionRight = Parent.Collider.Collision(Collider.Direction.Right))
+            {
+                horiSpeed = 0;
             }
 
             if (Engine.Input.IsKeyDown(ConsoleKey.W))

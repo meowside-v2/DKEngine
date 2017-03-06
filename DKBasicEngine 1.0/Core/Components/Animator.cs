@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace DKBasicEngine_1_0.Core.Components
+namespace DKEngine.Core.Components
 {
     public class Animator : Behavior, IAnimated
     {

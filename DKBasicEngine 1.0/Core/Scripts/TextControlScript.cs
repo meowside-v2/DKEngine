@@ -1,14 +1,14 @@
-﻿using DKBasicEngine_1_0.Core.Components;
-using DKBasicEngine_1_0.Core.UI;
+﻿using DKEngine.Core.Components;
+using DKEngine.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static DKBasicEngine_1_0.Core.UI.Text;
-using static DKBasicEngine_1_0.Core.UI.TextBlock;
+using static DKEngine.Core.UI.Text;
+using static DKEngine.Core.UI.TextBlock;
 
-namespace DKBasicEngine_1_0.Core.Scripts
+namespace DKEngine.Core.Scripts
 {
     internal sealed class TextControlScript : Script
     {

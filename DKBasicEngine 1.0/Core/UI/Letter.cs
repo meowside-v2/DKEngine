@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0.Core.UI
+namespace DKEngine.Core.UI
 {
     internal sealed class Letter : GameObject
     {

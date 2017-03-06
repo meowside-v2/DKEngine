@@ -2,13 +2,13 @@
 * (C) 2017 David Knieradl 
 */
 
-using DKBasicEngine_1_0.Core.Scripts;
+using DKEngine.Core.Scripts;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using static DKBasicEngine_1_0.Core.UI.Text;
+using static DKEngine.Core.UI.Text;
 
-namespace DKBasicEngine_1_0.Core.UI
+namespace DKEngine.Core.UI
 {
     public class TextBox : TextBlock, IControl
     {

@@ -2,13 +2,13 @@
 * (C) 2017 David Knieradl 
 */
 
-using DKBasicEngine_1_0.Core;
+using DKEngine.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DKBasicEngine_1_0.Core.Ext
+namespace DKEngine.Core.Ext
 {
     public static class Extensions
     {

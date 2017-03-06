@@ -2,13 +2,13 @@
 * (C) 2017 David Knieradl 
 */
 
-using DKBasicEngine_1_0.Core.Components;
-using DKBasicEngine_1_0.Core.Scripts;
+using DKEngine.Core.Components;
+using DKEngine.Core.Scripts;
 using System.Collections.Generic;
 using System.Drawing;
-using static DKBasicEngine_1_0.Core.UI.Text;
+using static DKEngine.Core.UI.Text;
 
-namespace DKBasicEngine_1_0.Core.UI
+namespace DKEngine.Core.UI
 {
     public class TextBlock : GameObject, IText
     {

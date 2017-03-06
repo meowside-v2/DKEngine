@@ -8,7 +8,7 @@ using NAudio.Wave;
 using System.IO;
 using NAudio.Wave.SampleProviders;
 
-namespace DKBasicEngine_1_0.Core.Components
+namespace DKEngine.Core.Components
 {
     public class SoundSource : Component
     {

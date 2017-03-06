@@ -1,4 +1,4 @@
-﻿namespace DKBasicEngine_1_0
+﻿namespace DKEngine
 {
     public interface IControl
     {

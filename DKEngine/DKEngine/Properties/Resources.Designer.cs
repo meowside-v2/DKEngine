@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DKEngine.Properties {
+namespace DKEngine_Tester.Properties {
     using System;
     
     

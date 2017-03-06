@@ -1,11 +1,11 @@
-﻿using DKBasicEngine_1_0.Core.Components;
+﻿using DKEngine.Core.Components;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0.Core
+namespace DKEngine.Core
 {
     public class Scene : IPage
     {
