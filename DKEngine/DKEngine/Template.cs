@@ -1,34 +1,43 @@
-﻿using DKBasicEngine_1_0;
+﻿using DKEngine;
+using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Core.UI;
+using DKEngine_Tester.Properties;
+using NAudio.Wave;
+using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 
-namespace DKEngine
+namespace DKEngine_Tester
 {
 
-    class TemplateScript : Script
+    sealed class TemplateScript : Script
     {
-
-        private const int Speed = 5;
+        TextBlock DepthMeter;
 
         public TemplateScript(GameObject Parent)
             :base(Parent)
         { }
 
-        public override void Start()
+        protected override void Start()
         {
-            this.Parent.Transform.Position = new Vector3(0, -5, 1);
-            this.Parent.Collider = new Collider(this.Parent);
-            this.Parent.Collider.IsTrigger = true;
-            this.Parent.Model = new Material(Color.BurlyWood, Parent);
-            this.Parent.Transform.Scale = new Vector3(10, 10, 10);
+            DepthMeter = new TextBlock(this.Parent);
+            DepthMeter.Name = "Depth meter";
+            DepthMeter.Transform.Position += new Vector3(150, 0, 0);
+            DepthMeter.Foreground = Color.BlanchedAlmond;
+            DepthMeter.Transform.Dimensions = new Vector3(30, 20, 1);
+            DepthMeter.Transform.Scale = new Vector3(1, 1, 1);
+            DepthMeter.TextHAlignment = Text.HorizontalAlignment.Right;
+            DepthMeter.Background = Color.ForestGreen;
         }
 
-        public override void Update()
+        protected override void Update()
         {
-            this.Parent.Transform.Position += new Vector3(0, Speed * Engine.deltaTime, 0);
+            DepthMeter.Text = string.Format("{0:F2}", Parent.Transform.Position.Y);
         }
 
-        public override void OnColliderEnter(Collider e)
+        protected override void OnColliderEnter(Collider e)
         {
             Debug.WriteLine("Collided");
         }

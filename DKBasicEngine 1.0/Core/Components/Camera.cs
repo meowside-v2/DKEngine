@@ -2,6 +2,7 @@
 * (C) 2017 David Knieradl 
 */
 
+using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,9 +11,9 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine.Core.Components
 {
-    public class Camera
+    public sealed class Camera
     {
         public Vector3 Position;
 
@@ -53,7 +54,7 @@ namespace DKBasicEngine_1_0
                 Temp = GameObjectsInView;
 
             else
-                Temp = Engine.ToRender.Where(obj => obj.IsInView && obj.Transform.Position.Z > MinRenderDepth && obj.Transform.Position.Z < MaxRenderDepth).ToList(); 
+                Temp = Engine.RenderGameObjects.Where(obj => obj.IsInView && obj.Transform.Position.Z > MinRenderDepth && obj.Transform.Position.Z < MaxRenderDepth).ToList(); 
 
             RenderingGUI = true;
             List<GameObject> GUI = Temp.Where(item => item.IsGUI).ToList();
@@ -64,44 +65,29 @@ namespace DKBasicEngine_1_0
             while (GUICount > 0)
             {
                 float tempHeight = GUI.FindMaxZ();
-                List<GameObject> toRender = GUI.Where(item => item.Transform.Position.Z == tempHeight).ToList();
+                GameObject[] toRender = GUI.Where(item => item.Transform.Position.Z == tempHeight).ToArray();
 
-                int toRenderCount = toRender.Count;
-                for (int i = 0; i < toRenderCount; i++)
-                    toRender[i].Render();
-
-                /*Parallel.For(0, toRenderCount, (i) =>
+                int toRenderCount = toRender.Length;
+                for (int i = toRenderCount - 1; i >= 0; i--)
                 {
                     toRender[i].Render();
-                });*/
-
-                for (int i = 0; i < toRenderCount; i++)
-                {
                     GUI.Remove(toRender[i]);
                     GUICount--;
                 }
             }
 
             RenderingGUI = false;
-
             int TempCount = Temp.Count;
 
             while(TempCount > 0)
             {
                 float tempHeight = Temp.FindMaxZ();
-                List<GameObject> toRender = Temp.Where(item => item.Transform.Position.Z == tempHeight).ToList();
+                GameObject[] toRender = Temp.Where(item => item.Transform.Position.Z == tempHeight).ToArray();
 
-                int toRenderCount = toRender.Count;
-                for (int i = 0; i < toRenderCount; i++)
-                    toRender[i].Render();
-
-                /*Parallel.For(0, toRenderCount, (i) =>
+                int toRenderCount = toRender.Length;
+                for (int i = toRenderCount - 1; i >= 0; i--)
                 {
                     toRender[i].Render();
-                });*/
-
-                for (int i = 0; i < toRenderCount; i++)
-                {
                     Temp.Remove(toRender[i]);
                     TempCount--;
                 }

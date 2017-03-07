@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine
 {
     public interface IAnimated
     {

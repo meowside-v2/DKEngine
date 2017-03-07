@@ -3,10 +3,11 @@
 */
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine.Core.Ext
 {
     public static class WindowControl
     {
@@ -40,13 +41,17 @@ namespace DKBasicEngine_1_0
 
         internal static void WindowInit()
         {
-            Console.SetWindowSize(20, 20);
-            Console.SetBufferSize(21, 21);
-
             Console.CursorVisible = false;
-            Console.Title = "MarIO";
+            Console.SetOut(TextWriter.Null);
+            Console.SetIn(TextReader.Null);
+
+            Console.BufferHeight = Console.LargestWindowHeight;
+            Console.BufferWidth  = Console.LargestWindowWidth;
+
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
+
+            Console.Clear();
 
             Timer windowCheck = new Timer(WindowSizeChecker, null, 0, 100);
         }

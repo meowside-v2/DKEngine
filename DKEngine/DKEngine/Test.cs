@@ -1,4 +1,7 @@
-﻿using DKBasicEngine_1_0;
+﻿using DKEngine;
+using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,7 +9,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKEngine
+namespace DKEngine_Tester
 {
     class Test : Scene
     {
@@ -73,21 +76,47 @@ namespace DKEngine
                         g.Transform.Position = new Position(i * 1024, j * 16, -a);
                         g.TypeName = "border";
                     }*/
-                        
-                        
-            for (int i = 0; i < 1000; i++)
+            Database.AddNewGameObjectMaterial("trigger", new Material(Color.AliceBlue, new Vector3(1,1,1)));
+
+            GameObject t2 = new GameObject();
+            t2.Model = new Material(Color.BurlyWood, t2);
+            t2.Transform.Scale = new Vector3(5, 5, 5);
+            t2.Name = "Player";
+            t2.InitNewScript<PlayerControl>();
+            t2.InitNewScript<TemplateScript>();
+            t2.Transform.Position -= new Vector3(0, 20, 0);
+
+            for (int i = 0; i < 100; i++)
             {
                 GameObject t1 = new GameObject();
-                t1.Model = new Material(Color.AliceBlue, t1);
-                t1.Transform.Position = new Vector3(0, i, 0);
-                t1.Collider = new Collider(t1);
+                t1.Name = string.Format("TriggerBottom_{0}", i);
+                t1.TypeName = "trigger";
+                t1.Transform.Position = new Vector3(i * 20, 0, 0);
                 t1.Transform.Scale = new Vector3(10, 10, 10);
+                t1.InitNewComponent<Collider>();
             }
-            
-            GameObject t2 = new GameObject();
-            t2.Scripts.Add(new TemplateScript(t2));
-            t2.Transform.Position = new Vector3(0, -10, 0);
-            
+
+            for (int i = 0; i < 100; i++)
+            {
+                GameObject t1 = new GameObject();
+                t1.Name = string.Format("TriggerTop_{0}", i);
+                t1.TypeName = "trigger";
+                t1.Transform.Position = new Vector3(i * 20, -200, 0);
+                t1.Transform.Scale = new Vector3(10, 10, 10);
+                t1.InitNewComponent<Collider>();
+            }
+
+            for (int i = 0; i < 100; i++)
+            {
+                TextBlock txt = new TextBlock();
+                txt.Name = string.Format("Depth_{0}", i * 100);
+                txt.Text = string.Format("{0}", i * 100);
+                txt.Transform.Position = new Vector3(-150, i * 100, 1);
+                txt.Foreground = Color.LightCyan;
+                txt.FontSize = 2f;
+                txt.Transform.Dimensions = new Vector3(300, 20, 1);
+            }
+
             Camera c = new Camera();
             c.Position = new Vector3(-300, -100, 0);
             c.Parent = t2;

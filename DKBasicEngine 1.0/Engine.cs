@@ -1,8 +1,6 @@
-﻿/*
+﻿/**
 * (C) 2017 David Knieradl 
-*/
-
-/**
+*
 * For the brave souls who get this far: You are the chosen ones,
 * the valiant knights of programming who toil away, without rest,
 * fixing our most awful code. To you, true saviors, kings of men,
@@ -15,45 +13,117 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
+using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Core.Ext;
+using DKEngine.Core.UI;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine
 {
     public static class Engine
     {
         public static class Render
         {
-            public const int RenderWidth  = 640;
-            public const int RenderHeight = 360;
-            internal const int ImageBufferSize = 3 * RenderWidth * RenderHeight;
+            public   const int RenderWidth        = 640;
+            public   const int RenderHeight       = 360;
+            internal const int ImageBufferSize    = 3 * RenderWidth * RenderHeight;
             internal const int ImageKeyBufferSize = RenderWidth * RenderHeight;
 
             internal static byte[] imageBuffer;
             internal static byte[] imageBufferKey;
-
-            internal static readonly byte[] ImageOutData = new byte[ImageBufferSize];
+            internal static byte[] ImageOutData;
             
-            internal const short sampleSize = 100;
-            internal static int lastTime = 0;
-            internal static int numRenders = 0;
+            /*internal const  short sampleSize = 100;
+            internal static int   lastTime   = 0;
+            internal static int   numRenders = 0;*/
 
             internal static bool AbortRender = false;
         }
+
+        /*public static class Sound
+        {
+            public static WaveOut OutputDevice;
+            public static bool IsSoundAvailable
+            {
+                get { return OutputDevice != null; }
+            }
+        }*/
 
         public static class Input
         {
             [DllImport("user32.dll")]
             private static extern ushort GetKeyState(short nVirtKey);
-
             private const ushort keyDownBit = 0x80;
+
+            internal static bool[] KeysPressed;
+            internal static bool[] KeysDown;
+            internal static bool[] KeysReleased;
+            internal static bool[] KeysUp;
+
+            internal static short NumberOfKeys;
 
             public static bool IsKeyPressed(ConsoleKey key)
             {
-                return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+                return KeysPressed[(short)key];
+                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+            }
+
+            public static bool IsKeyDown(ConsoleKey key)
+            {
+                return KeysDown[(short)key];
+                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+            }
+
+            public static bool IsKeyUp(ConsoleKey key)
+            {
+                return KeysUp[(short)key];
+                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+            }
+
+            public static bool IsKeyReleased(ConsoleKey key)
+            {
+                return KeysReleased[(short)key];
+                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+            }
+
+            internal static void CheckForKeys()
+            {
+                for(int key = 0; key < NumberOfKeys; key++)
+                {
+                    bool IsDown = ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
+
+                    if (IsDown)
+                    {
+                        if (!KeysDown[key])
+                        {
+                            KeysUp[key] = false;
+                            KeysReleased[key] = false;
+                            KeysPressed[key] = true;
+                            KeysDown[key] = true;
+                        }
+                        else if (KeysPressed[key])
+                        {
+                            KeysPressed[key] = false;
+                        }
+                    }
+                    else
+                    {
+                        if (KeysDown[key])
+                        {
+                            KeysPressed[key] = false;
+                            KeysDown[key] = false;
+                            KeysReleased[key] = true;
+                            KeysUp[key] = true;
+                        }
+                        else if (KeysReleased[key])
+                        {
+                            KeysReleased[key] = false;
+                        }
+                    }
+                }
             }
         }
 
@@ -67,26 +137,20 @@ namespace DKBasicEngine_1_0
         private static Stopwatch DeltaT;
         internal static Camera BaseCam;
 
-        internal static List<Collider> Collidable;
-        internal static List<GameObject> ToStart;
-        internal static List<GameObject> ToRender;
+        internal static List<Behavior> NewComponents;
+        internal static List<GameObject> NewGameobjects;
+        internal static List<GameObject> RenderGameObjects;
 
-        internal static Scene Scene;
+        internal static Scene CurrentScene;
+        internal static Scene LoadingScene;
 
         private static float deltaT = 0;
         public static float deltaTime { get { return deltaT; } }
 
-        internal static event UpdateHandler UpdateEvent;
-        internal delegate void UpdateHandler();
+        internal static long LastUpdated = 0;
 
-        /*internal static event BackgroundWorker UpdateEvent;
-        internal static event BackgroundWorker StartEvent;
-        internal static event BackgroundWorker RenderEvent;
-        internal static event BackgroundWorker GUIRenderEvent;
-        internal static event CollisionCheck CollisionCheckEvent;
-
-        internal delegate void BackgroundWorker();
-        internal delegate void CollisionCheck(Collider e);*/
+        internal static event EngineHandler UpdateEvent;
+        internal delegate void EngineHandler();
 
         public static void Init()
         {
@@ -94,41 +158,52 @@ namespace DKBasicEngine_1_0
             {
                 try
                 {
-                    Console.CursorVisible = false;
-                    Console.SetOut(TextWriter.Null);
-                    Console.SetIn(TextReader.Null);
-
                     WindowControl.WindowInit();
                     Database.InitDatabase();
                     
                     Render.imageBuffer    = new byte[Render.ImageBufferSize];
                     Render.imageBufferKey = new byte[Render.ImageKeyBufferSize];
+                    Render.ImageOutData   = new byte[Render.ImageBufferSize];
 
-                    DeltaT    = Stopwatch.StartNew();
+                    Input.NumberOfKeys = (short)Enum.GetNames(typeof(ConsoleKey)).Length;
+                    Input.KeysPressed  = new bool[Input.NumberOfKeys];
+                    Input.KeysDown     = new bool[Input.NumberOfKeys];
+                    Input.KeysUp       = new bool[Input.NumberOfKeys];
+                    Input.KeysReleased = new bool[Input.NumberOfKeys];
 
-                    ToStart    = new List<GameObject>();
-                    ToRender   = new List<GameObject>();
-                    Collidable = new List<Collider>();
+                    DeltaT = Stopwatch.StartNew();
+
+                    NewGameobjects     = new List<GameObject>(65536);
+                    RenderGameObjects  = new List<GameObject>(65536);
+                    NewComponents      = new List<Behavior>(65536);
+                    
+                    //Sound.OutputDevice = new WaveOut();
+
+                    FpsMeter = new TextBlock();
+                    FpsMeter.Transform.Position = new Vector3(0, 0, 128);
+                    FpsMeter.Transform.Dimensions = new Vector3(50, 5, 1);
+                    FpsMeter.Transform.Scale = new Vector3(2, 2, 1);
+                    FpsMeter.VAlignment = Text.VerticalAlignment.Bottom;
+                    FpsMeter.HAlignment = Text.HorizontalAlignment.Left;
+                    FpsMeter.Text = "0";
+                    FpsMeter.IsGUI = true;
+                    FpsMeter.TextShadow = true;
+                    FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
+                    FpsMeter.IsPartOfScene = false;
+
+                    UpdateEvent += FpsMeter.Scripts[0].UpdateHandle;
+                    RenderGameObjects.Add(FpsMeter);
 
                     BackgroundWorks = new Thread(Update);
                     RenderWorker    = new Thread(RenderImage);
                     BackgroundWorks.Start();
                     RenderWorker.Start();
 
-                    FpsMeter = new TextBlock();
-                    FpsMeter.Transform.Position = new Vector3(0, 0, 128);
-                    FpsMeter.Transform.Dimensions = new Vector3(50, 5, 1);
-                    FpsMeter.Transform.Scale = new Vector3(2, 2, 1);
-                    FpsMeter.VAlignment = TextBlock.VerticalAlignment.Bottom;
-                    FpsMeter.HAlignment = TextBlock.HorizontalAlignment.Left;
-                    FpsMeter.Text = "0";
-                    FpsMeter.IsGUI = true;
-                    FpsMeter.TextShadow = true;
-                    FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
-                    FpsMeter.Start();
-                    ToRender.Add(FpsMeter);
-                    
+#if !DEBUG
                     SplashScreen();
+#endif
+
+                    _IsInitialised = true;
                 }
                 catch (Exception e)
                 {
@@ -139,56 +214,35 @@ namespace DKBasicEngine_1_0
                 throw new Exception("Engine is being initialised second time");
         }
         
-        public static void ChangeScene(Scene Scene)
+        public static void ChangeScene<T>() where T : Scene
         {
-            if (_IsInitialised)
+            if (CurrentScene != null)
             {
-                //Engine._LoadingNewPage = true;
-                int SceneModelCount = Scene.Model.Count;
-                for (int i = 0; i < SceneModelCount; i++)
-                    Scene.Model[i].Destroy();
+                foreach (var pair in Engine.CurrentScene.AllGameObjects)
+                    pair.Value.Destroy();
 
-                Engine.Scene = Scene;
-                Scene.Init();
-
-                Engine.ToStart = Scene.NewlyGenerated;
-
-                //Engine._LoadingNewPage = false;
+                int ComponentCount = Engine.CurrentScene.AllComponents.Count;
+                for (int i = ComponentCount - 1; i >= 0; i--)
+                    Engine.CurrentScene.AllComponents[i].Destroy();
             }
-            else
-                throw new Exception("Engine not initialised \n Can't change page");
-        }
 
-        public static void Pause()
-        {
-            if (DeltaT.IsRunning) DeltaT?.Stop();
-            if (BackgroundWorks.IsAlive) BackgroundWorks?.Abort();
-            if (RenderWorker.IsAlive)
-            {
-                RenderWorker.Abort();
-                Render.AbortRender = true;
-            }
-        }
-
-        public static void Resume()
-        {
-            if(!DeltaT.IsRunning) DeltaT?.Start();
-            if(!BackgroundWorks.IsAlive) BackgroundWorks?.Start();
-            if (!RenderWorker.IsAlive)
-            {
-                Render.AbortRender = false;
-                RenderWorker.Start();
-            }
+            Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
+            Engine.LoadingScene.Init();
+            
+            Engine.CurrentScene = Engine.LoadingScene;
+            Engine.NewGameobjects = Engine.CurrentScene.NewlyGeneratedGameObjects;
+            Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
+                
+            //Engine._LoadingNewPage = false;
         }
 
         private static void SplashScreen()
         {
             if (!_IsInitialised)
             {
-                _IsInitialised = true;
+                Engine.ChangeScene<Scene>();
 
-                Engine.ChangeScene(new Scene());
-                SplashScreen splash     = new SplashScreen();
+                SplashScreen splash    = new SplashScreen();
                 Camera splashScreenCam = new Camera();
 
                 SpinWait.SpinUntil(() => splash.Animator.NumberOfPlays >= 1);
@@ -200,77 +254,60 @@ namespace DKBasicEngine_1_0
 
         private static void Update()
         {
+            
+            int       NumberOfFrames = 0;
+            TimeSpan  timeOut        = new TimeSpan(0, 0, 0, 0, 500);
+            Stopwatch time           = Stopwatch.StartNew();
+
             while (true)
             {
-                /*int referenceCount = reference.Count;
-                for(int i = referenceCount - 1; i >= 0; i--)
-                {
-                    if (reference[i] is I3Dimensional)
-                        if (!((I3Dimensional)reference[i]).IsInView())
-                            reference.Remove(reference[i]);
-                }*/
+                Engine.LastUpdated = Environment.TickCount;
 
-                /*if(Page != null)
-                {
-                    int controlReferenceCount = Page.PageControls.Count;
-                    for (int i = 0; i < controlReferenceCount; i++)
-                        Page.PageControls[i].IsFocused = i == Page.PageControls[i].FocusElementID;
-                }*/
-
-                /*if (Engine._LoadingNewPage)
-                {
-                    SpinWait.SpinUntil(() => !Engine._LoadingNewPage);
-                }*/
-
-                int ToStartCount = ToStart.Count;
-                while (ToStartCount > 0)
-                {
-                    ToStart[0].Start();
-                    ToRender.Add(ToStart[0]);
-                    ToStart.Remove(ToStart[0]);
-                    ToStartCount--;
-                }
-
-                //List<GameObject> reference = ToUpdate.GetGameObjectsInView();
+                Input.CheckForKeys();
 
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
 
-                /*int refereceCount = reference.Count;
-                for (int i = 0; i < refereceCount; i++)
-                    reference[i].Update();*/
+                int ToStartCount = NewGameobjects.Count - 1;
+                while (ToStartCount >= 0)
+                {
+                    NewGameobjects[ToStartCount--].Init();
+                }
 
-                List<GameObject> reference = ToRender.GetGameObjectsInView();
+                int InitComponentsCount = NewComponents.Count - 1;
+                while (InitComponentsCount >= 0)
+                {
+                    Behavior tmp = NewComponents[InitComponentsCount--];
+                    NewComponents.Remove(tmp);
+                    tmp.Start();
+                    Engine.UpdateEvent += tmp.UpdateHandle;
+                }
 
-                List<GameObject> Triggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
-                List<GameObject> VisibleWithCollider = reference.Where(obj => obj.Collider != null ? obj.Collider.IsCollidable : false).ToList();
-                int TriggersCount = Triggers.Count;
-                for (int i = 0; i < TriggersCount; i++)
-                    Triggers[i].Collider.TriggerCheck(VisibleWithCollider);
+                List<GameObject> reference = RenderGameObjects.GetGameObjectsInView();
+                
+                List<GameObject> VisibleTriggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
+                List<GameObject> VisibleColliders = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();
+                int ColliderCount = VisibleTriggers.Count;
+                for (int i = 0; i < ColliderCount; i++)
+                    VisibleTriggers[i].Collider.TriggerCheck(VisibleColliders);
                 
                 BaseCam?.BufferImage(reference);
 
-                Array.Copy(Render.imageBuffer, Render.ImageOutData, Render.ImageBufferSize);
-
-                if (Render.numRenders == 0)
-                    Render.lastTime = Environment.TickCount;
-
-                Render.numRenders++;
-
-                if (Render.numRenders == Render.sampleSize)
+                Buffer.BlockCopy(Render.imageBuffer, 0, Render.ImageOutData, 0, Render.ImageBufferSize);
+                
+                NumberOfFrames++;
+                
+                if (time.ElapsedMilliseconds > timeOut.TotalMilliseconds)
                 {
-                    int temp = Environment.TickCount - Render.lastTime;
-
-                    if (temp > 0)
-                    {
-                        FpsMeter.Text = string.Format("{0}", Render.sampleSize * 1000 / temp);
+                    long t = NumberOfFrames * 1000 / time.ElapsedMilliseconds;
+                    FpsMeter.Text = t.ToString();
 #if DEBUG
-                        Debug.WriteLine(string.Format("Buff {0}", Render.sampleSize * 1000 / temp));
+                    Debug.WriteLine(t);
 #endif
-                    }
-                    Render.numRenders = 0;
+                    time.Restart();
+                    NumberOfFrames = 0;
                 }
             }
         }
@@ -298,7 +335,6 @@ namespace DKBasicEngine_1_0
                         Width  = ScreenResCheck.Width;
                         Height = ScreenResCheck.Height;
                     }
-                    //Size imageSize = new Size(Console.WindowWidth, Console.WindowHeight); // desired image size in characters
 
                     fixed (byte* ptr = Render.ImageOutData)
                     {
@@ -309,61 +345,21 @@ namespace DKBasicEngine_1_0
                                                             System.Drawing.Imaging.PixelFormat.Format24bppRgb,
                                                             new IntPtr(ptr)))
                         {
-                            //Size fontSize = GetConsoleFontSize();
-
                             Rectangle imageRect = new Rectangle(0,
                                                                 0,
-                                                                Width, //imageSize.Width * fontSize.Width,
-                                                                Height); //imageSize.Height * fontSize.Height);
+                                                                Width,
+                                                                Height);
 
                             g.DrawImage(outFrame, imageRect);
                         }
                     }
+
+                    Thread.Sleep(1);
                 }
             }
         }
 
-        /*private static Size GetConsoleFontSize()
-        {
-            IntPtr outHandle = GetStdHandle(-11);
-            ConsoleFontInfo cfi = new ConsoleFontInfo();
-
-            if (!GetCurrentConsoleFont(outHandle, false, cfi))
-                throw new InvalidOperationException("Unable to get font information.");
-
-            return new Size(cfi.dwFontSize.X, cfi.dwFontSize.Y);
-        }*/
-
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern IntPtr GetConsoleWindow();
-
-        /*[DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool GetCurrentConsoleFont(
-            IntPtr hConsoleOutput,
-            bool bMaximumWindow,
-            [Out][MarshalAs(UnmanagedType.LPStruct)]ConsoleFontInfo lpConsoleCurrentFont);
-
-        [DllImport("kernel32.dll",
-         EntryPoint = "GetStdHandle",
-         SetLastError = true,
-         CharSet = CharSet.Auto,
-         CallingConvention = CallingConvention.StdCall)]
-        private static extern IntPtr GetStdHandle(int nStdHandle);
-
-        [StructLayout(LayoutKind.Sequential)]
-        private class ConsoleFontInfo
-        {
-            public int nFont;
-            public Coord dwFontSize;
-        }
-
-        [StructLayout(LayoutKind.Explicit)]
-        private struct Coord
-        {
-            [FieldOffset(0)]
-            internal short X;
-            [FieldOffset(2)]
-            internal short Y;
-        }*/
     }
 }

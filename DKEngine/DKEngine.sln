@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DKEngine", "DKEngine\DKEngine.csproj", "{F01914BE-C135-423C-AED5-9B4900954A54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DKEngine (Tester)", "DKEngine\DKEngine (Tester).csproj", "{F01914BE-C135-423C-AED5-9B4900954A54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DKBasicEngine 1.0", "..\DKBasicEngine 1.0\DKBasicEngine 1.0.csproj", "{685BB592-6FF3-43D1-AA93-DC6900601DDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DKEngine", "..\DKBasicEngine 1.0\DKEngine.csproj", "{685BB592-6FF3-43D1-AA93-DC6900601DDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarIO", "MarIO\MarIO.csproj", "{E5B976A6-D323-4C6D-9FE1-869A75846D1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{685BB592-6FF3-43D1-AA93-DC6900601DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{685BB592-6FF3-43D1-AA93-DC6900601DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{685BB592-6FF3-43D1-AA93-DC6900601DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5B976A6-D323-4C6D-9FE1-869A75846D1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5B976A6-D323-4C6D-9FE1-869A75846D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5B976A6-D323-4C6D-9FE1-869A75846D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5B976A6-D323-4C6D-9FE1-869A75846D1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

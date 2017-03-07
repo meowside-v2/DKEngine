@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine
 {
     public interface IPage
     {

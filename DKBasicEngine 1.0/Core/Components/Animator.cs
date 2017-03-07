@@ -3,28 +3,30 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine.Core.Components
 {
-    public class Animator : IAnimated
+    public class Animator : Behavior, IAnimated
     {
-        GameObject Parent;
+        public TimeSpan CurrentAnimationTime;
+        public Dictionary<string, AnimationNode> Animations;
+        private AnimationNode _current;
+        private GameObject _p;
 
-        private Engine.UpdateHandler UpdateDel;
-        private bool _wasPlayed         = false;
-        private AnimationLoop _settings = AnimationLoop.Once;
-        public AnimationLoop Settings
+        public int NumberOfPlays { get; private set; } = 0;
+        internal AnimationNode Current
         {
-            get
-            {
-                return _settings;
-            }
+            get { return _current; }
             set
             {
-                if(_settings != value)
+                if(value != _current)
                 {
-                    _settings = value;
-                    _wasPlayed = false;
+                    _current = value;
+                    Parent.Model = _current.Animation;
+                    NumberOfPlays = 0;
+                    CurrentAnimationTime = new TimeSpan(0);
                 }
             }
         }
@@ -34,36 +36,44 @@ namespace DKBasicEngine_1_0
             {
                 return (int)(CurrentAnimationTime.TotalMilliseconds / Parent.Model.DurationPerFrame % Parent.Model.Frames);
             }
-            set { }
         }
-        public TimeSpan CurrentAnimationTime = new TimeSpan(0);
-
-        private int _numberOfPlays = 0;
-        public int NumberOfPlays
+       
+        public Animator(GameObject Parent)
+            :base(Parent)
         {
-            get { return _numberOfPlays; }
-            set
+            this.CurrentAnimationTime = new TimeSpan(0);
+            this.Animations           = new Dictionary<string, AnimationNode>();
+            _p = Parent;
+            /*if(Parent.Model != null)
             {
-                if(value >= 0 && value != _numberOfPlays)
-                {
-                    _numberOfPlays = value;
+                Animations.Add("default", new AnimationNode("default", Parent.Model));
+                this.Play("default");
+            }*/
+        }
 
-                    if (Settings == AnimationLoop.Once && value > 0)
-                        _wasPlayed = true;
+        public void Play(string AnimationName)
+        {
+            if (AnimationName != Current?.Name)
+            {
+                AnimationNode Result;
+
+                try
+                {
+                    Result = Animations[AnimationName];
                 }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Animation \"{0}\"not found\n{1}", AnimationName, e);
+                    return;
+                }
+
+                Current = Result;
             }
         }
 
-        public Animator(GameObject Parent)
+        protected internal override void Update()
         {
-            this.Parent = Parent;
-            UpdateDel = new Engine.UpdateHandler(this.Update);
-            Engine.UpdateEvent += UpdateDel;
-        }
-
-        protected void Update()
-        {
-            if (Parent.Model?.Frames > 1 && !_wasPlayed)
+            if (Parent.Model?.Frames > 1)
             {
                 CurrentAnimationTime = CurrentAnimationTime.Add(new TimeSpan(0, 0, 0, 0, (int)(Engine.deltaTime * 1000)));
 
@@ -75,16 +85,15 @@ namespace DKBasicEngine_1_0
             }
         }
 
-        public void Restart()
-        {
-            _wasPlayed = false;
-            CurrentAnimationTime = new TimeSpan(0);
-            NumberOfPlays = 0;
-        }
+        protected internal override void Start()
+        { }
 
-        public void Destroy()
+        protected internal override void Destroy()
         {
-            Engine.UpdateEvent -= UpdateDel;
+            Engine.UpdateEvent -= UpdateHandle;
+            
+            Parent = null;
+            UpdateHandle = null;
         }
     }
 }

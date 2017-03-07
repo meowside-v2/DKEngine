@@ -10,17 +10,17 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DKBasicEngine_1_0
+namespace DKEngine.Core.Components
 {
     /// <summary>
-    /// Material represents ones texture with animations states
+    /// Low-Memory Material, unreleased stuff
     /// </summary>
-    public class Material
+    public sealed class Material
     {
         /// <summary>
-        /// Source image used for this Material
+        /// Source image used as Texture
         /// </summary>
-        public readonly Image SourceImage = null;
+        public readonly Bitmap Texture = null;
 
         /// <summary>
         /// Represents scaled length of image in pixels
@@ -36,11 +36,6 @@ namespace DKBasicEngine_1_0
         /// Number of frames
         /// </summary>
         public readonly int Frames = 1;
-
-        /// <summary>
-        /// Images of Animation loaded so far (returns one image less because of reasons)
-        /// </summary>
-        private int BufferImages = -1;
 
         /// <summary>
         /// Total duration of animated image
@@ -62,44 +57,30 @@ namespace DKBasicEngine_1_0
         /// </summary>
         public readonly bool IsLooped = false;
 
-        /// <summary>
-        /// Represents Alpha channel of image
-        /// </summary>
-        public readonly byte[][][] colorMapA;
+        private int _SelectedLayer       = -1;
+        private FrameDimension _FrameDim = null;
+        private BitmapData _BitmapData   = null;
+        private byte[] _Data             = null;
+        private byte _BytesPerPixel = 0;
 
-        /// <summary>
-        /// Represents Red channel of image
-        /// </summary>
-        public readonly byte[][][] colorMapR;
-
-        /// <summary>
-        /// Represents Green channel of image
-        /// </summary>
-        public readonly byte[][][] colorMapG;
-
-        /// <summary>
-        /// Represents Blue channel of image
-        /// </summary>
-        public readonly byte[][][] colorMapB;
-        
         /// <summary>
         /// Loads image and creates new material
         /// </summary>
         /// <param name="source">Source image</param>
         public Material(Image source)
         {
-            if(source != null)
+            if (source != null)
             {
-                SourceImage = source;
+                _FrameDim = new FrameDimension(source.FrameDimensionsList[0]);
+                Frames = source.GetFrameCount(_FrameDim);
+
+                Texture = (Bitmap)source;
 
                 Width = source.Width;
                 Height = source.Height;
-
+                
                 if (ImageAnimator.CanAnimate(source))
                 {
-                    FrameDimension frameDimension = new FrameDimension(source.FrameDimensionsList[0]);
-                    Frames = source.GetFrameCount(frameDimension);
-
                     int delay = 0;
                     int this_delay = 0;
                     int index = 0;
@@ -115,109 +96,23 @@ namespace DKBasicEngine_1_0
                     DurationPerFrame = Duration / Frames;
                     IsAnimated = true;
                     IsLooped = BitConverter.ToInt16(source.GetPropertyItem(20737).Value, 0) != 1;
-                    
-                    Bitmap[] layersOfImage = new Bitmap[Frames];
-
-                    for(int i = 0; i < Frames; i++)
-                    {
-                        source.SelectActiveFrame(frameDimension, i);
-                        layersOfImage[i] = new Bitmap(source);
-                    }
-
-                    colorMapA = new byte[Frames][][];
-                    colorMapR = new byte[Frames][][];
-                    colorMapG = new byte[Frames][][];
-                    colorMapB = new byte[Frames][][];
-
-                    Task.Factory.StartNew(() =>
-                    {
-                        int PixelFormat = 0;
-
-                        switch (layersOfImage[0].PixelFormat)
-                        {
-                            case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
-                                PixelFormat = 3;
-                                break;
-
-                            case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
-                                PixelFormat = 4;
-                                break;
-
-                            default:
-                                throw new Exception("Unsupported image pixel format");
-                        }
-                        
-                        for (int frame = 0; frame < Frames; frame++)
-                        {
-                            BitmapData ImageLayerData = layersOfImage[frame].LockBits(new Rectangle(0, 0, this.Width, this.Height), ImageLockMode.ReadOnly, layersOfImage[frame].PixelFormat);
-                            int size = ImageLayerData.Stride * ImageLayerData.Height;
-                            byte[] data = new byte[size];
-                            Marshal.Copy(ImageLayerData.Scan0, data, 0, size);
-
-                            colorMapA[frame] = new byte[this.Height][];
-                            colorMapR[frame] = new byte[this.Height][];
-                            colorMapG[frame] = new byte[this.Height][];
-                            colorMapB[frame] = new byte[this.Height][];
-
-                            for (int row = 0; row < this.Height; row++)
-                            {
-                                colorMapA[frame][row] = new byte[this.Width];
-                                colorMapR[frame][row] = new byte[this.Width];
-                                colorMapG[frame][row] = new byte[this.Width];
-                                colorMapB[frame][row] = new byte[this.Width];
-
-                                for (int column = 0; column < this.Width; column++)
-                                {
-                                    int offset = PixelFormat * row * Width + PixelFormat * column;
-                                    
-                                    colorMapA[frame][row][column] = PixelFormat == 4 ? data[offset + 3] : (byte)255;
-                                    colorMapR[frame][row][column] = data[offset + 2];
-                                    colorMapG[frame][row][column] = data[offset + 1];
-                                    colorMapB[frame][row][column] = data[offset];
-
-
-                                }
-                            }
-
-                            layersOfImage[frame].UnlockBits(ImageLayerData);
-
-                            BufferImages++;
-                        }
-                    });
                 }
-
-                else
+                
+                switch (source.PixelFormat)
                 {
-                    colorMapA = new byte[Frames][][];
-                    colorMapR = new byte[Frames][][];
-                    colorMapG = new byte[Frames][][];
-                    colorMapB = new byte[Frames][][];
+                    case PixelFormat.Format32bppArgb:
+                        _BytesPerPixel = 4;
+                        break;
 
-                    colorMapA[0] = new byte[this.Height][];
-                    colorMapR[0] = new byte[this.Height][];
-                    colorMapG[0] = new byte[this.Height][];
-                    colorMapB[0] = new byte[this.Height][];
+                    case PixelFormat.Format24bppRgb:
+                        _BytesPerPixel = 3;
+                        break;
 
-                    for (int row = 0; row < source.Height; row++)
-                    {
-                        colorMapA[0][row] = new byte[this.Width];
-                        colorMapR[0][row] = new byte[this.Width];
-                        colorMapG[0][row] = new byte[this.Width];
-                        colorMapB[0][row] = new byte[this.Width];
-
-                        for (int column = 0; column < source.Width; column++)
-                        {
-                            Color temp = ((Bitmap)source).GetPixel(column, row);
-
-                            colorMapA[0][row][column] = temp.A;
-                            colorMapR[0][row][column] = temp.R;
-                            colorMapG[0][row][column] = temp.G;
-                            colorMapB[0][row][column] = temp.B;
-                        }
-                    }
-
-                    BufferImages++;
+                    default:
+                        throw new Exception("Unsupported");
                 }
+
+                _Data = new byte[Width * Height * _BytesPerPixel];
             }
         }
 
@@ -225,42 +120,55 @@ namespace DKBasicEngine_1_0
         /// Creates new material with given color and scales it by parent's given scales
         /// </summary>
         /// <param name="clr">Source color</param>
-        /// <param name="Parent">I3Dimensional used for material scale</param>
-        public Material(Color clr, GameObject Parent)
+        /// <param name="Size">Vector3 used for material size</param>
+        public Material(Color clr, Vector3 Size)
         {
-            this.Width = (int)Parent.Transform.Dimensions.X;
-            this.Height = (int)Parent.Transform.Dimensions.Y;
+            this.Width = (int)Size.X;
+            this.Height = (int)Size.Y;
 
-            colorMapA = new byte[Frames][][];
-            colorMapR = new byte[Frames][][];
-            colorMapG = new byte[Frames][][];
-            colorMapB = new byte[Frames][][];
+            Frames = 1;
 
-            colorMapA[0] = new byte[this.Height][];
-            colorMapR[0] = new byte[this.Height][];
-            colorMapG[0] = new byte[this.Height][];
-            colorMapB[0] = new byte[this.Height][];
+            _BytesPerPixel = 4;
 
-            for (int row = 0; row < Height; row++)
+            int size = Width * Height * _BytesPerPixel;
+            _Data = new byte[size];
+
+            for (int index = 0; index < size; index += _BytesPerPixel)
             {
-                colorMapA[0][row] = new byte[this.Width];
-                colorMapR[0][row] = new byte[this.Width];
-                colorMapG[0][row] = new byte[this.Width];
-                colorMapB[0][row] = new byte[this.Width];
+                _Data[index + 3] = clr.A;
+                _Data[index + 2] = clr.R;
+                _Data[index + 1] = clr.G;
+                _Data[index] = clr.B;
+            }
 
-                for (int column = 0; column < Width; column++)
+            unsafe
+            {
+                fixed (byte* data = _Data)
                 {
-                    colorMapA[0][row][column] = clr.A;
-                    colorMapR[0][row][column] = clr.R;
-                    colorMapG[0][row][column] = clr.G;
-                    colorMapB[0][row][column] = clr.B;
+                    using (Bitmap tmp = new Bitmap(Width,
+                                             Height,
+                                             Width * _BytesPerPixel,
+                                             PixelFormat.Format32bppArgb,
+                                             new IntPtr(data)))
+                    {
+                        Texture = new Bitmap(tmp);
+                    }
                 }
             }
 
-            BufferImages++;
+            _FrameDim = new FrameDimension(Texture.FrameDimensionsList[0]);
         }
 
         /// <summary>
+        /// Creates new material with given color and scales it by parent's given scales
+        /// </summary>
+        /// <param name="clr">Source color</param>
+        /// <param name="Parent">GameObject used for material size</param>
+        public Material(Color clr, GameObject Parent)
+            :this(clr, Parent.Transform.Dimensions)
+        { }
+
+        /*/// <summary>
         /// Returns color of pixel on coordinations
         /// </summary>
         /// <param name="x">Column coordination</param>
@@ -273,17 +181,48 @@ namespace DKBasicEngine_1_0
                                                               this.colorMapR[frame][y][x],
                                                               this.colorMapG[frame][y][x],
                                                               this.colorMapB[frame][y][x]);
-        }
-        
+        }*/
+
         /// <summary>
         /// Render material into engine image buffer
         /// </summary>
         /// <param name="Parent">I3Dimensional for coordiantions</param>
         public void Render(GameObject Parent, Color? ReColor = null)
         {
-
             int AnimationState = Parent.Animator != null ? Parent.Animator.AnimationState : 0;
             bool HasShadow = Parent.HasShadow;
+
+            if (_SelectedLayer != AnimationState)
+            {
+                if(_BitmapData != null)
+                    Texture.UnlockBits(_BitmapData);
+                Texture.SelectActiveFrame(_FrameDim, AnimationState);
+                _BitmapData = Texture.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, Texture.PixelFormat);
+                Marshal.Copy(_BitmapData.Scan0, _Data, 0, _Data.Length);
+                _SelectedLayer = AnimationState;
+            }
+
+            /*BitmapData ImageData = Texture.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, Texture.PixelFormat);
+
+            int BytesPerPixel = -1;
+            switch (ImageData.PixelFormat)
+            {
+                case PixelFormat.Format32bppArgb:
+                    BytesPerPixel = 4;
+                    break;
+
+                case PixelFormat.Format24bppRgb:
+                    BytesPerPixel = 3;
+                    break;
+
+                default:
+                    throw new Exception("Unsupported");
+            }
+
+            byte[] data = new byte[ImageData.Stride * ImageData.Height];
+            Marshal.Copy(ImageData.Scan0, data, 0, ImageData.Stride * ImageData.Height);*/
+
+            
 
             float CamX = Engine.BaseCam != null ? Engine.BaseCam.X : 0;
             float CamY = Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
@@ -301,47 +240,48 @@ namespace DKBasicEngine_1_0
             float NonRasteredWidth = 0;
             if (ReColor == null)
             {
-                if(AnimationState <= BufferImages)
-                    for (int row = 0; row < RasteredHeight; row++)
-                    {
-                        NonRasteredWidth = 0;
+                for (int row = 0; row < RasteredHeight; row++)
+                {
+                    NonRasteredWidth = 0;
 
-                        if (y + row >= Engine.Render.RenderHeight)
+                    if (y + row >= Engine.Render.RenderHeight)
+                        break;
+
+                    for (int column = 0; column < RasteredWidth; column++)
+                    {
+
+                        if (x + column >= Engine.Render.RenderWidth)
                             break;
 
-                        for (int column = 0; column < RasteredWidth; column++)
+                        if (IsOnScreen(x + column, y + row))
                         {
 
-                            if (x + column >= Engine.Render.RenderWidth)
-                                break;
+                            int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
+                            int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
-                            if (IsOnScreen(x + column, y + row))
+                            int tempColumn = (int)NonRasteredWidth;
+                            int tempRow = (int)NonRasteredHeight;
+
+                            int index = _BytesPerPixel * (tempRow * Width + tempColumn);
+
+                            if (Engine.Render.imageBufferKey[keyOffset] != 255 && _BytesPerPixel == 4 ? _Data[index + 3] != 0 : true)
                             {
+                                Color temp = MixPixel(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset],
+                                                        _BytesPerPixel == 4 ? _Data[index + 3] : (byte)255, _Data[index + 2], _Data[index + 1], _Data[index]);
 
-                                int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
-                                int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
+                                Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
-                                int tempColumn = (int)NonRasteredWidth;
-                                int tempRow = (int)NonRasteredHeight;
-
-                                if (Engine.Render.imageBufferKey[keyOffset] != 255 && colorMapA[AnimationState][tempRow][tempColumn] != 0)
-                                {
-                                    Color temp = MixPixel(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset],
-                                                          colorMapA[AnimationState][tempRow][tempColumn], colorMapR[AnimationState][tempRow][tempColumn], colorMapG[AnimationState][tempRow][tempColumn], colorMapB[AnimationState][tempRow][tempColumn]);
-
-                                    Engine.Render.imageBufferKey[keyOffset] = temp.A;
-
-                                    Engine.Render.imageBuffer[offset] = temp.B;
-                                    Engine.Render.imageBuffer[offset + 1] = temp.G;
-                                    Engine.Render.imageBuffer[offset + 2] = temp.R;
-                                }
+                                Engine.Render.imageBuffer[offset] = temp.B;
+                                Engine.Render.imageBuffer[offset + 1] = temp.G;
+                                Engine.Render.imageBuffer[offset + 2] = temp.R;
                             }
-
-                            NonRasteredWidth += NonRasteredWidthRatio;
                         }
 
-                        NonRasteredHeight += NonRasteredHeightRatio;
+                        NonRasteredWidth += NonRasteredWidthRatio;
                     }
+
+                    NonRasteredHeight += NonRasteredHeightRatio;
+                }
             }
             else
             {
@@ -369,7 +309,9 @@ namespace DKBasicEngine_1_0
                             int tempColumn = (int)NonRasteredWidth;
                             int tempRow = (int)NonRasteredHeight;
 
-                            if (Engine.Render.imageBufferKey[keyOffset] != 255 && colorMapA[AnimationState][tempRow][tempColumn] != 0)
+                            int index = _BytesPerPixel * (tempRow * Width + tempColumn);
+
+                            if (Engine.Render.imageBufferKey[keyOffset] != 255 && _BytesPerPixel == 4 ? _Data[index + 3] != 0 : true)
                             {
                                 Color temp = MixPixel(Color.FromArgb(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset]),
                                                         tempColor);
@@ -389,7 +331,7 @@ namespace DKBasicEngine_1_0
                 }
             }
 
-            if (HasShadow)
+            /*if (HasShadow)
             {
                 NonRasteredHeight = 0;
                 NonRasteredWidth = 0;
@@ -417,7 +359,9 @@ namespace DKBasicEngine_1_0
                             int tempColumn = (int)NonRasteredWidth;
                             int tempRow = (int)NonRasteredHeight;
 
-                            if (Engine.Render.imageBufferKey[keyOffset] != 255 && colorMapA[AnimationState][tempRow][tempColumn] != 0)
+                            int index = BytesPerPixel * (tempRow * Width + tempColumn);
+
+                            if (Engine.Render.imageBufferKey[keyOffset] != 255 && BytesPerPixel == 4 ? data[index + 3] != 0 : true)
                             {
                                 Color temp = MixPixel(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset],
                                                       0xBB, 0x00, 0x00, 0x00);
@@ -435,7 +379,7 @@ namespace DKBasicEngine_1_0
 
                     NonRasteredHeight += NonRasteredHeightRatio;
                 }
-            }
+            }*/
         }
 
         public Color MixPixel(byte topA, byte topR, byte topG, byte topB, byte bottomA, byte bottomR, byte bottomG, byte bottomB)
