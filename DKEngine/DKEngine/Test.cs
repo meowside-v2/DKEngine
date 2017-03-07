@@ -84,19 +84,29 @@ namespace DKEngine_Tester
             t2.Name = "Player";
             t2.InitNewScript<PlayerControl>();
             t2.InitNewScript<TemplateScript>();
-            t2.Transform.Position -= new Vector3(0, 20, 0);         
+            t2.Transform.Position -= new Vector3(0, 20, 0);
 
             for (int i = 0; i < 100; i++)
             {
                 GameObject t1 = new GameObject();
-                t1.Name = string.Format("Trigger_{0}", i);
+                t1.Name = string.Format("TriggerBottom_{0}", i);
                 t1.TypeName = "trigger";
                 t1.Transform.Position = new Vector3(i * 20, 0, 0);
                 t1.Transform.Scale = new Vector3(10, 10, 10);
                 t1.InitNewComponent<Collider>();
             }
-            
-            for(int i = 0; i < 100; i++)
+
+            for (int i = 0; i < 100; i++)
+            {
+                GameObject t1 = new GameObject();
+                t1.Name = string.Format("TriggerTop_{0}", i);
+                t1.TypeName = "trigger";
+                t1.Transform.Position = new Vector3(i * 20, -200, 0);
+                t1.Transform.Scale = new Vector3(10, 10, 10);
+                t1.InitNewComponent<Collider>();
+            }
+
+            for (int i = 0; i < 100; i++)
             {
                 TextBlock txt = new TextBlock();
                 txt.Name = string.Format("Depth_{0}", i * 100);

@@ -155,7 +155,7 @@ namespace DKEngine.Core.Scripts
                 }
             }
 
-            this.Parent.Transform.Position += new Vector3(horiSpeed * Engine.deltaTime, vertSpeed * Engine.deltaTime, 0);
+            this.Parent.Transform.Position += new Vector3(/*0, 1, 0*/ horiSpeed * Engine.deltaTime, vertSpeed * Engine.deltaTime, 0);
         }
     }
 }
