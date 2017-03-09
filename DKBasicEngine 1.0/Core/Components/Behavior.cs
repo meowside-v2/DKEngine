@@ -14,11 +14,11 @@ namespace DKEngine.Core.Components
             : base(Parent)
         {
             UpdateHandle = new Engine.EngineHandler(Update);
-
+            
             if (Engine.LoadingScene != null)
             {
                 Engine.LoadingScene.NewlyGeneratedComponents.Add(this);
-                Engine.LoadingScene.AllComponents.Add(this);
+                Engine.LoadingScene.AllBehaviors.Add(this);
             }
         }
 

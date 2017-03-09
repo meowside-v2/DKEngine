@@ -33,7 +33,7 @@ namespace MarIO
 
         protected override void Start()
         {
-            Ref = GameObject.Find("changed");
+            Ref = GameObject.Find<GameObject>("changed");
         }
 
         protected override void Update()

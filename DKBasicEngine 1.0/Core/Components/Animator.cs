@@ -2,6 +2,7 @@
 * (C) 2017 David Knieradl 
 */
 
+using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -44,6 +45,14 @@ namespace DKEngine.Core.Components
             this.CurrentAnimationTime = new TimeSpan(0);
             this.Animations           = new Dictionary<string, AnimationNode>();
             _p = Parent;
+
+            this.Name = string.Format("{0}_Animator", Parent.Name);
+
+            if(Engine.LoadingScene != null)
+            {
+                if(IsPartOfScene)
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+            }
             /*if(Parent.Model != null)
             {
                 Animations.Add("default", new AnimationNode("default", Parent.Model));

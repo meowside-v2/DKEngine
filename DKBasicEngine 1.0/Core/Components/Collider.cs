@@ -2,6 +2,7 @@
 * (C) 2017 David Knieradl 
 */
 
+using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,6 +47,14 @@ namespace DKEngine.Core.Components
         {
             this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
             Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
+
+            this.Name = string.Format("{0}_Collider", Parent.Name);
+
+            if (Engine.LoadingScene != null)
+            {
+                if (IsPartOfScene)
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+            }
         }
 
         /// <summary>
@@ -62,6 +71,14 @@ namespace DKEngine.Core.Components
         {
             this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
             Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
+
+            this.Name = string.Format("{0}_Collider", Parent.Name);
+
+            if (Engine.LoadingScene != null)
+            {
+                if (IsPartOfScene)
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+            }
         }
         
         /// <summary>
@@ -74,6 +91,14 @@ namespace DKEngine.Core.Components
         {
             this.Area = Area;
             Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
+
+            this.Name = string.Format("{0}_Collider", Parent.Name);
+
+            if (Engine.LoadingScene != null)
+            {
+                if (IsPartOfScene)
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+            }
         }
 
         /// <summary>
@@ -87,6 +112,14 @@ namespace DKEngine.Core.Components
         {
             this.Area = new RectangleF(Coordinates, Size);
             Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
+
+            this.Name = string.Format("{0}_Collider", Parent.Name);
+
+            if (Engine.LoadingScene != null)
+            {
+                if (IsPartOfScene)
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+            }
         }
 
 #if DEBUG

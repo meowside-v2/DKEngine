@@ -157,7 +157,7 @@ namespace DKEngine.Core.UI
         internal override void Render()
         { Model?.Render(this, _bg); }
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             if (Engine.CurrentScene.NewlyGeneratedGameObjects.Contains(this))
                 Engine.CurrentScene.NewlyGeneratedGameObjects.Remove(this);

@@ -35,7 +35,7 @@ namespace MarIO.Assets.Models
                     Block newBlock = new Block(this);
 
                     newBlock.Type = Type;
-                    newBlock.Transform.Position += new Vector3(j, i, 0);
+                    newBlock.Transform.Position += new Vector3(j * this.Transform.Scale.X, i * this.Transform.Scale.Y, 0);
                     newBlock.Name = string.Format("{0}_{1}_{2}", Name, j, i);
                 }
             }

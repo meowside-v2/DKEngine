@@ -19,14 +19,14 @@ namespace DKEngine.Core.UI
             :base(Parent)
         { }
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             if (Engine.LoadingScene != null)
             {
                 if(Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
                     Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
 
-                Engine.LoadingScene.AllGameObjects.Remove(this.Name);
+                Engine.LoadingScene.AllComponents.Remove(this.Name);
             }
             
             if(Engine.RenderGameObjects.Contains(this))

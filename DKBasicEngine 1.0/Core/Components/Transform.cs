@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DKEngine.Core.Components
 {
-    public sealed class Transform : Component, I3Dimensional
+    public sealed class Transform : Component
     {
         private Vector3 _Dimensions;
         private Vector3 _Position;
@@ -69,7 +69,7 @@ namespace DKEngine.Core.Components
             _ScaledDimensions = new Vector3();
         }
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             throw new NotImplementedException();
         }

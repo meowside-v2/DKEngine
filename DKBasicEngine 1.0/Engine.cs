@@ -27,8 +27,8 @@ namespace DKEngine
     {
         public static class Render
         {
-            public   const int RenderWidth        = 320;
-            public   const int RenderHeight       = 180;
+            public   const int RenderWidth        = 640;
+            public   const int RenderHeight       = 360;
             internal const int ImageBufferSize    = 3 * RenderWidth * RenderHeight;
             internal const int ImageKeyBufferSize = RenderWidth * RenderHeight;
 
@@ -219,12 +219,12 @@ namespace DKEngine
         {
             if (CurrentScene != null)
             {
-                foreach (var pair in Engine.CurrentScene.AllGameObjects)
+                foreach (var pair in Engine.CurrentScene.AllComponents)
                     pair.Value.Destroy();
 
-                int ComponentCount = Engine.CurrentScene.AllComponents.Count;
+                int ComponentCount = Engine.CurrentScene.AllBehaviors.Count;
                 for (int i = ComponentCount - 1; i >= 0; i--)
-                    Engine.CurrentScene.AllComponents[i].Destroy();
+                    Engine.CurrentScene.AllBehaviors[i].Destroy();
             }
 
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));

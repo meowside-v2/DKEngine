@@ -1,4 +1,5 @@
 ﻿using DKEngine.Core.Components;
+using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,6 @@ namespace DKEngine.Core
 {
     public abstract class GameObject : Component
     {
-        public string Name { get; set; } = "";
         public bool HasShadow { get; set; } = false;
         public bool IsInView
         {
@@ -56,7 +56,7 @@ namespace DKEngine.Core
             }
         }
 
-        private Collider _collider;
+        internal Collider _collider;
         public Collider Collider
         {
             get { return _collider; }
@@ -87,8 +87,8 @@ namespace DKEngine.Core
         }
 
 
-        private bool _IsGUI = false;
-        private string _typeName = "";
+        internal bool _IsGUI = false;
+        internal string _typeName = "";
 
         public Material _Model         = null;
         public Animator Animator       = null;
@@ -99,9 +99,7 @@ namespace DKEngine.Core
         public readonly Transform Transform;
         public readonly List<GameObject> Child;
         internal readonly List<Script> Scripts;
-
-        internal bool IsPartOfScene { get; set; } = true;
-
+        
         public GameObject()
             :base(null)
         {
@@ -158,15 +156,18 @@ namespace DKEngine.Core
         {
             Init();
 
-            if(Engine.LoadingScene != null)
+            if (Engine.LoadingScene != null)
             {
                 if (Parent == null)
                     Engine.LoadingScene.Model.Add(this);
 
                 if (IsPartOfScene)
-                    Engine.LoadingScene.AllGameObjects.Add(this.Name, this);
+                {
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+                    Engine.LoadingScene.AllGameObjects.AddSafe(this);
+                }
             }
-            
+
             Engine.RenderGameObjects.Add(this);
 
             if(Engine.NewGameobjects.Contains(this))
@@ -225,7 +226,7 @@ namespace DKEngine.Core
         {
             if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
-            Engine.LoadingScene.AllGameObjects.Remove(this.Name);
+            Engine.LoadingScene.AllComponents.Remove(this.Name);
             Engine.RenderGameObjects.Remove(this);
 
             int ScriptsCount = this.Scripts.Count;

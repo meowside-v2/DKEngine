@@ -17,7 +17,7 @@ namespace DKEngine.Core
 
         protected internal abstract void OnColliderEnter(Collider e);
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             if(CollisionHandler != null)
             {

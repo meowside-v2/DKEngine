@@ -1,6 +1,7 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
+using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace MarIO.Assets.Scenes
         {
             Group _1 = new Group();
             _1.Type = Block.BlockType.Ground2;
+            _1.Transform.Scale = new Vector3(2, 2, 2);
             _1.SizeInBlocks = new Vector3(50, 3, 0);
             _1.Transform.Position = new Vector3(0, 100, 0);
             _1.Name = "ground1";
@@ -23,6 +25,7 @@ namespace MarIO.Assets.Scenes
 
             Group _2 = new Group();
             _2.Type = Block.BlockType.Ground2;
+            _2.Transform.Scale = new Vector3(2, 2, 2);
             _2.SizeInBlocks = new Vector3(10, 3, 0);
             _2.Transform.Position = new Vector3(60 * 16, 100, 0);
             _2.Name = "ground2";
@@ -30,15 +33,17 @@ namespace MarIO.Assets.Scenes
 
             Group _3 = new Group();
             _3.Type = Block.BlockType.Ground2;
+            _3.Transform.Scale = new Vector3(2, 2, 2);
             _3.SizeInBlocks = new Vector3(50, 3, 0);
             _3.Transform.Position = new Vector3(60 * 16 + 20 * 16, 100, 0);
             _3.Name = "ground3";
             _3.InitCollider = true;
 
             Mario m = new Mario();
+            m.Transform.Scale = new Vector3(2, 2, 2);
+            m.InitNewScript<CameraController>();
+
             Camera c = new Camera();
-            c.Parent = m;
-            c.Position += new Vector3(-100, -120, 0);
             c.BackGround = System.Drawing.Color.FromArgb(0xFF, 0x20, 0xEE, 0xEE);
             
         }

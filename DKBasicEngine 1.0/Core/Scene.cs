@@ -11,19 +11,21 @@ namespace DKEngine.Core
     {
         public string Name = "";
 
+        internal readonly Dictionary<string, Component> AllComponents;
         internal readonly Dictionary<string, GameObject> AllGameObjects;
-        
+
         internal readonly List<GameObject> Model;
         internal readonly List<GameObject> NewlyGeneratedGameObjects;
-        internal readonly List<Behavior> AllComponents;
-        internal readonly List<Behavior>  NewlyGeneratedComponents;
+        internal readonly List<Behavior>   AllBehaviors;
+        internal readonly List<Behavior>   NewlyGeneratedComponents;
         internal readonly List<Collider>   AllGameObjectsColliders;
 
         public Scene()
         {
+            AllComponents = new Dictionary<string, Component>(0xFFFF);
             AllGameObjects = new Dictionary<string, GameObject>(0xFFFF);
 
-            AllComponents             = new List<Behavior>(0xFFFF);
+            AllBehaviors             = new List<Behavior>(0xFFFF);
             NewlyGeneratedGameObjects = new List<GameObject>(0xFFFF);
             Model                     = new List<GameObject>(0xFFFF);
             NewlyGeneratedComponents  = new List<Behavior>(0xFFFF);

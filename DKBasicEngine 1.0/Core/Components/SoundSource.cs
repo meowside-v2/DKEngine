@@ -7,6 +7,7 @@ using NAudio;
 using NAudio.Wave;
 using System.IO;
 using NAudio.Wave.SampleProviders;
+using DKEngine.Core.Ext;
 
 namespace DKEngine.Core.Components
 {
@@ -262,6 +263,14 @@ namespace DKEngine.Core.Components
             mixer.ReadFully = true;
             outputDevice.Init(mixer);
             outputDevice.Play();
+
+            this.Name = string.Format("{0}_SoundSource", Parent.Name);
+
+            if (Engine.LoadingScene != null)
+            {
+                if (IsPartOfScene)
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+            }
         }
 
         public void PlaySound(string fileName)
@@ -298,7 +307,7 @@ namespace DKEngine.Core.Components
             outputDevice.Dispose();
         }
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             throw new NotImplementedException();
         }
