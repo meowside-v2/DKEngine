@@ -44,7 +44,42 @@ namespace MarIO.Assets.Models
             UnderGroundBackground1,
             UnderGroundBackground2,
             NumberOfObjects
-        }
+        } 
+        
+        public static Dictionary<BlockType, string> BlockTypeNames = new Dictionary<BlockType, string>()
+        {
+            { BlockType.Bridge, "bridge" },
+            { BlockType.Bush1, "bush_01" },
+            { BlockType.Bush2, "bush02" },
+            { BlockType.Bush3, "bush_03" },
+            { BlockType.BushSmall, "bush_small" },
+            { BlockType.CastleBig, "castle_big" },
+            { BlockType.CastleSmall, "castle_small" },
+            { BlockType.Cloud1, "cloud_01" },
+            { BlockType.Cloud2, "cloud_02" },
+            { BlockType.Cloud3, "cloud_03" },
+            { BlockType.Fence, "fence" },
+            { BlockType.Flag, null },
+            { BlockType.Ground1, "block_01" },
+            { BlockType.Ground2, "block_02" },
+            { BlockType.Ground3, "block_03" },
+            { BlockType.Ground4, "block_04" },
+            { BlockType.Mountain, "mountain" },
+            { BlockType.Pipe1, "pipe_01" },
+            { BlockType.Pipe2, "pipe_02" },
+            { BlockType.Pipe3, "pipe_03" },
+            { BlockType.Pipe4, "pipe_04" },
+            { BlockType.Pipe5, "pipe_05" },
+            { BlockType.Sky, "sky" },
+            { BlockType.UnderGround1, "underground_block_01" },
+            { BlockType.UnderGround2, "underground_block_02" },
+            { BlockType.UnderGround3, "underground_block_03" },
+            { BlockType.UnderGround4, "underground_block_04" },
+            { BlockType.UnderGroundBackground1, "background_01" },
+            { BlockType.UnderGroundBackground2, "background_02" },
+            { BlockType.Water1, "water_01" },
+            { BlockType.Water2, "water_02" },
+        };
 
         private BlockType _type = BlockType.Ground1;
         public BlockType Type
@@ -52,6 +87,16 @@ namespace MarIO.Assets.Models
             get { return _type; }
             set { _type = value; Init(); }
         }
+
+        public Block()
+            :base()
+        { }
+
+        public Block(GameObject Parent)
+            :base(Parent)
+        { }
+
+
 
         protected override void Init()
         {

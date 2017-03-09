@@ -8,8 +8,8 @@ namespace DKEngine.Core.Components
 {
     public abstract class Component
     {
-        protected GameObject Parent;
-        protected long LastUpdated;
+        public  GameObject Parent;
+        internal long LastUpdated;
 
         internal Component(GameObject Parent)
         {
@@ -17,6 +17,6 @@ namespace DKEngine.Core.Components
             LastUpdated = Engine.LastUpdated;
         }
 
-        protected internal abstract void Destroy();
+        public abstract void Destroy();
     }
 }

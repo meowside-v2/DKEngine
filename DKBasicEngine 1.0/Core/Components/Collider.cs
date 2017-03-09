@@ -480,7 +480,7 @@ namespace DKEngine.Core.Components
             destination.Area = new RectangleF(X, Y, Width, Height);
         }
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             Engine.CurrentScene.AllGameObjectsColliders.Remove(this);
             if (Parent.Collider == this)

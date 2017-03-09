@@ -8,7 +8,6 @@ namespace DKEngine.Core.Components
 {
     public abstract class Behavior : Component
     {
-
         internal Engine.EngineHandler UpdateHandle;
 
         public Behavior(GameObject Parent)

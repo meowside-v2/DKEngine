@@ -88,7 +88,7 @@ namespace DKEngine.Core.Components
         protected internal override void Start()
         { }
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             Engine.UpdateEvent -= UpdateHandle;
             

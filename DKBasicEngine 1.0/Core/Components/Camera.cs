@@ -13,8 +13,9 @@ using System.Threading.Tasks;
 
 namespace DKEngine.Core.Components
 {
-    public sealed class Camera
+    public sealed class Camera : Component
     {
+        public Color BackGround = Color.Black;
         public Vector3 Position;
 
         internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.X + Position.X : Position.X; } }
@@ -23,33 +24,23 @@ namespace DKEngine.Core.Components
         public float MinRenderDepth { get; set; }
         public float MaxRenderDepth { get; set; }
 
-        public GameObject Parent = null;
+        public string Name { get; set; }
 
         private bool RenderingGUI = false;
 
         public Camera()
+            :base(null)
         {
             this.Position = new Vector3(0, 0, 0);
             Engine.BaseCam = this;
         }
-
-        public void Destroy()
-        {
-            if (Engine.BaseCam == this)
-                Engine.BaseCam = null;
-
-            Parent = null;
-        }
         
         internal void BufferImage(List<GameObject> GameObjectsInView)
         {
-            Array.Clear(Engine.Render.imageBuffer, 0, Engine.Render.imageBuffer.Length);
-            Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
+            BackGroundInit();
 
-            
             List<GameObject> Temp = null;
-
-
+            
             if (GameObjectsInView != null)
                 Temp = GameObjectsInView;
 
@@ -92,6 +83,31 @@ namespace DKEngine.Core.Components
                     TempCount--;
                 }
             }
+        }
+
+        private void BackGroundInit()
+        {
+            byte R = BackGround.R;
+            byte G = BackGround.G;
+            byte B = BackGround.B;
+
+            int imageBufferLenght = Engine.Render.imageBuffer.Length;
+            for(int i = 0; i < imageBufferLenght; i += 3)
+            {
+                Engine.Render.imageBuffer[i + 2] = R;
+                Engine.Render.imageBuffer[i + 1] = G;
+                Engine.Render.imageBuffer[i] = B;
+            }
+            
+            Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
+        }
+
+        public override void Destroy()
+        {
+            if (Engine.BaseCam == this)
+                Engine.BaseCam = null;
+
+            Parent = null;
         }
     }
 }

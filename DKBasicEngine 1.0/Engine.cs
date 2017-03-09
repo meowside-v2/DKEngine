@@ -27,8 +27,8 @@ namespace DKEngine
     {
         public static class Render
         {
-            public   const int RenderWidth        = 640;
-            public   const int RenderHeight       = 360;
+            public   const int RenderWidth        = 320;
+            public   const int RenderHeight       = 180;
             internal const int ImageBufferSize    = 3 * RenderWidth * RenderHeight;
             internal const int ImageKeyBufferSize = RenderWidth * RenderHeight;
 

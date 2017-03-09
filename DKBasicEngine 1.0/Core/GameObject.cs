@@ -56,7 +56,7 @@ namespace DKEngine.Core
             }
         }
 
-        protected Collider _collider;
+        private Collider _collider;
         public Collider Collider
         {
             get { return _collider; }
@@ -87,8 +87,8 @@ namespace DKEngine.Core
         }
 
 
-        protected bool _IsGUI = false;
-        protected string _typeName = "";
+        private bool _IsGUI = false;
+        private string _typeName = "";
 
         public Material _Model         = null;
         public Animator Animator       = null;
@@ -158,12 +158,15 @@ namespace DKEngine.Core
         {
             Init();
 
-            if (Parent == null && Engine.LoadingScene != null)
-                Engine.LoadingScene.Model.Add(this);
+            if(Engine.LoadingScene != null)
+            {
+                if (Parent == null)
+                    Engine.LoadingScene.Model.Add(this);
 
-            if (IsPartOfScene && Engine.LoadingScene != null)
-                Engine.LoadingScene.AllGameObjects.Add(this.Name, this);
-
+                if (IsPartOfScene)
+                    Engine.LoadingScene.AllGameObjects.Add(this.Name, this);
+            }
+            
             Engine.RenderGameObjects.Add(this);
 
             if(Engine.NewGameobjects.Contains(this))
@@ -218,7 +221,7 @@ namespace DKEngine.Core
             }
         }
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
