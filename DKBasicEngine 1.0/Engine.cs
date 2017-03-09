@@ -191,8 +191,9 @@ namespace DKEngine
                     FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
                     FpsMeter.IsPartOfScene = false;
 
+                    FpsMeter.InitInternal();
+
                     UpdateEvent += FpsMeter.Scripts[0].UpdateHandle;
-                    RenderGameObjects.Add(FpsMeter);
 
                     BackgroundWorks = new Thread(Update);
                     RenderWorker    = new Thread(RenderImage);
@@ -273,7 +274,7 @@ namespace DKEngine
                 int ToStartCount = NewGameobjects.Count - 1;
                 while (ToStartCount >= 0)
                 {
-                    NewGameobjects[ToStartCount--].Init();
+                    NewGameobjects[ToStartCount--].InitInternal();
                 }
 
                 int InitComponentsCount = NewComponents.Count - 1;

@@ -12,18 +12,16 @@ namespace DKEngine
     sealed class SplashScreen : GameObject
     {
         public SplashScreen()
-        {
-            this.TypeName = "splashScreen";
-            this.InitNewComponent<Animator>();
-            //this.Animator = new Core.Components.Animator(this);
-        }
+        { }
 
         public SplashScreen(GameObject Parent)
             : base(Parent)
+        { }
+
+        protected override void Init()
         {
             this.TypeName = "splashScreen";
             this.InitNewComponent<Animator>();
-            //this.Animator = new Core.Components.Animator(this);
         }
     }
 }

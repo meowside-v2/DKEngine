@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace DKEngine.Core
 {
-    public class GameObject : Component
+    public abstract class GameObject : Component
     {
         public string Name { get; set; } = "";
         public bool HasShadow { get; set; } = false;
@@ -154,17 +154,23 @@ namespace DKEngine.Core
             }
         }
 
-        internal void Init()
+        internal void InitInternal()
         {
-            if(Parent == null)
+            Init();
+
+            if (Parent == null && Engine.LoadingScene != null)
                 Engine.LoadingScene.Model.Add(this);
 
-            if (IsPartOfScene)
+            if (IsPartOfScene && Engine.LoadingScene != null)
                 Engine.LoadingScene.AllGameObjects.Add(this.Name, this);
 
             Engine.RenderGameObjects.Add(this);
-            Engine.NewGameobjects.Remove(this);
+
+            if(Engine.NewGameobjects.Contains(this))
+                Engine.NewGameobjects.Remove(this);
         }
+
+        protected abstract void Init();
 
         public void InitNewScript<T>() where T : Script
         {
