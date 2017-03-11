@@ -4,6 +4,7 @@
 
 using DKEngine.Core.Ext;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -12,12 +13,12 @@ namespace DKEngine.Core.Components
     public class Animator : Behavior, IAnimated
     {
         public TimeSpan CurrentAnimationTime;
-        public Dictionary<string, AnimationNode> Animations;
+        internal Dictionary<string, AnimationNode> Animations;
         private AnimationNode _current;
         private GameObject _p;
 
         public int NumberOfPlays { get; private set; } = 0;
-        internal AnimationNode Current
+        public AnimationNode Current
         {
             get { return _current; }
             set
@@ -58,6 +59,15 @@ namespace DKEngine.Core.Components
                 Animations.Add("default", new AnimationNode("default", Parent.Model));
                 this.Play("default");
             }*/
+        }
+
+        public void AddAnimation(string Name, Material Source)
+        {
+            Animations.Add(Name, new AnimationNode(Name, Source));
+            if(Animations.Count == 1)
+            {
+                Play(Animations.ElementAt(0).Key);
+            }
         }
 
         public void Play(string AnimationName)

@@ -175,9 +175,6 @@
   <data name="finish_pole" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\finish_pole.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="mario" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>mario.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="mountain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\mountain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

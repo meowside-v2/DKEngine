@@ -49,13 +49,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Models\Block.cs" />
+    <Compile Include="Assets\Models\Enemy.cs" />
     <Compile Include="Assets\Models\Group.cs" />
     <Compile Include="Assets\Models\Mario.cs" />
     <Compile Include="Assets\Scenes\Test.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\CharacterController.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sprites\Enemies.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Enemies.resx</DependentUpon>
+    </Compile>
     <Compile Include="Sprites\Sprites.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -66,7 +73,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Sprites\blocks_project.psd" />
+    <None Include="Sprites\PSD\blocks_project.psd" />
+    <None Include="Sprites\PSD\Goomba.psd" />
+    <None Include="Sprites\PSD\Mario.psd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DKBasicEngine 1.0\DKEngine.csproj">
@@ -75,6 +84,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Sprites\Enemy\goomba.gif" />
+    <Content Include="Sprites\Enemy\mario_jump_left.png" />
+    <Content Include="Sprites\Enemy\mario_move_left.gif" />
     <Content Include="Sprites\Ground\block_01.png" />
     <Content Include="Sprites\Ground\block_02.png" />
     <Content Include="Sprites\Ground\block_03.png" />
@@ -96,7 +108,9 @@
     <Content Include="Sprites\Ground\sky_07.png" />
     <Content Include="Sprites\Ground\water_01.png" />
     <Content Include="Sprites\Ground\water_02.png" />
-    <Content Include="Sprites\mario.png" />
+    <Content Include="Sprites\Enemy\mario.png" />
+    <Content Include="Sprites\Enemy\mario_jump_right.png" />
+    <Content Include="Sprites\Enemy\mario_move_right.gif" />
     <Content Include="Sprites\Pipes\pipe_01.png" />
     <Content Include="Sprites\Pipes\pipe_02.png" />
     <Content Include="Sprites\Pipes\pipe_03.png" />
@@ -110,6 +124,11 @@
     <Content Include="Sprites\UnderGround\underground_block_04.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Sprites\Enemies.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Enemies.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Sprites\Sprites.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Sprites.Designer.cs</LastGenOutput>
