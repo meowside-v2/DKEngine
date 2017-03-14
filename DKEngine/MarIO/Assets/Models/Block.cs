@@ -1,5 +1,6 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
+using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,9 @@ namespace MarIO.Assets.Models
             Cloud2,
             Cloud3,
             Fence,
+            Finish,
             Flag,
+            FlagPole,
             Mountain,
             Sky,
             Water1,
@@ -80,13 +83,8 @@ namespace MarIO.Assets.Models
             { BlockType.Water1, "water_01" },
             { BlockType.Water2, "water_02" },
         };
-
-        private BlockType _type = BlockType.Ground1;
-        public BlockType Type
-        {
-            get { return _type; }
-            set { _type = value; Init(); }
-        }
+        
+        public BlockType Type { get; set; }
 
         public Block()
             :base()
@@ -95,109 +93,100 @@ namespace MarIO.Assets.Models
         public Block(GameObject Parent)
             :base(Parent)
         { }
-
-
-
+        
         protected override void Init()
         {
+            this.TypeName = BlockTypeNames[Type];
+
             switch (Type)
             {
                 case BlockType.Ground1:
-                    this.TypeName = "block_01";
+                    this.InitNewComponent<Collider>();
+                    this.InitNewScript<BonusBlockScript>();
+                    this.Collider.IsTrigger = true;
+                    this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y, this.Transform.Dimensions.X, 1);
                     break;
                 case BlockType.Ground2:
-                    this.TypeName = "block_02";
                     break;
                 case BlockType.Ground3:
-                    this.TypeName = "block_03";
                     break;
                 case BlockType.Ground4:
-                    this.TypeName = "block_04";
                     break;
                 case BlockType.Bridge:
-                    this.TypeName = "bridge";
                     break;
                 case BlockType.Bush1:
-                    this.TypeName = "bush_01";
                     break;
                 case BlockType.Bush2:
-                    this.TypeName = "bush_02";
                     break;
                 case BlockType.Bush3:
-                    this.TypeName = "bush_03";
                     break;
                 case BlockType.BushSmall:
-                    this.TypeName = "bush_small";
                     break;
                 case BlockType.CastleBig:
-                    this.TypeName = "castle_big";
                     break;
                 case BlockType.CastleSmall:
-                    this.TypeName = "castle_small";
                     break;
                 case BlockType.Cloud1:
-                    this.TypeName = "cloud_01";
                     break;
                 case BlockType.Cloud2:
-                    this.TypeName = "cloud_02";
                     break;
                 case BlockType.Cloud3:
-                    this.TypeName = "cloud_03";
                     break;
                 case BlockType.Fence:
-                    this.TypeName = "fence";
                     break;
                 case BlockType.Flag:
-                    /*
-                     
-                    NEEDS TO BE DONE
-                     
-                     */
+                    this.Transform.Dimensions = new Vector3(32, 200, 0);
+
+                    Block part1 = new Block(this);
+                    part1.TypeName = Block.BlockTypeNames[BlockType.Flag];
+
+                    Block part2 = new Block(this);
+                    part2.TypeName = Block.BlockTypeNames[BlockType.FlagPole];
+                    part2.Transform.Position += new Vector3(16, 0, 0);
                     break;
                 case BlockType.Mountain:
-                    this.TypeName = "mountain";
                     break;
                 case BlockType.Sky:
-                    this.TypeName = "sky";
                     break;
                 case BlockType.Water1:
-                    this.TypeName = "water_01";
                     break;
                 case BlockType.Water2:
-                    this.TypeName = "water_02";
                     break;
                 case BlockType.Pipe1:
-                    this.TypeName = "pipe_01";
+                    this.InitNewComponent<Collider>();
+                    this.Collider.IsTrigger = true;
+                    this.Collider.Area = new System.Drawing.RectangleF(-1, 0, 1, this.Transform.Dimensions.Y);
+
+                    this.InitNewScript<PipePort>();
                     break;
                 case BlockType.Pipe2:
-                    this.TypeName = "pipe_02";
                     break;
                 case BlockType.Pipe3:
-                    this.TypeName = "pipe_03";
+                    this.InitNewComponent<Collider>();
+                    this.Collider.IsTrigger = true;
+                    this.Collider.Area = new System.Drawing.RectangleF(0, -1, this.Transform.Dimensions.X, 1);
+
+                    this.InitNewScript<PipePort>();
                     break;
                 case BlockType.Pipe4:
-                    this.TypeName = "pipe_04";
                     break;
                 case BlockType.Pipe5:
-                    this.TypeName = "pipe_05";
                     break;
                 case BlockType.UnderGround1:
-                    this.TypeName = "underground_block_01";
+                    this.InitNewComponent<Collider>();
+                    this.InitNewScript<BonusBlockScript>();
+                    this.Collider.IsTrigger = true;
+                    this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y * this.Transform.Scale.Y, this.Transform.Dimensions.X * this.Transform.Scale.X, 1);
                     break;
                 case BlockType.UnderGround2:
-                    this.TypeName = "underground_block_02";
                     break;
                 case BlockType.UnderGround3:
-                    this.TypeName = "underground_block_03";
                     break;
                 case BlockType.UnderGround4:
-                    this.TypeName = "underground_block_04";
                     break;
                 case BlockType.UnderGroundBackground1:
-                    this.TypeName = "background_01";
                     break;
                 case BlockType.UnderGroundBackground2:
-                    this.TypeName = "background_01";
                     break;
                 default:
                     throw new Exception("A TO SE TI JAK POVEDLO");

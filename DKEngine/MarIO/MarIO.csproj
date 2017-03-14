@@ -53,8 +53,10 @@
     <Compile Include="Assets\Models\Group.cs" />
     <Compile Include="Assets\Models\Mario.cs" />
     <Compile Include="Assets\Scenes\Test.cs" />
+    <Compile Include="Assets\Scripts\BonusBlockScript.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\CharacterController.cs" />
+    <Compile Include="Assets\Scripts\PipePort.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
