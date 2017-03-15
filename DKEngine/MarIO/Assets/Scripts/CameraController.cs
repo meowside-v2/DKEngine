@@ -11,6 +11,7 @@ namespace MarIO.Assets.Scripts
 {
     class CameraController : Script
     {
+        GameObject Border;
         GameObject Player;
         Camera TargetCam;
         float PositionX;
@@ -26,7 +27,10 @@ namespace MarIO.Assets.Scripts
         {
             Player = GameObject.Find<GameObject>("Player");
             TargetCam = Component.Find<Camera>("Camera");
-            TargetCam.Position = new Vector3(0, -180, 0); ;
+            TargetCam.Position = new Vector3(0, -180, 0);
+
+            Border = new Border();
+            Border.Transform.Position = TargetCam.Position - new Vector3(20, 0, 0);
         }
 
         protected override void Update()

@@ -155,7 +155,7 @@ namespace MarIO.Assets.Models
                 case BlockType.Pipe1:
                     this.InitNewComponent<Collider>();
                     this.Collider.IsTrigger = true;
-                    this.Collider.Area = new System.Drawing.RectangleF(-1, 0, 1, this.Transform.Dimensions.Y);
+                    this.Collider.Area = new System.Drawing.RectangleF(-2, 0, 1, this.Transform.Dimensions.Y);
 
                     this.InitNewScript<PipePort>();
                     break;

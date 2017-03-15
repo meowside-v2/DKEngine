@@ -39,6 +39,11 @@ namespace MarIO.Assets.Scenes
             _3.Name = "ground3";
             _3.InitCollider = true;
 
+            Block pipe = new Block();
+            pipe.Type = Block.BlockType.Pipe1;
+            pipe.Transform.Scale = new Vector3(2, 2, 2);
+            pipe.Transform.Position = new Vector3(240, 36, 0);
+
             Mario m = new Mario();
             m.Transform.Scale = new Vector3(2, 2, 2);
             m.InitNewScript<CameraController>();
