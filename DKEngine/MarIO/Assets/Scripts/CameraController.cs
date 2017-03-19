@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DKEngine.Core.Components;
 using DKEngine;
+using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
@@ -29,8 +30,9 @@ namespace MarIO.Assets.Scripts
             TargetCam = Component.Find<Camera>("Camera");
             TargetCam.Position = new Vector3(0, -180, 0);
 
-            Border = new Border();
-            Border.Transform.Position = TargetCam.Position - new Vector3(20, 0, 0);
+            Border = new Blocker();
+            Border.Transform.Dimensions = new Vector3(20, Engine.Render.RenderHeight, 0);
+            Border.Transform.Position = TargetCam.Position;
         }
 
         protected override void Update()
@@ -38,6 +40,7 @@ namespace MarIO.Assets.Scripts
             if (Player.Transform.Position.X - TargetCam.Position.X > Engine.Render.RenderWidth / 3)
             {
                 TargetCam.Position.X += Player.Transform.Position.X - PositionX;
+                Border.Transform.Position = TargetCam.Position;
             }
 
             PositionX = Player.Transform.Position.X;

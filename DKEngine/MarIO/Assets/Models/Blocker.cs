@@ -9,12 +9,18 @@ using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models
 {
-    class Border : GameObject
+    class Blocker : GameObject
     {
+        public Blocker()
+            :base()
+        { }
+
+        public Blocker(GameObject Parent)
+            :base(Parent)
+        { }
+
         protected override void Init()
         {
-            this.Transform.Dimensions = new Vector3(20, Engine.Render.RenderHeight, 0);
-
             this.InitNewComponent<Collider>();
         }
     }

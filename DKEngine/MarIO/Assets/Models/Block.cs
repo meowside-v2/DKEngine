@@ -85,6 +85,7 @@ namespace MarIO.Assets.Models
         };
         
         public BlockType Type { get; set; }
+        public delegate PipeEnter();
 
         public Block()
             :base()
@@ -135,14 +136,16 @@ namespace MarIO.Assets.Models
                 case BlockType.Fence:
                     break;
                 case BlockType.Flag:
-                    this.Transform.Dimensions = new Vector3(32, 200, 0);
+                    {
+                        this.Transform.Dimensions = new Vector3(32, 200, 0);
 
-                    Block part1 = new Block(this);
-                    part1.TypeName = Block.BlockTypeNames[BlockType.Flag];
+                        Block part1 = new Block(this);
+                        part1.TypeName = Block.BlockTypeNames[BlockType.Flag];
 
-                    Block part2 = new Block(this);
-                    part2.TypeName = Block.BlockTypeNames[BlockType.FlagPole];
-                    part2.Transform.Position += new Vector3(16, 0, 0);
+                        Block part2 = new Block(this);
+                        part2.TypeName = Block.BlockTypeNames[BlockType.FlagPole];
+                        part2.Transform.Position += new Vector3(16, 0, 0);
+                    }
                     break;
                 case BlockType.Mountain:
                     break;
@@ -153,20 +156,32 @@ namespace MarIO.Assets.Models
                 case BlockType.Water2:
                     break;
                 case BlockType.Pipe1:
-                    this.InitNewComponent<Collider>();
-                    this.Collider.IsTrigger = true;
-                    this.Collider.Area = new System.Drawing.RectangleF(-2, 0, 1, this.Transform.Dimensions.Y);
+                    {
+                        this.InitNewComponent<Collider>();
+                        this.Collider.IsTrigger = true;
+                        this.Collider.Area = new System.Drawing.RectangleF(-2, 0, 1, this.Transform.Dimensions.Y);
 
-                    this.InitNewScript<PipePort>();
+                        this.InitNewScript<PipePort>();
+
+                        Blocker block = new Blocker(this);
+                        block.InitNewComponent<Collider>();
+                        block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
+                    }
                     break;
                 case BlockType.Pipe2:
                     break;
                 case BlockType.Pipe3:
-                    this.InitNewComponent<Collider>();
-                    this.Collider.IsTrigger = true;
-                    this.Collider.Area = new System.Drawing.RectangleF(0, -1, this.Transform.Dimensions.X, 1);
+                    {
+                        this.InitNewComponent<Collider>();
+                        this.Collider.IsTrigger = true;
+                        this.Collider.Area = new System.Drawing.RectangleF(0, -1, this.Transform.Dimensions.X, 1);
 
-                    this.InitNewScript<PipePort>();
+                        this.InitNewScript<PipePort>();
+
+                        Blocker block = new Blocker(this);
+                        block.InitNewComponent<Collider>();
+                        block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
+                    }
                     break;
                 case BlockType.Pipe4:
                     break;

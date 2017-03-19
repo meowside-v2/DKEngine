@@ -23,7 +23,6 @@ namespace MarIO.Assets.Models
             this.Animator.AddAnimation("right_jump", Database.GetGameObjectMaterial("mario_jump_right"));
             this.Animator.AddAnimation("left_jump", Database.GetGameObjectMaterial("mario_jump_left"));
             this.InitNewScript<CharacterController>();
-            //this.InitNewComponent<PlayerControl>();
         }
     }
 }

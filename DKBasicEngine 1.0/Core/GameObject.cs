@@ -96,10 +96,10 @@ namespace DKEngine.Core
         public SoundSource SoundSource = null;
         public Color? Foreground       = null;
 
-        public readonly Transform Transform;
-        public readonly List<GameObject> Child;
-        internal readonly List<Script> Scripts;
-        
+        public Transform Transform { get; }
+        public List<GameObject> Child { get; }
+        internal List<Script> Scripts { get; }
+
         public GameObject()
             :base(null)
         {

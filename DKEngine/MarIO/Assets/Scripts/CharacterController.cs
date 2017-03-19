@@ -83,15 +83,11 @@ namespace MarIO.Assets.Scripts
                     horiSpeed = -MovementSpeed;
                 }
             }
-            else if (Parent.Collider.Collision(Collider.Direction.Left))
-            {
-                horiSpeed = 0;
-            }
             else if (horiSpeed < 0)
             {
                 horiSpeed += Engine.deltaTime * Acceleration * 2;
 
-                if (horiSpeed > 0)
+                if (horiSpeed > 0 || Parent.Collider.Collision(Collider.Direction.Left))
                 {
                     horiSpeed = 0;
                     if (Parent.Animator.Current.Name != RIGHTJUMP && Parent.Animator.Current.Name != LEFTJUMP)
@@ -124,18 +120,12 @@ namespace MarIO.Assets.Scripts
             {
                 horiSpeed -= Engine.deltaTime * Acceleration * 2;
 
-                if (horiSpeed < 0)
+                if (horiSpeed < 0 || Parent.Collider.Collision(Collider.Direction.Right))
                 {
                     horiSpeed = 0;
                     if (Parent.Animator.Current.Name != RIGHTJUMP && Parent.Animator.Current.Name != LEFTJUMP)
                         Parent.Animator.Play(IDLE);
                 }
-                    
-            }
-
-            else if (Parent.Collider.Collision(Collider.Direction.Right))
-            {
-                horiSpeed = 0;
             }
 
             if (Engine.Input.IsKeyDown(ConsoleKey.W))
@@ -200,8 +190,8 @@ namespace MarIO.Assets.Scripts
                     }
                 }
             }
-
-            this.Parent.Transform.Position += new Vector3(/*0, 1, 0*/ horiSpeed * Engine.deltaTime, vertSpeed * Engine.deltaTime, 0);
+            
+            this.Parent.Transform.Position += new Vector3(horiSpeed * Engine.deltaTime, vertSpeed * Engine.deltaTime, 0);
         }
     }
 }

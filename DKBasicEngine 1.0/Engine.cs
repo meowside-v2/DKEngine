@@ -200,6 +200,8 @@ namespace DKEngine
                     BackgroundWorks.Start();
                     RenderWorker.Start();
 
+
+
 #if !DEBUG
                     SplashScreen();
 #endif
@@ -270,17 +272,15 @@ namespace DKEngine
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
-
-                int ToStartCount = NewGameobjects.Count - 1;
-                while (ToStartCount >= 0)
+                
+                while (NewGameobjects.Count > 0)
                 {
-                    NewGameobjects[ToStartCount--].InitInternal();
+                    NewGameobjects[NewGameobjects.Count - 1].InitInternal();
                 }
-
-                int InitComponentsCount = NewComponents.Count - 1;
-                while (InitComponentsCount >= 0)
+                
+                while (NewComponents.Count > 0)
                 {
-                    Behavior tmp = NewComponents[InitComponentsCount--];
+                    Behavior tmp = NewComponents[NewComponents.Count - 1];
                     NewComponents.Remove(tmp);
                     tmp.Start();
                     Engine.UpdateEvent += tmp.UpdateHandle;
