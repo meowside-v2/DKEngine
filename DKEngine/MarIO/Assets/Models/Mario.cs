@@ -11,6 +11,8 @@ namespace MarIO.Assets.Models
 {
     class Mario : GameObject
     {
+        public CharacterController.State State;
+
         protected override void Init()
         {
             this.Name = "Player";

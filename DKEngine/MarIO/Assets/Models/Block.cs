@@ -62,7 +62,8 @@ namespace MarIO.Assets.Models
             { BlockType.Cloud2, "cloud_02" },
             { BlockType.Cloud3, "cloud_03" },
             { BlockType.Fence, "fence" },
-            { BlockType.Flag, null },
+            { BlockType.Flag, "finish_flag" },
+            { BlockType.FlagPole, "flag_pole" },
             { BlockType.Ground1, "block_01" },
             { BlockType.Ground2, "block_02" },
             { BlockType.Ground3, "block_03" },
@@ -85,7 +86,8 @@ namespace MarIO.Assets.Models
         };
         
         public BlockType Type { get; set; }
-        public delegate PipeEnter();
+        public delegate void PipeEnter();
+        private event PipeEnter PipeEnterEvent;
 
         public Block()
             :base()
@@ -135,7 +137,7 @@ namespace MarIO.Assets.Models
                     break;
                 case BlockType.Fence:
                     break;
-                case BlockType.Flag:
+                case BlockType.Finish:
                     {
                         this.Transform.Dimensions = new Vector3(32, 200, 0);
 

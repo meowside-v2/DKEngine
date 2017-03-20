@@ -15,20 +15,34 @@ namespace MarIO.Assets.Scripts
         float horiSpeed = 0;
         float vertSpeed = 0;
 
-        protected float MovementSpeed = 100f;
-        protected float FloatSpeed = 50f;
+        protected float MovementSpeed = 150f;
+        protected float FloatSpeed = 120f;
 
-        protected float Acceleration = 20f;
+        protected float Acceleration = 40f;
 
         protected bool CanJump = true;
         bool IsFalling = false;
         bool Jumped = false;
 
-        const string IDLE = "idle";
+        string IDLE
+        {
+            get
+            {
+                return ""; /*----------------- TO DO ----------------------*/
+            }
+        }
         const string RIGHTMOVE = "right_move";
         const string LEFTMOVE = "left_move";
         const string RIGHTJUMP = "right_jump";
         const string LEFTJUMP = "left_jump";
+
+        public enum State
+        {
+            Small,
+            Super,
+            Fire,
+            Invincible
+        }
 
         public CharacterController(GameObject Parent)
             : base(Parent)
