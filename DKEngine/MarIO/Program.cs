@@ -18,7 +18,8 @@ namespace MarIO
             Database.LoadResources(Sprites.Sprites.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true));
             Database.LoadResources(Sprites.Enemies.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true));
 
-            Engine.ChangeScene<Test>();
+            Engine.LoadSceneToMemory<Test>();
+            Engine.ChangeScene("test");
         }
     }
 }
