@@ -217,48 +217,7 @@ namespace DKEngine
                 throw new Exception("Engine is being initialised second time");
         }
         
-        public static void LoadSceneToMemory<T>() where T : Scene
-        {
-            Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
-            Engine.LoadingScene.Init();
-
-            Database.AddScene(Engine.LoadingScene);
-            
-            //Engine.LoadingScene.Init();
-        }
-
-        public static void ChangeScene(string Name, bool Reload = false, params string[] args)
-        {
-            if (CurrentScene != null)
-            {
-                foreach (var item in CurrentScene.AllBehaviors)
-                {
-                    try
-                    {
-                        UpdateEvent -= item.UpdateHandle;
-                    }
-                    catch { }
-                }
-            }
-
-            Scene tmp = Database.GetScene(Name);
-            tmp.Set(args);
-
-            foreach (var item in tmp.AllBehaviors)
-            {
-                try
-                {
-                    UpdateEvent += item.UpdateHandle;
-                }
-                catch { }
-            }
-
-            Engine.CurrentScene = tmp;
-            Engine.NewGameobjects = Engine.CurrentScene.NewlyGeneratedGameObjects;
-            Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
-        }
-
-        /*public static void ChangeScene<T>() where T : Scene
+        public static void ChangeScene<T>() where T : Scene
         {
             if (CurrentScene != null)
             {
@@ -278,13 +237,13 @@ namespace DKEngine
             Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
                 
             //Engine._LoadingNewPage = false;
-        }*/
+        }
 
         private static void SplashScreen()
         {
             if (!_IsInitialised)
             {
-                Engine.LoadSceneToMemory<Scene>();
+                Engine.ChangeScene<Scene>();
 
                 SplashScreen splash    = new SplashScreen();
                 Camera splashScreenCam = new Camera();

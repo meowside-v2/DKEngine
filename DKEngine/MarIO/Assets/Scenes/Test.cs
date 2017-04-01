@@ -13,12 +13,7 @@ namespace MarIO.Assets.Scenes
 {
     class Test : Scene
     {
-        public Test()
-        {
-            Name = "test";
-        }
-
-        public override void Init()
+        protected override void Init()
         {
             Group _1 = new Group();
             _1.Type = Block.BlockType.Ground2;
@@ -70,14 +65,11 @@ namespace MarIO.Assets.Scenes
 
             Mario m = new Mario();
             m.Transform.Scale = new Vector3(2, 2, 2);
-            //m.InitNewScript<CameraController>();
+            m.InitNewScript<CameraController>();
 
             Camera c = new Camera();
             c.BackGround = System.Drawing.Color.FromArgb(0xFF, 0x20, 0xEE, 0xEE);
             
         }
-
-        public override void Set(params string[] Args)
-        { }
     }
 }

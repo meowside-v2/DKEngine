@@ -164,7 +164,6 @@ namespace DKEngine.Core
         }
 
         private static Dictionary<string, Material> GameObjects = new Dictionary<string, Material>();
-        private static Dictionary<string, Scene>    CachedScenes = new Dictionary<string, Scene>();
 
         internal static void InitDatabase()
         {
@@ -172,20 +171,6 @@ namespace DKEngine.Core
             AddNewGameObjectMaterial("splashScreen", new Material(Resources.DKEngine_splash2));
 
             CreateLetterReferences();
-        }
-
-        internal static Scene GetScene(string Key)
-        {
-            Scene retValue = null;
-
-            try
-            {
-                retValue = CachedScenes[Key];
-            }
-            catch
-            { }
-
-            return retValue;
         }
 
         public static Material GetLetter(this char ch)
@@ -266,45 +251,6 @@ namespace DKEngine.Core
                 {
                     AddNewGameObjectMaterial((string)entry.Key, new Material((Bitmap)entry.Value));
                 }
-            }
-        }
-
-        internal static void RewriteWorld(string Name)
-        {
-            try
-            {
-                Scene tmp = (Scene)Activator.CreateInstance(CachedScenes[Name].GetType());
-                Scene ToBeDestroyed = CachedScenes[Name];
-
-                foreach (var pair in ToBeDestroyed.AllComponents)
-                    pair.Value.Destroy();
-
-                int ComponentCount = ToBeDestroyed.AllBehaviors.Count;
-                for (int i = ComponentCount - 1; i >= 0; i--)
-                    ToBeDestroyed.AllBehaviors[i].Destroy();
-
-                tmp.Init();
-                CachedScenes[Name] = tmp;
-            }
-            catch
-            { }
-        }
-
-        internal static void AddScene(params Scene[] Source)
-        {
-            foreach (Scene item in Source)
-            {
-                try
-                {
-                    if (item != null)
-                    {
-                        CachedScenes.Add(item.Name, item);
-                    }
-                    else
-                        throw new Exception("Scene is null\n" + item.ToString());
-                }
-                catch
-                { }
             }
         }
     }

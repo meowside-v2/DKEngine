@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DKEngine.Core
 {
-    public abstract class Scene : IPage
+    public class Scene : IPage
     {
         public string Name = "";
 
@@ -32,13 +32,7 @@ namespace DKEngine.Core
             AllGameObjectsColliders   = new List<Collider>(0xFFFF);
         }
 
-        
-        public abstract void Init();
-        public abstract void Set(params string[] Args);
-
-
-        #region Nechapu_K_Cemu_To_Tady_Jeste_Je
-        /*public enum Mode
+        public enum Mode
         {
             View,
             Edit
@@ -79,25 +73,28 @@ namespace DKEngine.Core
                                 });
                 }*/
 
-        /*switch (mode)
-        {
-            case Mode.View:
-                break;
+                switch (mode)
+                {
+                    case Mode.View:
+                        break;
 
-            case Mode.Edit:
-                break;
+                    case Mode.Edit:
+                        break;
 
-            default:
-                break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("World loading failed", e);
+            }
+
+            br.Close();
         }
-    }
-    catch (Exception e)
-    {
-        throw new Exception("World loading failed", e);
-    }
 
-    br.Close();
-}*/
+        protected internal virtual void Init()
+        { }
 
         /*public virtual void Start() { }
 
@@ -138,6 +135,5 @@ namespace DKEngine.Core
         {
             
         }*/
-        #endregion
     }
 }

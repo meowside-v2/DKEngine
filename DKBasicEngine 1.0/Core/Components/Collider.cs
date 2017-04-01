@@ -519,26 +519,5 @@ namespace DKEngine.Core.Components
             if (Parent.Collider == this)
                 Parent.Collider = null;
         }
-
-        public void SetCollisionManually(Direction direction)
-        {
-            switch (direction)
-            {
-                case Direction.Up:
-                    _Top = true;
-                    break;
-                case Direction.Left:
-                    _Left = true;
-                    break;
-                case Direction.Down:
-                    _Bottom = true;
-                    break;
-                case Direction.Right:
-                    _Right = true;
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 }
