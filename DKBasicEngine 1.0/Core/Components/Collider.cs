@@ -2,6 +2,7 @@
 * (C) 2017 David Knieradl 
 */
 
+using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,7 +46,17 @@ namespace DKEngine.Core.Components
             : base(Parent)
         {
             this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
-            Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
+            this.Name = string.Format("{0}_Collider", Parent.Name);
+
+            try
+            {
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+            }
         }
 
         /// <summary>
@@ -61,7 +72,17 @@ namespace DKEngine.Core.Components
             :base(Parent)
         {
             this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
-            Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
+            this.Name = string.Format("{0}_Collider", Parent.Name);
+
+            try
+            {
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+            }
         }
         
         /// <summary>
@@ -73,7 +94,17 @@ namespace DKEngine.Core.Components
             : base(Parent)
         {
             this.Area = Area;
-            Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
+            this.Name = string.Format("{0}_Collider", Parent.Name);
+
+            try
+            {
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+            }
         }
 
         /// <summary>
@@ -86,7 +117,17 @@ namespace DKEngine.Core.Components
             : base(Parent)
         {
             this.Area = new RectangleF(Coordinates, Size);
-            Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
+            this.Name = string.Format("{0}_Collider", Parent.Name);
+
+            try
+            {
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+            }
         }
 
 #if DEBUG
@@ -130,90 +171,90 @@ namespace DKEngine.Core.Components
                 _Bottom = false;
                 _Top = false;
 
-                Parallel.ForEach(Engine.CurrentScene.AllGameObjectsColliders, (tmp) =>
+                foreach(Collider tmp in Engine.CurrentScene.AllGameObjectsColliders)
+                {
+                    bool _L = false;
+                    bool _R = false;
+                    bool _T = false;
+                    bool _B = false;
+
+                    float _LeftSpan = float.MaxValue;
+                    float _RightSpan = float.MaxValue;
+                    float _BottomSpan = float.MaxValue;
+                    float _TopSpan = float.MaxValue;
+
+                    if (Left(tmp))
                     {
-                        bool _L = false;
-                        bool _R = false;
-                        bool _T = false;
-                        bool _B = false;
+                        _L = true;
+                        _LeftSpan = LeftSpan(tmp);
+                        //this.Parent.Transform.Position += new Vector3(tmp.X + tmp.Width - this.X, 0, 0);
+                        //_Left = true;
+                    }
 
-                        float _LeftSpan = float.MaxValue;
-                        float _RightSpan = float.MaxValue;
-                        float _BottomSpan = float.MaxValue;
-                        float _TopSpan = float.MaxValue;
+                    if (Right(tmp))
+                    {
+                        _R = true;
+                        _RightSpan = RightSpan(tmp);
+                        //this.Parent.Transform.Position -= new Vector3(this.X + this.Width - tmp.X, 0, 0);
+                        //_Right = true;
+                    }
 
-                        if (Left(tmp))
+                    if (Up(tmp))
+                    {
+                        _T = true;
+                        _TopSpan = TopSpan(tmp);
+                        //this.Parent.Transform.Position += new Vector3(0, tmp.Y + tmp.Height - this.Y, 0);
+                        //_Top = true;
+                    }
+
+                    if (Down(tmp))
+                    {
+                        _B = true;
+                        _BottomSpan = BottomSpan(tmp);
+                        //this.Parent.Transform.Position -= new Vector3(0, this.Y + this.Height - tmp.Y, 0);
+                        //_Bottom = true;
+                    }
+
+                    if (_T)
+                    {
+                        if (_TopSpan <= _LeftSpan && _TopSpan <= _RightSpan && _TopSpan <= _BottomSpan)
                         {
-                            _L = true;
-                            _LeftSpan = Math.Abs(LeftSpan(tmp));
-                            //this.Parent.Transform.Position += new Vector3(tmp.X + tmp.Width - this.X, 0, 0);
-                            //_Left = true;
+                            _Top = true;
+                            this.Parent.Transform.Position += new Vector3(0, _TopSpan, 0);
+                            continue;
                         }
+                    }
 
-                        if (Right(tmp))
+                    if (_B)
+                    {
+                        if (_BottomSpan <= _LeftSpan && _BottomSpan <= _RightSpan && _BottomSpan <= _TopSpan)
                         {
-                            _R = true;
-                            _RightSpan = Math.Abs(RightSpan(tmp));
-                            //this.Parent.Transform.Position -= new Vector3(this.X + this.Width - tmp.X, 0, 0);
-                            //_Right = true;
+                            _Bottom = true;
+                            this.Parent.Transform.Position += new Vector3(0, -_BottomSpan, 0);
+                            continue;
                         }
+                    }
 
-                        if (Up(tmp))
+                    if (_L)
+                    {
+                        if (_LeftSpan <= _BottomSpan && _LeftSpan <= _TopSpan && _LeftSpan <= _RightSpan)
                         {
-                            _T = true;
-                            _TopSpan = Math.Abs(TopSpan(tmp));
-                            //this.Parent.Transform.Position += new Vector3(0, tmp.Y + tmp.Height - this.Y, 0);
-                            //_Top = true;
+                            _Left = true;
+                            this.Parent.Transform.Position += new Vector3(_LeftSpan, 0, 0);
+                            continue;
                         }
+                    }
 
-                        if (Down(tmp))
+                    if (_R)
+                    {
+                        if (_RightSpan <= _BottomSpan && _RightSpan <= _TopSpan && _RightSpan <= _LeftSpan)
                         {
-                            _B = true;
-                            _BottomSpan = Math.Abs(BottomSpan(tmp));
-                            //this.Parent.Transform.Position -= new Vector3(0, this.Y + this.Height - tmp.Y, 0);
-                            //_Bottom = true;
+                            _Right = true;
+                            this.Parent.Transform.Position += new Vector3(-_RightSpan, 0, 0);
+                            continue;
                         }
-
-                        if (_T)
-                        {
-                            if (_TopSpan <= _LeftSpan && _TopSpan <= _RightSpan)
-                            {
-                                _Top = true;
-                                this.Parent.Transform.Position += new Vector3(0, _TopSpan, 0);
-                                return;
-                            }
-                        }
-
-                        if (_B)
-                        {
-                            if (_BottomSpan <= _LeftSpan && _BottomSpan <= _RightSpan)
-                            {
-                                _Bottom = true;
-                                this.Parent.Transform.Position += new Vector3(0, -_BottomSpan, 0);
-                                return;
-                            }
-                        }
-
-                        if (_L)
-                        {
-                            if (_LeftSpan <= _BottomSpan && _LeftSpan <= _TopSpan)
-                            {
-                                _Left = true;
-                                this.Parent.Transform.Position += new Vector3(_LeftSpan, 0, 0);
-                                return;
-                            }
-                        }
-
-                        if (_R)
-                        {
-                            if (_RightSpan <= _BottomSpan && _RightSpan <= _TopSpan)
-                            {
-                                _Right = true;
-                                this.Parent.Transform.Position += new Vector3(-_RightSpan, 0, 0);
-                                return;
-                            }
-                        }
-                    });
+                    }
+                }
 
                 /*foreach (Collider tmp in Engine.CurrentScene.AllGameObjectsColliders)
                 {
@@ -413,12 +454,12 @@ namespace DKEngine.Core.Components
 
         private float LeftSpan(Collider obj)
         {
-            return this.X - obj.X - obj.Width;
+            return obj.X + obj.Width - this.X;
         }
 
         private float TopSpan(Collider obj)
         {
-            return this.Y - obj.Y - obj.Height;
+            return obj.Y + obj.Height - this.Y;
         }
 
         private float RightSpan(Collider obj)
@@ -436,7 +477,7 @@ namespace DKEngine.Core.Components
         private bool Left(Collider obj)
         {
             if (!this.Equals(obj) && !obj.IsTrigger)
-                return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X >= obj.X + obj.Width / 2 && this.X <= obj.X + obj.Width); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
+                return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X >= obj.X + obj.Width / 2 && this.X <= obj.X + obj.Width); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
 
             return false;
         }
@@ -444,7 +485,7 @@ namespace DKEngine.Core.Components
         private bool Right(Collider obj)
         {
             if (!this.Equals(obj) && !obj.IsTrigger)
-                return (this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y && this.X + this.Width >= obj.X && this.X + this.Width <= obj.X + obj.Width / 2);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
+                return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X + this.Width >= obj.X && this.X + this.Width <= obj.X + obj.Width / 2);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
 
             return false;
         }
@@ -452,7 +493,7 @@ namespace DKEngine.Core.Components
         private bool Up(Collider obj)
         {
             if (!this.Equals(obj) && !obj.IsTrigger)
-                return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
+                return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
 
             return false;
         }
@@ -460,7 +501,7 @@ namespace DKEngine.Core.Components
         private bool Down(Collider obj)
         {
             if (!this.Equals(obj) && !obj.IsTrigger)
-                return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y + this.Height >= obj.Y && this.Y + this.Height <= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
+                return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Height >= obj.Y && this.Y + this.Height <= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
 
             return false;
         }
@@ -480,11 +521,32 @@ namespace DKEngine.Core.Components
             destination.Area = new RectangleF(X, Y, Width, Height);
         }
 
-        protected internal override void Destroy()
+        public override void Destroy()
         {
             Engine.CurrentScene.AllGameObjectsColliders.Remove(this);
             if (Parent.Collider == this)
                 Parent.Collider = null;
+        }
+
+        public void SetCollisionManually(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Up:
+                    _Top = true;
+                    break;
+                case Direction.Left:
+                    _Left = true;
+                    break;
+                case Direction.Down:
+                    _Bottom = true;
+                    break;
+                case Direction.Right:
+                    _Right = true;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
