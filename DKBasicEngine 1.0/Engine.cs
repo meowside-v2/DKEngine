@@ -227,34 +227,7 @@ namespace DKEngine
             //Engine.LoadingScene.Init();
         }
 
-        public static void LoadScene<T>() where T : Scene
-        {
-            Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
-            Engine.LoadingScene.Init();
-
-            while (Engine.LoadingScene.NewlyGeneratedGameObjects.Count > 0)
-            {
-                NewGameobjects[Engine.LoadingScene.NewlyGeneratedGameObjects.Count - 1].InitInternal();
-            }
-
-            RegisterScene(Engine.LoadingScene);
-            //Engine.LoadingScene.Init();
-        }
-
-        public static void ReloadScene(string Name)
-        {
-            ReloadScene(Database.GetScene(Name));
-        }
-        
         public static void ChangeScene(string Name, bool Reload = false, params string[] args)
-        {
-            UnregisterScene();
-            if (Reload)
-                ReloadScene(Name);
-            RegisterScene(Database.GetScene(Name), args);
-        }
-
-        private static void UnregisterScene()
         {
             if (CurrentScene != null)
             {
@@ -267,13 +240,11 @@ namespace DKEngine
                     catch { }
                 }
             }
-        }
 
-        private static void RegisterScene(Scene source, params string[] args)
-        {
-            source.Set(args);
+            Scene tmp = Database.GetScene(Name);
+            tmp.Set(args);
 
-            foreach (var item in source.AllBehaviors)
+            foreach (var item in tmp.AllBehaviors)
             {
                 try
                 {
@@ -282,14 +253,9 @@ namespace DKEngine
                 catch { }
             }
 
-            Engine.CurrentScene = source;
+            Engine.CurrentScene = tmp;
             Engine.NewGameobjects = Engine.CurrentScene.NewlyGeneratedGameObjects;
             Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
-        }
-
-        private static void ReloadScene(Scene source)
-        {
-
         }
 
         /*public static void ChangeScene<T>() where T : Scene
@@ -347,6 +313,11 @@ namespace DKEngine
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
+                
+                while (NewGameobjects.Count > 0)
+                {
+                    NewGameobjects[NewGameobjects.Count - 1].InitInternal();
+                }
                 
                 while (NewComponents.Count > 0)
                 {

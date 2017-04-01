@@ -5,7 +5,6 @@
 using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -35,13 +34,10 @@ namespace DKEngine.Core.Components
 
             this.Name = Parent != null ? string.Format("{0}_Camera", Parent.Name) : string.Format("Camera", Engine.LoadingScene.AllComponents.Count);
 
-            try
+            if (Engine.LoadingScene != null)
             {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+                if (IsPartOfScene)
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
             }
         }
         
