@@ -90,7 +90,7 @@ namespace DKEngine.Core
         internal bool _IsGUI = false;
         internal string _typeName = "";
 
-        internal Material _Model         = null;
+        public Material _Model         = null;
         public Animator Animator       = null;
         
         public SoundSource SoundSource = null;

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DKEngine.Core;
 using DKEngine;
 using DKEngine.Core.Components;
-using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
@@ -29,25 +28,21 @@ namespace MarIO.Assets.Scripts
         {
             get
             {
-                switch (Shared.MarioCurrentState)
-                {
-                    case Mario.State.Small:
-                        return "idle";
-                    case Mario.State.Super:
-                        return "idle";
-                    case Mario.State.Fire:
-                        return "idle";
-                    case Mario.State.Invincible:
-                        return "idle";
-                    default:
-                        throw new Exception("JAK");
-                }
+                return ""; /*----------------- TO DO ----------------------*/
             }
         }
         const string RIGHTMOVE = "right_move";
         const string LEFTMOVE = "left_move";
         const string RIGHTJUMP = "right_jump";
         const string LEFTJUMP = "left_jump";
+
+        public enum State
+        {
+            Small,
+            Super,
+            Fire,
+            Invincible
+        }
 
         public CharacterController(GameObject Parent)
             : base(Parent)
@@ -106,7 +101,7 @@ namespace MarIO.Assets.Scripts
             {
                 horiSpeed += Engine.deltaTime * Acceleration * 2;
 
-                if (horiSpeed >= 0 || Parent.Collider.Collision(Collider.Direction.Left))
+                if (horiSpeed > 0 || Parent.Collider.Collision(Collider.Direction.Left))
                 {
                     horiSpeed = 0;
                     if (Parent.Animator.Current.Name != RIGHTJUMP && Parent.Animator.Current.Name != LEFTJUMP)
@@ -139,7 +134,7 @@ namespace MarIO.Assets.Scripts
             {
                 horiSpeed -= Engine.deltaTime * Acceleration * 2;
 
-                if (horiSpeed <= 0 || Parent.Collider.Collision(Collider.Direction.Right))
+                if (horiSpeed < 0 || Parent.Collider.Collision(Collider.Direction.Right))
                 {
                     horiSpeed = 0;
                     if (Parent.Animator.Current.Name != RIGHTJUMP && Parent.Animator.Current.Name != LEFTJUMP)
@@ -167,7 +162,7 @@ namespace MarIO.Assets.Scripts
                             vertSpeed = -FloatSpeed;
                             Jumped = true;
                         }
-                        else if (!Parent.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
+                        else if (!Parent.Collider.Collision(Collider.Direction.Up))
                         {
                             vertSpeed += Engine.deltaTime * Acceleration * 2;
                         }

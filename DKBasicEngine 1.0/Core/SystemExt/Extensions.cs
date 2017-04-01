@@ -26,7 +26,7 @@ namespace DKEngine.Core.Ext
                 }
                 catch
                 {
-                    Target.Name = string.Format("{0}_(Copy {1})", Target.Name, position);
+                    Target.Name = string.Format("{0}_(Copy){1}", Target.Name, position);
                     position++;
                     continue;
                 }
