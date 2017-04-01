@@ -2,9 +2,7 @@
 * (C) 2017 David Knieradl 
 */
 
-using DKEngine.Core.Ext;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -13,12 +11,12 @@ namespace DKEngine.Core.Components
     public class Animator : Behavior, IAnimated
     {
         public TimeSpan CurrentAnimationTime;
-        internal Dictionary<string, AnimationNode> Animations;
+        public Dictionary<string, AnimationNode> Animations;
         private AnimationNode _current;
         private GameObject _p;
 
         public int NumberOfPlays { get; private set; } = 0;
-        public AnimationNode Current
+        internal AnimationNode Current
         {
             get { return _current; }
             set
@@ -46,32 +44,11 @@ namespace DKEngine.Core.Components
             this.CurrentAnimationTime = new TimeSpan(0);
             this.Animations           = new Dictionary<string, AnimationNode>();
             _p = Parent;
-
-            this.Name = string.Format("{0}_Animator", Parent.Name);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
-
             /*if(Parent.Model != null)
             {
                 Animations.Add("default", new AnimationNode("default", Parent.Model));
                 this.Play("default");
             }*/
-        }
-
-        public void AddAnimation(string Name, Material Source)
-        {
-            Animations.Add(Name, new AnimationNode(Name, Source));
-            if(Animations.Count == 1)
-            {
-                Play(Animations.ElementAt(0).Key);
-            }
         }
 
         public void Play(string AnimationName)
@@ -111,7 +88,7 @@ namespace DKEngine.Core.Components
         protected internal override void Start()
         { }
 
-        public override void Destroy()
+        protected internal override void Destroy()
         {
             Engine.UpdateEvent -= UpdateHandle;
             

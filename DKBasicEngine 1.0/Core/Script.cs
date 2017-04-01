@@ -13,23 +13,17 @@ namespace DKEngine.Core
 
         public Script(GameObject Parent)
             :base(Parent)
-        {
-            if(Parent.Collider != null)
-            {
-                CollisionHandler = new Collider.CollisionEnterHandler(OnColliderEnter);
-                Parent.Collider.CollisionEvent += CollisionHandler;
-            }
-        }
+        { }
 
         protected internal abstract void OnColliderEnter(Collider e);
 
-        public override void Destroy()
+        protected internal override void Destroy()
         {
-            if(UpdateHandle != null)
+            if(CollisionHandler != null)
+            {
                 Engine.UpdateEvent -= UpdateHandle;
-
-            if (CollisionHandler != null)
                 Parent.Collider.CollisionEvent -= CollisionHandler;
+            }
             
             Parent.Scripts.Remove(this);
             Parent = null;

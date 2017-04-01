@@ -3,7 +3,6 @@
 */
 
 using DKEngine.Core;
-using DKEngine.Core.Components;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,27 +12,6 @@ namespace DKEngine.Core.Ext
 {
     public static class Extensions
     {
-        public static void AddSafe<TDataValue>(this Dictionary<string, TDataValue> Destination, Component Target)
-            where TDataValue : Component
-        {
-            int position = 0;
-
-            while (true)
-            {
-                try
-                {
-                    Destination.Add(Target.Name, Target as TDataValue);
-                }
-                catch
-                {
-                    Target.Name = string.Format("{0}_(Copy {1})", Target.Name, position);
-                    position++;
-                    continue;
-                }
-
-                break;
-            }
-        }
 
         public static void AddAll<T>(this List<T> list, params T[] stuff)
         {

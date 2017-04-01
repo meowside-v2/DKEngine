@@ -17,20 +17,16 @@ namespace DKEngine.Core.UI
 
         public Letter(TextBlock Parent)
             :base(Parent)
-        { }
-
-        public override void Destroy()
         {
-            if (Engine.LoadingScene != null)
-            {
-                if(Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
-                    Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
+            IsPartOfScene = false;
+        }
 
-                Engine.LoadingScene.AllComponents.Remove(this.Name);
-            }
-            
-            if(Engine.RenderGameObjects.Contains(this))
-                Engine.RenderGameObjects.Remove(this);
+        protected internal override void Destroy()
+        {
+            if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
+            Engine.LoadingScene.AllGameObjects.Remove(this.Name);
+            Engine.RenderGameObjects.Remove(this);
 
             /*Engine.LoadingScene.AllGameObjects.Remove(this);
             //if (Engine.ToRender.Contains(this))
@@ -44,11 +40,6 @@ namespace DKEngine.Core.UI
             Parent = null;
             Animator = null;
             Model = null;
-        }
-
-        protected override void Init()
-        {
-            IsPartOfScene = false;
         }
     }
 }

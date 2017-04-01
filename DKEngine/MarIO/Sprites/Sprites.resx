@@ -175,6 +175,9 @@
   <data name="finish_pole" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\finish_pole.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="mario" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>mario.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="mountain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\mountain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -193,7 +196,7 @@
   <data name="pipe_05" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pipes\pipe_05.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="sky" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="sky_07" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\sky_07.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="underground_block_01" type="System.Resources.ResXFileRef, System.Windows.Forms">

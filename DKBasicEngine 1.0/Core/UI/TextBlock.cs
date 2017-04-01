@@ -7,7 +7,6 @@ using DKEngine.Core.Scripts;
 using System.Collections.Generic;
 using System.Drawing;
 using static DKEngine.Core.UI.Text;
-using System;
 
 namespace DKEngine.Core.UI
 {
@@ -148,16 +147,22 @@ namespace DKEngine.Core.UI
 
         public TextBlock()
             :base()
-        { }
+        {
+            this.InitNewScript<TextControlScript>();
+            //this.Scripts.Add(new TextControlScript(this));
+        }
 
         public TextBlock(GameObject Parent)
             : base(Parent)
-        { }
+        {
+            this.InitNewScript<TextControlScript>();
+            //this.Scripts.Add(new TextControlScript(this));
+        }
 
         internal override void Render()
         { Model?.Render(this, _bg); }
 
-        public override void Destroy()
+        protected internal override void Destroy()
         {
             if (Engine.CurrentScene.NewlyGeneratedGameObjects.Contains(this))
                 Engine.CurrentScene.NewlyGeneratedGameObjects.Remove(this);
@@ -176,11 +181,6 @@ namespace DKEngine.Core.UI
 
             Model = null;
             Animator = null;
-        }
-
-        protected override void Init()
-        {
-            this.InitNewScript<TextControlScript>();
         }
     }
 }

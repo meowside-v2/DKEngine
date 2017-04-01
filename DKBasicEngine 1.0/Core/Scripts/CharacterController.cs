@@ -73,14 +73,6 @@ namespace DKEngine.Core.Scripts
             {
                 horiSpeed = 0;
             }
-            else if(horiSpeed < 0)
-            {
-                horiSpeed += Engine.deltaTime * Acceleration * 2;
-
-                if (horiSpeed > 0)
-                    horiSpeed = 0;
-            }
-
 
             if (Engine.Input.IsKeyDown(ConsoleKey.D))
             {
@@ -97,14 +89,6 @@ namespace DKEngine.Core.Scripts
                     horiSpeed = MovementSpeed;
                 }
             }
-            else if (horiSpeed > 0)
-            {
-                horiSpeed -= Engine.deltaTime * Acceleration * 2;
-
-                if (horiSpeed < 0)
-                    horiSpeed = 0;
-            }
-
             else if (CollisionRight = Parent.Collider.Collision(Collider.Direction.Right))
             {
                 horiSpeed = 0;

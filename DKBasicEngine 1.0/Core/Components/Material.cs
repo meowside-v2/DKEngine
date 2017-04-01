@@ -331,7 +331,7 @@ namespace DKEngine.Core.Components
                 }
             }
 
-            if (HasShadow)
+            /*if (HasShadow)
             {
                 NonRasteredHeight = 0;
                 NonRasteredWidth = 0;
@@ -348,25 +348,23 @@ namespace DKEngine.Core.Components
 
                     for (int column = 0; column < RasteredWidth; column++)
                     {
-
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
                         if (IsOnScreen(x + column, y + row))
                         {
-
                             int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
                             int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
                             int tempColumn = (int)NonRasteredWidth;
                             int tempRow = (int)NonRasteredHeight;
 
-                            int index = _BytesPerPixel * (tempRow * Width + tempColumn);
+                            int index = BytesPerPixel * (tempRow * Width + tempColumn);
 
-                            if (Engine.Render.imageBufferKey[keyOffset] != 255 && _BytesPerPixel == 4 ? _Data[index + 3] != 0 : true)
+                            if (Engine.Render.imageBufferKey[keyOffset] != 255 && BytesPerPixel == 4 ? data[index + 3] != 0 : true)
                             {
                                 Color temp = MixPixel(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset],
-                                                      (byte)192, (byte)0, (byte)0, (byte)0);
+                                                      0xBB, 0x00, 0x00, 0x00);
 
                                 Engine.Render.imageBufferKey[keyOffset] = temp.A;
 
@@ -381,7 +379,7 @@ namespace DKEngine.Core.Components
 
                     NonRasteredHeight += NonRasteredHeightRatio;
                 }
-            }
+            }*/
         }
 
         public Color MixPixel(byte topA, byte topR, byte topG, byte topB, byte bottomA, byte bottomR, byte bottomG, byte bottomB)

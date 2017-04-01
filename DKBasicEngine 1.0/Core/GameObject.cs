@@ -1,5 +1,4 @@
 ﻿using DKEngine.Core.Components;
-using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,8 +9,9 @@ using System.Windows.Forms;
 
 namespace DKEngine.Core
 {
-    public abstract class GameObject : Component
+    public class GameObject : Component
     {
+        public string Name { get; set; } = "";
         public bool HasShadow { get; set; } = false;
         public bool IsInView
         {
@@ -56,7 +56,7 @@ namespace DKEngine.Core
             }
         }
 
-        internal Collider _collider;
+        protected Collider _collider;
         public Collider Collider
         {
             get { return _collider; }
@@ -87,18 +87,20 @@ namespace DKEngine.Core
         }
 
 
-        internal bool _IsGUI = false;
-        internal string _typeName = "";
+        protected bool _IsGUI = false;
+        protected string _typeName = "";
 
-        internal Material _Model         = null;
+        public Material _Model         = null;
         public Animator Animator       = null;
         
         public SoundSource SoundSource = null;
         public Color? Foreground       = null;
 
-        public Transform Transform { get; }
-        public List<GameObject> Child { get; }
-        internal List<Script> Scripts { get; }
+        public readonly Transform Transform;
+        public readonly List<GameObject> Child;
+        internal readonly List<Script> Scripts;
+
+        internal bool IsPartOfScene { get; set; } = true;
 
         public GameObject()
             :base(null)
@@ -112,13 +114,9 @@ namespace DKEngine.Core
             //this.Collider             = new Collider(this);
             //this.Animator             = new Animator(this);
 
-            try
+            if (Engine.LoadingScene != null)
             {
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
 
@@ -142,55 +140,31 @@ namespace DKEngine.Core
                 this.Transform.Position = Parent.Transform.Position;
                 this.Transform.Scale    = Parent.Transform.Scale;
 
-                try
+                if (Engine.LoadingScene != null)
                 {
                     Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
                 }
 
                 this.IsPartOfScene = Parent.IsPartOfScene;
             }
-
-            try
+                
+            else if (Engine.LoadingScene != null)
             {
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
             }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
         }
 
-        internal void InitInternal()
+        internal void Init()
         {
-            Init();
+            if(Parent == null)
+                Engine.LoadingScene.Model.Add(this);
 
-            try
-            {
-                if (Parent == null)
-                    Engine.LoadingScene.Model.Add(this);
-
-                if (IsPartOfScene)
-                {
-                    Engine.LoadingScene.AllComponents.AddSafe(this);
-                    Engine.LoadingScene.AllGameObjects.AddSafe(this);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
+            if (IsPartOfScene)
+                Engine.LoadingScene.AllGameObjects.Add(this.Name, this);
 
             Engine.RenderGameObjects.Add(this);
-
-            if(Engine.NewGameobjects.Contains(this))
-                Engine.NewGameobjects.Remove(this);
+            Engine.NewGameobjects.Remove(this);
         }
-
-        protected abstract void Init();
 
         public void InitNewScript<T>() where T : Script
         {
@@ -238,11 +212,11 @@ namespace DKEngine.Core
             }
         }
 
-        public override void Destroy()
+        protected internal override void Destroy()
         {
             if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
-            Engine.LoadingScene.AllComponents.Remove(this.Name);
+            Engine.LoadingScene.AllGameObjects.Remove(this.Name);
             Engine.RenderGameObjects.Remove(this);
 
             int ScriptsCount = this.Scripts.Count;

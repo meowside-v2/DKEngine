@@ -15,6 +15,7 @@ namespace DKEngine
         {
             this.TypeName = "splashScreen";
             this.InitNewComponent<Animator>();
+            //this.Animator = new Core.Components.Animator(this);
         }
 
         public SplashScreen(GameObject Parent)
@@ -22,9 +23,7 @@ namespace DKEngine
         {
             this.TypeName = "splashScreen";
             this.InitNewComponent<Animator>();
+            //this.Animator = new Core.Components.Animator(this);
         }
-
-        protected override void Init()
-        { }
     }
 }
