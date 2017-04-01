@@ -7,30 +7,38 @@ using System.Threading.Tasks;
 
 namespace DKEngine.Core
 {
-    public class Scene : IPage
+    public abstract class Scene : IPage
     {
         public string Name = "";
 
+        internal readonly Dictionary<string, Component> AllComponents;
         internal readonly Dictionary<string, GameObject> AllGameObjects;
-        
+
         internal readonly List<GameObject> Model;
         internal readonly List<GameObject> NewlyGeneratedGameObjects;
-        internal readonly List<Behavior> AllComponents;
-        internal readonly List<Behavior>  NewlyGeneratedComponents;
+        internal readonly List<Behavior>   AllBehaviors;
+        internal readonly List<Behavior>   NewlyGeneratedComponents;
         internal readonly List<Collider>   AllGameObjectsColliders;
 
         public Scene()
         {
+            AllComponents = new Dictionary<string, Component>(0xFFFF);
             AllGameObjects = new Dictionary<string, GameObject>(0xFFFF);
 
-            AllComponents             = new List<Behavior>(0xFFFF);
+            AllBehaviors             = new List<Behavior>(0xFFFF);
             NewlyGeneratedGameObjects = new List<GameObject>(0xFFFF);
             Model                     = new List<GameObject>(0xFFFF);
             NewlyGeneratedComponents  = new List<Behavior>(0xFFFF);
             AllGameObjectsColliders   = new List<Collider>(0xFFFF);
         }
 
-        public enum Mode
+        
+        public abstract void Init();
+        public abstract void Set(params string[] Args);
+
+
+        #region Nechapu_K_Cemu_To_Tady_Jeste_Je
+        /*public enum Mode
         {
             View,
             Edit
@@ -71,28 +79,25 @@ namespace DKEngine.Core
                                 });
                 }*/
 
-                switch (mode)
-                {
-                    case Mode.View:
-                        break;
+        /*switch (mode)
+        {
+            case Mode.View:
+                break;
 
-                    case Mode.Edit:
-                        break;
+            case Mode.Edit:
+                break;
 
-                    default:
-                        break;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("World loading failed", e);
-            }
-
-            br.Close();
+            default:
+                break;
         }
+    }
+    catch (Exception e)
+    {
+        throw new Exception("World loading failed", e);
+    }
 
-        protected internal virtual void Init()
-        { }
+    br.Close();
+}*/
 
         /*public virtual void Start() { }
 
@@ -133,5 +138,6 @@ namespace DKEngine.Core
         {
             
         }*/
+        #endregion
     }
 }

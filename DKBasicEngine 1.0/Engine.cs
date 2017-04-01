@@ -191,13 +191,16 @@ namespace DKEngine
                     FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
                     FpsMeter.IsPartOfScene = false;
 
+                    FpsMeter.InitInternal();
+
                     UpdateEvent += FpsMeter.Scripts[0].UpdateHandle;
-                    RenderGameObjects.Add(FpsMeter);
 
                     BackgroundWorks = new Thread(Update);
                     RenderWorker    = new Thread(RenderImage);
                     BackgroundWorks.Start();
                     RenderWorker.Start();
+
+
 
 #if !DEBUG
                     SplashScreen();
@@ -214,16 +217,91 @@ namespace DKEngine
                 throw new Exception("Engine is being initialised second time");
         }
         
-        public static void ChangeScene<T>() where T : Scene
+        public static void LoadSceneToMemory<T>() where T : Scene
+        {
+            Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
+            Engine.LoadingScene.Init();
+
+            Database.AddScene(Engine.LoadingScene);
+            
+            //Engine.LoadingScene.Init();
+        }
+
+        public static void LoadScene<T>() where T : Scene
+        {
+            Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
+            Engine.LoadingScene.Init();
+
+            while (Engine.LoadingScene.NewlyGeneratedGameObjects.Count > 0)
+            {
+                NewGameobjects[Engine.LoadingScene.NewlyGeneratedGameObjects.Count - 1].InitInternal();
+            }
+
+            RegisterScene(Engine.LoadingScene);
+            //Engine.LoadingScene.Init();
+        }
+
+        public static void ReloadScene(string Name)
+        {
+            ReloadScene(Database.GetScene(Name));
+        }
+        
+        public static void ChangeScene(string Name, bool Reload = false, params string[] args)
+        {
+            UnregisterScene();
+            if (Reload)
+                ReloadScene(Name);
+            RegisterScene(Database.GetScene(Name), args);
+        }
+
+        private static void UnregisterScene()
         {
             if (CurrentScene != null)
             {
-                foreach (var pair in Engine.CurrentScene.AllGameObjects)
+                foreach (var item in CurrentScene.AllBehaviors)
+                {
+                    try
+                    {
+                        UpdateEvent -= item.UpdateHandle;
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private static void RegisterScene(Scene source, params string[] args)
+        {
+            source.Set(args);
+
+            foreach (var item in source.AllBehaviors)
+            {
+                try
+                {
+                    UpdateEvent += item.UpdateHandle;
+                }
+                catch { }
+            }
+
+            Engine.CurrentScene = source;
+            Engine.NewGameobjects = Engine.CurrentScene.NewlyGeneratedGameObjects;
+            Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
+        }
+
+        private static void ReloadScene(Scene source)
+        {
+
+        }
+
+        /*public static void ChangeScene<T>() where T : Scene
+        {
+            if (CurrentScene != null)
+            {
+                foreach (var pair in Engine.CurrentScene.AllComponents)
                     pair.Value.Destroy();
 
-                int ComponentCount = Engine.CurrentScene.AllComponents.Count;
+                int ComponentCount = Engine.CurrentScene.AllBehaviors.Count;
                 for (int i = ComponentCount - 1; i >= 0; i--)
-                    Engine.CurrentScene.AllComponents[i].Destroy();
+                    Engine.CurrentScene.AllBehaviors[i].Destroy();
             }
 
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
@@ -234,13 +312,13 @@ namespace DKEngine
             Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
                 
             //Engine._LoadingNewPage = false;
-        }
+        }*/
 
         private static void SplashScreen()
         {
             if (!_IsInitialised)
             {
-                Engine.ChangeScene<Scene>();
+                Engine.LoadSceneToMemory<Scene>();
 
                 SplashScreen splash    = new SplashScreen();
                 Camera splashScreenCam = new Camera();
@@ -269,17 +347,10 @@ namespace DKEngine
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
-
-                int ToStartCount = NewGameobjects.Count - 1;
-                while (ToStartCount >= 0)
+                
+                while (NewComponents.Count > 0)
                 {
-                    NewGameobjects[ToStartCount--].Init();
-                }
-
-                int InitComponentsCount = NewComponents.Count - 1;
-                while (InitComponentsCount >= 0)
-                {
-                    Behavior tmp = NewComponents[InitComponentsCount--];
+                    Behavior tmp = NewComponents[NewComponents.Count - 1];
                     NewComponents.Remove(tmp);
                     tmp.Start();
                     Engine.UpdateEvent += tmp.UpdateHandle;
