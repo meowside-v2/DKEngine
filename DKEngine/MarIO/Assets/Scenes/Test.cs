@@ -44,6 +44,25 @@ namespace MarIO.Assets.Scenes
             pipe.Transform.Scale = new Vector3(2, 2, 2);
             pipe.Transform.Position = new Vector3(240, 36, 0);
 
+            Block blck = new Block();
+            blck.InitNewComponent<Collider>();
+            blck.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
+            blck.Type = Block.BlockType.Ground2;
+            blck.Transform.Scale = new Vector3(2, 2, 2);
+            blck.Transform.Position = new Vector3(800, 100 - 32, 0);
+
+            Block blck2 = new Block();
+            blck2.InitNewComponent<Collider>();
+            blck2.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
+            blck2.Type = Block.BlockType.Ground2;
+            blck2.Transform.Scale = new Vector3(2, 2, 2);
+            blck2.Transform.Position = new Vector3(1200, 100 - 32, 0);
+
+            Enemy goomba = new Enemy();
+            goomba.Type = Enemy.EnemyType.Goomba;
+            goomba.Transform.Scale = new Vector3(2, 2, 2);
+            goomba.Transform.Position = new Vector3(1000, 100 - 60, 0);
+
             Mario m = new Mario();
             m.Transform.Scale = new Vector3(2, 2, 2);
             m.InitNewScript<CameraController>();

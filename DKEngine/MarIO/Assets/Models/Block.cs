@@ -105,7 +105,7 @@ namespace MarIO.Assets.Models
             {
                 case BlockType.Ground1:
                     this.InitNewComponent<Collider>();
-                    this.InitNewScript<BonusBlockScript>();
+                    this.InitNewScript<BottomMarioChecker>();
                     this.Collider.IsTrigger = true;
                     this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y, this.Transform.Dimensions.X, 1);
                     break;
@@ -191,7 +191,7 @@ namespace MarIO.Assets.Models
                     break;
                 case BlockType.UnderGround1:
                     this.InitNewComponent<Collider>();
-                    this.InitNewScript<BonusBlockScript>();
+                    this.InitNewScript<BottomMarioChecker>();
                     this.Collider.IsTrigger = true;
                     this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y * this.Transform.Scale.Y, this.Transform.Dimensions.X * this.Transform.Scale.X, 1);
                     break;
