@@ -49,11 +49,15 @@ namespace DKEngine.Core.Components
 
             this.Name = string.Format("{0}_Animator", Parent.Name);
 
-            if(Engine.LoadingScene != null)
+            try
             {
-                if(IsPartOfScene)
-                    Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllComponents.AddSafe(this);
             }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+            }
+
             /*if(Parent.Model != null)
             {
                 Animations.Add("default", new AnimationNode("default", Parent.Model));

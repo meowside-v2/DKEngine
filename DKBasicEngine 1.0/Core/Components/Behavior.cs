@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +15,15 @@ namespace DKEngine.Core.Components
             : base(Parent)
         {
             UpdateHandle = new Engine.EngineHandler(Update);
-            
-            if (Engine.LoadingScene != null)
+
+            try
             {
                 Engine.LoadingScene.NewlyGeneratedComponents.Add(this);
                 Engine.LoadingScene.AllBehaviors.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
 
