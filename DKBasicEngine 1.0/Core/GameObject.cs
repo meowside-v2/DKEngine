@@ -112,9 +112,13 @@ namespace DKEngine.Core
             //this.Collider             = new Collider(this);
             //this.Animator             = new Animator(this);
 
-            if (Engine.LoadingScene != null)
+            try
             {
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
 
@@ -138,17 +142,25 @@ namespace DKEngine.Core
                 this.Transform.Position = Parent.Transform.Position;
                 this.Transform.Scale    = Parent.Transform.Scale;
 
-                if (Engine.LoadingScene != null)
+                try
                 {
                     Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
                 }
 
                 this.IsPartOfScene = Parent.IsPartOfScene;
             }
-                
-            else if (Engine.LoadingScene != null)
+
+            try
             {
                 Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
 
@@ -156,7 +168,7 @@ namespace DKEngine.Core
         {
             Init();
 
-            if (Engine.LoadingScene != null)
+            try
             {
                 if (Parent == null)
                     Engine.LoadingScene.Model.Add(this);
@@ -166,6 +178,10 @@ namespace DKEngine.Core
                     Engine.LoadingScene.AllComponents.AddSafe(this);
                     Engine.LoadingScene.AllGameObjects.AddSafe(this);
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
 
             Engine.RenderGameObjects.Add(this);

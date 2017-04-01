@@ -46,14 +46,16 @@ namespace DKEngine.Core.Components
             : base(Parent)
         {
             this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
-            Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
-
             this.Name = string.Format("{0}_Collider", Parent.Name);
 
-            if (Engine.LoadingScene != null)
+            try
             {
-                if (IsPartOfScene)
-                    Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
 
@@ -70,14 +72,16 @@ namespace DKEngine.Core.Components
             :base(Parent)
         {
             this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
-            Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
-
             this.Name = string.Format("{0}_Collider", Parent.Name);
 
-            if (Engine.LoadingScene != null)
+            try
             {
-                if (IsPartOfScene)
-                    Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
         
@@ -90,14 +94,16 @@ namespace DKEngine.Core.Components
             : base(Parent)
         {
             this.Area = Area;
-            Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
-
             this.Name = string.Format("{0}_Collider", Parent.Name);
 
-            if (Engine.LoadingScene != null)
+            try
             {
-                if (IsPartOfScene)
-                    Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
 
@@ -111,14 +117,16 @@ namespace DKEngine.Core.Components
             : base(Parent)
         {
             this.Area = new RectangleF(Coordinates, Size);
-            Engine.LoadingScene?.AllGameObjectsColliders.Add(this);
-
             this.Name = string.Format("{0}_Collider", Parent.Name);
 
-            if (Engine.LoadingScene != null)
+            try
             {
-                if (IsPartOfScene)
-                    Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
 
