@@ -159,10 +159,14 @@ namespace DKEngine.Core.UI
 
         public override void Destroy()
         {
-            if (Engine.CurrentScene.NewlyGeneratedGameObjects.Contains(this))
-                Engine.CurrentScene.NewlyGeneratedGameObjects.Remove(this);
+            try
+            {
+                Engine.CurrentScene.NewlyGeneratedGameObjects.Pop();
+            }
+            catch { }
+                
             //Engine.CurrentScene.AllGameObjects.Remove(this);
-            Engine.RenderGameObjects.Remove(this);
+            //Engine.RenderGameObjects.Remove(this);
 
             int ScriptsCount = this.Scripts.Count;
             for (int i = 0; i < ScriptsCount; i++)

@@ -19,7 +19,8 @@ namespace MarIO.Assets.Scripts
         {
             if(e.Parent is Enemy)
             {
-                Debug.WriteLine("Zabil jsi {0}", e.Parent.TypeName);
+                e.Parent.Destroy();
+                //Debug.WriteLine("Zabil jsi {0}", e.Parent.TypeName);
             }
         }
 

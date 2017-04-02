@@ -21,16 +21,22 @@ namespace DKEngine.Core.UI
 
         public override void Destroy()
         {
-            if (Engine.LoadingScene != null)
+            try
             {
-                if(Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
-                    Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
-
                 Engine.LoadingScene.AllComponents.Remove(this.Name);
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Pop();
             }
-            
-            if(Engine.RenderGameObjects.Contains(this))
-                Engine.RenderGameObjects.Remove(this);
+            catch
+            { }
+
+            try
+            {
+                Engine.RenderObjects.Remove(this);
+            }
+            catch { }
+
+            /*if(Engine.RenderGameObjects.Contains(this))
+                Engine.RenderGameObjects.Remove(this);*/
 
             /*Engine.LoadingScene.AllGameObjects.Remove(this);
             //if (Engine.ToRender.Contains(this))
@@ -47,8 +53,6 @@ namespace DKEngine.Core.UI
         }
 
         protected override void Init()
-        {
-            IsPartOfScene = false;
-        }
+        { }
     }
 }

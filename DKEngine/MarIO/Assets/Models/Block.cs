@@ -142,9 +142,11 @@ namespace MarIO.Assets.Models
                         this.Transform.Dimensions = new Vector3(32, 200, 0);
 
                         Block part1 = new Block(this);
+                        part1.Name = string.Format("{0}_Flag", this.Name);
                         part1.TypeName = Block.BlockTypeNames[BlockType.Flag];
 
                         Block part2 = new Block(this);
+                        part2.Name = string.Format("{0}_Pole", this.Name);
                         part2.TypeName = Block.BlockTypeNames[BlockType.FlagPole];
                         part2.Transform.Position += new Vector3(16, 0, 0);
                     }
@@ -166,6 +168,7 @@ namespace MarIO.Assets.Models
                         this.InitNewScript<PipePort>();
 
                         Blocker block = new Blocker(this);
+                        block.Name = string.Format("{0}_Blocker", this.Name);
                         block.InitNewComponent<Collider>();
                         block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
                     }
@@ -181,6 +184,7 @@ namespace MarIO.Assets.Models
                         this.InitNewScript<PipePort>();
 
                         Blocker block = new Blocker(this);
+                        block.Name = string.Format("{0}_Blocker", this.Name);
                         block.InitNewComponent<Collider>();
                         block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
                     }

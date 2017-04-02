@@ -137,12 +137,10 @@ namespace DKEngine
         private static Stopwatch DeltaT;
         internal static Camera BaseCam;
 
-        internal static List<Behavior> NewComponents;
-        internal static List<GameObject> NewGameobjects;
-        internal static List<GameObject> RenderGameObjects;
+        internal static Scene CurrentScene { get; set; }
+        internal static Scene LoadingScene { get; set; }
 
-        internal static Scene CurrentScene;
-        internal static Scene LoadingScene;
+        internal static List<GameObject> RenderObjects;
 
         private static float deltaT = 0;
         public static float deltaTime { get { return deltaT; } }
@@ -173,10 +171,8 @@ namespace DKEngine
 
                     DeltaT = Stopwatch.StartNew();
 
-                    NewGameobjects     = new List<GameObject>(65536);
-                    RenderGameObjects  = new List<GameObject>(65536);
-                    NewComponents      = new List<Behavior>(65536);
-                    
+                    RenderObjects = new List<GameObject>(0xFFFF);
+
                     //Sound.OutputDevice = new WaveOut();
 
                     FpsMeter = new TextBlock();
@@ -189,7 +185,6 @@ namespace DKEngine
                     FpsMeter.IsGUI = true;
                     FpsMeter.TextShadow = true;
                     FpsMeter.Foreground = Color.FromArgb(0xFF, 0x00, 0xFF, 0xFF);
-                    FpsMeter.IsPartOfScene = false;
 
                     FpsMeter.InitInternal();
 
@@ -222,6 +217,16 @@ namespace DKEngine
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
+            while (Engine.LoadingScene.NewlyGeneratedGameObjects.Count > 0)
+            {
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Pop().InitInternal();
+            }
+
+            while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
+            {
+                Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
+            }
+
             Database.AddScene(Engine.LoadingScene);
             
             //Engine.LoadingScene.Init();
@@ -234,11 +239,15 @@ namespace DKEngine
 
             while (Engine.LoadingScene.NewlyGeneratedGameObjects.Count > 0)
             {
-                NewGameobjects[Engine.LoadingScene.NewlyGeneratedGameObjects.Count - 1].InitInternal();
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Pop().InitInternal();
+            }
+
+            while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
+            {
+                Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
             }
 
             RegisterScene(Engine.LoadingScene);
-            //Engine.LoadingScene.Init();
         }
 
         public static void ReloadScene(string Name)
@@ -256,7 +265,7 @@ namespace DKEngine
 
         private static void UnregisterScene()
         {
-            if (CurrentScene != null)
+            try
             {
                 foreach (var item in CurrentScene.AllBehaviors)
                 {
@@ -267,12 +276,14 @@ namespace DKEngine
                     catch { }
                 }
             }
+            catch { }
         }
 
         private static void RegisterScene(Scene source, params string[] args)
         {
+            Engine.CurrentScene = Engine.LoadingScene;
             source.Set(args);
-
+            
             foreach (var item in source.AllBehaviors)
             {
                 try
@@ -281,10 +292,6 @@ namespace DKEngine
                 }
                 catch { }
             }
-
-            Engine.CurrentScene = source;
-            Engine.NewGameobjects = Engine.CurrentScene.NewlyGeneratedGameObjects;
-            Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
         }
 
         private static void ReloadScene(Scene source)
@@ -318,7 +325,7 @@ namespace DKEngine
         {
             if (!_IsInitialised)
             {
-                Engine.LoadSceneToMemory<Scene>();
+                Engine.LoadScene<Scene>();
 
                 SplashScreen splash    = new SplashScreen();
                 Camera splashScreenCam = new Camera();
@@ -348,15 +355,14 @@ namespace DKEngine
 
                 UpdateEvent?.Invoke();
                 
-                while (NewComponents.Count > 0)
+                while(Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)
                 {
-                    Behavior tmp = NewComponents[NewComponents.Count - 1];
-                    NewComponents.Remove(tmp);
-                    tmp.Start();
-                    Engine.UpdateEvent += tmp.UpdateHandle;
+                    GameObject tmp = Engine.CurrentScene.GameObjectsToAddToRender.Pop();
+                    Engine.RenderObjects.Add(tmp);
+                    Engine.CurrentScene.GameObjectsAddedToRender.Push(tmp);
                 }
 
-                List<GameObject> reference = RenderGameObjects.GetGameObjectsInView();
+                List<GameObject> reference = Engine.RenderObjects.GetGameObjectsInView();
                 
                 List<GameObject> VisibleTriggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
                 List<GameObject> VisibleColliders = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();

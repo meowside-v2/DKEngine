@@ -45,11 +45,13 @@ namespace MarIO.Assets.Scenes
             _3.InitCollider = true;
 
             Block pipe = new Block();
+            pipe.Name = "pipe1";
             pipe.Type = Block.BlockType.Pipe1;
             pipe.Transform.Scale = new Vector3(2, 2, 2);
             pipe.Transform.Position = new Vector3(240, 36, 0);
 
             Block blck = new Block();
+            blck.Name = "random1";
             blck.InitNewComponent<Collider>();
             blck.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
             blck.Type = Block.BlockType.Ground2;
@@ -57,6 +59,7 @@ namespace MarIO.Assets.Scenes
             blck.Transform.Position = new Vector3(800, 100 - 32, 0);
 
             Block blck2 = new Block();
+            blck.Name = "random2";
             blck2.InitNewComponent<Collider>();
             blck2.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
             blck2.Type = Block.BlockType.Ground2;

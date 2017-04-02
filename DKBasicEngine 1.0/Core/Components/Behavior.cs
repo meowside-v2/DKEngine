@@ -18,7 +18,7 @@ namespace DKEngine.Core.Components
 
             try
             {
-                Engine.LoadingScene.NewlyGeneratedComponents.Add(this);
+                Engine.LoadingScene.NewlyGeneratedBehaviors.Push(this);
                 Engine.LoadingScene.AllBehaviors.Add(this);
             }
             catch (Exception e)

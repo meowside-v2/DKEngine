@@ -2,10 +2,8 @@
 * (C) 2017 David Knieradl 
 */
 
-using DKEngine.Core;
+
 using DKEngine.Core.Components;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,10 +55,11 @@ namespace DKEngine.Core.Ext
 
             return z2;*/
         }
-
-        public static List<GameObject> GetGameObjectsInView(this List<GameObject> list)
+        
+        public static List<GameObject> GetGameObjectsInView(this IEnumerable<GameObject> list)
         {
             return list.Where(obj => obj.IsInView).ToList();
+            
             /*List<GameObject> retValue = new List<GameObject>();
             
             int listCount = list.Count;

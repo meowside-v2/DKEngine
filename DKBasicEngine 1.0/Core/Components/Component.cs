@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,6 @@ namespace DKEngine.Core.Components
 
         public GameObject Parent { get; set; } = null;
         public  string Name { get; set; } = "";
-        internal bool IsPartOfScene { get; set; } = true;
 
         internal Component(GameObject Parent)
         {
@@ -29,11 +29,11 @@ namespace DKEngine.Core.Components
 
             try
             {
-                retValue = (T)Engine.CurrentScene.AllComponents[Name];
+                retValue = (T)Engine.LoadingScene.AllComponents[Name];
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Object not found\n" + ex);
+                Debug.WriteLine("Object not found\n" + ex);
             }
 
             return retValue;

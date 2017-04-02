@@ -90,7 +90,7 @@ namespace DKEngine.Core
         internal bool _IsGUI = false;
         internal string _typeName = "";
 
-        internal Material _Model         = null;
+        internal Material _Model       = null;
         public Animator Animator       = null;
         
         public SoundSource SoundSource = null;
@@ -114,7 +114,7 @@ namespace DKEngine.Core
 
             try
             {
-                Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Push(this);
             }
             catch (Exception e)
             {
@@ -144,23 +144,23 @@ namespace DKEngine.Core
 
                 try
                 {
-                    Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
+                    Engine.LoadingScene.NewlyGeneratedGameObjects.Push(this);
                 }
                 catch (Exception e)
                 {
                     Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
                 }
-
-                this.IsPartOfScene = Parent.IsPartOfScene;
             }
-
-            try
+            else
             {
-                Engine.LoadingScene.NewlyGeneratedGameObjects.Add(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+                try
+                {
+                    Engine.LoadingScene.NewlyGeneratedGameObjects.Push(this);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+                }
             }
         }
 
@@ -172,22 +172,15 @@ namespace DKEngine.Core
             {
                 if (Parent == null)
                     Engine.LoadingScene.Model.Add(this);
-
-                if (IsPartOfScene)
-                {
-                    Engine.LoadingScene.AllComponents.AddSafe(this);
-                    Engine.LoadingScene.AllGameObjects.AddSafe(this);
-                }
+                
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjects.AddSafe(this);
+                Engine.LoadingScene.GameObjectsToAddToRender.Push(this);
             }
             catch (Exception e)
             {
                 Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
-
-            Engine.RenderGameObjects.Add(this);
-
-            if(Engine.NewGameobjects.Contains(this))
-                Engine.NewGameobjects.Remove(this);
         }
 
         protected abstract void Init();
@@ -199,7 +192,7 @@ namespace DKEngine.Core
 
         public void InitNewComponent<T>() where T : Component
         {
-            if (typeof(T) == typeof(Animator))
+            if (typeof(T) == typeof(Animator) || typeof(T).IsSubclassOf(typeof(Animator)))
             {
                 if(this.Animator == null)
                 {
@@ -240,10 +233,20 @@ namespace DKEngine.Core
 
         public override void Destroy()
         {
-            if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
-                Engine.LoadingScene.NewlyGeneratedGameObjects.Remove(this);
+            try
+            {
+                Engine.LoadingScene.NewlyGeneratedGameObjects.Pop();
+            }
+            catch { }
+               
             Engine.LoadingScene.AllComponents.Remove(this.Name);
-            Engine.RenderGameObjects.Remove(this);
+
+            try
+            {
+                Engine.RenderObjects.Remove(this);
+            }
+            catch { }
+            
 
             int ScriptsCount = this.Scripts.Count;
             for (int i = 0; i < ScriptsCount; i++)
@@ -267,11 +270,11 @@ namespace DKEngine.Core
 
             try
             {
-                retValue = Engine.CurrentScene.AllGameObjects[Name];
+                retValue = Engine.LoadingScene.AllGameObjects[Name];
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Object not found\n" + ex);
+                Debug.WriteLine("Object not found\n" + ex);
             }
 
             return retValue;
