@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace MarIO.Assets.Scripts
 {
@@ -20,17 +21,12 @@ namespace MarIO.Assets.Scripts
             if(e.Parent is Enemy)
             {
                 e.Parent.Destroy();
-                //Debug.WriteLine("Zabil jsi {0}", e.Parent.TypeName);
+                Debug.WriteLine("Zabil jsi {0}", e.Parent.TypeName);
             }
         }
 
         protected override void Start()
-        {
-            this.Parent.Collider.Area = new System.Drawing.RectangleF(0,
-                                                                      this.Parent.Transform.Dimensions.Y * this.Parent.Transform.Scale.Y,
-                                                                      this.Parent.Transform.Dimensions.X * this.Parent.Transform.Scale.X,
-                                                                      2);
-        }
+        { }
 
         protected override void Update()
         { }
@@ -50,12 +46,7 @@ namespace MarIO.Assets.Scripts
         }
 
         protected override void Start()
-        {
-            this.Parent.Collider.Area = new System.Drawing.RectangleF(0,
-                                                                      -2,
-                                                                      this.Parent.Transform.Dimensions.X * this.Parent.Transform.Scale.X,
-                                                                      2);
-        }
+        { }
 
         protected override void Update()
         { }
@@ -75,12 +66,7 @@ namespace MarIO.Assets.Scripts
         }
 
         protected override void Start()
-        {
-            this.Parent.Collider.Area = new System.Drawing.RectangleF(-2,
-                                                                      0,
-                                                                      2,
-                                                                      this.Parent.Transform.Dimensions.Y * this.Parent.Transform.Scale.Y);
-        }
+        { }
 
         protected override void Update()
         { }
@@ -100,12 +86,7 @@ namespace MarIO.Assets.Scripts
         }
 
         protected override void Start()
-        {
-            this.Parent.Collider.Area = new System.Drawing.RectangleF(this.Parent.Transform.Dimensions.X * this.Parent.Transform.Scale.X,
-                                                                      0,
-                                                                      2,
-                                                                      this.Parent.Transform.Dimensions.Y * this.Parent.Transform.Scale.Y);
-        }
+        { }
 
         protected override void Update()
         { }

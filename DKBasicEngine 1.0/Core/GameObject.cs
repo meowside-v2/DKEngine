@@ -256,8 +256,12 @@ namespace DKEngine.Core
             for (int i = 0; i < ChildCount; i++)
                 Child[i].Destroy();
 
+            this.Animator.Destroy();
             this.Animator = null;
+
+            this.Collider.Destroy();
             this.Collider = null;
+            
             this.Parent = null;
         }
 
