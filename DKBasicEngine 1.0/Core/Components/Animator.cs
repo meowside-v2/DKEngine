@@ -98,7 +98,7 @@ namespace DKEngine.Core.Components
         {
             if (Parent.Model?.Frames > 1)
             {
-                CurrentAnimationTime = CurrentAnimationTime.Add(new TimeSpan(0, 0, 0, 0, (int)(Engine.deltaTime * 1000)));
+                CurrentAnimationTime = CurrentAnimationTime.Add(new TimeSpan(0, 0, 0, 0, (int)(Engine.DeltaTime * 1000)));
 
                 if (CurrentAnimationTime.TotalMilliseconds > Parent.Model.Duration)
                 {

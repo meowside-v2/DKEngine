@@ -20,8 +20,8 @@ namespace MarIO.Assets.Scripts
         {
             if(e.Parent is Enemy)
             {
+                Debug.WriteLine("Zabil jsi {0}", e.Parent.TypeName.ToString());
                 e.Parent.Destroy();
-                Debug.WriteLine("Zabil jsi {0}", e.Parent.TypeName);
             }
         }
 
@@ -41,7 +41,7 @@ namespace MarIO.Assets.Scripts
         {
             if (e.Parent is Enemy)
             {
-                Debug.WriteLine("Zabilo Tě {0}", e.Parent.TypeName);
+                Debug.WriteLine("Zabilo Tě {0}", e.Parent.TypeName.ToString());
             }
         }
 
@@ -61,7 +61,7 @@ namespace MarIO.Assets.Scripts
         {
             if (e.Parent is Enemy)
             {
-                Debug.WriteLine("Zabilo Tě {0}", e.Parent.TypeName);
+                Debug.WriteLine("Zabilo Tě {0}", e.Parent.TypeName.ToString());
             }
         }
 
@@ -81,7 +81,7 @@ namespace MarIO.Assets.Scripts
         {
             if (e.Parent is Enemy)
             {
-                Debug.WriteLine("Zabilo Tě {0}", e.Parent.TypeName);
+                Debug.WriteLine("Zabilo Tě {0}", e.Parent.TypeName.ToString());
             }
         }
 

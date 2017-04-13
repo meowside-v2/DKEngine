@@ -105,10 +105,12 @@ namespace DKEngine.Core
         {
             this.Child                = new List<GameObject>();
             this.Scripts              = new List<Script>();
-            this.Transform            = new Transform(this);
-            this.Transform.Dimensions = new Vector3(1, 1, 1);
-            this.Transform.Scale      = new Vector3(1, 1, 1);
-            this.Transform.Position   = new Vector3(0, 0, 0);
+            this.Transform = new Transform(this)
+            {
+                Dimensions = new Vector3(1, 1, 1),
+                Scale = new Vector3(1, 1, 1),
+                Position = new Vector3(0, 0, 0)
+            };
             //this.Collider             = new Collider(this);
             //this.Animator             = new Animator(this);
 
@@ -127,13 +129,15 @@ namespace DKEngine.Core
         {
             this.Child = new List<GameObject>();
             this.Scripts = new List<Script>();
-            this.Transform = new Transform(this);
-            this.Transform.Dimensions = new Vector3(1, 1, 1);
-            this.Transform.Scale = new Vector3(1, 1, 1);
-            this.Transform.Position = new Vector3(0, 0, 0);
+            this.Transform = new Transform(this)
+            {
+                Dimensions = new Vector3(1, 1, 1),
+                Scale = new Vector3(1, 1, 1),
+                Position = new Vector3(0, 0, 0)
+            };
             //this.Collider = new Collider(this);
             //this.Animator = new Animator(this);
-            
+
             if (Parent != null)
             {
                 this.Parent = Parent;

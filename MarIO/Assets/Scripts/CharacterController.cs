@@ -101,7 +101,7 @@ namespace MarIO.Assets.Scripts
             {
                 if (!Player.Collider.Collision(Collider.Direction.Left) && horiSpeed > -MovementSpeed)
                 {
-                    horiSpeed -= Engine.deltaTime * Acceleration;
+                    horiSpeed -= Engine.DeltaTime * Acceleration;
                     if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
                         Player.Animator.Play(LEFTMOVE);
                 }
@@ -118,7 +118,7 @@ namespace MarIO.Assets.Scripts
             }
             else if (horiSpeed < 0)
             {
-                horiSpeed += Engine.deltaTime * Acceleration * 2;
+                horiSpeed += Engine.DeltaTime * Acceleration * 2;
 
                 if (horiSpeed >= 0 || Player.Collider.Collision(Collider.Direction.Left))
                 {
@@ -134,7 +134,7 @@ namespace MarIO.Assets.Scripts
             {
                 if (!Player.Collider.Collision(Collider.Direction.Right) && horiSpeed < MovementSpeed)
                 {
-                    horiSpeed += Engine.deltaTime * Acceleration;
+                    horiSpeed += Engine.DeltaTime * Acceleration;
                     if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
                         Player.Animator.Play(RIGHTMOVE);
                 }
@@ -151,7 +151,7 @@ namespace MarIO.Assets.Scripts
             }
             else if (horiSpeed > 0)
             {
-                horiSpeed -= Engine.deltaTime * Acceleration * 2;
+                horiSpeed -= Engine.DeltaTime * Acceleration * 2;
 
                 if (horiSpeed <= 0 || Player.Collider.Collision(Collider.Direction.Right))
                 {
@@ -183,7 +183,7 @@ namespace MarIO.Assets.Scripts
                         }
                         else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
                         {
-                            vertSpeed += Engine.deltaTime * Acceleration * 2;
+                            vertSpeed += Engine.DeltaTime * Acceleration * 2;
                         }
                         else
                         {
@@ -215,7 +215,7 @@ namespace MarIO.Assets.Scripts
                 {
                     if (vertSpeed < FloatSpeed)
                     {
-                        vertSpeed += Engine.deltaTime * Acceleration;
+                        vertSpeed += Engine.DeltaTime * Acceleration;
                     }
                     else
                     {
@@ -224,7 +224,7 @@ namespace MarIO.Assets.Scripts
                 }
             }
             
-            Player.Transform.Position += new Vector3(horiSpeed * Engine.deltaTime, vertSpeed * Engine.deltaTime, 0);
+            Player.Transform.Position = Player.Transform.Position.Add(horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
 
             if (Player.Transform.Position.X - TargetCam.Position.X > MaxCameraDistance)
             {
@@ -233,7 +233,7 @@ namespace MarIO.Assets.Scripts
 
             if (Player.Transform.Position.X < TargetCam.Position.X)
             {
-                Player.Transform.Position += new Vector3(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
+                Player.Transform.Position = Player.Transform.Position.Add(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
                 horiSpeed = 0f;
                 Player.Animator.Play(IDLE);
             }

@@ -20,64 +20,75 @@ namespace MarIO.Assets.Scenes
 
         public override void Init()
         {
-            Group _1 = new Group();
-            _1.Type = Block.BlockType.Ground2;
-            _1.Transform.Scale = new Vector3(2, 2, 2);
+            Group _1 = new Group()
+            {
+                Name = "ground1",
+                InitCollider = true,
+                Type = Block.BlockType.Ground2
+            };
             _1.SizeInBlocks = new Vector3(50, 3, 0);
-            _1.Transform.Position = new Vector3(0, 100, 0);
-            _1.Name = "ground1";
-            _1.InitCollider = true;
+            _1.Transform.Position = new Vector3(0, -40, 0);
+            
 
-            Group _2 = new Group();
-            _2.Type = Block.BlockType.Ground2;
-            _2.Transform.Scale = new Vector3(2, 2, 2);
+            Group _2 = new Group()
+            {
+                Name = "ground2",
+                InitCollider = true,
+                Type = Block.BlockType.Ground2
+            };
             _2.SizeInBlocks = new Vector3(10, 3, 0);
-            _2.Transform.Position = new Vector3(60 * 16, 100, 0);
-            _2.Name = "ground2";
-            _2.InitCollider = true;
+            _2.Transform.Position = new Vector3(60 * 16, -40, 0);
+            
 
-            Group _3 = new Group();
-            _3.Type = Block.BlockType.Ground2;
-            _3.Transform.Scale = new Vector3(2, 2, 2);
+            Group _3 = new Group()
+            {
+                Name = "ground3",
+                Type = Block.BlockType.Ground2,
+                InitCollider = true
+            };
             _3.SizeInBlocks = new Vector3(50, 3, 0);
-            _3.Transform.Position = new Vector3(60 * 16 + 20 * 16, 100, 0);
-            _3.Name = "ground3";
-            _3.InitCollider = true;
+            _3.Transform.Position = new Vector3(80 * 16, -40, 0);
 
-            Block pipe = new Block();
-            pipe.Name = "pipe1";
-            pipe.Type = Block.BlockType.Pipe1;
-            pipe.Transform.Scale = new Vector3(2, 2, 2);
-            pipe.Transform.Position = new Vector3(240, 36, 0);
+            Block pipe = new Block()
+            {
+                Name = "pipe1",
+                Type = Block.BlockType.Pipe1
+            };
+            pipe.Transform.Position = new Vector3(240, -72, 0);
 
-            Block blck = new Block();
-            blck.Name = "random1";
+            Block blck = new Block()
+            {
+                Name = "random1",
+                Type = Block.BlockType.Ground2
+            };
             blck.InitNewComponent<Collider>();
             blck.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
-            blck.Type = Block.BlockType.Ground2;
-            blck.Transform.Scale = new Vector3(2, 2, 2);
-            blck.Transform.Position = new Vector3(800, 100 - 32, 0);
+            blck.Transform.Position = new Vector3(400, -56, 0);
 
-            Block blck2 = new Block();
-            blck.Name = "random2";
+            Block blck2 = new Block()
+            {
+                Type = Block.BlockType.Ground2,
+                Name = "random2"
+            };
+            
+            blck2.Transform.Position = new Vector3(600, -56, 0);
             blck2.InitNewComponent<Collider>();
             blck2.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
-            blck2.Type = Block.BlockType.Ground2;
-            blck2.Transform.Scale = new Vector3(2, 2, 2);
-            blck2.Transform.Position = new Vector3(1200, 100 - 32, 0);
 
-            Enemy goomba = new Enemy();
-            goomba.Type = Enemy.EnemyType.Goomba;
-            goomba.Transform.Scale = new Vector3(2, 2, 2);
-            goomba.Transform.Position = new Vector3(1000, 100 - 60, 0);
+            Enemy goomba = new Enemy()
+            {
+                Type = Enemy.EnemyType.Goomba
+            };
+            goomba.Transform.Position = new Vector3(500, -60, 0);
 
             Mario m = new Mario();
-            m.Transform.Scale = new Vector3(2, 2, 2);
+            m.Transform.Position = new Vector3(10, -100, 0);
             //m.InitNewScript<CameraController>();
 
-            Camera c = new Camera();
-            c.BackGround = System.Drawing.Color.FromArgb(0xFF, 0x20, 0xEE, 0xEE);
-            
+            Camera c = new Camera()
+            {
+                BackGround = System.Drawing.Color.FromArgb(0xFF, 0x20, 0xEE, 0xEE)
+            };
         }
 
         public override void Set(params string[] Args)

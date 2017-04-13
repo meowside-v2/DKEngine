@@ -20,6 +20,7 @@ using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.Ext;
 using DKEngine.Core.UI;
+using System.Threading.Tasks;
 
 namespace DKEngine
 {
@@ -27,10 +28,14 @@ namespace DKEngine
     {
         public static class Render
         {
-            public   const int RenderWidth        = 640;
-            public   const int RenderHeight       = 360;
-            internal const int ImageBufferSize    = 3 * RenderWidth * RenderHeight;
-            internal const int ImageKeyBufferSize = RenderWidth * RenderHeight;
+            public   const int   ResolutionScale    = 50;
+            public   const float ResolutionRatio    = ResolutionScale / 100f;
+
+            public   const int   RenderWidth        = (int)(640 * ResolutionRatio);
+            public   const int   RenderHeight       = (int)(480 * ResolutionRatio);
+
+            internal const int   ImageBufferSize    = 3 * RenderWidth * RenderHeight;
+            internal const int   ImageKeyBufferSize = RenderWidth * RenderHeight;
 
             internal static byte[] imageBuffer;
             internal static byte[] imageBufferKey;
@@ -131,7 +136,7 @@ namespace DKEngine
         private static bool _IsInitialised = false;
 
         private static Thread BackgroundWorks;
-        private static Thread RenderWorker;
+        //private static Thread RenderWorker;
 
         private static TextBlock FpsMeter;
         private static Stopwatch DeltaT;
@@ -143,7 +148,7 @@ namespace DKEngine
         internal static List<GameObject> RenderObjects;
 
         private static float deltaT = 0;
-        public static float deltaTime { get { return deltaT; } }
+        public static float DeltaTime { get { return deltaT; } }
 
         internal static long LastUpdated = 0;
 
@@ -191,9 +196,9 @@ namespace DKEngine
                     UpdateEvent += FpsMeter.Scripts[0].UpdateHandle;
 
                     BackgroundWorks = new Thread(Update);
-                    RenderWorker    = new Thread(RenderImage);
+                    //RenderWorker    = new Thread(RenderImage);
                     BackgroundWorks.Start();
-                    RenderWorker.Start();
+                    //RenderWorker.Start();
 
 
 
@@ -339,7 +344,9 @@ namespace DKEngine
 
         private static void Update()
         {
-            
+
+            Task imageRender = Task.Factory.StartNew(RenderImage);
+
             int       NumberOfFrames = 0;
             TimeSpan  timeOut        = new TimeSpan(0, 0, 0, 0, 500);
             Stopwatch time           = Stopwatch.StartNew();
@@ -389,7 +396,7 @@ namespace DKEngine
             }
         }
 
-        private static unsafe void RenderImage()
+        private static async void RenderImage()
         {
             IntPtr ConsoleWindow = GetConsoleWindow();
 
@@ -397,11 +404,20 @@ namespace DKEngine
             {
                 g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
                 g.PixelOffsetMode    = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
-                g.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                g.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.None;
+                g.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 
                 Rectangle Screen = System.Windows.Forms.Screen.FromHandle(ConsoleWindow).Bounds;
                 int Width        = Screen.Width;
                 int Height       = Screen.Height;
+
+                float ScaleRatio = Height / Engine.Render.RenderHeight;
+
+                int RasteredHeight = (int)(Engine.Render.RenderHeight * ScaleRatio);
+                int RasteredWidth = (int)(Engine.Render.RenderWidth * ScaleRatio);
+
+                int XOffset = (int)(Width - RasteredWidth) / 2;
+                int YOffset = (int)(Height - RasteredHeight) / 2;
                 
                 while (!Render.AbortRender)
                 {
@@ -411,27 +427,34 @@ namespace DKEngine
                     {
                         Width  = ScreenResCheck.Width;
                         Height = ScreenResCheck.Height;
+
+                        XOffset = (int)(Width - (Engine.Render.RenderWidth * ScaleRatio)) / 2;
+                        YOffset = (int)(Height - (Engine.Render.RenderHeight * ScaleRatio)) / 2;
                     }
 
-                    fixed (byte* ptr = Render.ImageOutData)
+                    unsafe
                     {
-
-                        using (Bitmap outFrame = new Bitmap(Render.RenderWidth,
-                                                            Render.RenderHeight,
-                                                            3 * Render.RenderWidth,
-                                                            System.Drawing.Imaging.PixelFormat.Format24bppRgb,
-                                                            new IntPtr(ptr)))
+                        fixed (byte* ptr = Render.ImageOutData)
                         {
-                            Rectangle imageRect = new Rectangle(0,
-                                                                0,
-                                                                Width,
-                                                                Height);
 
-                            g.DrawImage(outFrame, imageRect);
+                            using (Bitmap outFrame = new Bitmap(Render.RenderWidth,
+                                                                Render.RenderHeight,
+                                                                3 * Render.RenderWidth,
+                                                                System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+                                                                new IntPtr(ptr)))
+                            {
+                                Rectangle imageRect = new Rectangle(XOffset,
+                                                                    YOffset,
+                                                                    RasteredWidth,
+                                                                    RasteredHeight);
+
+                                g.DrawImage(outFrame, imageRect);
+                            }
                         }
                     }
-
-                    Thread.Sleep(1);
+                    
+                    await Task.Delay(1);
+                    //Thread.Sleep(1);
                 }
             }
         }

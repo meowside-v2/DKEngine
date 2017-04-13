@@ -58,7 +58,7 @@ namespace DKEngine.Core.Scripts
             {
                 if (!(CollisionLeft = Parent.Collider.Collision(Collider.Direction.Left)) && horiSpeed > -MovementSpeed)
                 {
-                    horiSpeed -= Engine.deltaTime * Acceleration;
+                    horiSpeed -= Engine.DeltaTime * Acceleration;
                 }
                 else if (CollisionLeft)
                 {
@@ -75,7 +75,7 @@ namespace DKEngine.Core.Scripts
             }
             else if(horiSpeed < 0)
             {
-                horiSpeed += Engine.deltaTime * Acceleration * 2;
+                horiSpeed += Engine.DeltaTime * Acceleration * 2;
 
                 if (horiSpeed > 0)
                     horiSpeed = 0;
@@ -86,7 +86,7 @@ namespace DKEngine.Core.Scripts
             {
                 if (!(CollisionRight = Parent.Collider.Collision(Collider.Direction.Right)) && horiSpeed < MovementSpeed)
                 {
-                    horiSpeed += Engine.deltaTime * Acceleration;
+                    horiSpeed += Engine.DeltaTime * Acceleration;
                 }
                 else if (CollisionRight)
                 {
@@ -99,7 +99,7 @@ namespace DKEngine.Core.Scripts
             }
             else if (horiSpeed > 0)
             {
-                horiSpeed -= Engine.deltaTime * Acceleration * 2;
+                horiSpeed -= Engine.DeltaTime * Acceleration * 2;
 
                 if (horiSpeed < 0)
                     horiSpeed = 0;
@@ -123,7 +123,7 @@ namespace DKEngine.Core.Scripts
                         }
                         else if (!(CollisionTop = Parent.Collider.Collision(Collider.Direction.Up)))
                         {
-                            vertSpeed += Engine.deltaTime * Acceleration * 2;
+                            vertSpeed += Engine.DeltaTime * Acceleration * 2;
                         }
                         else
                         {
@@ -162,7 +162,7 @@ namespace DKEngine.Core.Scripts
                 {
                     if (vertSpeed < FloatSpeed)
                     {
-                        vertSpeed += Engine.deltaTime * Acceleration;
+                        vertSpeed += Engine.DeltaTime * Acceleration;
                     }
                     else
                     {
@@ -171,7 +171,7 @@ namespace DKEngine.Core.Scripts
                 }
             }
 
-            this.Parent.Transform.Position += new Vector3(/*0, 1, 0*/ horiSpeed * Engine.deltaTime, vertSpeed * Engine.deltaTime, 0);
+            this.Parent.Transform.Position += new Vector3(/*0, 1, 0*/ horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
         }
     }
 }

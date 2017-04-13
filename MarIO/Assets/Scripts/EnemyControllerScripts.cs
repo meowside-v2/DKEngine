@@ -11,9 +11,9 @@ namespace MarIO.Assets.Scripts
 {
     class GoombaController : Script
     {
-        const int Speed = 40;
-        const int FloatSpeed = 100;
-        const int Acceleration = 40;
+        const int Speed = 20;
+        const int FloatSpeed = 60;
+        const int Acceleration = 20;
 
         int CurrentSpeed = 0;
         float vertSpeed = 0;
@@ -54,7 +54,7 @@ namespace MarIO.Assets.Scripts
                 {
                     if (vertSpeed < FloatSpeed)
                     {
-                        vertSpeed += Engine.deltaTime * Acceleration;
+                        vertSpeed += Engine.DeltaTime * Acceleration;
                     }
                     else
                     {
@@ -68,7 +68,7 @@ namespace MarIO.Assets.Scripts
                 IsFalling = false;
             }
 
-            this.Parent.Transform.Position += new Vector3(CurrentSpeed * Engine.deltaTime, vertSpeed * Engine.deltaTime, 0);
+            this.Parent.Transform.Position += new Vector3(CurrentSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
         }
     }
 }
