@@ -85,6 +85,8 @@ namespace MarIO.Assets.Scenes
             m.Transform.Position = new Vector3(10, -100, 0);
             //m.InitNewScript<CameraController>();
 
+            new MusicPlayer();
+
             Camera c = new Camera()
             {
                 BackGround = System.Drawing.Color.FromArgb(0xFF, 0x20, 0xEE, 0xEE)

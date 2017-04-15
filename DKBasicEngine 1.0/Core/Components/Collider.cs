@@ -476,32 +476,48 @@ namespace DKEngine.Core.Components
 
         private bool Left(Collider obj)
         {
-            if (!this.Equals(obj) && !obj.IsTrigger)
-                return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X >= obj.X + obj.Width / 2 && this.X <= obj.X + obj.Width); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
-
+            try
+            {
+                if (!this.Equals(obj) && !obj.IsTrigger)
+                    return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X >= obj.X + obj.Width / 2 && this.X <= obj.X + obj.Width); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
+            }
+            catch { }
+            
             return false;
         }
 
         private bool Right(Collider obj)
         {
-            if (!this.Equals(obj) && !obj.IsTrigger)
-                return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X + this.Width >= obj.X && this.X + this.Width <= obj.X + obj.Width / 2);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
-
+            try
+            {
+                if (!this.Equals(obj) && !obj.IsTrigger)
+                    return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X + this.Width >= obj.X && this.X + this.Width <= obj.X + obj.Width / 2);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
+            }
+            catch { }
+            
             return false;
         }
 
         private bool Up(Collider obj)
         {
-            if (!this.Equals(obj) && !obj.IsTrigger)
-                return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
+            try
+            {
+                if (!this.Equals(obj) && !obj.IsTrigger)
+                    return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
+            }
+            catch { }
 
             return false;
         }
 
         private bool Down(Collider obj)
         {
-            if (!this.Equals(obj) && !obj.IsTrigger)
-                return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Height >= obj.Y && this.Y + this.Height <= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
+            try
+            {
+                if (!this.Equals(obj) && !obj.IsTrigger)
+                    return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Height >= obj.Y && this.Y + this.Height <= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
+            }
+            catch { }
 
             return false;
         }
@@ -523,7 +539,19 @@ namespace DKEngine.Core.Components
 
         public override void Destroy()
         {
-            Engine.CurrentScene.AllGameObjectsColliders.Remove(this);
+            try
+            {
+                Engine.CurrentScene.AllGameObjectsColliders.Remove(this);
+            }
+            catch { }
+
+            try
+            {
+                Engine.CurrentScene.AllComponents.Remove(this.Name);
+            }
+            catch
+            { }
+
             if (Parent.Collider == this)
                 Parent.Collider = null;
         }

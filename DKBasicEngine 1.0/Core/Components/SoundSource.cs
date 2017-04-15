@@ -12,30 +12,20 @@ using System.Diagnostics;
 
 namespace DKEngine.Core.Components
 {
-    public class SoundSource : Component
+    public class SoundPlayer
     {
         private readonly IWavePlayer outputDevice;
         private readonly MixingSampleProvider mixer;
 
-        public SoundSource(GameObject Parent, int sampleRate = 44100, int channelCount = 2)
-            :base(Parent)
+        public SoundPlayer(int sampleRate = 44100, int channelCount = 2)
         {
             outputDevice = new WaveOutEvent();
-            mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount));
-            mixer.ReadFully = true;
+            mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount))
+            {
+                ReadFully = true
+            };
             outputDevice.Init(mixer);
             outputDevice.Play();
-
-            this.Name = string.Format("{0}_SoundSource", Parent.Name);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
         }
 
         public void PlaySound(string fileName)
@@ -57,7 +47,7 @@ namespace DKEngine.Core.Components
             throw new NotImplementedException("Not yet implemented this channel count conversion");
         }
 
-        public void PlaySound(CachedSound sound)
+        public void PlaySound(Sound sound)
         {
             AddMixerInput(new CachedSoundSampleProvider(sound));
         }
@@ -71,10 +61,40 @@ namespace DKEngine.Core.Components
         {
             outputDevice.Dispose();
         }
+    }
+
+    public class SoundSource : Component
+    {
+        public SoundSource(GameObject Parent)
+            :base(Parent)
+        {
+            this.Name = string.Format("{0}_SoundSource", Parent.Name);
+
+            try
+            {
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+            }
+        }
+
+        public void PlaySound(Sound sound)
+        {
+            Engine.Sound.Instance.PlaySound(sound);
+        }
 
         public override void Destroy()
         {
-            throw new NotImplementedException();
+            try
+            {
+                Engine.LoadingScene.AllComponents.Remove(this.Name);
+            }
+            catch
+            { }
+
+            this.Parent = null;
         }
     }
 
@@ -106,10 +126,10 @@ namespace DKEngine.Core.Components
 
     class CachedSoundSampleProvider : ISampleProvider
     {
-        private readonly CachedSound cachedSound;
+        private readonly Sound cachedSound;
         private long position;
 
-        public CachedSoundSampleProvider(CachedSound cachedSound)
+        public CachedSoundSampleProvider(Sound cachedSound)
         {
             this.cachedSound = cachedSound;
         }
@@ -126,20 +146,22 @@ namespace DKEngine.Core.Components
         public WaveFormat WaveFormat { get { return cachedSound.WaveFormat; } }
     }
 
-    public class CachedSound
+    public class Sound
     {
         public float[] AudioData { get; private set; }
         public WaveFormat WaveFormat { get; private set; }
-        public CachedSound(string audioFileName)
+        public AudioFileReader FileReader { get; private set; }
+
+        public Sound(string audioFileName)
         {
-            using (var audioFileReader = new AudioFileReader(audioFileName))
+            using (FileReader = new AudioFileReader(audioFileName))
             {
                 // TODO: could add resampling in here if required
-                WaveFormat = audioFileReader.WaveFormat;
-                var wholeFile = new List<float>((int)(audioFileReader.Length / 4));
-                var readBuffer = new float[audioFileReader.WaveFormat.SampleRate * audioFileReader.WaveFormat.Channels];
+                WaveFormat = FileReader.WaveFormat;
+                var wholeFile = new List<float>((int)(FileReader.Length / 4));
+                var readBuffer = new float[FileReader.WaveFormat.SampleRate * FileReader.WaveFormat.Channels];
                 int samplesRead;
-                while ((samplesRead = audioFileReader.Read(readBuffer, 0, readBuffer.Length)) > 0)
+                while ((samplesRead = FileReader.Read(readBuffer, 0, readBuffer.Length)) > 0)
                 {
                     wholeFile.AddRange(readBuffer.Take(samplesRead));
                 }

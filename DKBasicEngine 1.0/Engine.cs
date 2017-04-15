@@ -26,6 +26,11 @@ namespace DKEngine
 {
     public static class Engine
     {
+        public static class Sound
+        {
+            public readonly static SoundPlayer Instance = new SoundPlayer();
+        }
+
         public static class Render
         {
             public   const int   ResolutionScale    = 50;

@@ -228,7 +228,7 @@ namespace DKEngine.Core
                 if(this.SoundSource == null)
                 {
                     Type t = typeof(T);
-                    this.SoundSource = (SoundSource)t.Assembly.CreateInstance(t.FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { this, 44100, 2 }, null, null);   
+                    this.SoundSource = (SoundSource)t.Assembly.CreateInstance(t.FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { this }, null, null);   
                 }
 
                 return;
@@ -239,18 +239,33 @@ namespace DKEngine.Core
         {
             try
             {
-                Engine.LoadingScene.NewlyGeneratedGameObjects.Pop();
+                Engine.CurrentScene.NewlyGeneratedGameObjects.Pop();
             }
             catch { }
-               
-            Engine.LoadingScene.AllComponents.Remove(this.Name);
+
+            try
+            {
+                Engine.CurrentScene.AllComponents.Remove(this.Name);
+            }
+            catch { }
+
+            try
+            {
+                Engine.CurrentScene.AllGameObjects.Remove(this.Name);
+            }
+            catch { }
 
             try
             {
                 Engine.RenderObjects.Remove(this);
             }
             catch { }
-            
+
+            try
+            {
+                Engine.CurrentScene.Model.Remove(this);    
+            }
+            catch { }
 
             int ScriptsCount = this.Scripts.Count;
             for (int i = 0; i < ScriptsCount; i++)
@@ -260,10 +275,10 @@ namespace DKEngine.Core
             for (int i = 0; i < ChildCount; i++)
                 Child[i].Destroy();
 
-            this.Animator.Destroy();
+            this.Animator?.Destroy();
             this.Animator = null;
 
-            this.Collider.Destroy();
+            this.Collider?.Destroy();
             this.Collider = null;
             
             this.Parent = null;
