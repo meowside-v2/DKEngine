@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models
 {
-    class Mario : GameObject
+    class Mario : AnimatedObject
     {
         public enum State
         {

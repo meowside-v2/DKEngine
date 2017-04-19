@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Models\AnimatedObject.cs" />
     <Compile Include="Assets\Models\Block.cs" />
     <Compile Include="Assets\Models\Blocker.cs" />
     <Compile Include="Assets\Models\Enemy.cs" />

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DKEngine.Core.Components;
 using DKEngine;
+using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
@@ -19,8 +20,14 @@ namespace MarIO.Assets.Scripts
         float vertSpeed = 0;
         bool IsFalling = false;
 
+        bool firstTimeDeadAnimation = true;
+
+        Enemy Target;
+
         public GoombaController(GameObject Parent) : base(Parent)
-        { }
+        {
+            Target = (Enemy)Parent;
+        }
 
         protected override void OnColliderEnter(Collider e)
         { }
@@ -31,6 +38,18 @@ namespace MarIO.Assets.Scripts
         }
 
         protected override void Update()
+        {
+            if (!Target.IsDead)
+            {
+                Movement();
+            }
+            else
+            {
+                DeadAnimation();
+            }
+        }    
+        
+        private void Movement()
         {
             if (this.Parent.Collider.Collision(Collider.Direction.Left))
             {
@@ -70,5 +89,14 @@ namespace MarIO.Assets.Scripts
 
             this.Parent.Transform.Position += new Vector3(CurrentSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
         }
+
+        private void DeadAnimation()
+        {
+            if (firstTimeDeadAnimation)
+            {
+                Target.Collider.Destroy();
+            }
+        }
+
     }
 }

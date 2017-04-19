@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models
 {
-    class Enemy : GameObject
+    class Enemy : AnimatedObject
     {
         public enum EnemyType
         {
