@@ -1,5 +1,6 @@
 ﻿using DKEngine;
 using DKEngine.Core;
+using DKEngine.Core.Components;
 using MarIO.Assets.Scenes;
 using System;
 using System.Collections.Generic;

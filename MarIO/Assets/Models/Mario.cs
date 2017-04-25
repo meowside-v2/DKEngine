@@ -40,7 +40,7 @@ namespace MarIO.Assets.Models
             bottom.Transform.Position += new Vector3(0, 16, 0);
             bottom.Transform.Dimensions = new Vector3(14, 1, 0);
             bottom.InitNewScript<BottomMarioChecker>();
-            bottom.Model = new Material(Color.Black, bottom);
+            //bottom.Model = new Material(Color.Black, bottom);
 
             Trigger left = new Trigger(this)
             {
@@ -49,7 +49,7 @@ namespace MarIO.Assets.Models
             left.Transform.Position += new Vector3(-1, 0, 0);
             left.Transform.Dimensions = new Vector3(1, 16, 0);
             left.InitNewScript<LeftMarioChecker>();
-            left.Model = new Material(Color.Black, left);
+            //left.Model = new Material(Color.Black, left);
 
             Trigger right = new Trigger(this)
             {
@@ -58,7 +58,7 @@ namespace MarIO.Assets.Models
             right.Transform.Position += new Vector3(14, 0, 0);
             right.Transform.Dimensions = new Vector3(1, 16, 0);
             right.InitNewScript<RightMarioChecker>();
-            right.Model = new Material(Color.Black, right);
+            //right.Model = new Material(Color.Black, right);
 
             Trigger top = new Trigger(this)
             {
@@ -67,12 +67,7 @@ namespace MarIO.Assets.Models
             top.Transform.Position += new Vector3(0, -1, 0);
             top.Transform.Dimensions = new Vector3(14, 1, 0);
             top.InitNewScript<TopMarioChecker>();
-            top.Model = new Material(Color.Black, top);
-
-            
-
-            //this.TypeName = "mario";
-            
+            //top.Model = new Material(Color.Black, top);
         }
     }
 }

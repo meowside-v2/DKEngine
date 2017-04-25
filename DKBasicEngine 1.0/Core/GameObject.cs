@@ -1,5 +1,6 @@
 ﻿using DKEngine.Core.Components;
 using DKEngine.Core.Ext;
+using DKEngine.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -94,7 +95,7 @@ namespace DKEngine.Core
         public Animator Animator       = null;
         
         public SoundSource SoundSource = null;
-        public Color? Foreground       = null;
+        public Color? Foreground { get; set; }
 
         public Transform Transform { get; }
         public List<GameObject> Child { get; }
@@ -177,8 +178,12 @@ namespace DKEngine.Core
                 if (Parent == null)
                     Engine.LoadingScene.Model.Add(this);
                 
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-                Engine.LoadingScene.AllGameObjects.AddSafe(this);
+                if(typeof(Letter) != this.GetType())
+                {
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+                    Engine.LoadingScene.AllGameObjects.AddSafe(this);
+                }
+                
                 Engine.LoadingScene.GameObjectsToAddToRender.Push(this);
             }
             catch (Exception e)

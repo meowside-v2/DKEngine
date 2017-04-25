@@ -24,7 +24,10 @@ namespace DKEngine.Core.UI
             try
             {
                 Engine.LoadingScene.AllComponents.Remove(this.Name);
-                Engine.LoadingScene.NewlyGeneratedGameObjects.Pop();
+                if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
+                {
+                    Engine.LoadingScene.NewlyGeneratedGameObjects.Pop();
+                }
             }
             catch
             { }

@@ -28,6 +28,9 @@ namespace DKEngine
     {
         public static class Sound
         {
+            public static bool IsSoundEnabled = false;
+            public static float SoundVolume = 1f;
+
             public readonly static SoundPlayer Instance = new SoundPlayer();
         }
 
@@ -186,9 +189,8 @@ namespace DKEngine
                     //Sound.OutputDevice = new WaveOut();
 
                     FpsMeter = new TextBlock();
-                    FpsMeter.Transform.Position = new Vector3(0, 0, 128);
+                    FpsMeter.Transform.Position = new Vector3(4, -4, 128);
                     FpsMeter.Transform.Dimensions = new Vector3(50, 5, 1);
-                    FpsMeter.Transform.Scale = new Vector3(2, 2, 1);
                     FpsMeter.VAlignment = Text.VerticalAlignment.Bottom;
                     FpsMeter.HAlignment = Text.HorizontalAlignment.Left;
                     FpsMeter.Text = "0";
@@ -366,8 +368,18 @@ namespace DKEngine
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
-                
-                while(Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)
+
+                while (Engine.CurrentScene?.NewlyGeneratedGameObjects.Count > 0)
+                {
+                    Engine.CurrentScene.NewlyGeneratedGameObjects.Pop().InitInternal();
+                }
+
+                while (Engine.CurrentScene?.NewlyGeneratedBehaviors.Count > 0)
+                {
+                    Engine.CurrentScene.NewlyGeneratedBehaviors.Pop().Start();
+                }
+
+                while (Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)
                 {
                     GameObject tmp = Engine.CurrentScene.GameObjectsToAddToRender.Pop();
                     Engine.RenderObjects.Add(tmp);

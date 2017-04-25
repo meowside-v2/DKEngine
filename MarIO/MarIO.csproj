@@ -53,6 +53,7 @@
     <Compile Include="Assets\Models\Blocker.cs" />
     <Compile Include="Assets\Models\Enemy.cs" />
     <Compile Include="Assets\Models\Group.cs" />
+    <Compile Include="Assets\Models\GUIUpdater.cs" />
     <Compile Include="Assets\Models\Mario.cs" />
     <Compile Include="Assets\Models\MusicPlayer.cs" />
     <Compile Include="Assets\Models\Trigger.cs" />

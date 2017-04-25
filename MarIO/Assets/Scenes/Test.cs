@@ -20,6 +20,8 @@ namespace MarIO.Assets.Scenes
 
         public override void Init()
         {
+            new GUIUpdater();
+
             Group _1 = new Group()
             {
                 Name = "ground1",

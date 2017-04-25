@@ -16,8 +16,9 @@ namespace DKEngine.Core.Components
     {
         private readonly IWavePlayer outputDevice;
         private readonly MixingSampleProvider mixer;
+        private bool IsAvailable = true;
 
-        public SoundPlayer(int sampleRate = 44100, int channelCount = 2)
+        internal SoundPlayer(int sampleRate = 44100, int channelCount = 2)
         {
             outputDevice = new WaveOutEvent();
             mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount))
@@ -30,8 +31,21 @@ namespace DKEngine.Core.Components
 
         public void PlaySound(string fileName)
         {
-            var input = new AudioFileReader(fileName);
-            AddMixerInput(new AutoDisposeFileReader(input));
+            if (Engine.Sound.IsSoundEnabled)
+            {
+                if (IsAvailable)
+                {
+                    try
+                    {
+                        var input = new AudioFileReader(fileName);
+                        AddMixerInput(new AutoDisposeFileReader(input));
+                    }
+                    catch
+                    {
+                        IsAvailable = false;
+                    }
+                }
+            }
         }
 
         private ISampleProvider ConvertToRightChannelCount(ISampleProvider input)
@@ -49,7 +63,17 @@ namespace DKEngine.Core.Components
 
         public void PlaySound(Sound sound)
         {
-            AddMixerInput(new CachedSoundSampleProvider(sound));
+            if (IsAvailable)
+            {
+                try
+                {
+                    AddMixerInput(new CachedSoundSampleProvider(sound));
+                }
+                catch
+                {
+                    IsAvailable = false;
+                }
+            }
         }
 
         private void AddMixerInput(ISampleProvider input)
@@ -65,6 +89,8 @@ namespace DKEngine.Core.Components
 
     public class SoundSource : Component
     {
+        private bool IsAvailable = true;
+
         public SoundSource(GameObject Parent)
             :base(Parent)
         {
@@ -82,7 +108,20 @@ namespace DKEngine.Core.Components
 
         public void PlaySound(Sound sound)
         {
-            Engine.Sound.Instance.PlaySound(sound);
+            if (Engine.Sound.IsSoundEnabled)
+            {
+                if (IsAvailable)
+                {
+                    try
+                    {
+                        Engine.Sound.Instance.PlaySound(sound);
+                    }
+                    catch
+                    {
+                        IsAvailable = false;
+                    }
+                }
+            }
         }
 
         public override void Destroy()
@@ -156,6 +195,7 @@ namespace DKEngine.Core.Components
         {
             using (FileReader = new AudioFileReader(audioFileName))
             {
+                FileReader.Volume = Engine.Sound.SoundVolume;
                 // TODO: could add resampling in here if required
                 WaveFormat = FileReader.WaveFormat;
                 var wholeFile = new List<float>((int)(FileReader.Length / 4));
