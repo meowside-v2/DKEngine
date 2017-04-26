@@ -117,6 +117,7 @@
     <Content Include="Sprites\Enemy\mario.png" />
     <Content Include="Sprites\Enemy\mario_jump_right.png" />
     <Content Include="Sprites\Enemy\mario_move_right.gif" />
+    <Content Include="Sprites\Miscellaneous\coin.gif" />
     <Content Include="Sprites\Pipes\pipe_01.png" />
     <Content Include="Sprites\Pipes\pipe_02.png" />
     <Content Include="Sprites\Pipes\pipe_03.png" />

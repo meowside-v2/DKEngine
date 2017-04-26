@@ -16,7 +16,7 @@ namespace MarIO
 
         public readonly static Stopwatch TimeCounter = new Stopwatch();
 
-        private readonly static TimeSpan LevelTime = new TimeSpan(0, 3, 0);
+        private readonly static TimeSpan LevelTime = new TimeSpan(0, 10, 0);
         public static TimeSpan TimeLeft
         {
             get { return LevelTime - TimeCounter.Elapsed; }

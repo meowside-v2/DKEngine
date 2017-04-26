@@ -41,19 +41,20 @@ namespace MarIO.Assets.Models
                 FontSize = 2
             };
             Time.Transform.Dimensions = new Vector3(100, 20, 1);
-            Time.Transform.Position += new Vector3(16, 16, 128);
+            Time.Transform.Position += new Vector3(22, 16, 128);
 
-            TextBlock _coins = new TextBlock(this)
+            TextBlock Score = new TextBlock(this)
             {
-                Text = "COINS",
+                Name = "txt_Score",
+                Text = "",
                 IsGUI = true,
                 TextShadow = true,
                 FontSize = 2,
                 HAlignment = Text.HorizontalAlignment.Right,
                 TextHAlignment = Text.HorizontalAlignment.Right
             };
-            _coins.Transform.Dimensions = new Vector3(100, 20, 1);
-            _coins.Transform.Position += new Vector3(-16, 4, 128);
+            Score.Transform.Dimensions = new Vector3(100, 20, 1);
+            Score.Transform.Position += new Vector3(-16, 4, 128);
             
             TextBlock _lives = new TextBlock(this)
             {
