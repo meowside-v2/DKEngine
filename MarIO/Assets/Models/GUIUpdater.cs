@@ -1,9 +1,12 @@
-﻿using DKEngine.Core;
+﻿
+using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
+using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,16 +14,15 @@ namespace MarIO.Assets.Models
 {
     class GUIUpdater : GameObject
     {
-        TextBlock Time;
-        TextBlock Coins;
-        TextBlock World;
-        TextBlock Lives;
-
         protected override void Init()
         {
             Name = "GUI";
 
-            TextBlock _time = new TextBlock()
+            this.IsGUI = true;
+
+            /*------------ TIME TEXT ----------------*/
+
+            TextBlock _time = new TextBlock(this)
             {
                 IsGUI = true,
                 TextShadow = true,
@@ -29,9 +31,19 @@ namespace MarIO.Assets.Models
             };
             _time.Transform.Dimensions = new Vector3(100, 20, 1);
             _time.Transform.Position += new Vector3(16, 4, 128);
-            
 
-            TextBlock _coins = new TextBlock()
+            TextBlock Time = new TextBlock(this)
+            {
+                Name = "txt_Time",
+                IsGUI = true,
+                TextShadow = true,
+                Text = "",
+                FontSize = 2
+            };
+            Time.Transform.Dimensions = new Vector3(100, 20, 1);
+            Time.Transform.Position += new Vector3(16, 16, 128);
+
+            TextBlock _coins = new TextBlock(this)
             {
                 Text = "COINS",
                 IsGUI = true,
@@ -42,8 +54,8 @@ namespace MarIO.Assets.Models
             };
             _coins.Transform.Dimensions = new Vector3(100, 20, 1);
             _coins.Transform.Position += new Vector3(-16, 4, 128);
-
-            TextBlock _lives = new TextBlock()
+            
+            TextBlock _lives = new TextBlock(this)
             {
                 Text = "LIVES",
                 IsGUI = true,
@@ -53,7 +65,9 @@ namespace MarIO.Assets.Models
             _lives.Transform.Dimensions = new Vector3(100, 20, 1);
             _lives.Transform.Position += new Vector3(100, 4, 128);
 
-            TextBlock _world = new TextBlock()
+            /*------------ WORLD TEXT ----------------*/
+
+            TextBlock _world = new TextBlock(this)
             {
                 Text = "WORLD",
                 IsGUI = true,
@@ -64,6 +78,21 @@ namespace MarIO.Assets.Models
             };
             _world.Transform.Dimensions = new Vector3(100, 20, 1);
             _world.Transform.Position += new Vector3(-100, 4, 128);
+
+            TextBlock World = new TextBlock(this)
+            {
+                Name = "txt_World",
+                Text = "",
+                IsGUI = true,
+                TextShadow = true,
+                FontSize = 2,
+                HAlignment = Text.HorizontalAlignment.Right,
+                TextHAlignment = Text.HorizontalAlignment.Right
+            };
+            World.Transform.Dimensions = new Vector3(100, 20, 1);
+            World.Transform.Position += new Vector3(-100, 16, 128);
+
+            this.InitNewScript<GUIUpdateScript>();
         }
     }
 }

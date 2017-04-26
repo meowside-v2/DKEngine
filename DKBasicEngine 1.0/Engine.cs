@@ -158,6 +158,8 @@ namespace DKEngine
         private static float deltaT = 0;
         public static float DeltaTime { get { return deltaT; } }
 
+        public static string SceneName { get { return Engine.LoadingScene != null ? Engine.LoadingScene.Name : ""; } }
+
         internal static long LastUpdated = 0;
 
         internal static event EngineHandler UpdateEvent;
