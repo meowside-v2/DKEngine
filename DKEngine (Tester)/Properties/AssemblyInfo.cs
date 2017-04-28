@@ -1,20 +1,16 @@
-﻿/*
-* (C) 2017 David Knieradl 
-*/
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DKBasicEngine 1.0")]
-[assembly: AssemblyDescription("Engine project")]
+[assembly: AssemblyTitle("DKEngine")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DKBasicEngine 1.0")]
-[assembly: AssemblyCopyright("Copyright © David Knieradl 2016")]
+[assembly: AssemblyProduct("DKEngine")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -24,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("685bb592-6ff3-43d1-aa93-dc6900601dda")]
+[assembly: Guid("f01914be-c135-423c-aed5-9b4900954a54")]
 
 // Version information for an assembly consists of the following four values:
 //

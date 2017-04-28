@@ -2,6 +2,7 @@
 using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
+using MarIO.Assets.Models.Miscellaneous;
 using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
@@ -55,10 +56,14 @@ namespace MarIO.Assets.Models
             };
             Score.Transform.Dimensions = new Vector3(100, 20, 1);
             Score.Transform.Position += new Vector3(-16, 4, 128);
-            
+
+            Coin UICoin = new Coin(this);
+            UICoin.Transform.Position += new Vector3(90, 4, 128);
+            UICoin.Transform.Dimensions = new Vector3(2, 2, 0);
+
             TextBlock _lives = new TextBlock(this)
             {
-                Text = "LIVES",
+                Text = "x00",
                 IsGUI = true,
                 TextShadow = true,
                 FontSize = 2

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DKEngine.Properties {
+namespace DKEngine_Tester.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace DKEngine.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DKBasicEngine_1_0.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DKEngine.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,51 +61,21 @@ namespace DKEngine.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static System.Drawing.Bitmap border {
+        internal static byte[] footsteps_2 {
             get {
-                object obj = ResourceManager.GetObject("border", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap DKEngine_splash1 {
-            get {
-                object obj = ResourceManager.GetObject("DKEngine_splash1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap DKEngine_splash2 {
-            get {
-                object obj = ResourceManager.GetObject("DKEngine_splash2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap DKEngine_splash3 {
-            get {
-                object obj = ResourceManager.GetObject("DKEngine_splash3", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("footsteps_2", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] FontFile {
+        internal static byte[] glock {
             get {
-                object obj = ResourceManager.GetObject("FontFile", resourceCulture);
+                object obj = ResourceManager.GetObject("glock", resourceCulture);
                 return ((byte[])(obj));
             }
         }

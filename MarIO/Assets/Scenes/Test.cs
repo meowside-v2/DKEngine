@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace MarIO.Assets.Scenes
 {
-    class Test : Scene
+    class Test : MapBase
     {
         public Test()
         {
             Name = "test";
         }
 
-        public override void Init()
+        public override void Load()
         {
             new GUIUpdater();
 
@@ -30,7 +30,7 @@ namespace MarIO.Assets.Scenes
             };
             _1.SizeInBlocks = new Vector3(50, 3, 0);
             _1.Transform.Position = new Vector3(0, -40, 0);
-            
+
 
             Group _2 = new Group()
             {
@@ -40,7 +40,7 @@ namespace MarIO.Assets.Scenes
             };
             _2.SizeInBlocks = new Vector3(10, 3, 0);
             _2.Transform.Position = new Vector3(60 * 16, -40, 0);
-            
+
 
             Group _3 = new Group()
             {
@@ -72,7 +72,7 @@ namespace MarIO.Assets.Scenes
                 Type = Block.BlockType.Ground2,
                 Name = "random2"
             };
-            
+
             blck2.Transform.Position = new Vector3(600, -56, 0);
             blck2.InitNewComponent<Collider>();
             blck2.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);

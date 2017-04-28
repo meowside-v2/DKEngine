@@ -55,8 +55,10 @@
     <Compile Include="Assets\Models\Group.cs" />
     <Compile Include="Assets\Models\GUIUpdater.cs" />
     <Compile Include="Assets\Models\Mario.cs" />
+    <Compile Include="Assets\Models\Miscellaneous\Coin.cs" />
     <Compile Include="Assets\Models\MusicPlayer.cs" />
     <Compile Include="Assets\Models\Trigger.cs" />
+    <Compile Include="Assets\Scenes\MapBase.cs" />
     <Compile Include="Assets\Scenes\Test.cs" />
     <Compile Include="Assets\Scripts\EnemyControllerScripts.cs" />
     <Compile Include="Assets\Scripts\GUIUpdateScript.cs" />
@@ -85,7 +87,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Sprites\PSD\blocks_project.psd" />
+    <None Include="Sprites\PSD\coin.psd" />
     <None Include="Sprites\PSD\Goomba.psd" />
+    <None Include="Sprites\PSD\heart.psd" />
     <None Include="Sprites\PSD\Mario.psd" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +122,7 @@
     <Content Include="Sprites\Enemy\mario_jump_right.png" />
     <Content Include="Sprites\Enemy\mario_move_right.gif" />
     <Content Include="Sprites\Miscellaneous\coin.gif" />
+    <Content Include="Sprites\Miscellaneous\heart.gif" />
     <Content Include="Sprites\Pipes\pipe_01.png" />
     <Content Include="Sprites\Pipes\pipe_02.png" />
     <Content Include="Sprites\Pipes\pipe_03.png" />
@@ -142,7 +147,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DKBasicEngine 1.0\DKEngine.csproj">
+    <ProjectReference Include="..\DKEngine\DKEngine.csproj">
       <Project>{685bb592-6ff3-43d1-aa93-dc6900601dda}</Project>
       <Name>DKEngine</Name>
     </ProjectReference>
