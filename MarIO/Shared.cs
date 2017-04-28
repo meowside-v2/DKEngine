@@ -12,8 +12,8 @@ namespace MarIO
     {
         private static byte _coinsCount = 0;
 
-        public static short Points { get; set; }
-        public static byte Lives { get; set; }
+        public static short GameScore { get; set; } = 0;
+        public static byte Lives { get; set; } = 3;
         public static byte CoinsCount
         {
             get { return _coinsCount; }

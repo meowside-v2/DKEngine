@@ -26,21 +26,25 @@ namespace MarIO.Assets.Scripts
 
         protected override void Start()
         {
-            World = GameObject.Find<TextBlock>("txt_World");
-            Time = GameObject.Find<TextBlock>("txt_Time");
-            Score = GameObject.Find<TextBlock>("txt_Score");
-            /*Coins = GameObject.Find<TextBlock>("txt_World");
-            Lives = GameObject.Find<TextBlock>("txt_World");*/
+            this.World = GameObject.Find<TextBlock>("txt_World");
+            this.Time  = GameObject.Find<TextBlock>("txt_Time");
+            this.Score = GameObject.Find<TextBlock>("txt_Score");
+            this.Coins = GameObject.Find<TextBlock>("txt_Coins");
+            this.Lives = GameObject.Find<TextBlock>("txt_Lives");
 
-            World.Text = Engine.SceneName;
-            Time.Text = string.Format("{0:000}", Shared.TimeLeft.TotalSeconds);
-            Score.Text = string.Format("{0:00000000}", Shared.Points);
+            this.World.Text = Engine.SceneName;
+            this.Time.Text  = string.Format("{0:000}", Shared.TimeLeft.TotalSeconds);
+            this.Score.Text = string.Format("{0:00000000}", Shared.GameScore);
+            this.Coins.Text = string.Format("*{0:00}", Shared.CoinsCount);
+            this.Lives.Text = string.Format("*{0:00}", Shared.Lives);
         }
 
         protected override void Update()
         {
-            Time.Text = string.Format("{0:000}", Shared.TimeLeft.TotalSeconds);
-            Score.Text = string.Format("{0:00000000}", Shared.Points);
+            this.Time.Text = string.Format("{0:000}", Shared.TimeLeft.TotalSeconds);
+            this.Score.Text = string.Format("{0:00000000}", Shared.GameScore);
+            this.Coins.Text = string.Format("*{0:00}", Shared.CoinsCount);
+            this.Lives.Text = string.Format("*{0:00}", Shared.Lives);
         }
     }
 }

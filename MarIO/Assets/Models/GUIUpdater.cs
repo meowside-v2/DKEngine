@@ -70,11 +70,11 @@ namespace MarIO.Assets.Models
 
             TextBlock _coins = new TextBlock(this)
             {
-                Text = "*00",
+                Name = "txt_Coins",
+                Text = "",
                 IsGUI = true,
                 TextShadow = true,
-                FontSize = 1.5f,
-                Name = "txt_Coins"
+                FontSize = 1.5f
             };
             _coins.Transform.Dimensions = new Vector3(100, 20, 1);
             _coins.Transform.Position += new Vector3(100, 4, 128);
@@ -90,11 +90,11 @@ namespace MarIO.Assets.Models
 
             TextBlock _lives = new TextBlock(this)
             {
-                Text = "*00",
+                Name = "txt_Lives",
+                Text = "",
                 IsGUI = true,
                 TextShadow = true,
-                FontSize = 1.5f,
-                Name = "txt_Lives"
+                FontSize = 1.5f
             };
             _lives.Transform.Dimensions = new Vector3(100, 20, 1);
             _lives.Transform.Position += new Vector3(100, 18, 128);
