@@ -18,8 +18,11 @@ namespace DKEngine.Core.UI
             get { return _textStr; }
             set
             {
-                _textStr = value;
-                _changed = true;
+                if(value != _textStr)
+                {
+                    _textStr = value;
+                    _changed = true;
+                }
             }
         }
         public Color? Background

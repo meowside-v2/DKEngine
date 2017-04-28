@@ -5,7 +5,8 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace DKEngine.Core.Ext
 {
@@ -53,14 +54,25 @@ namespace DKEngine.Core.Ext
 
             Console.Clear();
 
-            Timer windowCheck = new Timer(WindowSizeChecker, null, 0, 100);
+            WindowSizeChecker(null, null);
+
+            Timer windowChecker = new Timer()
+            {
+                AutoReset = true,
+                Enabled = true,
+                Interval = 1000f
+            };
+            windowChecker.Elapsed += WindowSizeChecker;
+            
+            windowChecker.Start();
         }
 
-        private static void WindowSizeChecker(object state)
+        private static void WindowSizeChecker(object sender, ElapsedEventArgs e)
         {
             if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
             {
                 SetConsoleDisplayMode(hConsole, 1, out xy);
+                Console.CursorVisible = false;
             }
         }
     }
