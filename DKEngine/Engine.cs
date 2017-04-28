@@ -394,7 +394,7 @@ namespace DKEngine
                 List<GameObject> VisibleColliders = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();
                 int ColliderCount = VisibleTriggers.Count;
                 for (int i = 0; i < ColliderCount; i++)
-                    VisibleTriggers[i].Collider.TriggerCheck(VisibleColliders);
+                    VisibleTriggers[i].Collider?.TriggerCheck(VisibleColliders);
                 
                 BaseCam?.BufferImage(reference);
 

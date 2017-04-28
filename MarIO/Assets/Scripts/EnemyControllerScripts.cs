@@ -39,7 +39,7 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
-            if (!Target.IsDead)
+            if (!Target.IsDestroyed)
             {
                 Movement();
             }

@@ -13,6 +13,8 @@ namespace MarIO.Assets.Scripts
 {
     class BottomMarioChecker : Script
     {
+        GameObject Mario;
+
         public BottomMarioChecker(GameObject Parent) : base(Parent)
         { }
 
@@ -26,7 +28,9 @@ namespace MarIO.Assets.Scripts
         }
 
         protected override void Start()
-        { }
+        {
+            Mario = GameObject.Find<Mario>("Player");
+        }
 
         protected override void Update()
         { }
@@ -34,6 +38,8 @@ namespace MarIO.Assets.Scripts
 
     class TopMarioChecker : Script
     {
+        GameObject Mario;
+
         public TopMarioChecker(GameObject Parent) : base(Parent)
         { }
 
@@ -42,11 +48,18 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
+                Mario?.Destroy();
+            }
+            else if(e.Parent is Block)
+            {
+                ((Block)e.Parent).ChangeState = true;
             }
         }
 
         protected override void Start()
-        { }
+        {
+            Mario = GameObject.Find<Mario>("Player");
+        }
 
         protected override void Update()
         { }
@@ -54,6 +67,8 @@ namespace MarIO.Assets.Scripts
 
     class LeftMarioChecker : Script
     {
+        GameObject Mario;
+
         public LeftMarioChecker(GameObject Parent) : base(Parent)
         { }
 
@@ -62,11 +77,14 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
+                Mario?.Destroy();
             }
         }
 
         protected override void Start()
-        { }
+        {
+            Mario = GameObject.Find<Mario>("Player");
+        }
 
         protected override void Update()
         { }
@@ -74,6 +92,8 @@ namespace MarIO.Assets.Scripts
 
     class RightMarioChecker : Script
     {
+        GameObject Mario;
+
         public RightMarioChecker(GameObject Parent) : base(Parent)
         { }
 
@@ -82,11 +102,14 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
+                Mario?.Destroy();
             }
         }
 
         protected override void Start()
-        { }
+        {
+            Mario = GameObject.Find<Mario>("Player");
+        }
 
         protected override void Update()
         { }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models
 {
-    class Block : GameObject
+    class Block : AnimatedObject
     {
         public enum BlockType
         {
