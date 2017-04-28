@@ -56,6 +56,7 @@
     <Compile Include="Assets\Models\GUIUpdater.cs" />
     <Compile Include="Assets\Models\Mario.cs" />
     <Compile Include="Assets\Models\Miscellaneous\Coin.cs" />
+    <Compile Include="Assets\Models\Miscellaneous\Heart.cs" />
     <Compile Include="Assets\Models\MusicPlayer.cs" />
     <Compile Include="Assets\Models\Trigger.cs" />
     <Compile Include="Assets\Scenes\MapBase.cs" />

@@ -44,6 +44,8 @@ namespace MarIO.Assets.Models
             Time.Transform.Dimensions = new Vector3(100, 20, 1);
             Time.Transform.Position += new Vector3(22, 16, 128);
 
+            /*------------ SCORE TEXT ----------------*/
+
             TextBlock Score = new TextBlock(this)
             {
                 Name = "txt_Score",
@@ -57,19 +59,45 @@ namespace MarIO.Assets.Models
             Score.Transform.Dimensions = new Vector3(100, 20, 1);
             Score.Transform.Position += new Vector3(-16, 4, 128);
 
-            Coin UICoin = new Coin(this);
+            /*------------ COINS TEXT ----------------*/
+
+            Coin UICoin = new Coin(this)
+            {
+                HasShadow = true
+            };
             UICoin.Transform.Position += new Vector3(90, 4, 128);
-            UICoin.Transform.Dimensions = new Vector3(2, 2, 0);
+
+
+            TextBlock _coins = new TextBlock(this)
+            {
+                Text = "*00",
+                IsGUI = true,
+                TextShadow = true,
+                FontSize = 1.5f,
+                Name = "txt_Coins"
+            };
+            _coins.Transform.Dimensions = new Vector3(100, 20, 1);
+            _coins.Transform.Position += new Vector3(100, 4, 128);
+
+            /*------------ LIVES TEXT ----------------*/
+
+            Heart UIHeart = new Heart(this)
+            {
+                HasShadow = true
+            };
+            UIHeart.Transform.Position += new Vector3(88, 16, 128);
+
 
             TextBlock _lives = new TextBlock(this)
             {
-                Text = "x00",
+                Text = "*00",
                 IsGUI = true,
                 TextShadow = true,
-                FontSize = 2
+                FontSize = 1.5f,
+                Name = "txt_Lives"
             };
             _lives.Transform.Dimensions = new Vector3(100, 20, 1);
-            _lives.Transform.Position += new Vector3(100, 4, 128);
+            _lives.Transform.Position += new Vector3(100, 18, 128);
 
             /*------------ WORLD TEXT ----------------*/
 
