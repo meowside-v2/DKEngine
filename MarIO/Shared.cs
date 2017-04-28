@@ -10,9 +10,23 @@ namespace MarIO
 {
     static class Shared
     {
-        public static short Points     = 0;
-        public static byte  Lives      = 0;
-        public static byte  CoinsCount = 0;
+        private static byte _coinsCount = 0;
+
+        public static short Points { get; set; }
+        public static byte Lives { get; set; }
+        public static byte CoinsCount
+        {
+            get { return _coinsCount; }
+            set
+            {
+                _coinsCount = value;
+                if(_coinsCount > 99)
+                {
+                    Lives++;
+                    _coinsCount = 0;
+                }
+            }
+        }
 
         public readonly static Stopwatch TimeCounter = new Stopwatch();
 
