@@ -22,7 +22,7 @@ namespace MarIO.Assets.Models
             this.IsGUI = true;
 
             /*------------ TIME TEXT ----------------*/
-
+#region TIME
             TextBlock _time = new TextBlock(this)
             {
                 IsGUI = true,
@@ -43,9 +43,10 @@ namespace MarIO.Assets.Models
             };
             Time.Transform.Dimensions = new Vector3(100, 20, 1);
             Time.Transform.Position += new Vector3(22, 16, 128);
+#endregion
 
             /*------------ SCORE TEXT ----------------*/
-
+#region SCORE
             TextBlock Score = new TextBlock(this)
             {
                 Name = "txt_Score",
@@ -58,14 +59,15 @@ namespace MarIO.Assets.Models
             };
             Score.Transform.Dimensions = new Vector3(100, 20, 1);
             Score.Transform.Position += new Vector3(-16, 4, 128);
+#endregion
 
             /*------------ COINS TEXT ----------------*/
-
+#region COINS
             Coin UICoin = new Coin(this)
             {
                 HasShadow = true
             };
-            UICoin.Transform.Position += new Vector3(90, 4, 128);
+            UICoin.Transform.Position += new Vector3(75, 4, 128);
 
 
             TextBlock _coins = new TextBlock(this)
@@ -77,15 +79,16 @@ namespace MarIO.Assets.Models
                 FontSize = 1.5f
             };
             _coins.Transform.Dimensions = new Vector3(100, 20, 1);
-            _coins.Transform.Position += new Vector3(100, 4, 128);
+            _coins.Transform.Position += new Vector3(85, 4, 128);
+#endregion
 
             /*------------ LIVES TEXT ----------------*/
-
+#region LIVES
             Heart UIHeart = new Heart(this)
             {
                 HasShadow = true
             };
-            UIHeart.Transform.Position += new Vector3(88, 16, 128);
+            UIHeart.Transform.Position += new Vector3(73, 16, 128);
 
 
             TextBlock _lives = new TextBlock(this)
@@ -97,10 +100,11 @@ namespace MarIO.Assets.Models
                 FontSize = 1.5f
             };
             _lives.Transform.Dimensions = new Vector3(100, 20, 1);
-            _lives.Transform.Position += new Vector3(100, 18, 128);
+            _lives.Transform.Position += new Vector3(85, 18, 128);
+#endregion
 
             /*------------ WORLD TEXT ----------------*/
-
+#region WORLD
             TextBlock _world = new TextBlock(this)
             {
                 Text = "WORLD",
@@ -111,7 +115,7 @@ namespace MarIO.Assets.Models
                 TextHAlignment = Text.HorizontalAlignment.Right
             };
             _world.Transform.Dimensions = new Vector3(100, 20, 1);
-            _world.Transform.Position += new Vector3(-100, 4, 128);
+            _world.Transform.Position += new Vector3(-90, 4, 128);
 
             TextBlock World = new TextBlock(this)
             {
@@ -124,7 +128,8 @@ namespace MarIO.Assets.Models
                 TextHAlignment = Text.HorizontalAlignment.Right
             };
             World.Transform.Dimensions = new Vector3(100, 20, 1);
-            World.Transform.Position += new Vector3(-100, 16, 128);
+            World.Transform.Position += new Vector3(-90, 16, 128);
+#endregion
 
             this.InitNewScript<GUIUpdateScript>();
         }

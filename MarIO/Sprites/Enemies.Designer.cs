@@ -73,9 +73,19 @@ namespace MarIO.Sprites {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap mario {
+        internal static System.Drawing.Bitmap goomba_dead {
             get {
-                object obj = ResourceManager.GetObject("mario", resourceCulture);
+                object obj = ResourceManager.GetObject("goomba_dead", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mario_dead {
+            get {
+                object obj = ResourceManager.GetObject("mario_dead", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,6 +113,16 @@ namespace MarIO.Sprites {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mario_left {
+            get {
+                object obj = ResourceManager.GetObject("mario_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mario_move_left {
             get {
                 object obj = ResourceManager.GetObject("mario_move_left", resourceCulture);
@@ -116,6 +136,16 @@ namespace MarIO.Sprites {
         internal static System.Drawing.Bitmap mario_move_right {
             get {
                 object obj = ResourceManager.GetObject("mario_move_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mario_right {
+            get {
+                object obj = ResourceManager.GetObject("mario_right", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

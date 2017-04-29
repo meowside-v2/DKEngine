@@ -37,5 +37,34 @@ namespace MarIO
         }
 
         public static Mario.State MarioCurrentState = Mario.State.Small;
+
+        #region Animations
+
+        #region Mario
+
+        public const string MARIO_IDLE_LEFT = "idle_left";
+        public const string MARIO_IDLE_LEFT_MAT = "mario_left";
+
+        public const string MARIO_IDLE_RIGHT = "idle_right";
+        public const string MARIO_IDLE_RIGHT_MAT = "mario_right";
+
+        public const string MARIO_MOVE_LEFT = "left_move";
+        public const string MARIO_MOVE_LEFT_MAT = "mario_move_left";
+
+        public const string MARIO_MOVE_RIGHT = "right_move";
+        public const string MARIO_MOVE_RIGHT_MAT = "mario_move_right";
+
+        public const string MARIO_JUMP_LEFT = "left_jump";
+        public const string MARIO_JUMP_LEFT_MAT = "mario_jump_left";
+
+        public const string MARIO_JUMP_RIGHT = "right_jump";
+        public const string MARIO_JUMP_RIGHT_MAT = "mario_jump_right";
+
+        public const string MARIO_DEAD = "dead";
+        public const string MARIO_DEAD_MAT = "mario_dead";
+
+        #endregion
+
+        #endregion
     }
 }

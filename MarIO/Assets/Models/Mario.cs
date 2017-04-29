@@ -13,6 +13,8 @@ namespace MarIO.Assets.Models
 {
     class Mario : AnimatedObject
     {
+        public bool KilledEnemy = false;
+
         public Mario()
         { }
 
@@ -32,15 +34,17 @@ namespace MarIO.Assets.Models
         {
             this.Name = "Player";
 
-            //this.InitNewComponent<Collider>();
-            //this.Collider.Area = new RectangleF(0, 0, 14, 16);
-
             this.InitNewComponent<Animator>();
-            this.Animator.AddAnimation("idle", Database.GetGameObjectMaterial("mario"));
-            this.Animator.AddAnimation("right_move", Database.GetGameObjectMaterial("mario_move_right"));
-            this.Animator.AddAnimation("left_move", Database.GetGameObjectMaterial("mario_move_left"));
-            this.Animator.AddAnimation("right_jump", Database.GetGameObjectMaterial("mario_jump_right"));
-            this.Animator.AddAnimation("left_jump", Database.GetGameObjectMaterial("mario_jump_left"));
+            this.Animator.AddAnimation(Shared.MARIO_IDLE_LEFT,  Shared.MARIO_IDLE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.MARIO_IDLE_RIGHT, Shared.MARIO_IDLE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.MARIO_JUMP_LEFT,  Shared.MARIO_JUMP_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.MARIO_JUMP_RIGHT, Shared.MARIO_JUMP_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.MARIO_MOVE_LEFT,  Shared.MARIO_MOVE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.MARIO_MOVE_RIGHT, Shared.MARIO_MOVE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.MARIO_DEAD,       Shared.MARIO_DEAD_MAT);
+
+            this.Animator.Play(Shared.MARIO_IDLE_RIGHT);
+
             this.InitNewScript<CharacterController>();
 
             Trigger bottom = new Trigger(this)

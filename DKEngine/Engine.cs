@@ -36,7 +36,7 @@ namespace DKEngine
 
         public static class Render
         {
-            public   const int   ResolutionScale    = 50;
+            public   const int   ResolutionScale    = 40;
             public   const float ResolutionRatio    = ResolutionScale / 100f;
 
             public   const int   RenderWidth        = (int)(640 * ResolutionRatio);

@@ -96,8 +96,12 @@
   <ItemGroup>
     <Content Include="Sounds\Overworld_Theme.mp3" />
     <Content Include="Sprites\Enemy\goomba.gif" />
+    <Content Include="Sprites\Enemy\goomba_dead.png" />
+    <Content Include="Sprites\Enemy\mario_dead.png" />
     <Content Include="Sprites\Enemy\mario_jump_left.png" />
+    <Content Include="Sprites\Enemy\mario_left.png" />
     <Content Include="Sprites\Enemy\mario_move_left.gif" />
+    <Content Include="Sprites\Enemy\mario_right.png" />
     <Content Include="Sprites\Ground\block_01.png" />
     <Content Include="Sprites\Ground\block_02.png" />
     <Content Include="Sprites\Ground\block_03.png" />
@@ -119,7 +123,6 @@
     <Content Include="Sprites\Ground\sky_07.png" />
     <Content Include="Sprites\Ground\water_01.png" />
     <Content Include="Sprites\Ground\water_02.png" />
-    <Content Include="Sprites\Enemy\mario.png" />
     <Content Include="Sprites\Enemy\mario_jump_right.png" />
     <Content Include="Sprites\Enemy\mario_move_right.gif" />
     <Content Include="Sprites\Miscellaneous\coin.gif" />

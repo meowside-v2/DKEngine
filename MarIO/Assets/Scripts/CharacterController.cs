@@ -13,6 +13,7 @@ namespace MarIO.Assets.Scripts
 {
     class CharacterController : Script
     {
+        Animator PlayerAnimator;
         Mario Player;
         Camera TargetCam;
         Vector3 Offset;
@@ -31,6 +32,8 @@ namespace MarIO.Assets.Scripts
         protected bool CanJump = true;
         bool IsFalling = false;
         bool Jumped = false;
+        bool IsFacingLeft = false;
+        bool EnemyKilledAnim = false;
 
         string IDLE
         {
@@ -39,7 +42,7 @@ namespace MarIO.Assets.Scripts
                 switch (Shared.MarioCurrentState)
                 {
                     case Mario.State.Small:
-                        return "idle";
+                        return IsFacingLeft ? Shared.MARIO_IDLE_LEFT : Shared.MARIO_IDLE_RIGHT;
                     case Mario.State.Super:
                         return "idle";
                     case Mario.State.Fire:
@@ -51,10 +54,45 @@ namespace MarIO.Assets.Scripts
                 }
             }
         }
-        const string RIGHTMOVE = "right_move";
-        const string LEFTMOVE = "left_move";
-        const string RIGHTJUMP = "right_jump";
-        const string LEFTJUMP = "left_jump";
+        string MOVE
+        {
+            get
+            {
+                switch (Shared.MarioCurrentState)
+                {
+                    case Mario.State.Small:
+                        return horiSpeed >= 0 ? Shared.MARIO_MOVE_RIGHT : Shared.MARIO_MOVE_LEFT;
+                    case Mario.State.Super:
+                        return "idle";
+                    case Mario.State.Fire:
+                        return "idle";
+                    case Mario.State.Invincible:
+                        return "idle";
+                    default:
+                        throw new Exception("JAK");
+                }
+            }
+        }
+        string JUMP
+        {
+            get
+            {
+                switch (Shared.MarioCurrentState)
+                {
+                    case Mario.State.Small:
+                        return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.MARIO_JUMP_RIGHT : Shared.MARIO_JUMP_LEFT)
+                                              : (IsFacingLeft  ? Shared.MARIO_JUMP_LEFT  : Shared.MARIO_JUMP_RIGHT);
+                    case Mario.State.Super:
+                        return "idle";
+                    case Mario.State.Fire:
+                        return "idle";
+                    case Mario.State.Invincible:
+                        return "idle";
+                    default:
+                        throw new Exception("JAK");
+                }
+            }
+        }
 
         public CharacterController(GameObject Parent)
             : base(Parent)
@@ -71,6 +109,7 @@ namespace MarIO.Assets.Scripts
             Offset = new Vector3(20, 0, 0);
 
             Player = GameObject.Find<Mario>("Player");
+            PlayerAnimator = Component.Find<Animator>("Player_Animator");
             TargetCam = Component.Find<Camera>("Camera");
             TargetCam.Position = new Vector3(0, -180, 0);
 
@@ -79,6 +118,15 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
+            if (Player.KilledEnemy)
+            {
+                Player.KilledEnemy = false;
+                EnemyKilledAnim = true;
+                Jumped = true;
+                IsFalling = false;
+                vertSpeed = -FloatSpeed;
+            }
+
             if (!Player.IsDestroyed)
             {
                 Movement();
@@ -89,13 +137,15 @@ namespace MarIO.Assets.Scripts
             }
             
             Player.Transform.Position = Player.Transform.Position.Add(horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
-
+            
             CameraControl();
+            AnimationControl();
         }
 
         private void DeadAnimation()
         {
-
+            horiSpeed = 0;
+            Player.Collider.Destroy();
         }
 
         private void CameraControl()
@@ -109,7 +159,6 @@ namespace MarIO.Assets.Scripts
             {
                 Player.Transform.Position = Player.Transform.Position.Add(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
                 horiSpeed = 0f;
-                Player.Animator.Play(IDLE);
             }
 
             PositionX = Player.Transform.Position.X;
@@ -123,31 +172,19 @@ namespace MarIO.Assets.Scripts
                 Jumped = false;
 
                 vertSpeed = 0;
-
-                if (horiSpeed > 0)
-                    Player.Animator.Play(RIGHTMOVE);
-
-                else if (horiSpeed < 0)
-                    Player.Animator.Play(LEFTMOVE);
-
-                else
-                    Player.Animator.Play(IDLE);
             }
 
 
             if (Engine.Input.IsKeyDown(ConsoleKey.A))
             {
+                IsFacingLeft = true;
                 if (!Player.Collider.Collision(Collider.Direction.Left) && horiSpeed > -MovementSpeed)
                 {
                     horiSpeed -= Engine.DeltaTime * Acceleration;
-                    if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
-                        Player.Animator.Play(LEFTMOVE);
                 }
                 else if (Player.Collider.Collision(Collider.Direction.Left))
                 {
                     horiSpeed = 0;
-                    if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
-                        Player.Animator.Play(IDLE);
                 }
                 else
                 {
@@ -156,31 +193,47 @@ namespace MarIO.Assets.Scripts
             }
             else if (horiSpeed < 0)
             {
+                IsFacingLeft = true;
                 horiSpeed += Engine.DeltaTime * Acceleration * 2;
 
                 if (horiSpeed >= 0 || Player.Collider.Collision(Collider.Direction.Left))
                 {
                     horiSpeed = 0;
-                    if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
-                        Player.Animator.Play(IDLE);
-
                 }
             }
 
+            if (Engine.Input.IsKeyDown(ConsoleKey.W))
+            {
+                Jump();
+            }
+            else if (Jumped)
+            {
+                if (EnemyKilledAnim)
+                {
+                    vertSpeed += Engine.DeltaTime * Acceleration * 4;
+
+                    if(vertSpeed <= 0)
+                    {
+                        IsFalling = true;
+                    }
+                }
+                else if (!IsFalling)
+                {
+                    vertSpeed = -vertSpeed;
+                    IsFalling = true;
+                }
+            }
 
             if (Engine.Input.IsKeyDown(ConsoleKey.D))
             {
+                IsFacingLeft = false;
                 if (!Player.Collider.Collision(Collider.Direction.Right) && horiSpeed < MovementSpeed)
                 {
                     horiSpeed += Engine.DeltaTime * Acceleration;
-                    if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
-                        Player.Animator.Play(RIGHTMOVE);
                 }
                 else if (Player.Collider.Collision(Collider.Direction.Right))
                 {
                     horiSpeed = 0;
-                    if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
-                        Player.Animator.Play(IDLE);
                 }
                 else
                 {
@@ -189,57 +242,15 @@ namespace MarIO.Assets.Scripts
             }
             else if (horiSpeed > 0)
             {
+                IsFacingLeft = false;
                 horiSpeed -= Engine.DeltaTime * Acceleration * 2;
 
                 if (horiSpeed <= 0 || Player.Collider.Collision(Collider.Direction.Right))
                 {
                     horiSpeed = 0;
-                    if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
-                        Player.Animator.Play(IDLE);
                 }
             }
-
-            if (Engine.Input.IsKeyDown(ConsoleKey.W))
-            {
-                if (CanJump)
-                {
-                    if (!IsFalling)
-                    {
-                        if (vertSpeed == 0 && !Jumped)
-                        {
-                            if (horiSpeed >= 0)
-                            {
-                                Player.Animator.Play(RIGHTJUMP);
-                            }
-                            else
-                            {
-                                Player.Animator.Play(LEFTJUMP);
-                            }
-
-                            vertSpeed = -FloatSpeed;
-                            Jumped = true;
-                        }
-                        else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
-                        {
-                            vertSpeed += Engine.DeltaTime * Acceleration * 2;
-                        }
-                        else
-                        {
-                            vertSpeed = 0;
-                            IsFalling = true;
-                        }
-                    }
-                }
-            }
-            else if (Jumped)
-            {
-                if (!IsFalling)
-                {
-                    vertSpeed = -vertSpeed;
-                    IsFalling = true;
-                }
-            }
-
+            
             if (!Player.Collider.Collision(Collider.Direction.Down))
             {
                 if (!IsFalling && !Jumped)
@@ -260,6 +271,53 @@ namespace MarIO.Assets.Scripts
                         vertSpeed = FloatSpeed;
                     }
                 }
+            }
+        }
+
+        public void Jump()
+        {
+            if (CanJump)
+            {
+                if (!IsFalling)
+                {
+                    if (vertSpeed == 0 && !Jumped)
+                    {
+                        vertSpeed = -FloatSpeed;
+                        Jumped = true;
+                    }
+                    else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
+                    {
+                        vertSpeed += Engine.DeltaTime * Acceleration * 2;
+                    }
+                    else
+                    {
+                        vertSpeed = 0;
+                        IsFalling = true;
+                    }
+                }
+            }
+        }
+
+        public void AnimationControl()
+        {
+            if (!Player.IsDestroyed)
+            {
+                if (Jumped)
+                {
+                    PlayerAnimator.Play(JUMP);
+                }
+                else
+                {
+                    if (horiSpeed != 0)
+                        PlayerAnimator.Play(MOVE);
+
+                    else
+                        PlayerAnimator.Play(IDLE);
+                }
+            }
+            else
+            {
+                PlayerAnimator.Play(Shared.MARIO_DEAD);
             }
         }
     }

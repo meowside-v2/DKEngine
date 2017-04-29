@@ -52,7 +52,16 @@ namespace DKEngine.Core.Components
         public void AddAnimation(string Name, Material Source)
         {
             Animations.Add(Name, new AnimationNode(Name, Source));
-            if(Animations.Count == 1)
+            if (Animations.Count == 1)
+            {
+                Play(Animations.ElementAt(0).Key);
+            }
+        }
+
+        public void AddAnimation(string Name, string MaterialKey)
+        {
+            Animations.Add(Name, new AnimationNode(Name, Database.GetGameObjectMaterial(MaterialKey)));
+            if (Animations.Count == 1)
             {
                 Play(Animations.ElementAt(0).Key);
             }

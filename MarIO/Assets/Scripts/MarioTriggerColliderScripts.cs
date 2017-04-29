@@ -13,7 +13,7 @@ namespace MarIO.Assets.Scripts
 {
     class BottomMarioChecker : Script
     {
-        GameObject Mario;
+        Mario Mario;
 
         public BottomMarioChecker(GameObject Parent) : base(Parent)
         { }
@@ -24,6 +24,7 @@ namespace MarIO.Assets.Scripts
             {
                 Debug.WriteLine(string.Format("Zabil jsi {0}", e.Parent.TypeName));
                 e.Parent.Destroy();
+                Mario.KilledEnemy = true;
             }
         }
 
@@ -38,7 +39,7 @@ namespace MarIO.Assets.Scripts
 
     class TopMarioChecker : Script
     {
-        GameObject Mario;
+        Mario Mario;
 
         public TopMarioChecker(GameObject Parent) : base(Parent)
         { }
@@ -48,7 +49,8 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
-                Mario?.Destroy();
+                Mario.IsDestroyed = true;
+                //Mario?.Destroy();
             }
             else if(e.Parent is Block)
             {
@@ -67,7 +69,7 @@ namespace MarIO.Assets.Scripts
 
     class LeftMarioChecker : Script
     {
-        GameObject Mario;
+        Mario Mario;
 
         public LeftMarioChecker(GameObject Parent) : base(Parent)
         { }
@@ -77,7 +79,8 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
-                Mario?.Destroy();
+                Mario.IsDestroyed = true;
+                //Mario?.Destroy();
             }
         }
 
@@ -92,7 +95,7 @@ namespace MarIO.Assets.Scripts
 
     class RightMarioChecker : Script
     {
-        GameObject Mario;
+        Mario Mario;
 
         public RightMarioChecker(GameObject Parent) : base(Parent)
         { }
@@ -102,7 +105,8 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
-                Mario?.Destroy();
+                Mario.IsDestroyed = true;
+                //Mario?.Destroy();
             }
         }
 

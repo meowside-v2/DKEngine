@@ -65,24 +65,25 @@ namespace DKEngine.Core
             {
                 if(_collider != value)
                 {
-                    _collider = value;
-                    if (value != null)
-                    {
-                        foreach (Script scr in this.Scripts)
-                        {
-                            scr.CollisionHandler = new Collider.CollisionEnterHandler(scr.OnColliderEnter);
-                            _collider.CollisionEvent += scr.CollisionHandler;
-                        }
-                    }
-                    else
+                    if(_collider != null)
                     {
                         foreach (Script scr in this.Scripts)
                         {
                             _collider.CollisionEvent -= scr.CollisionHandler;
                             scr.CollisionHandler = null;
-                            
                         }
                     }
+
+                    if (value != null)
+                    {
+                        foreach (Script scr in this.Scripts)
+                        {
+                            scr.CollisionHandler = new Collider.CollisionEnterHandler(scr.OnColliderEnter);
+                            value.CollisionEvent += scr.CollisionHandler;
+                        }
+                    }
+
+                    _collider = value;
                 }
             }
         }
