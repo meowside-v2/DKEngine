@@ -45,7 +45,9 @@ namespace DKEngine.Core.Components
             }
         }
 
-        internal abstract void Init();
+        internal virtual void Init()
+        { }
+
         public abstract void Destroy();
         
         public static T Find<T>(string Name) where T : Component

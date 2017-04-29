@@ -44,7 +44,11 @@ namespace DKEngine.Core.Components
         /// <param name="Parent">Parent of collider (determines size of collider)</param>
         internal Collider(GameObject Parent)
             : base(Parent)
-        { }
+        {
+            this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
+
+            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Collider));
+        }
 
 #if DEBUG
 
@@ -495,14 +499,8 @@ namespace DKEngine.Core.Components
 
         internal sealed override void Init()
         {
-            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Collider));
-
-            if (Area == null)
-                Area = new RectangleF();
-
             try
             {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
                 Engine.LoadingScene.AllGameObjectsColliders.Add(this);
             }
             catch (Exception e)

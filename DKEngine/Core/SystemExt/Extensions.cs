@@ -11,26 +11,32 @@ namespace DKEngine.Core.Ext
 {
     public static class Extensions
     {
-        public static void AddSafe<TDataValue>(this Dictionary<string, TDataValue> Destination, Component Target)
-            where TDataValue : Component
+        public static void AddSafe<DataValue>(this Dictionary<string, DataValue> Destination, Component Target)
+            where DataValue : Component
         {
-            int position = 0;
+            string Key = Target.Name;
 
-            while (true)
+            if (Engine.LoadingScene.ComponentCount.ContainsKey(Target.Name))
             {
-                try
-                {
-                    Destination.Add(Target.Name, Target as TDataValue);
-                }
-                catch
-                {
-                    Target.Name = string.Format("{0}_(Copy {1})", Target.Name, position);
-                    position++;
-                    continue;
-                }
-
-                break;
+                Target.Name = string.Format("{0}_(Copy {1})", Key, Engine.LoadingScene.ComponentCount[Target.Name]++);
+                Key = Target.Name;
             }
+            
+            else
+            {
+                Engine.LoadingScene.ComponentCount.Add(Key, 1);
+            }
+
+            /*try
+            {
+                position = Engine.LoadingScene.ComponentCount[Key];
+            }
+            catch
+            {
+                Engine.LoadingScene.ComponentCount[Key] = 0;
+            }*/
+
+            Destination.Add(Key, Target as DataValue);
         }
 
         public static void AddAll<T>(this List<T> list, params T[] stuff)

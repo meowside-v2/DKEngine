@@ -29,12 +29,21 @@ namespace DKEngine.Core.Components
 
         public Camera()
             :base(null)
-        { }
+        {
+            this.Position = new Vector3(0, 0, 0);
+            Engine.BaseCam = this;
+
+            this.Name = string.Format("{0}", nameof(Camera));
+        }
 
         public Camera(GameObject Parent)
             :base(Parent)
-        { }
-        
+        {
+            Engine.BaseCam = this;
+
+            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Camera));
+        }
+
         internal void BufferImage(List<GameObject> GameObjectsInView)
         {
             BackGroundInit();
@@ -113,14 +122,6 @@ namespace DKEngine.Core.Components
                 Engine.BaseCam = null;
 
             Parent = null;
-        }
-
-        internal sealed override void Init()
-        {
-            this.Position = new Vector3(0, 0, 0);
-            Engine.BaseCam = this;
-
-            this.Name = Parent != null ? string.Format("{0}_{1}", Parent.Name, nameof(Camera)) : string.Format("{0}_{1}", nameof(Camera), Engine.LoadingScene.AllComponents.Count);
         }
     }
 }

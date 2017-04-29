@@ -12,6 +12,7 @@ namespace DKEngine.Core
         public string Name = "";
 
         internal readonly Dictionary<string, Component> AllComponents;
+        internal readonly Dictionary<string, int> ComponentCount;
         //internal readonly Dictionary<string, GameObject> AllGameObjects;
 
         internal readonly List<GameObject> Model;
@@ -19,14 +20,15 @@ namespace DKEngine.Core
         internal readonly List<Collider>   AllGameObjectsColliders;
 
         internal readonly Stack<Component> NewlyGeneratedComponents;
-        //internal readonly Stack<Behavior> NewlyGeneratedBehaviors;
+        internal readonly Stack<Behavior> NewlyGeneratedBehaviors;
 
         internal readonly Stack<GameObject> GameObjectsToAddToRender;
         internal readonly Stack<GameObject> GameObjectsAddedToRender;
 
         public Scene()
         {
-            AllComponents = new Dictionary<string, Component>(0xFFFF);
+            AllComponents  = new Dictionary<string, Component>(0xFFFF);
+            ComponentCount = new Dictionary<string, int>(0xFFFF);
             //AllGameObjects = new Dictionary<string, GameObject>(0xFFFF);
 
             AllBehaviors              = new List<Behavior>(0xFFFF);
@@ -34,7 +36,7 @@ namespace DKEngine.Core
             AllGameObjectsColliders   = new List<Collider>(0xFFFF);
 
             NewlyGeneratedComponents = new Stack<Component>(0xFFFF);
-            //NewlyGeneratedBehaviors   = new Stack<Behavior>(0xFFFF);
+            NewlyGeneratedBehaviors   = new Stack<Behavior>(0xFFFF);
 
             GameObjectsToAddToRender  = new Stack<GameObject>(0xFFFF);
             GameObjectsAddedToRender  = new Stack<GameObject>(0xFFFF);

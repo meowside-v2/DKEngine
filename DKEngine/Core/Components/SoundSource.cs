@@ -93,7 +93,9 @@ namespace DKEngine.Core.Components
 
         public SoundSource(GameObject Parent)
             :base(Parent)
-        { }
+        {
+            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(SoundSource));
+        }
 
         public void PlaySound(Sound sound)
         {
@@ -123,11 +125,6 @@ namespace DKEngine.Core.Components
             { }
 
             this.Parent = null;
-        }
-
-        internal override void Init()
-        {
-            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(SoundSource));
         }
     }
 

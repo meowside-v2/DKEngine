@@ -42,7 +42,12 @@ namespace DKEngine.Core.Components
        
         public Animator(GameObject Parent)
             :base(Parent)
-        { }
+        {
+            this.CurrentAnimationTime = new TimeSpan(0);
+            this.Animations = new Dictionary<string, AnimationNode>();
+
+            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Animator));
+        }
 
         public void AddAnimation(string Name, Material Source)
         {
@@ -100,16 +105,11 @@ namespace DKEngine.Core.Components
 
         protected override void Initialize()
         {
-            this.CurrentAnimationTime = new TimeSpan(0);
-            this.Animations = new Dictionary<string, AnimationNode>();
-
-            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Animator));
-
-            if (Parent.Model != null)
+            /*if (Parent.Model != null)
             {
-                Animations.Add("default", new AnimationNode("default", Parent.Model));
+                AddAnimation("default", Parent.Model);
                 this.Play("default");
-            }
+            }*/
         }
     }
 }

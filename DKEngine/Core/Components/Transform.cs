@@ -62,18 +62,15 @@ namespace DKEngine.Core.Components
         
         public Transform(GameObject Parent)
             :base(Parent)
-        { }
-
-        public override void Destroy()
-        { }
-
-        internal override void Init()
         {
             _Position = new Vector3();
             _Dimensions = new Vector3();
             _Scale = new Vector3();
             _ScaledDimensions = new Vector3();
         }
+
+        public override void Destroy()
+        { }
     }
 }
  /*

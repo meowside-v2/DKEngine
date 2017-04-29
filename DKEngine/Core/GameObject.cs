@@ -50,7 +50,7 @@ namespace DKEngine.Core
 
                     if(Animator?.Animations.Count == 0)
                     {
-                        Animator.Animations.Add("default", new AnimationNode("default", _Model));
+                        Animator.AddAnimation("default", _Model);
                         Animator.Play("default");
                     }
                 }

@@ -13,24 +13,23 @@ namespace DKEngine.Core.Components
 
         public Behavior(GameObject Parent)
             : base(Parent)
-        { }
+        {
+            UpdateHandle = new Engine.EngineHandler(Update);
+        }
 
         internal sealed override void Init()
         {
             Initialize();
 
-            UpdateHandle = new Engine.EngineHandler(Update);
-
             try
             {
                 Engine.LoadingScene.AllBehaviors.Add(this);
+                Engine.LoadingScene.NewlyGeneratedBehaviors.Push(this);
             }
             catch (Exception e)
             {
                 Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
-
-            Start();
         }
 
         protected abstract void Initialize();

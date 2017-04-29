@@ -236,10 +236,10 @@ namespace DKEngine
                 Engine.LoadingScene.NewlyGeneratedComponents.Pop().InitInternal();
             }
 
-            /*while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
+            while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
             {
                 Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
-            }*/
+            }
 
             Database.AddScene(Engine.LoadingScene);
             
@@ -256,10 +256,10 @@ namespace DKEngine
                 Engine.LoadingScene.NewlyGeneratedComponents.Pop().InitInternal();
             }
 
-            /*while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
+            while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
             {
                 Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
-            }*/
+            }
 
             RegisterScene(Engine.LoadingScene);
         }
@@ -376,10 +376,10 @@ namespace DKEngine
                     Engine.CurrentScene.NewlyGeneratedComponents.Pop().InitInternal();
                 }
 
-                /*while (Engine.CurrentScene?.NewlyGeneratedBehaviors.Count > 0)
+                while (Engine.CurrentScene?.NewlyGeneratedBehaviors.Count > 0)
                 {
                     Engine.CurrentScene.NewlyGeneratedBehaviors.Pop().Start();
-                }*/
+                }
 
                 while (Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)
                 {

@@ -32,6 +32,9 @@ namespace MarIO.Assets.Models
         {
             this.Name = "Player";
 
+            //this.InitNewComponent<Collider>();
+            //this.Collider.Area = new RectangleF(0, 0, 14, 16);
+
             this.InitNewComponent<Animator>();
             this.Animator.AddAnimation("idle", Database.GetGameObjectMaterial("mario"));
             this.Animator.AddAnimation("right_move", Database.GetGameObjectMaterial("mario_move_right"));

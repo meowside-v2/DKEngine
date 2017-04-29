@@ -20,8 +20,6 @@ namespace MarIO.Assets.Scenes
 
         public override void Load()
         {
-            new GUIUpdater();
-
             Group _1 = new Group()
             {
                 Name = "ground1",
@@ -93,6 +91,8 @@ namespace MarIO.Assets.Scenes
             {
                 BackGround = System.Drawing.Color.FromArgb(0xFF, 0x20, 0xEE, 0xEE)
             };
+
+            new GUIUpdater();
         }
 
         public override void Set(params string[] Args)
