@@ -24,16 +24,20 @@ namespace MarIO.Assets.Scripts
         float horiSpeed = 0;
         float vertSpeed = 0;
 
-        protected float MovementSpeed = 150f;
-        protected float FloatSpeed = 120f;
+        float MovementSpeed = 150f;
+        float FloatSpeed = 120f;
 
-        protected float Acceleration = 40f;
+        float Acceleration = 40f;
 
-        protected bool CanJump = true;
+        float DeathAnimHeight = 50;
+        float DeathAnimStartY = float.MinValue;
+
+        bool CanJump = true;
         bool IsFalling = false;
         bool Jumped = false;
         bool IsFacingLeft = false;
         bool EnemyKilledAnim = false;
+        bool FirstTimeDeadAnimPlay = true;
 
         string IDLE
         {
@@ -145,7 +149,22 @@ namespace MarIO.Assets.Scripts
         private void DeadAnimation()
         {
             horiSpeed = 0;
-            Player.Collider.Destroy();
+
+            if (FirstTimeDeadAnimPlay)
+            {
+                DeathAnimStartY = Player.Transform.Position.Y;
+
+                Player.Collider.Destroy();
+
+                foreach (GameObject child in Player.Child)
+                {
+                    child.Collider.Destroy();
+                }
+
+                FirstTimeDeadAnimPlay = false;
+            }
+
+
         }
 
         private void CameraControl()
