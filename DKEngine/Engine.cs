@@ -31,7 +31,7 @@ namespace DKEngine
             public static bool IsSoundEnabled = false;
             public static float SoundVolume = 1f;
 
-            public readonly static SoundPlayer Instance = new SoundPlayer();
+            internal readonly static SoundPlayer Instance = new SoundPlayer();
         }
 
         public static class Render
@@ -231,15 +231,15 @@ namespace DKEngine
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
-            while (Engine.LoadingScene.NewlyGeneratedGameObjects.Count > 0)
+            while (Engine.LoadingScene.NewlyGeneratedComponents.Count > 0)
             {
-                Engine.LoadingScene.NewlyGeneratedGameObjects.Pop().InitInternal();
+                Engine.LoadingScene.NewlyGeneratedComponents.Pop().InitInternal();
             }
 
-            while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
+            /*while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
             {
                 Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
-            }
+            }*/
 
             Database.AddScene(Engine.LoadingScene);
             
@@ -251,15 +251,15 @@ namespace DKEngine
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
-            while (Engine.LoadingScene.NewlyGeneratedGameObjects.Count > 0)
+            while (Engine.LoadingScene.NewlyGeneratedComponents.Count > 0)
             {
-                Engine.LoadingScene.NewlyGeneratedGameObjects.Pop().InitInternal();
+                Engine.LoadingScene.NewlyGeneratedComponents.Pop().InitInternal();
             }
 
-            while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
+            /*while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
             {
                 Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
-            }
+            }*/
 
             RegisterScene(Engine.LoadingScene);
         }
@@ -371,15 +371,15 @@ namespace DKEngine
 
                 UpdateEvent?.Invoke();
 
-                while (Engine.CurrentScene?.NewlyGeneratedGameObjects.Count > 0)
+                while (Engine.CurrentScene?.NewlyGeneratedComponents.Count > 0)
                 {
-                    Engine.CurrentScene.NewlyGeneratedGameObjects.Pop().InitInternal();
+                    Engine.CurrentScene.NewlyGeneratedComponents.Pop().InitInternal();
                 }
 
-                while (Engine.CurrentScene?.NewlyGeneratedBehaviors.Count > 0)
+                /*while (Engine.CurrentScene?.NewlyGeneratedBehaviors.Count > 0)
                 {
                     Engine.CurrentScene.NewlyGeneratedBehaviors.Pop().Start();
-                }
+                }*/
 
                 while (Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)
                 {

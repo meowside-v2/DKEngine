@@ -15,7 +15,7 @@ namespace MarIO.Assets.Models
 {
     class GUIUpdater : GameObject
     {
-        protected override void Init()
+        protected override void Initialize()
         {
             Name = "GUI";
 

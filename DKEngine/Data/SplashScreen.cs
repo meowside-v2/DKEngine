@@ -24,7 +24,7 @@ namespace DKEngine
             this.InitNewComponent<Animator>();
         }
 
-        protected override void Init()
+        protected override void Initialize()
         { }
     }
 }

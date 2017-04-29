@@ -21,7 +21,7 @@ namespace DKEngine.Core.Components
         /// <summary>
         /// Determines size and position of collider
         /// </summary>
-        public RectangleF Area;
+        public RectangleF Area = new RectangleF();
 
         /// <summary>
         /// If is TRUE => Triggers OnColliderEnter once another GameObject enter this collider
@@ -44,91 +44,7 @@ namespace DKEngine.Core.Components
         /// <param name="Parent">Parent of collider (determines size of collider)</param>
         internal Collider(GameObject Parent)
             : base(Parent)
-        {
-            this.Area = new RectangleF(0, 0, Parent.Transform.Dimensions.X, Parent.Transform.Dimensions.Y);
-            this.Name = string.Format("{0}_Collider", Parent.Name);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
-        }
-
-        /// <summary>
-        /// Creates new Instance of Collider class
-        /// </summary>
-        /// <param name="Parent"></param>
-        /// <param name="collidableReference"></param>
-        /// <param name="Xoffset">Horizontal offset</param>
-        /// <param name="Yoffset">Vertical offset</param>
-        /// <param name="Width">Width of collider</param>
-        /// <param name="Height">Height of collider</param>
-        internal Collider(GameObject Parent, float Xoffset, float Yoffset, float Width, float Height)
-            :base(Parent)
-        {
-            this.Area = new RectangleF(Xoffset, Yoffset, Width, Height);
-            this.Name = string.Format("{0}_Collider", Parent.Name);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
-        }
-        
-        /// <summary>
-        /// Creates new Instance of Collider class
-        /// </summary>
-        /// <param name="Parent">Parent of collider</param>
-        /// <param name="Area">Determines size and position of collider</param>
-        internal Collider(GameObject Parent, RectangleF Area)
-            : base(Parent)
-        {
-            this.Area = Area;
-            this.Name = string.Format("{0}_Collider", Parent.Name);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
-        }
-
-        /// <summary>
-        /// Creates new Instance of Collider class
-        /// </summary>
-        /// <param name="Parent">Parent of collider</param>
-        /// <param name="Coordinates">Determines position of collider</param>
-        /// <param name="Size">Determines size of collider</param>
-        internal Collider(GameObject Parent, PointF Coordinates, SizeF Size)
-            : base(Parent)
-        {
-            this.Area = new RectangleF(Coordinates, Size);
-            this.Name = string.Format("{0}_Collider", Parent.Name);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
-        }
+        { }
 
 #if DEBUG
 
@@ -574,6 +490,24 @@ namespace DKEngine.Core.Components
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal sealed override void Init()
+        {
+            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Collider));
+
+            if (Area == null)
+                Area = new RectangleF();
+
+            try
+            {
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+                Engine.LoadingScene.AllGameObjectsColliders.Add(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
             }
         }
     }

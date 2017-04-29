@@ -164,7 +164,7 @@ namespace DKEngine.Core.UI
         {
             try
             {
-                Engine.CurrentScene.NewlyGeneratedGameObjects.Pop();
+                Engine.CurrentScene.NewlyGeneratedComponents.Pop();
             }
             catch { }
                 
@@ -185,7 +185,7 @@ namespace DKEngine.Core.UI
             Animator = null;
         }
 
-        protected override void Init()
+        protected override void Initialize()
         {
             this.InitNewScript<TextControlScript>();
         }

@@ -24,9 +24,9 @@ namespace DKEngine.Core.UI
             try
             {
                 Engine.LoadingScene.AllComponents.Remove(this.Name);
-                if (Engine.LoadingScene.NewlyGeneratedGameObjects.Contains(this))
+                if (Engine.LoadingScene.NewlyGeneratedComponents.Contains(this))
                 {
-                    Engine.LoadingScene.NewlyGeneratedGameObjects.Pop();
+                    Engine.LoadingScene.NewlyGeneratedComponents.Pop();
                 }
             }
             catch
@@ -55,7 +55,7 @@ namespace DKEngine.Core.UI
             Model = null;
         }
 
-        protected override void Init()
+        protected override void Initialize()
         { }
     }
 }

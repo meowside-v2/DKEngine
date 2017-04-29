@@ -24,5 +24,8 @@ namespace DKEngine.Core.Components
 
         public override void Destroy()
         { }
+
+        internal override void Init()
+        { }
     }
 }

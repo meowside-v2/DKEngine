@@ -16,7 +16,7 @@ namespace DKEngine.Core.UI
             : base(Parent)
         { }
 
-        protected override void Init()
+        protected override void Initialize()
         { }
     }
 }

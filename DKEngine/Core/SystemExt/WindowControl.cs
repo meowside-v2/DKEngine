@@ -29,11 +29,7 @@ namespace DKEngine.Core.Ext
         private static extern IntPtr GetStdHandle(int handle);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool SetConsoleDisplayMode(
-            IntPtr ConsoleOutput
-            , uint Flags
-            , out COORD NewScreenBufferDimensions
-            );
+        private static extern bool SetConsoleDisplayMode(IntPtr ConsoleOutput, uint Flags, out COORD NewScreenBufferDimensions);
 
 
         private static IntPtr hConsole = GetStdHandle(-11);

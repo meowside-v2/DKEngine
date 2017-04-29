@@ -11,7 +11,7 @@ namespace MarIO.Assets.Models
 {
     class MusicPlayer : GameObject
     {
-        protected override void Init()
+        protected override void Initialize()
         {
             this.Name = "MusicPlayer";
             this.InitNewComponent<SoundSource>();

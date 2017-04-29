@@ -17,7 +17,7 @@ namespace MarIO.Assets.Models.Miscellaneous
             :base(Parent)
         { }
 
-        protected override void Init()
+        protected override void Initialize()
         {
             this.Name = "heart";
             //this.TypeName = "coin";

@@ -12,14 +12,14 @@ namespace DKEngine.Core
         public string Name = "";
 
         internal readonly Dictionary<string, Component> AllComponents;
-        internal readonly Dictionary<string, GameObject> AllGameObjects;
+        //internal readonly Dictionary<string, GameObject> AllGameObjects;
 
         internal readonly List<GameObject> Model;
         internal readonly List<Behavior>   AllBehaviors;
         internal readonly List<Collider>   AllGameObjectsColliders;
 
-        internal readonly Stack<GameObject> NewlyGeneratedGameObjects;
-        internal readonly Stack<Behavior> NewlyGeneratedBehaviors;
+        internal readonly Stack<Component> NewlyGeneratedComponents;
+        //internal readonly Stack<Behavior> NewlyGeneratedBehaviors;
 
         internal readonly Stack<GameObject> GameObjectsToAddToRender;
         internal readonly Stack<GameObject> GameObjectsAddedToRender;
@@ -27,14 +27,14 @@ namespace DKEngine.Core
         public Scene()
         {
             AllComponents = new Dictionary<string, Component>(0xFFFF);
-            AllGameObjects = new Dictionary<string, GameObject>(0xFFFF);
+            //AllGameObjects = new Dictionary<string, GameObject>(0xFFFF);
 
             AllBehaviors              = new List<Behavior>(0xFFFF);
             Model                     = new List<GameObject>(0xFFFF);
             AllGameObjectsColliders   = new List<Collider>(0xFFFF);
 
-            NewlyGeneratedGameObjects = new Stack<GameObject>(0xFFFF);
-            NewlyGeneratedBehaviors   = new Stack<Behavior>(0xFFFF);
+            NewlyGeneratedComponents = new Stack<Component>(0xFFFF);
+            //NewlyGeneratedBehaviors   = new Stack<Behavior>(0xFFFF);
 
             GameObjectsToAddToRender  = new Stack<GameObject>(0xFFFF);
             GameObjectsAddedToRender  = new Stack<GameObject>(0xFFFF);

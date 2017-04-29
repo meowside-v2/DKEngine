@@ -42,28 +42,7 @@ namespace DKEngine.Core.Components
        
         public Animator(GameObject Parent)
             :base(Parent)
-        {
-            this.CurrentAnimationTime = new TimeSpan(0);
-            this.Animations           = new Dictionary<string, AnimationNode>();
-            this.Parent = Parent;
-
-            this.Name = string.Format("{0}_Animator", Parent.Name);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
-
-            /*if(Parent.Model != null)
-            {
-                Animations.Add("default", new AnimationNode("default", Parent.Model));
-                this.Play("default");
-            }*/
-        }
+        { }
 
         public void AddAnimation(string Name, Material Source)
         {
@@ -117,6 +96,20 @@ namespace DKEngine.Core.Components
             
             Parent = null;
             UpdateHandle = null;
+        }
+
+        protected override void Initialize()
+        {
+            this.CurrentAnimationTime = new TimeSpan(0);
+            this.Animations = new Dictionary<string, AnimationNode>();
+
+            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Animator));
+
+            if (Parent.Model != null)
+            {
+                Animations.Add("default", new AnimationNode("default", Parent.Model));
+                this.Play("default");
+            }
         }
     }
 }

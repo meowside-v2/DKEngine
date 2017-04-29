@@ -13,7 +13,7 @@ namespace MarIO.Assets.Scripts
 {
     class CharacterController : Script
     {
-        GameObject Player;
+        Mario Player;
         Camera TargetCam;
         Vector3 Offset;
 
@@ -70,7 +70,7 @@ namespace MarIO.Assets.Scripts
             MaxCameraDistance = Engine.Render.RenderWidth / 3;
             Offset = new Vector3(20, 0, 0);
 
-            Player = GameObject.Find<GameObject>("Player");
+            Player = GameObject.Find<Mario>("Player");
             TargetCam = Component.Find<Camera>("Camera");
             TargetCam.Position = new Vector3(0, -180, 0);
 
@@ -78,6 +78,44 @@ namespace MarIO.Assets.Scripts
         }
 
         protected override void Update()
+        {
+            if (!Player.IsDestroyed)
+            {
+                Movement();
+            }
+            else
+            {
+                DeadAnimation();
+            }
+            
+            Player.Transform.Position = Player.Transform.Position.Add(horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
+
+            CameraControl();
+        }
+
+        private void DeadAnimation()
+        {
+
+        }
+
+        private void CameraControl()
+        {
+            if (Player.Transform.Position.X - TargetCam.Position.X > MaxCameraDistance)
+            {
+                TargetCam.Position.X += Player.Transform.Position.X - PositionX;
+            }
+
+            if (Player.Transform.Position.X < TargetCam.Position.X)
+            {
+                Player.Transform.Position = Player.Transform.Position.Add(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
+                horiSpeed = 0f;
+                Player.Animator.Play(IDLE);
+            }
+
+            PositionX = Player.Transform.Position.X;
+        }
+
+        private void Movement()
         {
             if (Player.Collider.Collision(Collider.Direction.Down))
             {
@@ -125,8 +163,8 @@ namespace MarIO.Assets.Scripts
                     horiSpeed = 0;
                     if (Player.Animator.Current.Name != RIGHTJUMP && Player.Animator.Current.Name != LEFTJUMP)
                         Player.Animator.Play(IDLE);
-                    
-                }  
+
+                }
             }
 
 
@@ -169,7 +207,7 @@ namespace MarIO.Assets.Scripts
                     {
                         if (vertSpeed == 0 && !Jumped)
                         {
-                            if(horiSpeed >= 0)
+                            if (horiSpeed >= 0)
                             {
                                 Player.Animator.Play(RIGHTJUMP);
                             }
@@ -223,22 +261,6 @@ namespace MarIO.Assets.Scripts
                     }
                 }
             }
-            
-            Player.Transform.Position = Player.Transform.Position.Add(horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
-
-            if (Player.Transform.Position.X - TargetCam.Position.X > MaxCameraDistance)
-            {
-                TargetCam.Position.X += Player.Transform.Position.X - PositionX;
-            }
-
-            if (Player.Transform.Position.X < TargetCam.Position.X)
-            {
-                Player.Transform.Position = Player.Transform.Position.Add(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
-                horiSpeed = 0f;
-                Player.Animator.Play(IDLE);
-            }
-
-            PositionX = Player.Transform.Position.X;
         }
     }
 }

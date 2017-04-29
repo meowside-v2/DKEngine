@@ -23,6 +23,8 @@ namespace DKEngine.Core
 
         protected internal abstract void OnColliderEnter(Collider e);
 
+        protected sealed override void Initialize()
+        { }
         public override void Destroy()
         {
             if(UpdateHandle != null)

@@ -12,7 +12,7 @@ namespace DKEngine
             : base(Parent)
         { }
 
-        protected override void Init()
+        protected override void Initialize()
         {
             this.TypeName = "border";
         }

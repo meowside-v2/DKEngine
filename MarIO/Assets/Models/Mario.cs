@@ -13,6 +13,13 @@ namespace MarIO.Assets.Models
 {
     class Mario : AnimatedObject
     {
+        public Mario()
+        { }
+
+        public Mario(GameObject Parent)
+            : base(Parent)
+        { }
+
         public enum State
         {
             Small,
@@ -21,7 +28,7 @@ namespace MarIO.Assets.Models
             Invincible
         };
 
-        protected override void Init()
+        protected override void Initialize()
         {
             this.Name = "Player";
 

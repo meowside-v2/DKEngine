@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DKEngine.Core.Ext;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,10 +20,34 @@ namespace DKEngine.Core.Components
         {
             this.Parent = Parent;
             LastUpdated = Engine.LastUpdated;
+
+            try
+            {
+                Engine.LoadingScene.NewlyGeneratedComponents.Push(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+            }
         }
 
-        public abstract void Destroy();
+        internal void InitInternal()
+        {
+            Init();
 
+            try
+            {
+                Engine.LoadingScene.AllComponents.AddSafe(this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
+            }
+        }
+
+        internal abstract void Init();
+        public abstract void Destroy();
+        
         public static T Find<T>(string Name) where T : Component
         {
             T retValue = null;

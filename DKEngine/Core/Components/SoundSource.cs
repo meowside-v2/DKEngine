@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace DKEngine.Core.Components
 {
-    public class SoundPlayer
+    internal class SoundPlayer
     {
         private readonly IWavePlayer outputDevice;
         private readonly MixingSampleProvider mixer;
@@ -93,18 +93,7 @@ namespace DKEngine.Core.Components
 
         public SoundSource(GameObject Parent)
             :base(Parent)
-        {
-            this.Name = string.Format("{0}_SoundSource", Parent.Name);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
-        }
+        { }
 
         public void PlaySound(Sound sound)
         {
@@ -134,6 +123,11 @@ namespace DKEngine.Core.Components
             { }
 
             this.Parent = null;
+        }
+
+        internal override void Init()
+        {
+            this.Name = string.Format("{0}_{1}", Parent.Name, nameof(SoundSource));
         }
     }
 

@@ -165,7 +165,7 @@ namespace DKEngine.Core
             }
         }
 
-        private static Dictionary<string, Material> GameObjects = new Dictionary<string, Material>();
+        private static Dictionary<string, Material> CachedMaterials = new Dictionary<string, Material>();
         private static Dictionary<string, Scene>    CachedScenes = new Dictionary<string, Scene>();
 
         internal static void InitDatabase()
@@ -212,7 +212,7 @@ namespace DKEngine.Core
             {
                 if (Object != null)
                 {
-                    GameObjects.Add(ObjectName, Object);
+                    CachedMaterials.Add(ObjectName, Object);
                 }
                 else
                     throw new Exception("Material is null\n" + Object.ToString());
@@ -229,7 +229,7 @@ namespace DKEngine.Core
 
             try
             {
-                retValue = GameObjects[Key];
+                retValue = CachedMaterials[Key];
             }
             catch (Exception ex)
             {
@@ -245,7 +245,7 @@ namespace DKEngine.Core
 
             try
             {
-                retValue = GameObjects.ElementAtOrDefault(Position).Value;
+                retValue = CachedMaterials.ElementAtOrDefault(Position).Value;
             }
             catch (Exception ex)
             {
@@ -257,7 +257,7 @@ namespace DKEngine.Core
         
         public static string GetMaterialDatabaseKey(int Position)
         {
-            return GameObjects.ElementAtOrDefault(Position).Key; //.FirstOrDefault(x => x.Value == Position).Key;
+            return CachedMaterials.ElementAtOrDefault(Position).Key; //.FirstOrDefault(x => x.Value == Position).Key;
         }
 
         public static void LoadResources(ResourceSet source)

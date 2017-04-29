@@ -19,7 +19,7 @@ namespace MarIO.Assets.Models
             :base(Parent)
         { }
 
-        protected override void Init()
+        protected override void Initialize()
         {
             this.InitNewComponent<Collider>();
         }

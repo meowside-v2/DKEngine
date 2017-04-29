@@ -23,7 +23,7 @@ namespace MarIO.Assets.Models
         public Block.BlockType Type { get; set; }
         public Vector3 SizeInBlocks { get; set; }
 
-        protected override void Init()
+        protected override void Initialize()
         {
             Material tmp = Database.GetGameObjectMaterial(Block.BlockTypeNames[Type]);
 

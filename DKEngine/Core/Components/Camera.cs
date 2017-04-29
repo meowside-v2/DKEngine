@@ -29,21 +29,11 @@ namespace DKEngine.Core.Components
 
         public Camera()
             :base(null)
-        {
-            this.Position = new Vector3(0, 0, 0);
-            Engine.BaseCam = this;
+        { }
 
-            this.Name = Parent != null ? string.Format("{0}_Camera", Parent.Name) : string.Format("Camera", Engine.LoadingScene.AllComponents.Count);
-
-            try
-            {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
-        }
+        public Camera(GameObject Parent)
+            :base(Parent)
+        { }
         
         internal void BufferImage(List<GameObject> GameObjectsInView)
         {
@@ -117,12 +107,20 @@ namespace DKEngine.Core.Components
             Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
         }
 
-        public override void Destroy()
+        public sealed override void Destroy()
         {
             if (Engine.BaseCam == this)
                 Engine.BaseCam = null;
 
             Parent = null;
+        }
+
+        internal sealed override void Init()
+        {
+            this.Position = new Vector3(0, 0, 0);
+            Engine.BaseCam = this;
+
+            this.Name = Parent != null ? string.Format("{0}_{1}", Parent.Name, nameof(Camera)) : string.Format("{0}_{1}", nameof(Camera), Engine.LoadingScene.AllComponents.Count);
         }
     }
 }

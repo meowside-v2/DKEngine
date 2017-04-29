@@ -114,15 +114,7 @@ namespace DKEngine.Core
             };
             //this.Collider             = new Collider(this);
             //this.Animator             = new Animator(this);
-
-            try
-            {
-                Engine.LoadingScene.NewlyGeneratedGameObjects.Push(this);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-            }
+            
         }
 
         public GameObject(GameObject Parent)
@@ -146,32 +138,12 @@ namespace DKEngine.Core
                 Parent.Child.Add(this);
                 this.Transform.Position = Parent.Transform.Position;
                 this.Transform.Scale    = Parent.Transform.Scale;
-
-                try
-                {
-                    Engine.LoadingScene.NewlyGeneratedGameObjects.Push(this);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-                }
-            }
-            else
-            {
-                try
-                {
-                    Engine.LoadingScene.NewlyGeneratedGameObjects.Push(this);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Loading scene is NULL\n\n{0}", e);
-                }
             }
         }
 
-        internal void InitInternal()
+        internal override void Init()
         {
-            Init();
+            Initialize();
 
             try
             {
@@ -181,7 +153,7 @@ namespace DKEngine.Core
                 if(typeof(Letter) != this.GetType())
                 {
                     Engine.LoadingScene.AllComponents.AddSafe(this);
-                    Engine.LoadingScene.AllGameObjects.AddSafe(this);
+                    //Engine.LoadingScene.AllGameObjects.AddSafe(this);
                 }
                 
                 Engine.LoadingScene.GameObjectsToAddToRender.Push(this);
@@ -192,7 +164,7 @@ namespace DKEngine.Core
             }
         }
 
-        protected abstract void Init();
+        protected abstract void Initialize();
 
         public void InitNewScript<T>() where T : Script
         {
@@ -211,11 +183,11 @@ namespace DKEngine.Core
                 return;
             }
 
-            if (typeof(T).IsSubclassOf(typeof(Script)))
+            /*if (typeof(T).IsSubclassOf(typeof(Script)))
             {
                 this.Scripts.Add((Script)Activator.CreateInstance(typeof(T), (GameObject)this));
                 return;
-            }
+            }*/
 
             if (typeof(T) == typeof(Collider) || typeof(T).IsSubclassOf(typeof(Collider)))
             {
@@ -244,7 +216,7 @@ namespace DKEngine.Core
         {
             try
             {
-                Engine.CurrentScene.NewlyGeneratedGameObjects.Pop();
+                Engine.CurrentScene.NewlyGeneratedComponents.Pop();
             }
             catch { }
 
@@ -254,11 +226,11 @@ namespace DKEngine.Core
             }
             catch { }
 
-            try
+            /*try
             {
                 Engine.CurrentScene.AllGameObjects.Remove(this.Name);
             }
-            catch { }
+            catch { }*/
 
             try
             {
@@ -292,13 +264,29 @@ namespace DKEngine.Core
         internal virtual void Render()
         { Model?.Render(this, Foreground); }
 
+        public static new T Find<T>(string Name) where T : GameObject
+        {
+            T retValue = null;
+
+            try
+            {
+                retValue = (T)Engine.LoadingScene.AllComponents[Name];
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Object not found\n" + ex);
+            }
+
+            return retValue;
+        }
+
         public static GameObject Find(string Name)
         {
             GameObject retValue = null;
 
             try
             {
-                retValue = Engine.LoadingScene.AllGameObjects[Name];
+                retValue = (GameObject)Engine.LoadingScene.AllComponents[Name];
             }
             catch (Exception ex)
             {

@@ -12,7 +12,7 @@ namespace MarIO
 {
     class TestObject : GameObject
     {
-        protected override void Init()
+        protected override void Initialize()
         {
             this.Name = "changer";
             this.InitNewScript<ChangerScript>();
