@@ -148,7 +148,6 @@ namespace DKEngine
 
         private static TextBlock FpsMeter;
         private static Stopwatch DeltaT;
-        private static Stopwatch EnvironmentTimer;
         internal static Camera BaseCam;
 
         internal static Scene CurrentScene { get; set; }
@@ -159,9 +158,12 @@ namespace DKEngine
         private static float deltaT = 0;
         public static float DeltaTime { get { return deltaT; } }
 
+        private static TimeSpan lastUpdated = new TimeSpan();
+        public static TimeSpan LastUpdated { get { return lastUpdated; } }
+
         public static string SceneName { get { return Engine.LoadingScene != null ? Engine.LoadingScene.Name : ""; } }
 
-        internal static TimeSpan LastUpdated { get; private set; }
+        
 
         internal static event EngineHandler UpdateEvent;
         internal delegate void EngineHandler();
@@ -186,7 +188,6 @@ namespace DKEngine
                     Input.KeysReleased = new bool[Input.NumberOfKeys];
 
                     DeltaT = Stopwatch.StartNew();
-                    EnvironmentTimer = Stopwatch.StartNew();
 
                     RenderObjects = new List<GameObject>(0xFFFF);
 
@@ -364,10 +365,9 @@ namespace DKEngine
             
             while (true)
             {
-                Engine.LastUpdated = EnvironmentTimer.Elapsed;
-
                 Input.CheckForKeys();
 
+                lastUpdated += DeltaT.Elapsed;
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;
                 DeltaT?.Restart();
 
@@ -380,7 +380,9 @@ namespace DKEngine
 
                 while (Engine.CurrentScene?.NewlyGeneratedBehaviors.Count > 0)
                 {
-                    Engine.CurrentScene.NewlyGeneratedBehaviors.Pop().Start();
+                    Behavior tmp = Engine.CurrentScene.NewlyGeneratedBehaviors.Pop();
+                    UpdateEvent += tmp.UpdateHandle;
+                    tmp.Start();
                 }
 
                 while (Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)

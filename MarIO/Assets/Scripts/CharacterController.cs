@@ -26,20 +26,21 @@ namespace MarIO.Assets.Scripts
         float horiSpeed = 0;
         float vertSpeed = 0;
 
-        float MovementSpeed = 150f;
+        float MovementSpeed = 80f;
         float FloatSpeed = 120f;
 
-        float Acceleration = 40f;
+        float Acceleration = 2f;
 
         float DeathAnimHeight = 50;
         float DeathAnimStartY = float.MinValue;
-
+        
         bool CanJump = true;
         bool IsFalling = false;
         bool Jumped = false;
         bool IsFacingLeft = false;
         bool EnemyKilledAnim = false;
         bool FirstTimeDeadAnimPlay = true;
+        //bool 
 
         string IDLE
         {
@@ -119,13 +120,14 @@ namespace MarIO.Assets.Scripts
             TargetCam = Component.Find<Camera>("Camera");
             TargetCam.Position = new Vector3(0, -180, 0);
 
-            Player.Animator.Play("idle");
-
             test = new Parabola(Player)
             {
-                Time = new TimeSpan(0, 0, 0, 0, 500),
-                Y = 120
+                Y = FloatSpeed,
+                Time = new TimeSpan(0, 0, 1)
             };
+
+            Player.Animator.Play("idle");
+            
         }
 
         protected override void Update()
@@ -202,12 +204,81 @@ namespace MarIO.Assets.Scripts
             }
 
 
+            if (Engine.Input.IsKeyDown(ConsoleKey.A) || horiSpeed < 0)
+            {
+                Left();
+            }
+
+            if (Engine.Input.IsKeyDown(ConsoleKey.W) || Jumped)
+            {
+                Jump();
+            }
+
+            if (Engine.Input.IsKeyDown(ConsoleKey.D) || horiSpeed > 0)
+            {
+                Right();
+            }
+            
+            if (!Player.Collider.Collision(Collider.Direction.Down))
+            {
+                Fall();
+            }
+        }
+
+        private void Jump()
+        {
+            if (Engine.Input.IsKeyDown(ConsoleKey.W))
+            {
+                if (CanJump)
+                {
+                    if (!IsFalling)
+                    {
+                        //if (/*vertSpeed == 0 && !Jumped*/)
+                        //{
+                            test.Enabled = true;
+                            vertSpeed = test.Accumulated; /*-FloatSpeed * 1.5f;*/
+                            Jumped = true;
+                        //}
+                        /*else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
+                        {
+                            vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed;
+                        }
+                        else
+                        {
+                            vertSpeed = 0;
+                            IsFalling = true;
+                        }*/
+                    }
+                }
+            }
+            else if (Jumped)
+            {
+                if (EnemyKilledAnim)
+                {
+                    //vertSpeed = test.Accumulated;
+                    vertSpeed = test.Accumulated; //vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed * 4;
+
+                    if (vertSpeed <= 0)
+                    {
+                        IsFalling = true;
+                    }
+                }
+                else if (!IsFalling)
+                {
+                    vertSpeed = -vertSpeed;
+                    IsFalling = true;
+                }
+            }
+        }
+
+        private void Left()
+        {
             if (Engine.Input.IsKeyDown(ConsoleKey.A))
             {
                 IsFacingLeft = true;
                 if (!Player.Collider.Collision(Collider.Direction.Left) && horiSpeed > -MovementSpeed)
                 {
-                    horiSpeed -= Engine.DeltaTime * Acceleration;
+                    horiSpeed -= Engine.DeltaTime * Acceleration * MovementSpeed;
                 }
                 else if (Player.Collider.Collision(Collider.Direction.Left))
                 {
@@ -221,43 +292,23 @@ namespace MarIO.Assets.Scripts
             else if (horiSpeed < 0)
             {
                 IsFacingLeft = true;
-                horiSpeed += Engine.DeltaTime * Acceleration * 2;
+                horiSpeed += Engine.DeltaTime * Acceleration * MovementSpeed * 2;
 
                 if (horiSpeed >= 0 || Player.Collider.Collision(Collider.Direction.Left))
                 {
                     horiSpeed = 0;
                 }
             }
+        } 
 
-            if (Engine.Input.IsKeyDown(ConsoleKey.W))
-            {
-                Jump();
-            }
-            else if (Jumped)
-            {
-                if (EnemyKilledAnim)
-                {
-                    //vertSpeed = test.Accumulated;
-                    vertSpeed += Engine.DeltaTime * Acceleration * 4;
-
-                    if (vertSpeed <= 0)
-                    {
-                        IsFalling = true;
-                    }
-                }
-                else if (!IsFalling)
-                {
-                    vertSpeed = -vertSpeed;
-                    IsFalling = true;
-                }
-            }
-
+        private void Right()
+        {
             if (Engine.Input.IsKeyDown(ConsoleKey.D))
             {
                 IsFacingLeft = false;
                 if (!Player.Collider.Collision(Collider.Direction.Right) && horiSpeed < MovementSpeed)
                 {
-                    horiSpeed += Engine.DeltaTime * Acceleration;
+                    horiSpeed += Engine.DeltaTime * Acceleration * MovementSpeed;
                 }
                 else if (Player.Collider.Collision(Collider.Direction.Right))
                 {
@@ -271,63 +322,38 @@ namespace MarIO.Assets.Scripts
             else if (horiSpeed > 0)
             {
                 IsFacingLeft = false;
-                horiSpeed -= Engine.DeltaTime * Acceleration * 2;
+                horiSpeed -= Engine.DeltaTime * Acceleration * MovementSpeed * 2;
 
                 if (horiSpeed <= 0 || Player.Collider.Collision(Collider.Direction.Right))
                 {
                     horiSpeed = 0;
                 }
             }
-            
-            if (!Player.Collider.Collision(Collider.Direction.Down))
-            {
-                if (!IsFalling && !Jumped)
-                {
-                    vertSpeed = 0;
-                    Jumped = true;
-                    IsFalling = true;
-                }
+        } 
 
-                else if (IsFalling)
-                {
-                    if (vertSpeed < FloatSpeed)
-                    {
-                        vertSpeed += Engine.DeltaTime * Acceleration;
-                    }
-                    else
-                    {
-                        vertSpeed = FloatSpeed;
-                    }
-                }
-            }
-        }
-
-        public void Jump()
+        private void Fall()
         {
-            if (CanJump)
+            if (!IsFalling && !Jumped)
             {
-                if (!IsFalling)
+                vertSpeed = 0;
+                Jumped = true;
+                IsFalling = true;
+            }
+
+            else if (IsFalling)
+            {
+                if (vertSpeed < FloatSpeed)
                 {
-                    if (vertSpeed == 0 && !Jumped)
-                    {
-                        test.Enabled = true;
-                        vertSpeed = test.Accumulated;//-FloatSpeed;
-                        Jumped = true;
-                    }
-                    else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
-                    {
-                        vertSpeed += test.Accumulated;//Engine.DeltaTime * Acceleration * 2;
-                    }
-                    else
-                    {
-                        vertSpeed = 0;
-                        IsFalling = true;
-                    }
+                    vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed;
+                }
+                else
+                {
+                    vertSpeed = FloatSpeed;
                 }
             }
         }
 
-        public void AnimationControl()
+        private void AnimationControl()
         {
             if (!Player.IsDestroyed)
             {

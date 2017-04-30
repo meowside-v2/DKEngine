@@ -19,8 +19,6 @@ namespace DKEngine.Core.Components
 
         internal sealed override void Init()
         {
-            Initialize();
-
             try
             {
                 Engine.LoadingScene.AllBehaviors.Add(this);
@@ -32,7 +30,6 @@ namespace DKEngine.Core.Components
             }
         }
 
-        protected abstract void Initialize();
         protected internal abstract void Start();
         protected internal abstract void Update();
     }

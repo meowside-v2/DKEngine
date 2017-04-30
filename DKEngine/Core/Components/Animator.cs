@@ -111,14 +111,5 @@ namespace DKEngine.Core.Components
             Parent = null;
             UpdateHandle = null;
         }
-
-        protected override void Initialize()
-        {
-            /*if (Parent.Model != null)
-            {
-                AddAnimation("default", Parent.Model);
-                this.Play("default");
-            }*/
-        }
     }
 }
