@@ -148,6 +148,7 @@ namespace DKEngine
 
         private static TextBlock FpsMeter;
         private static Stopwatch DeltaT;
+        private static Stopwatch EnvironmentTimer;
         internal static Camera BaseCam;
 
         internal static Scene CurrentScene { get; set; }
@@ -160,7 +161,7 @@ namespace DKEngine
 
         public static string SceneName { get { return Engine.LoadingScene != null ? Engine.LoadingScene.Name : ""; } }
 
-        internal static long LastUpdated = 0;
+        internal static TimeSpan LastUpdated { get; private set; }
 
         internal static event EngineHandler UpdateEvent;
         internal delegate void EngineHandler();
@@ -185,6 +186,7 @@ namespace DKEngine
                     Input.KeysReleased = new bool[Input.NumberOfKeys];
 
                     DeltaT = Stopwatch.StartNew();
+                    EnvironmentTimer = Stopwatch.StartNew();
 
                     RenderObjects = new List<GameObject>(0xFFFF);
 
@@ -359,10 +361,10 @@ namespace DKEngine
             int       NumberOfFrames = 0;
             TimeSpan  timeOut        = new TimeSpan(0, 0, 0, 0, 500);
             Stopwatch time           = Stopwatch.StartNew();
-
+            
             while (true)
             {
-                Engine.LastUpdated = Environment.TickCount;
+                Engine.LastUpdated = EnvironmentTimer.Elapsed;
 
                 Input.CheckForKeys();
 

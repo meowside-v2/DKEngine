@@ -1,5 +1,4 @@
-﻿using DKEngine.Core.Scripts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +7,7 @@ using DKEngine.Core;
 using DKEngine;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
+using DKBasicEngine_1_0.Core.Components;
 
 namespace MarIO.Assets.Scripts
 {
@@ -17,6 +17,8 @@ namespace MarIO.Assets.Scripts
         Mario Player;
         Camera TargetCam;
         Vector3 Offset;
+
+        Parabola test;
 
         float PositionX;
         float MaxCameraDistance;
@@ -118,6 +120,12 @@ namespace MarIO.Assets.Scripts
             TargetCam.Position = new Vector3(0, -180, 0);
 
             Player.Animator.Play("idle");
+
+            test = new Parabola(Player)
+            {
+                Time = new TimeSpan(0, 0, 0, 0, 500),
+                Y = 120
+            };
         }
 
         protected override void Update()
@@ -229,9 +237,10 @@ namespace MarIO.Assets.Scripts
             {
                 if (EnemyKilledAnim)
                 {
+                    //vertSpeed = test.Accumulated;
                     vertSpeed += Engine.DeltaTime * Acceleration * 4;
 
-                    if(vertSpeed <= 0)
+                    if (vertSpeed <= 0)
                     {
                         IsFalling = true;
                     }
@@ -301,12 +310,13 @@ namespace MarIO.Assets.Scripts
                 {
                     if (vertSpeed == 0 && !Jumped)
                     {
-                        vertSpeed = -FloatSpeed;
+                        test.Enabled = true;
+                        vertSpeed = test.Accumulated;//-FloatSpeed;
                         Jumped = true;
                     }
                     else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
                     {
-                        vertSpeed += Engine.DeltaTime * Acceleration * 2;
+                        vertSpeed += test.Accumulated;//Engine.DeltaTime * Acceleration * 2;
                     }
                     else
                     {

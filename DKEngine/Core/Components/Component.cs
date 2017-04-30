@@ -11,7 +11,16 @@ namespace DKEngine.Core.Components
 {
     public abstract class Component
     {
-        internal long LastUpdated;
+        private TimeSpan _lastUpdated;
+        internal TimeSpan LastUpdated
+        {
+            get
+            {
+                TimeSpan tmp = _lastUpdated;
+                _lastUpdated = Engine.LastUpdated;
+                return tmp;
+            }
+        }
 
         public GameObject Parent { get; set; } = null;
         public  string Name { get; set; } = "";
@@ -19,7 +28,7 @@ namespace DKEngine.Core.Components
         internal Component(GameObject Parent)
         {
             this.Parent = Parent;
-            LastUpdated = Engine.LastUpdated;
+            _lastUpdated = Engine.LastUpdated;
 
             try
             {

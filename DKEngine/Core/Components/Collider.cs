@@ -84,7 +84,7 @@ namespace DKEngine.Core.Components
 
             if(LastUpdated != Engine.LastUpdated)
             {
-                LastUpdated = Engine.LastUpdated;
+                //LastUpdated = Engine.LastUpdated;
 
                 _Right = false;
                 _Left = false;
