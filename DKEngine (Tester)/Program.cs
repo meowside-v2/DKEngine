@@ -2,12 +2,12 @@
 
 namespace DKEngine_Tester
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Engine.Init();
-            
+
             Engine.ChangeScene<Test>();
         }
     }

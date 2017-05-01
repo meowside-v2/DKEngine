@@ -1,21 +1,17 @@
 ﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DKEngine.Core.Components;
+using System;
 using System.Diagnostics;
 
 namespace MarIO.Assets.Scripts
 {
-    class MusicScript : Script
+    internal class MusicScript : Script
     {
-        Sound Music;
-        SoundSource Output;
-        TimeSpan MusicLenght;
+        private Sound Music;
+        private SoundSource Output;
+        private TimeSpan MusicLenght;
 
-        Stopwatch Timer;
+        private Stopwatch Timer;
 
         public MusicScript(GameObject Parent) : base(Parent)
         { }
@@ -37,7 +33,7 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
-            if(Timer.Elapsed > MusicLenght)
+            if (Timer.Elapsed > MusicLenght)
             {
                 Output.PlaySound(Music);
 

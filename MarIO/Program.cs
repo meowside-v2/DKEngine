@@ -1,19 +1,13 @@
 ﻿using DKEngine;
 using DKEngine.Core;
-using DKEngine.Core.Components;
 using MarIO.Assets.Scenes;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Engine.Init();
             Database.LoadResources(Sprites.Sprites.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true));

@@ -1,9 +1,5 @@
 ﻿using DKEngine.Core.Components;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace DKEngine.Core
 {
@@ -16,8 +12,8 @@ namespace DKEngine.Core
         //internal readonly Dictionary<string, GameObject> AllGameObjects;
 
         internal readonly List<GameObject> Model;
-        internal readonly List<Behavior>   AllBehaviors;
-        internal readonly List<Collider>   AllGameObjectsColliders;
+        internal readonly List<Behavior> AllBehaviors;
+        internal readonly List<Collider> AllGameObjectsColliders;
 
         internal readonly Stack<Component> NewlyGeneratedComponents;
         internal readonly Stack<Behavior> NewlyGeneratedBehaviors;
@@ -27,27 +23,29 @@ namespace DKEngine.Core
 
         public Scene()
         {
-            AllComponents  = new Dictionary<string, Component>(0xFFFF);
+            AllComponents = new Dictionary<string, Component>(0xFFFF);
             ComponentCount = new Dictionary<string, int>(0xFFFF);
             //AllGameObjects = new Dictionary<string, GameObject>(0xFFFF);
 
-            AllBehaviors              = new List<Behavior>(0xFFFF);
-            Model                     = new List<GameObject>(0xFFFF);
-            AllGameObjectsColliders   = new List<Collider>(0xFFFF);
+            AllBehaviors = new List<Behavior>(0xFFFF);
+            Model = new List<GameObject>(0xFFFF);
+            AllGameObjectsColliders = new List<Collider>(0xFFFF);
 
             NewlyGeneratedComponents = new Stack<Component>(0xFFFF);
-            NewlyGeneratedBehaviors   = new Stack<Behavior>(0xFFFF);
+            NewlyGeneratedBehaviors = new Stack<Behavior>(0xFFFF);
 
-            GameObjectsToAddToRender  = new Stack<GameObject>(0xFFFF);
-            GameObjectsAddedToRender  = new Stack<GameObject>(0xFFFF);
+            GameObjectsToAddToRender = new Stack<GameObject>(0xFFFF);
+            GameObjectsAddedToRender = new Stack<GameObject>(0xFFFF);
         }
 
-        
         public abstract void Init();
+
         public abstract void Set(params string[] Args);
+
         public abstract void Unload();
 
         #region Nechapu_K_Cemu_To_Tady_Jeste_Je
+
         /*public enum Mode
         {
             View,
@@ -141,13 +139,12 @@ namespace DKEngine.Core
 
         public void Destroy()
         {
-
         }
 
         public void Render()
         {
-            
         }*/
-        #endregion
+
+        #endregion Nechapu_K_Cemu_To_Tady_Jeste_Je
     }
 }

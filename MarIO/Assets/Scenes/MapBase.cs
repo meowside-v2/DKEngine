@@ -2,7 +2,7 @@
 
 namespace MarIO.Assets.Scenes
 {
-    abstract class MapBase : Scene
+    internal abstract class MapBase : Scene
     {
         public sealed override void Init()
         {

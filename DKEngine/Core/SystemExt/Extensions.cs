@@ -1,7 +1,6 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
-
 
 using DKEngine.Core.Components;
 using System.Collections.Generic;
@@ -21,7 +20,6 @@ namespace DKEngine.Core.Ext
                 Target.Name = string.Format("{0}_(Copy {1})", Key, Engine.LoadingScene.ComponentCount[Target.Name]++);
                 Key = Target.Name;
             }
-            
             else
             {
                 Engine.LoadingScene.ComponentCount.Add(Key, 1);
@@ -61,13 +59,13 @@ namespace DKEngine.Core.Ext
 
             return z2;*/
         }
-        
+
         public static List<GameObject> GetGameObjectsInView(this IEnumerable<GameObject> list)
         {
             return list.Where(obj => obj.IsInView).ToList();
-            
+
             /*List<GameObject> retValue = new List<GameObject>();
-            
+
             int listCount = list.Count;
             for (int i = 0; i < listCount; i++)
             {
@@ -117,7 +115,7 @@ namespace DKEngine.Core.Ext
 
             return false;
         }*/
-        
+
         /*public static T FirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             List<T> _source = new List<T>(source);
@@ -127,7 +125,6 @@ namespace DKEngine.Core.Ext
             {
                 if (predicate(_source[i]))
                     return _source[i];
-
             }
 
             return default(T);
@@ -173,12 +170,12 @@ namespace DKEngine.Core.Ext
         {
             foreach (T obj in source) yield return obj;
         }
-        
+
         public static bool All<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             List<T> _source = new List<T>(source);
 
-            int _sourceCount = _source.Count; 
+            int _sourceCount = _source.Count;
             for(int i = 0; i < _sourceCount; i++)
             {
                 if (!predicate(_source[i]))

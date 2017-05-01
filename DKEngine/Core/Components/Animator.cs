@@ -1,12 +1,11 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
-using DKEngine.Core.Ext;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DKEngine.Core.Components
 {
@@ -18,12 +17,13 @@ namespace DKEngine.Core.Components
         //private GameObject _p;
 
         public int NumberOfPlays { get; private set; } = 0;
+
         public AnimationNode Current
         {
             get { return _current; }
             set
             {
-                if(value != _current)
+                if (value != _current)
                 {
                     _current = value;
                     Parent.Model = _current.Animation;
@@ -32,6 +32,7 @@ namespace DKEngine.Core.Components
                 }
             }
         }
+
         public int AnimationState
         {
             get
@@ -39,9 +40,9 @@ namespace DKEngine.Core.Components
                 return (int)(CurrentAnimationTime.TotalMilliseconds / Parent.Model.DurationPerFrame % Parent.Model.Frames);
             }
         }
-       
+
         public Animator(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         {
             this.CurrentAnimationTime = new TimeSpan(0);
             this.Animations = new Dictionary<string, AnimationNode>();
@@ -107,7 +108,7 @@ namespace DKEngine.Core.Components
         public override void Destroy()
         {
             Engine.UpdateEvent -= UpdateHandle;
-            
+
             Parent = null;
             UpdateHandle = null;
         }

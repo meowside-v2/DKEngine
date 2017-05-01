@@ -1,17 +1,13 @@
-﻿using DKEngine.Core.UI;
+﻿using DKEngine.Core.Components;
+using DKEngine.Core.UI;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DKEngine.Core.Components;
 
 namespace DKEngine.Core.Scripts
 {
     internal sealed class TextBoxScript : Script
     {
-        TextBox _Parent;
+        private TextBox _Parent;
         private TimeSpan TimeOut = new TimeSpan(0, 0, 0, 0, 50);
         private Stopwatch TimeOutStopwatch = new Stopwatch();
 
@@ -27,7 +23,6 @@ namespace DKEngine.Core.Scripts
         {
             if (_Parent.IsFocused)
             {
-
                 if (Console.KeyAvailable)
                 {
                     if (TimeOut < TimeOutStopwatch.Elapsed)
@@ -48,7 +43,6 @@ namespace DKEngine.Core.Scripts
 
                             TimeOutStopwatch.Start();
                         }
-
                         else if (_Parent.Text.Length < MaxTextLenght)
                         {
                             _Parent.Text += key;
@@ -57,7 +51,6 @@ namespace DKEngine.Core.Scripts
                         }
                     }
                 }
-
                 else if (TimeOutStopwatch.IsRunning)
                     TimeOutStopwatch.Reset();
             }
@@ -65,6 +58,7 @@ namespace DKEngine.Core.Scripts
 
         protected internal override void Start()
         { }
+
         protected internal override void OnColliderEnter(Collider e)
         { }
     }

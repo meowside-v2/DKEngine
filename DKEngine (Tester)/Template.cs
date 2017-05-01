@@ -1,23 +1,17 @@
-﻿using DKEngine;
-using DKEngine.Core;
+﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
-using DKEngine_Tester.Properties;
-using NAudio.Wave;
-using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 
 namespace DKEngine_Tester
 {
-
-    sealed class TemplateScript : Script
+    internal sealed class TemplateScript : Script
     {
-        TextBlock DepthMeter;
+        private TextBlock DepthMeter;
 
         public TemplateScript(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         { }
 
         protected override void Start()

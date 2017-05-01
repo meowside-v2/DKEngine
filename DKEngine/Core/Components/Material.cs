@@ -1,14 +1,11 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKEngine.Core.Components
 {
@@ -57,10 +54,10 @@ namespace DKEngine.Core.Components
         /// </summary>
         public readonly bool IsLooped = false;
 
-        private int _SelectedLayer       = -1;
+        private int _SelectedLayer = -1;
         private FrameDimension _FrameDim = null;
-        private BitmapData _BitmapData   = null;
-        private byte[] _Data             = null;
+        private BitmapData _BitmapData = null;
+        private byte[] _Data = null;
         private byte _BytesPerPixel = 0;
 
         /// <summary>
@@ -78,7 +75,7 @@ namespace DKEngine.Core.Components
 
                 Width = source.Width;
                 Height = source.Height;
-                
+
                 if (ImageAnimator.CanAnimate(source))
                 {
                     int delay = 0;
@@ -97,7 +94,7 @@ namespace DKEngine.Core.Components
                     IsAnimated = true;
                     IsLooped = BitConverter.ToInt16(source.GetPropertyItem(20737).Value, 0) != 1;
                 }
-                
+
                 switch (source.PixelFormat)
                 {
                     case PixelFormat.Format32bppArgb:
@@ -165,7 +162,7 @@ namespace DKEngine.Core.Components
         /// <param name="clr">Source color</param>
         /// <param name="Parent">GameObject used for material size</param>
         public Material(Color clr, GameObject Parent)
-            :this(clr, Parent.Transform.Dimensions)
+            : this(clr, Parent.Transform.Dimensions)
         { }
 
         /*/// <summary>
@@ -194,7 +191,7 @@ namespace DKEngine.Core.Components
 
             if (_SelectedLayer != AnimationState)
             {
-                if(_BitmapData != null)
+                if (_BitmapData != null)
                     Texture.UnlockBits(_BitmapData);
                 Texture.SelectActiveFrame(_FrameDim, AnimationState);
                 _BitmapData = Texture.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.ReadOnly, Texture.PixelFormat);
@@ -222,8 +219,6 @@ namespace DKEngine.Core.Components
             byte[] data = new byte[ImageData.Stride * ImageData.Height];
             Marshal.Copy(ImageData.Scan0, data, 0, ImageData.Stride * ImageData.Height);*/
 
-            
-
             float CamX = Engine.BaseCam != null ? Engine.BaseCam.X : 0;
             float CamY = Engine.BaseCam != null ? Engine.BaseCam.Y : 0;
 
@@ -249,13 +244,11 @@ namespace DKEngine.Core.Components
 
                     for (int column = 0; column < RasteredWidth; column++)
                     {
-
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
                         if (IsOnScreen(x + column, y + row))
                         {
-
                             int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
                             int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
@@ -296,13 +289,11 @@ namespace DKEngine.Core.Components
 
                     for (int column = 0; column < RasteredWidth; column++)
                     {
-
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
                         if (IsOnScreen(x + column, y + row))
                         {
-
                             int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
                             int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
@@ -348,13 +339,11 @@ namespace DKEngine.Core.Components
 
                     for (int column = 0; column < RasteredWidth; column++)
                     {
-
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
                         if (IsOnScreen(x + column, y + row))
                         {
-
                             int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
                             int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 

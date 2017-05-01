@@ -1,12 +1,6 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
-
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKEngine.Core.UI
 {
@@ -16,7 +10,7 @@ namespace DKEngine.Core.UI
         { }
 
         public Letter(TextBlock Parent)
-            :base(Parent)
+            : base(Parent)
         { }
 
         public override void Destroy()

@@ -3,13 +3,10 @@ using DKEngine.Core.Components;
 using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models
 {
-    class Block : AnimatedObject
+    internal class Block : AnimatedObject
     {
         public enum BlockType
         {
@@ -47,8 +44,8 @@ namespace MarIO.Assets.Models
             UnderGroundBackground1,
             UnderGroundBackground2,
             NumberOfObjects
-        } 
-        
+        }
+
         public static Dictionary<BlockType, string> BlockTypeNames = new Dictionary<BlockType, string>()
         {
             { BlockType.Bridge, "bridge" },
@@ -84,19 +81,21 @@ namespace MarIO.Assets.Models
             { BlockType.Water1, "water_01" },
             { BlockType.Water2, "water_02" },
         };
-        
+
         public BlockType Type { get; set; }
+
         public delegate void PipeEnter();
+
         private event PipeEnter PipeEnterEvent;
 
         public Block()
-            :base()
+            : base()
         { }
 
         public Block(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         { }
-        
+
         protected override void Initialize()
         {
             this.TypeName = BlockTypeNames[Type];
@@ -108,34 +107,49 @@ namespace MarIO.Assets.Models
                     this.Collider.IsTrigger = true;
                     this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y, this.Transform.Dimensions.X, 1);
                     break;
+
                 case BlockType.Ground2:
                     break;
+
                 case BlockType.Ground3:
                     break;
+
                 case BlockType.Ground4:
                     break;
+
                 case BlockType.Bridge:
                     break;
+
                 case BlockType.Bush1:
                     break;
+
                 case BlockType.Bush2:
                     break;
+
                 case BlockType.Bush3:
                     break;
+
                 case BlockType.BushSmall:
                     break;
+
                 case BlockType.CastleBig:
                     break;
+
                 case BlockType.CastleSmall:
                     break;
+
                 case BlockType.Cloud1:
                     break;
+
                 case BlockType.Cloud2:
                     break;
+
                 case BlockType.Cloud3:
                     break;
+
                 case BlockType.Fence:
                     break;
+
                 case BlockType.Finish:
                     {
                         this.Transform.Dimensions = new Vector3(32, 200, 0);
@@ -153,14 +167,19 @@ namespace MarIO.Assets.Models
                         part2.Transform.Position += new Vector3(16, 0, 0);
                     }
                     break;
+
                 case BlockType.Mountain:
                     break;
+
                 case BlockType.Sky:
                     break;
+
                 case BlockType.Water1:
                     break;
+
                 case BlockType.Water2:
                     break;
+
                 case BlockType.Pipe1:
                     {
                         this.InitNewComponent<Collider>();
@@ -177,8 +196,10 @@ namespace MarIO.Assets.Models
                         block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
                     }
                     break;
+
                 case BlockType.Pipe2:
                     break;
+
                 case BlockType.Pipe3:
                     {
                         this.InitNewComponent<Collider>();
@@ -195,26 +216,35 @@ namespace MarIO.Assets.Models
                         block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
                     }
                     break;
+
                 case BlockType.Pipe4:
                     break;
+
                 case BlockType.Pipe5:
                     break;
+
                 case BlockType.UnderGround1:
                     this.InitNewComponent<Collider>();
                     this.InitNewScript<BottomMarioChecker>();
                     this.Collider.IsTrigger = true;
                     this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y * this.Transform.Scale.Y, this.Transform.Dimensions.X * this.Transform.Scale.X, 1);
                     break;
+
                 case BlockType.UnderGround2:
                     break;
+
                 case BlockType.UnderGround3:
                     break;
+
                 case BlockType.UnderGround4:
                     break;
+
                 case BlockType.UnderGroundBackground1:
                     break;
+
                 case BlockType.UnderGroundBackground2:
                     break;
+
                 default:
                     throw new Exception("A TO SE TI JAK POVEDLO");
             }

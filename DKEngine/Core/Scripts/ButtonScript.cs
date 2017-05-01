@@ -1,16 +1,12 @@
-﻿using DKEngine.Core.UI;
+﻿using DKEngine.Core.Components;
+using DKEngine.Core.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DKEngine.Core.Components;
 
 namespace DKEngine.Core.Scripts
 {
     internal sealed class ButtonScript : Script
     {
-        Button _Parent;
+        private Button _Parent;
         private bool IsHeld = false;
 
         public ButtonScript(Button Parent)
@@ -29,7 +25,6 @@ namespace DKEngine.Core.Scripts
                     IsHeld = true;
                 }
             }
-
             else if (IsHeld)
             {
                 IsHeld = false;

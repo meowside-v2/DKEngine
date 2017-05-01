@@ -1,17 +1,13 @@
 ﻿using DKEngine.Core.Ext;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DKEngine.Core.Components
 {
     public abstract class Component
     {
         private TimeSpan _lastUpdated;
+
         internal TimeSpan LastUpdated
         {
             get
@@ -23,7 +19,7 @@ namespace DKEngine.Core.Components
         }
 
         public GameObject Parent { get; set; } = null;
-        public  string Name { get; set; } = "";
+        public string Name { get; set; } = "";
 
         internal Component(GameObject Parent)
         {
@@ -58,7 +54,7 @@ namespace DKEngine.Core.Components
         { }
 
         public abstract void Destroy();
-        
+
         public static T Find<T>(string Name) where T : Component
         {
             T retValue = null;

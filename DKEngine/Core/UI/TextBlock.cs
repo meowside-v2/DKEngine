@@ -1,5 +1,5 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
 using DKEngine.Core.Components;
@@ -7,7 +7,6 @@ using DKEngine.Core.Scripts;
 using System.Collections.Generic;
 using System.Drawing;
 using static DKEngine.Core.UI.Text;
-using System;
 
 namespace DKEngine.Core.UI
 {
@@ -18,13 +17,14 @@ namespace DKEngine.Core.UI
             get { return _textStr; }
             set
             {
-                if(value != _textStr)
+                if (value != _textStr)
                 {
                     _textStr = value;
                     _changed = true;
                 }
             }
         }
+
         public Color? Background
         {
             get { return _bg; }
@@ -36,6 +36,7 @@ namespace DKEngine.Core.UI
                     Model = new Material((Color)value, this);
             }
         }
+
         public float FontSize
         {
             get { return _FontSize; }
@@ -53,6 +54,7 @@ namespace DKEngine.Core.UI
                 }
             }
         }
+
         public HorizontalAlignment HAlignment
         {
             set
@@ -80,10 +82,11 @@ namespace DKEngine.Core.UI
 
                     this.Transform.Position += new Vector3(horiOffset, 0, 0);
                 }
-                    
+
                 _changed = true;
             }
         }
+
         public VerticalAlignment VAlignment
         {
             set
@@ -111,11 +114,11 @@ namespace DKEngine.Core.UI
 
                     this.Transform.Position += new Vector3(0, vertOffset, 0);
                 }
-                    
 
                 _changed = true;
             }
         }
+
         public HorizontalAlignment TextHAlignment
         {
             set
@@ -124,6 +127,7 @@ namespace DKEngine.Core.UI
                 _changed = true;
             }
         }
+
         public VerticalAlignment TextVAlignment
         {
             set
@@ -150,7 +154,7 @@ namespace DKEngine.Core.UI
         internal bool _changed = false;
 
         public TextBlock()
-            :base()
+            : base()
         { }
 
         public TextBlock(GameObject Parent)
@@ -167,14 +171,14 @@ namespace DKEngine.Core.UI
                 Engine.CurrentScene.NewlyGeneratedComponents.Pop();
             }
             catch { }
-                
+
             //Engine.CurrentScene.AllGameObjects.Remove(this);
             //Engine.RenderGameObjects.Remove(this);
 
             int ScriptsCount = this.Scripts.Count;
             for (int i = 0; i < ScriptsCount; i++)
                 Scripts[i].Destroy();
-            
+
             int _textCount = _text.Count;
             for (int i = 0; i < _textCount; i++)
                 _text[0].Destroy();

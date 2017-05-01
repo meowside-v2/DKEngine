@@ -61,6 +61,7 @@
     <Compile Include="Assets\Models\Trigger.cs" />
     <Compile Include="Assets\Scenes\MapBase.cs" />
     <Compile Include="Assets\Scenes\Test.cs" />
+    <Compile Include="Assets\Scripts\BlockAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\EnemyControllerScripts.cs" />
     <Compile Include="Assets\Scripts\GUIUpdateScript.cs" />
     <Compile Include="Assets\Scripts\MarioTriggerColliderScripts.cs" />

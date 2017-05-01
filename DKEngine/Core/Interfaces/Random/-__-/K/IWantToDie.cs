@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DKEngine.Core.Interfaces.Random.____.K
+﻿namespace DKEngine.Core.Interfaces.Random.____.K
 {
-    interface IWantToDie
+    internal interface IWantToDie
     {
     }
 }

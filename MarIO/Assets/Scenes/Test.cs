@@ -1,17 +1,9 @@
-﻿using DKEngine.Core;
-using DKEngine.Core.Components;
+﻿using DKEngine.Core.Components;
 using MarIO.Assets.Models;
-using MarIO.Assets.Scripts;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Scenes
 {
-    class Test : MapBase
+    internal class Test : MapBase
     {
         public Test()
         {
@@ -29,7 +21,6 @@ namespace MarIO.Assets.Scenes
             _1.SizeInBlocks = new Vector3(50, 3, 0);
             _1.Transform.Position = new Vector3(0, -30, 0);
 
-
             Group _2 = new Group()
             {
                 Name = "ground2",
@@ -38,7 +29,6 @@ namespace MarIO.Assets.Scenes
             };
             _2.SizeInBlocks = new Vector3(10, 3, 0);
             _2.Transform.Position = new Vector3(60 * 16, -30, 0);
-
 
             Group _3 = new Group()
             {

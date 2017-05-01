@@ -6,14 +6,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace DKEngine.Core
 {
     public abstract class GameObject : Component
     {
         public bool HasShadow { get; set; } = false;
+
         public bool IsInView
         {
             get
@@ -24,11 +23,13 @@ namespace DKEngine.Core
                 return (this.Transform.Position.X + this.Transform._ScaledDimensions.X >= X && this.Transform.Position.X < X + Engine.Render.RenderWidth && this.Transform.Position.Y + this.Transform._ScaledDimensions.Y >= Y && this.Transform.Position.Y < Y + Engine.Render.RenderHeight);
             }
         }
+
         public bool IsGUI
         {
             get { return Parent != null ? Parent.IsGUI : _IsGUI; }
             set { _IsGUI = value; }
         }
+
         public string TypeName
         {
             get { return _typeName; }
@@ -38,6 +39,7 @@ namespace DKEngine.Core
                 this.Model = Database.GetGameObjectMaterial(value);
             }
         }
+
         public Material Model
         {
             get { return _Model; }
@@ -48,7 +50,7 @@ namespace DKEngine.Core
                     _Model = value;
                     this.Transform.Dimensions = new Vector3(value.Width, value.Height, 1);
 
-                    if(Animator?.Animations.Count == 0)
+                    if (Animator?.Animations.Count == 0)
                     {
                         Animator.AddAnimation("default", _Model);
                         Animator.Play("default");
@@ -58,14 +60,15 @@ namespace DKEngine.Core
         }
 
         internal Collider _collider;
+
         public Collider Collider
         {
             get { return _collider; }
             set
             {
-                if(_collider != value)
+                if (_collider != value)
                 {
-                    if(_collider != null)
+                    if (_collider != null)
                     {
                         foreach (Script scr in this.Scripts)
                         {
@@ -88,13 +91,12 @@ namespace DKEngine.Core
             }
         }
 
-
         internal bool _IsGUI = false;
         internal string _typeName = "";
 
-        internal Material _Model       = null;
-        public Animator Animator       = null;
-        
+        internal Material _Model = null;
+        public Animator Animator = null;
+
         public SoundSource SoundSource = null;
         public Color? Foreground { get; set; }
 
@@ -103,10 +105,10 @@ namespace DKEngine.Core
         internal List<Script> Scripts { get; }
 
         public GameObject()
-            :base(null)
+            : base(null)
         {
-            this.Child                = new List<GameObject>();
-            this.Scripts              = new List<Script>();
+            this.Child = new List<GameObject>();
+            this.Scripts = new List<Script>();
             this.Transform = new Transform(this)
             {
                 Dimensions = new Vector3(1, 1, 1),
@@ -115,11 +117,10 @@ namespace DKEngine.Core
             };
             //this.Collider             = new Collider(this);
             //this.Animator             = new Animator(this);
-            
         }
 
         public GameObject(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         {
             this.Child = new List<GameObject>();
             this.Scripts = new List<Script>();
@@ -138,7 +139,7 @@ namespace DKEngine.Core
 
                 Parent.Child.Add(this);
                 this.Transform.Position = Parent.Transform.Position;
-                this.Transform.Scale    = Parent.Transform.Scale;
+                this.Transform.Scale = Parent.Transform.Scale;
             }
         }
 
@@ -150,13 +151,13 @@ namespace DKEngine.Core
             {
                 if (Parent == null)
                     Engine.LoadingScene.Model.Add(this);
-                
-                if(typeof(Letter) != this.GetType())
+
+                if (typeof(Letter) != this.GetType())
                 {
                     Engine.LoadingScene.AllComponents.AddSafe(this);
                     //Engine.LoadingScene.AllGameObjects.AddSafe(this);
                 }
-                
+
                 Engine.LoadingScene.GameObjectsToAddToRender.Push(this);
             }
             catch (Exception e)
@@ -176,7 +177,7 @@ namespace DKEngine.Core
         {
             if (typeof(T) == typeof(Animator) || typeof(T).IsSubclassOf(typeof(Animator)))
             {
-                if(this.Animator == null)
+                if (this.Animator == null)
                 {
                     this.Animator = new Animator(this);
                 }
@@ -192,7 +193,7 @@ namespace DKEngine.Core
 
             if (typeof(T) == typeof(Collider) || typeof(T).IsSubclassOf(typeof(Collider)))
             {
-                if(this.Collider == null)
+                if (this.Collider == null)
                 {
                     Type t = typeof(T);
                     this.Collider = (Collider)t.Assembly.CreateInstance(t.FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { this }, null, null);
@@ -203,10 +204,10 @@ namespace DKEngine.Core
 
             if (typeof(T) == typeof(SoundSource) || typeof(T).IsSubclassOf(typeof(SoundSource)))
             {
-                if(this.SoundSource == null)
+                if (this.SoundSource == null)
                 {
                     Type t = typeof(T);
-                    this.SoundSource = (SoundSource)t.Assembly.CreateInstance(t.FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { this }, null, null);   
+                    this.SoundSource = (SoundSource)t.Assembly.CreateInstance(t.FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { this }, null, null);
                 }
 
                 return;
@@ -241,7 +242,7 @@ namespace DKEngine.Core
 
             try
             {
-                Engine.CurrentScene.Model.Remove(this);    
+                Engine.CurrentScene.Model.Remove(this);
             }
             catch { }
 
@@ -258,7 +259,7 @@ namespace DKEngine.Core
 
             this.Collider?.Destroy();
             this.Collider = null;
-            
+
             this.Parent = null;
         }
 

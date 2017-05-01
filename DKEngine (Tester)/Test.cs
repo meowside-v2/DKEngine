@@ -1,19 +1,12 @@
-﻿using DKEngine;
-using DKEngine.Core;
+﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKEngine_Tester
 {
-    class Test : Scene
+    internal class Test : Scene
     {
-        
         public Test()
         { }
 
@@ -67,7 +60,6 @@ namespace DKEngine_Tester
                         //};
                     }
 
-
             for (int a = 1; a < 2; a++)
                 for (int i = 1; i < 32; i++)
                     for (int j = 1; j < 64; j++)
@@ -76,7 +68,7 @@ namespace DKEngine_Tester
                         g.Transform.Position = new Position(i * 1024, j * 16, -a);
                         g.TypeName = "border";
                     }*/
-            Database.AddNewGameObjectMaterial("trigger", new Material(Color.AliceBlue, new Vector3(1,1,1)));
+            Database.AddNewGameObjectMaterial("trigger", new Material(Color.AliceBlue, new Vector3(1, 1, 1)));
 
             GameObject t2 = new GameObject();
             t2.Model = new Material(Color.BurlyWood, t2);

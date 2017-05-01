@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DKEngine
+﻿namespace DKEngine
 {
     public interface IAnimated
     {
@@ -13,6 +7,7 @@ namespace DKEngine
         int AnimationState { get; set; }
         TimeSpan CurrentAnimationTime { get; }*/
     }
+
     public enum AnimationLoop
     {
         Once,

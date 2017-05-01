@@ -1,16 +1,12 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
 using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DKEngine.Core.Components
 {
@@ -28,7 +24,7 @@ namespace DKEngine.Core.Components
         private bool RenderingGUI = false;
 
         public Camera()
-            :base(null)
+            : base(null)
         {
             this.Position = new Vector3(0, 0, 0);
             Engine.BaseCam = this;
@@ -37,7 +33,7 @@ namespace DKEngine.Core.Components
         }
 
         public Camera(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         {
             Engine.BaseCam = this;
 
@@ -77,7 +73,7 @@ namespace DKEngine.Core.Components
             RenderingGUI = false;
             int TempCount = GameObjectsInView.Count;
 
-            while(TempCount > 0)
+            while (TempCount > 0)
             {
                 float tempHeight = GameObjectsInView.FindMaxZ();
                 GameObject[] toRender = GameObjectsInView.Where(item => item.Transform.Position.Z == tempHeight).ToArray();
@@ -88,7 +84,7 @@ namespace DKEngine.Core.Components
                     //Temp.Remove(obj);
                     TempCount--;
                 });*/
-                
+
                 int toRenderCount = toRender.Length;
                 for (int i = toRenderCount - 1; i >= 0; i--)
                 {
@@ -106,13 +102,13 @@ namespace DKEngine.Core.Components
             byte B = BackGround.B;
 
             int imageBufferLenght = Engine.Render.imageBuffer.Length;
-            for(int i = 0; i < imageBufferLenght; i += 3)
+            for (int i = 0; i < imageBufferLenght; i += 3)
             {
                 Engine.Render.imageBuffer[i + 2] = R;
                 Engine.Render.imageBuffer[i + 1] = G;
                 Engine.Render.imageBuffer[i] = B;
             }
-            
+
             Array.Clear(Engine.Render.imageBufferKey, 0, Engine.Render.imageBufferKey.Length);
         }
 

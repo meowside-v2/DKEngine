@@ -1,14 +1,11 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKEngine.Core.Components.Unused
 {
@@ -59,14 +56,14 @@ namespace DKEngine.Core.Components.Unused
 
         private int SelectedLayer = 0;
         private FrameDimension FrameDim = null;
-        
+
         /// <summary>
         /// Loads image and creates new material
         /// </summary>
         /// <param name="source">Source image</param>
         public Material_LowMemory(Image source)
         {
-            if(source != null)
+            if (source != null)
             {
                 FrameDim = new FrameDimension(source.FrameDimensionsList[0]);
                 Frames = source.GetFrameCount(FrameDim);
@@ -93,7 +90,6 @@ namespace DKEngine.Core.Components.Unused
                     DurationPerFrame = Duration / Frames;
                     IsAnimated = true;
                     IsLooped = BitConverter.ToInt16(source.GetPropertyItem(20737).Value, 0) != 1;
-                    
                 }
 
                 /*switch (source.PixelFormat)
@@ -138,7 +134,7 @@ namespace DKEngine.Core.Components.Unused
 
             unsafe
             {
-                fixed(byte* data = ImageData)
+                fixed (byte* data = ImageData)
                 {
                     Texture = new Bitmap(Width,
                                              Height,
@@ -165,18 +161,17 @@ namespace DKEngine.Core.Components.Unused
                                                               this.colorMapG[frame][y][x],
                                                               this.colorMapB[frame][y][x]);
         }*/
-        
+
         /// <summary>
         /// Render material into engine image buffer
         /// </summary>
         /// <param name="Parent">I3Dimensional for coordiantions</param>
         public void Render(GameObject Parent, Color? ReColor = null)
         {
-
             int AnimationState = Parent.Animator != null ? Parent.Animator.AnimationState : 0;
             bool HasShadow = Parent.HasShadow;
 
-            if(SelectedLayer != AnimationState)
+            if (SelectedLayer != AnimationState)
             {
                 Texture.SelectActiveFrame(FrameDim, AnimationState);
                 SelectedLayer = AnimationState;
@@ -229,13 +224,11 @@ namespace DKEngine.Core.Components.Unused
 
                     for (int column = 0; column < RasteredWidth; column++)
                     {
-
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
                         if (IsOnScreen(x + column, y + row))
                         {
-
                             int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
                             int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
@@ -243,7 +236,7 @@ namespace DKEngine.Core.Components.Unused
                             int tempRow = (int)NonRasteredHeight;
 
                             int index = BytesPerPixel * (tempRow * Width + tempColumn);
-                            
+
                             if (Engine.Render.imageBufferKey[keyOffset] != 255 && BytesPerPixel == 4 ? data[index + 3] != 0 : true)
                             {
                                 Color temp = MixPixel(Engine.Render.imageBufferKey[keyOffset], Engine.Render.imageBuffer[offset + 2], Engine.Render.imageBuffer[offset + 1], Engine.Render.imageBuffer[offset],
@@ -276,13 +269,11 @@ namespace DKEngine.Core.Components.Unused
 
                     for (int column = 0; column < RasteredWidth; column++)
                     {
-
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
                         if (IsOnScreen(x + column, y + row))
                         {
-
                             int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
                             int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 

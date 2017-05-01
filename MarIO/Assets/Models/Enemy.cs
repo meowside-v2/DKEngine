@@ -1,15 +1,11 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Scripts;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models
 {
-    class Enemy : AnimatedObject
+    internal class Enemy : AnimatedObject
     {
         public enum EnemyType
         {
@@ -29,7 +25,7 @@ namespace MarIO.Assets.Models
             BillBlasterSmall
         }
 
-        Dictionary<EnemyType, string> EnemyTypeNames = new Dictionary<EnemyType, string>()
+        private Dictionary<EnemyType, string> EnemyTypeNames = new Dictionary<EnemyType, string>()
         {
             { EnemyType.Goomba, "goomba" },
             { EnemyType.GoombaBlue, "" },
@@ -50,11 +46,11 @@ namespace MarIO.Assets.Models
         public EnemyType Type { get; set; }
 
         public Enemy()
-            :base()
+            : base()
         { }
 
         public Enemy(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         { }
 
         protected override void Initialize()
@@ -72,32 +68,46 @@ namespace MarIO.Assets.Models
                     this.InitNewComponent<Animator>();
                     this.Animator.AddAnimation("default", Database.GetGameObjectMaterial(EnemyTypeNames[Type]));
                     break;
+
                 case EnemyType.GoombaBlue:
                     break;
+
                 case EnemyType.GoombaSilver:
                     break;
+
                 case EnemyType.KoopaTroopa:
                     break;
+
                 case EnemyType.KoopaParatroopa:
                     break;
+
                 case EnemyType.PiranhaPlant:
                     break;
+
                 case EnemyType.Spiny:
                     break;
+
                 case EnemyType.BuzzyBeatle:
                     break;
+
                 case EnemyType.BuzzyBeatleBlue:
                     break;
+
                 case EnemyType.BuzzyBeatleSilver:
                     break;
+
                 case EnemyType.FireBar:
                     break;
+
                 case EnemyType.BulletBill:
                     break;
+
                 case EnemyType.BillBlasterLarge:
                     break;
+
                 case EnemyType.BillBlasterSmall:
                     break;
+
                 default:
                     break;
             }

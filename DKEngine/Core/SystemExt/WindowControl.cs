@@ -1,12 +1,11 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Timers;
-using System.Windows.Threading;
 
 namespace DKEngine.Core.Ext
 {
@@ -17,12 +16,12 @@ namespace DKEngine.Core.Ext
         {
             public short X;
             public short Y;
+
             public COORD(short x, short y)
             {
                 this.X = x;
                 this.Y = y;
             }
-
         }
 
         [DllImport("kernel32.dll")]
@@ -30,7 +29,6 @@ namespace DKEngine.Core.Ext
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool SetConsoleDisplayMode(IntPtr ConsoleOutput, uint Flags, out COORD NewScreenBufferDimensions);
-
 
         private static IntPtr hConsole = GetStdHandle(-11);
         private static COORD xy = new COORD(100, 100);
@@ -43,7 +41,7 @@ namespace DKEngine.Core.Ext
             Console.SetIn(TextReader.Null);
 
             Console.BufferHeight = Console.LargestWindowHeight;
-            Console.BufferWidth  = Console.LargestWindowWidth;
+            Console.BufferWidth = Console.LargestWindowWidth;
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
@@ -59,7 +57,7 @@ namespace DKEngine.Core.Ext
                 Interval = 1000f
             };
             windowChecker.Elapsed += WindowSizeChecker;
-            
+
             windowChecker.Start();
         }
 

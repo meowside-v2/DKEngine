@@ -1,12 +1,7 @@
-﻿using DKEngine.Core.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
 using DKEngine.Core;
-using DKEngine;
-using System.Diagnostics;
+using DKEngine.Core.Components;
+using System;
 
 namespace DKBasicEngine_1_0.Core.Components
 {
@@ -100,6 +95,7 @@ namespace DKBasicEngine_1_0.Core.Components
         }
     }*/
 
+    [Obsolete]
     public class Parabola : Behavior
     {
         public TimeSpan Time;
@@ -110,12 +106,12 @@ namespace DKBasicEngine_1_0.Core.Components
 
         public bool Enabled = false;
 
-        float Elapsed = 0f;
+        private float Elapsed = 0f;
 
-        float[] ValuesInTime;
-        int NumberOfSamples;
-        const float SamplesInSecodnd = 1000;
-        const float X1 = 0f;
+        private float[] ValuesInTime;
+        private int NumberOfSamples;
+        private const float SamplesInSecodnd = 1000;
+        private const float X1 = 0f;
         public float X2 { get; private set; }
 
         public Parabola(GameObject Parent)
@@ -150,11 +146,11 @@ namespace DKBasicEngine_1_0.Core.Components
             {
                 _accumulated = 0;
                 float MaxTime = 0;
-                float LeftoverTime = (float)((Elapsed + Engine.DeltaTime) - Time.TotalMilliseconds);
+                float LeftoverTime = (float)((Elapsed + Engine.DeltaTime) * 1000 - Time.TotalMilliseconds);
 
                 if (LeftoverTime > 0)
                 {
-                    MaxTime = (float)(Time.TotalMilliseconds - LeftoverTime);
+                    MaxTime = (float)Time.TotalSeconds;
                     Enabled = false;
                 }
                 else
@@ -162,9 +158,11 @@ namespace DKBasicEngine_1_0.Core.Components
                     MaxTime = Elapsed + Engine.DeltaTime;
                 }
 
-                for (float i = Elapsed; i < MaxTime; i++)
+                int start = (int)(Elapsed * 1000);
+                int end = (int)(MaxTime * 1000);
+                for (int i = start; i < end; i++)
                 {
-                    _accumulated += ValuesInTime[(int)i];
+                    _accumulated += ValuesInTime[i];
                 }
 
                 Elapsed += Engine.DeltaTime;

@@ -1,27 +1,23 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
-using System.Diagnostics;
-using DKEngine;
 using MarIO.Assets.Models;
+using System;
+using System.Diagnostics;
 
 namespace MarIO.Assets.Scripts
 {
-    class PipePort : Script
+    internal class PipePort : Script
     {
-        GameObject Player;
-        Block Pipe;
+        private GameObject Player;
+        private Block Pipe;
 
         public PipePort(GameObject Parent) : base(Parent)
         { }
 
         protected override void OnColliderEnter(Collider e)
         {
-            if(e.Parent == Player)
+            if (e.Parent == Player)
             {
                 ConsoleKey tmp = Pipe.Type == Block.BlockType.Pipe1 ? ConsoleKey.D : ConsoleKey.S;
 

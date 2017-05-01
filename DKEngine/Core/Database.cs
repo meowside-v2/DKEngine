@@ -77,7 +77,6 @@ namespace DKEngine.Core
             Y,
             Z,
             NumberOfTypes
-                
         };
 
         private static Dictionary<char, Font> font = new Dictionary<char, Font>()
@@ -166,7 +165,7 @@ namespace DKEngine.Core
         }
 
         private static Dictionary<string, Material> CachedMaterials = new Dictionary<string, Material>();
-        private static Dictionary<string, Scene>    CachedScenes = new Dictionary<string, Scene>();
+        private static Dictionary<string, Scene> CachedScenes = new Dictionary<string, Scene>();
 
         internal static void InitDatabase()
         {
@@ -254,7 +253,7 @@ namespace DKEngine.Core
 
             return retValue;
         }
-        
+
         public static string GetMaterialDatabaseKey(int Position)
         {
             return CachedMaterials.ElementAtOrDefault(Position).Key; //.FirstOrDefault(x => x.Value == Position).Key;
@@ -262,9 +261,9 @@ namespace DKEngine.Core
 
         public static void LoadResources(ResourceSet source)
         {
-            foreach(DictionaryEntry entry in source)
+            foreach (DictionaryEntry entry in source)
             {
-                if(entry.Value is Image)
+                if (entry.Value is Image)
                 {
                     AddNewGameObjectMaterial((string)entry.Key, new Material((Bitmap)entry.Value));
                 }

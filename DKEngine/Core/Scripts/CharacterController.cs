@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DKEngine.Core.Components;
+﻿using DKEngine.Core.Components;
+using System;
 
 namespace DKEngine.Core.Scripts
 {
     public class CharacterController : Script
     {
-        float horiSpeed = 0;
-        float vertSpeed = 0;
+        private float horiSpeed = 0;
+        private float vertSpeed = 0;
 
         protected float MovementSpeed = 1;
         protected float FloatSpeed = 1;
@@ -18,13 +14,13 @@ namespace DKEngine.Core.Scripts
         protected float Acceleration = 1;
 
         protected bool CanJump = true;
-        bool IsFalling = false;
-        bool Jumped = false;
+        private bool IsFalling = false;
+        private bool Jumped = false;
 
-        bool Landed = false;
-        bool CollisionLeft = false;
-        bool CollisionRight = false;
-        bool CollisionTop = false;
+        private bool Landed = false;
+        private bool CollisionLeft = false;
+        private bool CollisionRight = false;
+        private bool CollisionTop = false;
 
         public CharacterController(GameObject Parent)
             : base(Parent)
@@ -35,7 +31,6 @@ namespace DKEngine.Core.Scripts
 
         protected internal override void OnColliderEnter(Collider e)
         {
-
         }
 
         protected internal override void Start()
@@ -52,7 +47,6 @@ namespace DKEngine.Core.Scripts
 
                 vertSpeed = 0;
             }
-                
 
             if (Engine.Input.IsKeyDown(ConsoleKey.A))
             {
@@ -73,14 +67,13 @@ namespace DKEngine.Core.Scripts
             {
                 horiSpeed = 0;
             }
-            else if(horiSpeed < 0)
+            else if (horiSpeed < 0)
             {
                 horiSpeed += Engine.DeltaTime * Acceleration * 2;
 
                 if (horiSpeed > 0)
                     horiSpeed = 0;
             }
-
 
             if (Engine.Input.IsKeyDown(ConsoleKey.D))
             {
@@ -104,7 +97,6 @@ namespace DKEngine.Core.Scripts
                 if (horiSpeed < 0)
                     horiSpeed = 0;
             }
-
             else if (CollisionRight = Parent.Collider.Collision(Collider.Direction.Right))
             {
                 horiSpeed = 0;
@@ -157,7 +149,6 @@ namespace DKEngine.Core.Scripts
                     Jumped = true;
                     IsFalling = true;
                 }
-
                 else if (IsFalling)
                 {
                     if (vertSpeed < FloatSpeed)

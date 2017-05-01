@@ -1,9 +1,4 @@
 ﻿using DKEngine.Core.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKEngine.Core
 {
@@ -12,9 +7,9 @@ namespace DKEngine.Core
         internal Collider.CollisionEnterHandler CollisionHandler;
 
         public Script(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         {
-            if(Parent.Collider != null)
+            if (Parent.Collider != null)
             {
                 CollisionHandler = new Collider.CollisionEnterHandler(OnColliderEnter);
                 Parent.Collider.CollisionEvent += CollisionHandler;
@@ -22,15 +17,15 @@ namespace DKEngine.Core
         }
 
         protected internal abstract void OnColliderEnter(Collider e);
-        
+
         public override void Destroy()
         {
-            if(UpdateHandle != null)
+            if (UpdateHandle != null)
                 Engine.UpdateEvent -= UpdateHandle;
 
             if (CollisionHandler != null)
                 Parent.Collider.CollisionEvent -= CollisionHandler;
-            
+
             Parent.Scripts.Remove(this);
             Parent = null;
             UpdateHandle = null;

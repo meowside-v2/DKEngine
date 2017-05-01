@@ -1,14 +1,8 @@
-﻿using System;
+﻿using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NAudio;
-using NAudio.Wave;
-using System.IO;
-using NAudio.Wave.SampleProviders;
-using DKEngine.Core.Ext;
-using System.Diagnostics;
 
 namespace DKEngine.Core.Components
 {
@@ -92,7 +86,7 @@ namespace DKEngine.Core.Components
         private bool IsAvailable = true;
 
         public SoundSource(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         {
             this.Name = string.Format("{0}_{1}", Parent.Name, nameof(SoundSource));
         }
@@ -128,10 +122,11 @@ namespace DKEngine.Core.Components
         }
     }
 
-    class AutoDisposeFileReader : ISampleProvider
+    internal class AutoDisposeFileReader : ISampleProvider
     {
         private readonly AudioFileReader reader;
         private bool isDisposed;
+
         public AutoDisposeFileReader(AudioFileReader reader)
         {
             this.reader = reader;
@@ -154,7 +149,7 @@ namespace DKEngine.Core.Components
         public WaveFormat WaveFormat { get; private set; }
     }
 
-    class CachedSoundSampleProvider : ISampleProvider
+    internal class CachedSoundSampleProvider : ISampleProvider
     {
         private readonly Sound cachedSound;
         private long position;

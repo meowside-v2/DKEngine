@@ -1,5 +1,10 @@
-﻿/**
-* (C) 2017 David Knieradl 
+﻿using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Core.Ext;
+using DKEngine.Core.UI;
+
+/**
+* (C) 2017 David Knieradl
 *
 * For the brave souls who get this far: You are the chosen ones,
 * the valiant knights of programming who toil away, without rest,
@@ -16,10 +21,6 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using DKEngine.Core;
-using DKEngine.Core.Components;
-using DKEngine.Core.Ext;
-using DKEngine.Core.UI;
 using System.Threading.Tasks;
 
 namespace DKEngine
@@ -36,19 +37,19 @@ namespace DKEngine
 
         public static class Render
         {
-            public   const int   ResolutionScale    = 40;
-            public   const float ResolutionRatio    = ResolutionScale / 100f;
+            public const int ResolutionScale = 40;
+            public const float ResolutionRatio = ResolutionScale / 100f;
 
-            public   const int   RenderWidth        = (int)(640 * ResolutionRatio);
-            public   const int   RenderHeight       = (int)(480 * ResolutionRatio);
+            public const int RenderWidth = (int)(640 * ResolutionRatio);
+            public const int RenderHeight = (int)(480 * ResolutionRatio);
 
-            internal const int   ImageBufferSize    = 3 * RenderWidth * RenderHeight;
-            internal const int   ImageKeyBufferSize = RenderWidth * RenderHeight;
+            internal const int ImageBufferSize = 3 * RenderWidth * RenderHeight;
+            internal const int ImageKeyBufferSize = RenderWidth * RenderHeight;
 
             internal static byte[] imageBuffer;
             internal static byte[] imageBufferKey;
             internal static byte[] ImageOutData;
-            
+
             /*internal const  short sampleSize = 100;
             internal static int   lastTime   = 0;
             internal static int   numRenders = 0;*/
@@ -69,6 +70,7 @@ namespace DKEngine
         {
             [DllImport("user32.dll")]
             private static extern ushort GetKeyState(short nVirtKey);
+
             private const ushort keyDownBit = 0x80;
 
             internal static bool[] KeysPressed;
@@ -104,7 +106,7 @@ namespace DKEngine
 
             internal static void CheckForKeys()
             {
-                for(int key = 0; key < NumberOfKeys; key++)
+                for (int key = 0; key < NumberOfKeys; key++)
                 {
                     bool IsDown = ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
 
@@ -163,9 +165,8 @@ namespace DKEngine
 
         public static string SceneName { get { return Engine.LoadingScene != null ? Engine.LoadingScene.Name : ""; } }
 
-        
-
         internal static event EngineHandler UpdateEvent;
+
         internal delegate void EngineHandler();
 
         public static void Init()
@@ -176,15 +177,15 @@ namespace DKEngine
                 {
                     WindowControl.WindowInit();
                     Database.InitDatabase();
-                    
-                    Render.imageBuffer    = new byte[Render.ImageBufferSize];
+
+                    Render.imageBuffer = new byte[Render.ImageBufferSize];
                     Render.imageBufferKey = new byte[Render.ImageKeyBufferSize];
-                    Render.ImageOutData   = new byte[Render.ImageBufferSize];
+                    Render.ImageOutData = new byte[Render.ImageBufferSize];
 
                     Input.NumberOfKeys = (short)Enum.GetNames(typeof(ConsoleKey)).Length;
-                    Input.KeysPressed  = new bool[Input.NumberOfKeys];
-                    Input.KeysDown     = new bool[Input.NumberOfKeys];
-                    Input.KeysUp       = new bool[Input.NumberOfKeys];
+                    Input.KeysPressed = new bool[Input.NumberOfKeys];
+                    Input.KeysDown = new bool[Input.NumberOfKeys];
+                    Input.KeysUp = new bool[Input.NumberOfKeys];
                     Input.KeysReleased = new bool[Input.NumberOfKeys];
 
                     DeltaT = Stopwatch.StartNew();
@@ -212,8 +213,6 @@ namespace DKEngine
                     BackgroundWorks.Start();
                     //RenderWorker.Start();
 
-
-
 #if !DEBUG
                     SplashScreen();
 #endif
@@ -228,7 +227,7 @@ namespace DKEngine
             else
                 throw new Exception("Engine is being initialised second time");
         }
-        
+
         public static void LoadSceneToMemory<T>() where T : Scene
         {
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
@@ -245,7 +244,7 @@ namespace DKEngine
             }
 
             Database.AddScene(Engine.LoadingScene);
-            
+
             //Engine.LoadingScene.Init();
         }
 
@@ -271,7 +270,7 @@ namespace DKEngine
         {
             ReloadScene(Database.GetScene(Name));
         }
-        
+
         public static void ChangeScene(string Name, bool Reload = false, params string[] args)
         {
             UnregisterScene();
@@ -300,7 +299,7 @@ namespace DKEngine
         {
             Engine.CurrentScene = Engine.LoadingScene;
             source.Set(args);
-            
+
             foreach (var item in source.AllBehaviors)
             {
                 try
@@ -313,7 +312,6 @@ namespace DKEngine
 
         private static void ReloadScene(Scene source)
         {
-
         }
 
         /*public static void ChangeScene<T>() where T : Scene
@@ -330,11 +328,11 @@ namespace DKEngine
 
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
-            
+
             Engine.CurrentScene = Engine.LoadingScene;
             Engine.NewGameobjects = Engine.CurrentScene.NewlyGeneratedGameObjects;
             Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
-                
+
             //Engine._LoadingNewPage = false;
         }*/
 
@@ -344,7 +342,7 @@ namespace DKEngine
             {
                 Engine.LoadScene<Scene>();
 
-                SplashScreen splash    = new SplashScreen();
+                SplashScreen splash = new SplashScreen();
                 Camera splashScreenCam = new Camera();
 
                 SpinWait.SpinUntil(() => splash.Animator.NumberOfPlays >= 1);
@@ -356,13 +354,12 @@ namespace DKEngine
 
         private static void Update()
         {
-
             Task imageRender = Task.Factory.StartNew(RenderImage);
 
-            int       NumberOfFrames = 0;
-            TimeSpan  timeOut        = new TimeSpan(0, 0, 0, 0, 500);
-            Stopwatch time           = Stopwatch.StartNew();
-            
+            int NumberOfFrames = 0;
+            TimeSpan timeOut = new TimeSpan(0, 0, 0, 0, 500);
+            Stopwatch time = Stopwatch.StartNew();
+
             while (true)
             {
                 Input.CheckForKeys();
@@ -393,19 +390,19 @@ namespace DKEngine
                 }
 
                 List<GameObject> reference = Engine.RenderObjects.GetGameObjectsInView();
-                
+
                 List<GameObject> VisibleTriggers = reference.Where(obj => obj.Collider != null ? obj.Collider.IsTrigger : false).ToList();
                 List<GameObject> VisibleColliders = reference.Where(obj => obj.Collider != null ? !obj.Collider.IsTrigger : false).ToList();
                 int ColliderCount = VisibleTriggers.Count;
                 for (int i = 0; i < ColliderCount; i++)
                     VisibleTriggers[i].Collider?.TriggerCheck(VisibleColliders);
-                
+
                 BaseCam?.BufferImage(reference);
 
                 Buffer.BlockCopy(Render.imageBuffer, 0, Render.ImageOutData, 0, Render.ImageBufferSize);
-                
+
                 NumberOfFrames++;
-                
+
                 if (time.ElapsedMilliseconds > timeOut.TotalMilliseconds)
                 {
                     long t = NumberOfFrames * 1000 / time.ElapsedMilliseconds;
@@ -426,13 +423,13 @@ namespace DKEngine
             using (Graphics g = Graphics.FromHwnd(ConsoleWindow))
             {
                 g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
-                g.PixelOffsetMode    = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
-                g.SmoothingMode      = System.Drawing.Drawing2D.SmoothingMode.None;
-                g.InterpolationMode  = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+
                 Rectangle Screen = System.Windows.Forms.Screen.FromHandle(ConsoleWindow).Bounds;
-                int Width        = Screen.Width;
-                int Height       = Screen.Height;
+                int Width = Screen.Width;
+                int Height = Screen.Height;
 
                 float ScaleRatio = Height / Engine.Render.RenderHeight;
 
@@ -441,14 +438,14 @@ namespace DKEngine
 
                 int XOffset = (int)(Width - RasteredWidth) / 2;
                 int YOffset = (int)(Height - RasteredHeight) / 2;
-                
+
                 while (!Render.AbortRender)
                 {
                     Rectangle ScreenResCheck = System.Windows.Forms.Screen.FromHandle(ConsoleWindow).Bounds;
 
                     if (ScreenResCheck != Screen)
                     {
-                        Width  = ScreenResCheck.Width;
+                        Width = ScreenResCheck.Width;
                         Height = ScreenResCheck.Height;
 
                         XOffset = (int)(Width - (Engine.Render.RenderWidth * ScaleRatio)) / 2;
@@ -459,7 +456,6 @@ namespace DKEngine
                     {
                         fixed (byte* ptr = Render.ImageOutData)
                         {
-
                             using (Bitmap outFrame = new Bitmap(Render.RenderWidth,
                                                                 Render.RenderHeight,
                                                                 3 * Render.RenderWidth,
@@ -475,7 +471,7 @@ namespace DKEngine
                             }
                         }
                     }
-                    
+
                     await Task.Delay(1);
                     //Thread.Sleep(1);
                 }

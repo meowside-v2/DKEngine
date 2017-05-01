@@ -1,23 +1,20 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
-using DKEngine.Core.Ext;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DKEngine.Core.Components
 {
     public class Collider : Component
     {
         internal event CollisionEnterHandler CollisionEvent;
+
         internal delegate void CollisionEnterHandler(Collider m);
-        
-        
+
         /// <summary>
         /// Determines size and position of collider
         /// </summary>
@@ -60,7 +57,9 @@ namespace DKEngine.Core.Components
         {
             return string.Format("Left {0}\nRight {1}\nTop {2}\nDown {3}", Collision(Direction.Left), Collision(Direction.Right), Collision(Direction.Up), Collision(Direction.Down));
         }
+
 #endif
+
         /// <summary>
         /// Direction of the collision detection: Up, Down, Left, Right
         /// </summary>
@@ -82,7 +81,7 @@ namespace DKEngine.Core.Components
             if (this.IsTrigger)
                 return false;
 
-            if(LastUpdated != Engine.LastUpdated)
+            if (LastUpdated != Engine.LastUpdated)
             {
                 //LastUpdated = Engine.LastUpdated;
 
@@ -91,7 +90,7 @@ namespace DKEngine.Core.Components
                 _Bottom = false;
                 _Top = false;
 
-                foreach(Collider tmp in Engine.CurrentScene.AllGameObjectsColliders)
+                foreach (Collider tmp in Engine.CurrentScene.AllGameObjectsColliders)
                 {
                     bool _L = false;
                     bool _R = false;
@@ -270,6 +269,7 @@ namespace DKEngine.Core.Components
                             return true;
                         }
                         return false;
+
                     case Direction.Left:
                         if ((tmp = Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Left(obj2))) != null)
                         {
@@ -277,6 +277,7 @@ namespace DKEngine.Core.Components
                             return true;
                         }
                         return false;
+
                     case Direction.Down:
                         if ((tmp = Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Down(obj2))) != null)
                         {
@@ -284,6 +285,7 @@ namespace DKEngine.Core.Components
                             return true;
                         }
                         return false;
+
                     case Direction.Right:
                         if ((tmp = Engine.CurrentScene.AllGameObjectsColliders.FirstOrDefault(obj2 => Right(obj2))) != null)
                         {
@@ -291,22 +293,26 @@ namespace DKEngine.Core.Components
                             return true;
                         }
                         return false;
+
                     default:
                         throw new Exception("WTF jak se ti to povedlo");
                 }*/
             }
 
-
             switch (direction)
             {
                 case Direction.Up:
                     return _Top;
+
                 case Direction.Left:
                     return _Left;
+
                 case Direction.Down:
                     return _Bottom;
+
                 case Direction.Right:
                     return _Right;
+
                 default:
                     return false;
             }
@@ -384,13 +390,11 @@ namespace DKEngine.Core.Components
 
         private float RightSpan(Collider obj)
         {
-            
             return this.X + this.Width - obj.X;
         }
 
         private float BottomSpan(Collider obj)
         {
-            
             return this.Y + this.Height - obj.Y;
         }
 
@@ -402,7 +406,7 @@ namespace DKEngine.Core.Components
                     return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X >= obj.X + obj.Width / 2 && this.X <= obj.X + obj.Width); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
             }
             catch { }
-            
+
             return false;
         }
 
@@ -414,7 +418,7 @@ namespace DKEngine.Core.Components
                     return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X + this.Width >= obj.X && this.X + this.Width <= obj.X + obj.Width / 2);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
             }
             catch { }
-            
+
             return false;
         }
 
@@ -441,7 +445,7 @@ namespace DKEngine.Core.Components
 
             return false;
         }
-        
+
         public static void SetNewCollider(Collider destination, RectangleF Area)
         {
             destination.Area = Area;
@@ -483,15 +487,19 @@ namespace DKEngine.Core.Components
                 case Direction.Up:
                     _Top = true;
                     break;
+
                 case Direction.Left:
                     _Left = true;
                     break;
+
                 case Direction.Down:
                     _Bottom = true;
                     break;
+
                 case Direction.Right:
                     _Right = true;
                     break;
+
                 default:
                     break;
             }

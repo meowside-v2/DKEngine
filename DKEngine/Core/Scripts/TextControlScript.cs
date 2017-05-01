@@ -1,12 +1,7 @@
 ﻿using DKEngine.Core.Components;
 using DKEngine.Core.UI;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static DKEngine.Core.UI.Text;
-using static DKEngine.Core.UI.TextBlock;
 
 namespace DKEngine.Core.Scripts
 {
@@ -58,7 +53,6 @@ namespace DKEngine.Core.Scripts
                     {
                         Xoffset += 3 * _Parent.Transform.Scale.X * _Parent.FontSize;
                     }
-
                     else
                     {
                         if (_Parent._textStr[i] == '\r' || _Parent._textStr[i] == '\n')
@@ -110,16 +104,18 @@ namespace DKEngine.Core.Scripts
                 case VerticalAlignment.Top:
                     startY = 0;
                     break;
+
                 case VerticalAlignment.Center:
                     startY = (_Parent.Transform.Dimensions.Y * _Parent.Transform.Scale.Y * _Parent.FontSize - maxHeight) / 2;
                     break;
+
                 case VerticalAlignment.Bottom:
                     startY = _Parent.Transform.Dimensions.Y * _Parent.Transform.Scale.Y * _Parent.FontSize - maxHeight;
                     break;
+
                 default:
                     break;
             }
-
 
             for (int i = 0; i < textAlignedCount; i++)
             {
@@ -147,7 +143,6 @@ namespace DKEngine.Core.Scripts
                             startX = _Parent.Transform.Dimensions.X * _Parent.Transform.Scale.X - maxWidth;
                             break;
                     }
-
 
                     for (int j = 0; j < textAlignedRowCount; j++)//foreach (Letter letter in row)
                     {

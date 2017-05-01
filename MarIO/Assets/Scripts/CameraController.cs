@@ -1,24 +1,19 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
-using DKEngine;
-using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    class CameraController : Script
+    internal class CameraController : Script
     {
         //GameObject Border;
-        GameObject Player;
-        Camera TargetCam;
-        float PositionX;
-        float MaxCameraDistance;
+        private GameObject Player;
 
-        Vector3 Offset;
+        private Camera TargetCam;
+        private float PositionX;
+        private float MaxCameraDistance;
+
+        private Vector3 Offset;
 
         public CameraController(GameObject Parent)
             : base(Parent)
@@ -49,9 +44,9 @@ namespace MarIO.Assets.Scripts
                 //Border.Transform.Position = TargetCam.Position - Offset;
             }
 
-            if(Player.Transform.Position.X < TargetCam.Position.X)
+            if (Player.Transform.Position.X < TargetCam.Position.X)
             {
-                Player.Transform.Position += new Vector3(TargetCam.Position.X - Player.Transform.Position.X , 0, 0);
+                Player.Transform.Position += new Vector3(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
             }
 
             PositionX = Player.Transform.Position.X;

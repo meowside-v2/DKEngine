@@ -1,13 +1,11 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DKEngine.Core.Components.Unused
@@ -81,14 +79,14 @@ namespace DKEngine.Core.Components.Unused
         /// Represents Blue channel of image
         /// </summary>
         public readonly byte[][][] colorMapB;
-        
+
         /// <summary>
         /// Loads image and creates new material
         /// </summary>
         /// <param name="source">Source image</param>
         public Material_HighMemory(Image source)
         {
-            if(source != null)
+            if (source != null)
             {
                 SourceImage = source;
 
@@ -115,10 +113,10 @@ namespace DKEngine.Core.Components.Unused
                     DurationPerFrame = Duration / Frames;
                     IsAnimated = true;
                     IsLooped = BitConverter.ToInt16(source.GetPropertyItem(20737).Value, 0) != 1;
-                    
+
                     Bitmap[] layersOfImage = new Bitmap[Frames];
 
-                    for(int i = 0; i < Frames; i++)
+                    for (int i = 0; i < Frames; i++)
                     {
                         source.SelectActiveFrame(frameDimension, i);
                         layersOfImage[i] = new Bitmap(source);
@@ -146,7 +144,7 @@ namespace DKEngine.Core.Components.Unused
                             default:
                                 throw new Exception("Unsupported image pixel format");
                         }
-                        
+
                         for (int frame = 0; frame < Frames; frame++)
                         {
                             BitmapData ImageLayerData = layersOfImage[frame].LockBits(new Rectangle(0, 0, this.Width, this.Height), ImageLockMode.ReadOnly, layersOfImage[frame].PixelFormat);
@@ -169,13 +167,11 @@ namespace DKEngine.Core.Components.Unused
                                 for (int column = 0; column < this.Width; column++)
                                 {
                                     int offset = PixelFormat * row * Width + PixelFormat * column;
-                                    
+
                                     colorMapA[frame][row][column] = PixelFormat == 4 ? data[offset + 3] : (byte)255;
                                     colorMapR[frame][row][column] = data[offset + 2];
                                     colorMapG[frame][row][column] = data[offset + 1];
                                     colorMapB[frame][row][column] = data[offset];
-
-
                                 }
                             }
 
@@ -185,7 +181,6 @@ namespace DKEngine.Core.Components.Unused
                         }
                     });
                 }
-
                 else
                 {
                     colorMapA = new byte[Frames][][];
@@ -274,7 +269,7 @@ namespace DKEngine.Core.Components.Unused
                                                               this.colorMapG[frame][y][x],
                                                               this.colorMapB[frame][y][x]);
         }*/
-        
+
         /// <summary>
         /// Render material into engine image buffer
         /// </summary>
@@ -301,7 +296,7 @@ namespace DKEngine.Core.Components.Unused
 
             if (ReColor == null)
             {
-                if(AnimationState <= BufferImages)
+                if (AnimationState <= BufferImages)
                     for (int row = 0; row < RasteredHeight; row++)
                     {
                         NonRasteredWidth = 0;
@@ -311,13 +306,11 @@ namespace DKEngine.Core.Components.Unused
 
                         for (int column = 0; column < RasteredWidth; column++)
                         {
-
                             if (x + column >= Engine.Render.RenderWidth)
                                 break;
 
                             if (IsOnScreen(x + column, y + row))
                             {
-
                                 int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
                                 int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 
@@ -356,13 +349,11 @@ namespace DKEngine.Core.Components.Unused
 
                     for (int column = 0; column < RasteredWidth; column++)
                     {
-
                         if (x + column >= Engine.Render.RenderWidth)
                             break;
 
                         if (IsOnScreen(x + column, y + row))
                         {
-
                             int offset = (int)(3 * ((y + row) * Engine.Render.RenderWidth + (x + column)));
                             int keyOffset = (int)((y + row) * Engine.Render.RenderWidth + (x + column));
 

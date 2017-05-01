@@ -1,28 +1,23 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
-using DKEngine;
 using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    class GoombaController : Script
+    internal class GoombaController : Script
     {
-        const int Speed = 20;
-        const int FloatSpeed = 60;
-        const int Acceleration = 20;
+        private const int Speed = 20;
+        private const int FloatSpeed = 60;
+        private const int Acceleration = 20;
 
-        int CurrentSpeed = 0;
-        float vertSpeed = 0;
-        bool IsFalling = false;
+        private int CurrentSpeed = 0;
+        private float vertSpeed = 0;
+        private bool IsFalling = false;
 
-        bool firstTimeDeadAnimation = true;
+        private bool firstTimeDeadAnimation = true;
 
-        Enemy Target;
+        private Enemy Target;
 
         public GoombaController(GameObject Parent) : base(Parent)
         {
@@ -47,8 +42,8 @@ namespace MarIO.Assets.Scripts
             {
                 DeadAnimation();
             }
-        }    
-        
+        }
+
         private void Movement()
         {
             if (this.Parent.Collider.Collision(Collider.Direction.Left))
@@ -68,7 +63,6 @@ namespace MarIO.Assets.Scripts
                     vertSpeed = 0;
                     IsFalling = true;
                 }
-
                 else
                 {
                     if (vertSpeed < FloatSpeed)
@@ -97,6 +91,5 @@ namespace MarIO.Assets.Scripts
                 Target.Collider.Destroy();
             }
         }
-
     }
 }

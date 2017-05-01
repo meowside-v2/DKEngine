@@ -1,22 +1,17 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
-using DKEngine;
 
 namespace MarIO.Assets.Scripts
 {
-    class GUIUpdateScript : Script
+    internal class GUIUpdateScript : Script
     {
-        TextBlock Time;
-        TextBlock Coins;
-        TextBlock World;
-        TextBlock Lives;
-        TextBlock Score;
+        private TextBlock Time;
+        private TextBlock Coins;
+        private TextBlock World;
+        private TextBlock Lives;
+        private TextBlock Score;
 
         public GUIUpdateScript(GameObject Parent) : base(Parent)
         { }
@@ -27,13 +22,13 @@ namespace MarIO.Assets.Scripts
         protected override void Start()
         {
             this.World = GameObject.Find<TextBlock>("txt_World");
-            this.Time  = GameObject.Find<TextBlock>("txt_Time");
+            this.Time = GameObject.Find<TextBlock>("txt_Time");
             this.Score = GameObject.Find<TextBlock>("txt_Score");
             this.Coins = GameObject.Find<TextBlock>("txt_Coins");
             this.Lives = GameObject.Find<TextBlock>("txt_Lives");
 
             this.World.Text = Engine.SceneName;
-            this.Time.Text  = string.Format("{0:000}", Shared.TimeLeft.TotalSeconds);
+            this.Time.Text = string.Format("{0:000}", Shared.TimeLeft.TotalSeconds);
             this.Score.Text = string.Format("{0:00000000}", Shared.GameScore);
             this.Coins.Text = string.Format("*{0:00}", Shared.CoinsCount);
             this.Lives.Text = string.Format("*{0:00}", Shared.Lives);

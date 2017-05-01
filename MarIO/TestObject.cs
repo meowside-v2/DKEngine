@@ -1,16 +1,12 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
-using DKEngine;
 using MarIO.Assets.Models;
+using System;
 
 namespace MarIO
 {
-    class TestObject : GameObject
+    internal class TestObject : GameObject
     {
         protected override void Initialize()
         {
@@ -21,8 +17,8 @@ namespace MarIO
 
     internal class ChangerScript : Script
     {
-        GameObject Ref;
-        int change = 0;
+        private GameObject Ref;
+        private int change = 0;
 
         public ChangerScript(GameObject Parent) : base(Parent)
         {
@@ -47,7 +43,7 @@ namespace MarIO
         }
     }
 
-    class ChangedObject : Block
+    internal class ChangedObject : Block
     {
         public ChangedObject()
         {

@@ -1,20 +1,15 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models.Miscellaneous
 {
-    class Heart : GameObject
+    internal class Heart : GameObject
     {
         public Heart()
         { }
 
         public Heart(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         { }
 
         protected override void Initialize()

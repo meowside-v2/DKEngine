@@ -1,48 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
 using DKEngine.Core;
-using DKEngine;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
-using DKBasicEngine_1_0.Core.Components;
+using System;
 
 namespace MarIO.Assets.Scripts
 {
-    class CharacterController : Script
+    internal class CharacterController : Script
     {
-        Animator PlayerAnimator;
-        Mario Player;
-        Camera TargetCam;
-        Vector3 Offset;
+        private Animator PlayerAnimator;
+        private Mario Player;
+        private Camera TargetCam;
+        private Vector3 Offset;
 
-        Parabola test;
+        //Parabola test;
 
-        float PositionX;
-        float MaxCameraDistance;
+        private float PositionX;
+        private float MaxCameraDistance;
 
-        float horiSpeed = 0;
-        float vertSpeed = 0;
+        private float horiSpeed = 0;
+        private float vertSpeed = 0;
 
-        float MovementSpeed = 80f;
-        float FloatSpeed = 120f;
+        private float MovementSpeed = 80f;
+        private float FloatSpeed = 120f;
 
-        float Acceleration = 2f;
+        private float Acceleration = 2f;
 
-        float DeathAnimHeight = 50;
-        float DeathAnimStartY = float.MinValue;
-        
-        bool CanJump = true;
-        bool IsFalling = false;
-        bool Jumped = false;
-        bool IsFacingLeft = false;
-        bool EnemyKilledAnim = false;
-        bool FirstTimeDeadAnimPlay = true;
-        //bool 
+        private float DeathAnimSpeed = 50;
 
-        string IDLE
+        private bool CanJump = true;
+        private bool IsFalling = false;
+        private bool Jumped = false;
+        private bool IsFacingLeft = false;
+        private bool EnemyKilledAnim = false;
+        private bool FirstTimeDeadAnimPlay = true;
+        //bool
+
+        private string IDLE
         {
             get
             {
@@ -50,18 +44,23 @@ namespace MarIO.Assets.Scripts
                 {
                     case Mario.State.Small:
                         return IsFacingLeft ? Shared.MARIO_IDLE_LEFT : Shared.MARIO_IDLE_RIGHT;
+
                     case Mario.State.Super:
                         return "idle";
+
                     case Mario.State.Fire:
                         return "idle";
+
                     case Mario.State.Invincible:
                         return "idle";
+
                     default:
                         throw new Exception("JAK");
                 }
             }
         }
-        string MOVE
+
+        private string MOVE
         {
             get
             {
@@ -69,18 +68,23 @@ namespace MarIO.Assets.Scripts
                 {
                     case Mario.State.Small:
                         return horiSpeed >= 0 ? Shared.MARIO_MOVE_RIGHT : Shared.MARIO_MOVE_LEFT;
+
                     case Mario.State.Super:
                         return "idle";
+
                     case Mario.State.Fire:
                         return "idle";
+
                     case Mario.State.Invincible:
                         return "idle";
+
                     default:
                         throw new Exception("JAK");
                 }
             }
         }
-        string JUMP
+
+        private string JUMP
         {
             get
             {
@@ -88,13 +92,17 @@ namespace MarIO.Assets.Scripts
                 {
                     case Mario.State.Small:
                         return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.MARIO_JUMP_RIGHT : Shared.MARIO_JUMP_LEFT)
-                                              : (IsFacingLeft  ? Shared.MARIO_JUMP_LEFT  : Shared.MARIO_JUMP_RIGHT);
+                                              : (IsFacingLeft ? Shared.MARIO_JUMP_LEFT : Shared.MARIO_JUMP_RIGHT);
+
                     case Mario.State.Super:
                         return "idle";
+
                     case Mario.State.Fire:
                         return "idle";
+
                     case Mario.State.Invincible:
                         return "idle";
+
                     default:
                         throw new Exception("JAK");
                 }
@@ -120,14 +128,13 @@ namespace MarIO.Assets.Scripts
             TargetCam = Component.Find<Camera>("Camera");
             TargetCam.Position = new Vector3(0, -180, 0);
 
-            test = new Parabola(Player)
+            /*test = new Parabola(Player)
             {
                 Y = FloatSpeed,
                 Time = new TimeSpan(0, 0, 1)
-            };
+            };*/
 
             Player.Animator.Play("idle");
-            
         }
 
         protected override void Update()
@@ -149,9 +156,9 @@ namespace MarIO.Assets.Scripts
             {
                 DeadAnimation();
             }
-            
+
             Player.Transform.Position = Player.Transform.Position.Add(horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
-            
+
             CameraControl();
             AnimationControl();
         }
@@ -162,8 +169,6 @@ namespace MarIO.Assets.Scripts
 
             if (FirstTimeDeadAnimPlay)
             {
-                DeathAnimStartY = Player.Transform.Position.Y;
-
                 Player.Collider.Destroy();
 
                 foreach (GameObject child in Player.Child)
@@ -171,10 +176,14 @@ namespace MarIO.Assets.Scripts
                     child.Collider.Destroy();
                 }
 
+                vertSpeed = -FloatSpeed;
+
                 FirstTimeDeadAnimPlay = false;
             }
-
-
+            else
+            {
+                vertSpeed += Engine.DeltaTime * DeathAnimSpeed * Acceleration;
+            }
         }
 
         private void CameraControl()
@@ -203,7 +212,6 @@ namespace MarIO.Assets.Scripts
                 vertSpeed = 0;
             }
 
-
             if (Engine.Input.IsKeyDown(ConsoleKey.A) || horiSpeed < 0)
             {
                 Left();
@@ -218,7 +226,7 @@ namespace MarIO.Assets.Scripts
             {
                 Right();
             }
-            
+
             if (!Player.Collider.Collision(Collider.Direction.Down))
             {
                 Fall();
@@ -231,15 +239,24 @@ namespace MarIO.Assets.Scripts
             {
                 if (CanJump)
                 {
-                    if (!IsFalling)
+                    if (EnemyKilledAnim)
                     {
-                        //if (/*vertSpeed == 0 && !Jumped*/)
-                        //{
-                            test.Enabled = true;
-                            vertSpeed = test.Accumulated; /*-FloatSpeed * 1.5f;*/
+                        vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed * 2;
+
+                        if (vertSpeed <= 0)
+                        {
+                            IsFalling = true;
+                            EnemyKilledAnim = false;
+                        }
+                    }
+                    else if (!IsFalling)
+                    {
+                        if (vertSpeed == 0 && !Jumped)
+                        {
+                            vertSpeed = -FloatSpeed * 1.5f;
                             Jumped = true;
-                        //}
-                        /*else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
+                        }
+                        else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
                         {
                             vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed;
                         }
@@ -247,7 +264,7 @@ namespace MarIO.Assets.Scripts
                         {
                             vertSpeed = 0;
                             IsFalling = true;
-                        }*/
+                        }
                     }
                 }
             }
@@ -255,18 +272,19 @@ namespace MarIO.Assets.Scripts
             {
                 if (EnemyKilledAnim)
                 {
-                    //vertSpeed = test.Accumulated;
-                    vertSpeed = test.Accumulated; //vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed * 4;
+                    vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed * 4;
 
                     if (vertSpeed <= 0)
                     {
                         IsFalling = true;
+                        EnemyKilledAnim = false;
                     }
                 }
                 else if (!IsFalling)
                 {
-                    vertSpeed = -vertSpeed;
+                    vertSpeed = -vertSpeed * Acceleration;
                     IsFalling = true;
+                    EnemyKilledAnim = false;
                 }
             }
         }
@@ -292,14 +310,14 @@ namespace MarIO.Assets.Scripts
             else if (horiSpeed < 0)
             {
                 IsFacingLeft = true;
-                horiSpeed += Engine.DeltaTime * Acceleration * MovementSpeed * 2;
+                horiSpeed += Engine.DeltaTime * Acceleration * MovementSpeed * 4;
 
                 if (horiSpeed >= 0 || Player.Collider.Collision(Collider.Direction.Left))
                 {
                     horiSpeed = 0;
                 }
             }
-        } 
+        }
 
         private void Right()
         {
@@ -329,7 +347,7 @@ namespace MarIO.Assets.Scripts
                     horiSpeed = 0;
                 }
             }
-        } 
+        }
 
         private void Fall()
         {
@@ -339,7 +357,6 @@ namespace MarIO.Assets.Scripts
                 Jumped = true;
                 IsFalling = true;
             }
-
             else if (IsFalling)
             {
                 if (vertSpeed < FloatSpeed)
@@ -365,7 +382,6 @@ namespace MarIO.Assets.Scripts
                 {
                     if (horiSpeed != 0)
                         PlayerAnimator.Play(MOVE);
-
                     else
                         PlayerAnimator.Play(IDLE);
                 }

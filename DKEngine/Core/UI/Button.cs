@@ -1,5 +1,5 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
 using DKEngine.Core.Scripts;

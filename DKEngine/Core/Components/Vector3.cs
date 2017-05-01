@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DKEngine.Core.Components
+﻿namespace DKEngine.Core.Components
 {
 #pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+
     public struct Vector3
 #pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
 #pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
@@ -182,6 +177,7 @@ namespace DKEngine.Core.Components
         }
 
         private static Vector3 _zero = new Vector3(0, 0, 0);
+
         public static Vector3 Zero
         {
             get { return _zero; }

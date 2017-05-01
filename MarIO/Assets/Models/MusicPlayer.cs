@@ -1,15 +1,10 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Scripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models
 {
-    class MusicPlayer : GameObject
+    internal class MusicPlayer : GameObject
     {
         protected override void Initialize()
         {

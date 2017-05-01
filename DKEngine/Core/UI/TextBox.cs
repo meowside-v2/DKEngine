@@ -1,10 +1,9 @@
 ﻿/*
-* (C) 2017 David Knieradl 
+* (C) 2017 David Knieradl
 */
 
 using DKEngine.Core.Scripts;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using static DKEngine.Core.UI.Text;
 
@@ -14,6 +13,7 @@ namespace DKEngine.Core.UI
     {
         public bool IsFocused { get; set; }
         public int FocusElementID { get; private set; }
+
         public override string Text
         {
             set
@@ -26,6 +26,7 @@ namespace DKEngine.Core.UI
             }
             get { return _textStr; }
         }
+
         public InputType AllowedChars { get; set; }
 
         public TextBox()
@@ -35,24 +36,28 @@ namespace DKEngine.Core.UI
         }
 
         public TextBox(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         {
             this.InitNewScript<TextBoxScript>();
             //this.Scripts.Add(new TextBoxScript(this));
         }
-        
+
         private bool TextControl(string key)
         {
             switch (AllowedChars)
             {
                 case InputType.All:
                     return true;
+
                 case InputType.AlphaNumerical:
                     return key.All(Char.IsLetterOrDigit);
+
                 case InputType.Alpha:
                     return key.All(Char.IsLetter);
+
                 case InputType.Numerical:
                     return key.All(Char.IsNumber);
+
                 default:
                     return false;
             }
@@ -64,12 +69,16 @@ namespace DKEngine.Core.UI
             {
                 case Type.All:
                     return true;
+
                 case Type.AlphaNumerical:
                     return Char.IsLetterOrDigit(key);
+
                 case Type.Alpha:
                     return Char.IsLetter(key);
+
                 case Type.Numerical:
                     return Char.IsNumber(key);
+
                 default:
                     return false;
             }

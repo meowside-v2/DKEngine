@@ -1,14 +1,9 @@
-﻿using DKEngine.Core.Scripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DKEngine.Core;
+﻿using DKEngine.Core;
+using DKEngine.Core.Scripts;
 
 namespace DKEngine_Tester
 {
-    class PlayerControl : CharacterController
+    internal class PlayerControl : CharacterController
     {
         public PlayerControl(GameObject Parent)
             : base(Parent)

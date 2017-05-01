@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DKEngine.Core.Components
 {
@@ -31,6 +27,7 @@ namespace DKEngine.Core.Components
         }
 
         protected internal abstract void Start();
+
         protected internal abstract void Update();
     }
 }
