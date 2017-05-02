@@ -177,13 +177,17 @@ namespace DKEngine.Core.UI
 
             int ScriptsCount = this.Scripts.Count;
             for (int i = 0; i < ScriptsCount; i++)
-                Scripts[i].Destroy();
+                Scripts[0].Destroy();
 
             int _textCount = _text.Count;
             for (int i = 0; i < _textCount; i++)
+            {
                 _text[0].Destroy();
+                _text.RemoveAt(0);
+            }
+                
 
-            Animator.Destroy();
+            Animator?.Destroy();
 
             Model = null;
             Animator = null;

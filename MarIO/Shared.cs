@@ -1,4 +1,5 @@
-﻿using MarIO.Assets.Models;
+﻿using DKEngine.Core.UI;
+using MarIO.Assets.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,6 +40,15 @@ namespace MarIO
 
         public static List<Block> BlocksToUpdate = new List<Block>();
         public static List<float> BlocksStartPositions = new List<float>();
+
+        public static List<TextBlock> FloatingTexts = new List<TextBlock>();
+        public static List<float> FloatingTextStartPosition = new List<float>();
+
+        #region Constants
+
+        public const int GOOMBA_POINTS = 100;
+
+        #endregion
 
         #region Animations
 

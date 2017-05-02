@@ -67,6 +67,7 @@ namespace MarIO.Assets.Models
                     this.InitNewScript<GoombaController>();
                     this.InitNewComponent<Animator>();
                     this.Animator.AddAnimation("default", Database.GetGameObjectMaterial(EnemyTypeNames[Type]));
+                    this.Animator.AddAnimation("dead", Database.GetGameObjectMaterial(EnemyTypeNames[Type] + "_dead"));
                     break;
 
                 case EnemyType.GoombaBlue:

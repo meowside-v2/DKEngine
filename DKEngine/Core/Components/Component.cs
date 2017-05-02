@@ -1,4 +1,5 @@
 ﻿using DKEngine.Core.Ext;
+using DKEngine.Core.UI;
 using System;
 using System.Diagnostics;
 
@@ -42,7 +43,13 @@ namespace DKEngine.Core.Components
 
             try
             {
-                Engine.LoadingScene.AllComponents.AddSafe(this);
+                if (this.GetType() != typeof(Letter))
+                {
+                    Engine.LoadingScene.AllComponents.AddSafe(this);
+                    //Engine.LoadingScene.AllGameObjects.AddSafe(this);
+                }
+
+                //Engine.LoadingScene.AllComponents.AddSafe(this);
             }
             catch (Exception e)
             {

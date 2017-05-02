@@ -16,8 +16,9 @@ namespace MarIO.Assets.Scripts
         {
             if (e.Parent is Enemy)
             {
-                Debug.WriteLine(string.Format("Zabil jsi {0}", e.Parent.TypeName));
-                e.Parent.Destroy();
+                Enemy tmp = e.Parent as Enemy;
+                Debug.WriteLine(string.Format("Zabil jsi {0}", tmp.TypeName));
+                tmp.IsDestroyed = true;
                 Mario.KilledEnemy = true;
             }
         }

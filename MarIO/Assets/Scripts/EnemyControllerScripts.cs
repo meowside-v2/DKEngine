@@ -1,6 +1,7 @@
 ﻿using DKEngine;
 using DKEngine.Core;
 using DKEngine.Core.Components;
+using DKEngine.Core.UI;
 using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
@@ -16,6 +17,9 @@ namespace MarIO.Assets.Scripts
         private bool IsFalling = false;
 
         private bool firstTimeDeadAnimation = true;
+
+        private float DeadTimeCurrent = 0f;
+        private const float DeadTime = 3f;
 
         private Enemy Target;
 
@@ -46,17 +50,17 @@ namespace MarIO.Assets.Scripts
 
         private void Movement()
         {
-            if (this.Parent.Collider.Collision(Collider.Direction.Left))
+            if (Target.Collider.Collision(Collider.Direction.Left))
             {
                 CurrentSpeed = Speed;
             }
 
-            if (this.Parent.Collider.Collision(Collider.Direction.Right))
+            if (Target.Collider.Collision(Collider.Direction.Right))
             {
                 CurrentSpeed = -Speed;
             }
 
-            if (!Parent.Collider.Collision(Collider.Direction.Down))
+            if (!Target.Collider.Collision(Collider.Direction.Down))
             {
                 if (!IsFalling)
                 {
@@ -81,14 +85,34 @@ namespace MarIO.Assets.Scripts
                 IsFalling = false;
             }
 
-            this.Parent.Transform.Position += new Vector3(CurrentSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
+            Target.Transform.Position += new Vector3(CurrentSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
         }
 
         private void DeadAnimation()
         {
             if (firstTimeDeadAnimation)
             {
+                TextBlock FloatingText = new TextBlock()
+                {
+                    Text = string.Format("{0}", Shared.GOOMBA_POINTS),
+                    TextShadow = true
+                };
+                FloatingText.Transform.Position = Target.Transform.Position;
+                FloatingText.AddAsFloatingText();
 
+                Target.Collider.Enabled = false;
+                Target.Animator.Play("dead");
+                firstTimeDeadAnimation = false;
+                Target.Transform.Position += new Vector3(0, 8, 0);
+
+                
+            }
+
+            DeadTimeCurrent += Engine.DeltaTime;
+
+            if(DeadTimeCurrent > DeadTime)
+            {
+                Target.Destroy();
             }
         }
     }

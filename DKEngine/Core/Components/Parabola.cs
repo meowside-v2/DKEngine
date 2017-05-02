@@ -3,7 +3,7 @@ using DKEngine.Core;
 using DKEngine.Core.Components;
 using System;
 
-namespace DKBasicEngine_1_0.Core.Components
+namespace DKEngine.Core.Components
 {
     /*
      * ------------------

@@ -152,11 +152,11 @@ namespace DKEngine.Core
                 if (Parent == null)
                     Engine.LoadingScene.Model.Add(this);
 
-                if (typeof(Letter) != this.GetType())
+                /*if (this.GetType() != typeof(Letter))
                 {
                     Engine.LoadingScene.AllComponents.AddSafe(this);
                     //Engine.LoadingScene.AllGameObjects.AddSafe(this);
-                }
+                }*/
 
                 Engine.LoadingScene.GameObjectsToAddToRender.Push(this);
             }

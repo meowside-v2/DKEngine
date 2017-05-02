@@ -27,7 +27,6 @@ namespace DKEngine.Core.Components
         }
 
         protected internal abstract void Start();
-
         protected internal abstract void Update();
     }
 }

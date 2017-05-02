@@ -63,7 +63,9 @@
     <Compile Include="Assets\Scenes\MapBase.cs" />
     <Compile Include="Assets\Scenes\Test.cs" />
     <Compile Include="Assets\Scripts\BlockAnimatorScript.cs" />
+    <Compile Include="Assets\Scripts\DeathZoneScript.cs" />
     <Compile Include="Assets\Scripts\EnemyControllerScripts.cs" />
+    <Compile Include="Assets\Scripts\FloatingTextAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\GUIUpdateScript.cs" />
     <Compile Include="Assets\Scripts\MarioTriggerColliderScripts.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
@@ -83,6 +85,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Sprites.resx</DependentUpon>
     </Compile>
+    <Compile Include="SystemExt.cs" />
     <Compile Include="TestObject.cs" />
   </ItemGroup>
   <ItemGroup>

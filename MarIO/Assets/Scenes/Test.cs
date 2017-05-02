@@ -2,6 +2,7 @@
 using MarIO.Assets.Models;
 using MarIO.Assets.Scripts;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace MarIO.Assets.Scenes
 {
@@ -99,6 +100,12 @@ namespace MarIO.Assets.Scenes
 
             BackgroundWorker BW = new BackgroundWorker();
             BW.InitNewScript<BlockAnimatorScript>();
+            BW.InitNewScript<FloatingTextAnimatorScript>();
+
+            Trigger DeathZone = new Trigger();
+            DeathZone.InitNewScript<DeathZoneScript>();
+            DeathZone.Transform.Dimensions = new Vector3(3200, 10, 0);
+            DeathZone.Transform.Position = new Vector3(0, 10, 0);
         }
 
         public override void Set(params string[] Args)

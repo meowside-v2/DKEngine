@@ -23,9 +23,12 @@ namespace DKEngine.Core.Scripts
 
         protected internal override void Update()
         {
-            if (_Parent._changed)
+            if(_Parent != null)
             {
-                Text();
+                if (_Parent._changed)
+                {
+                    Text();
+                }
             }
         }
 
