@@ -82,9 +82,17 @@ namespace MarIO.Assets.Models
             { BlockType.Water2, "water_02" },
         };
 
-        public BlockType Type { get; set; }
+        public enum CollisionState
+        {
+            Stay,
+            Up,
+            Down
+        }
 
+        public BlockType Type { get; set; }
         public delegate void PipeEnter();
+        public bool InitCollider { get; set; }
+        public CollisionState State { get; set; }
 
         private event PipeEnter PipeEnterEvent;
 
@@ -99,13 +107,15 @@ namespace MarIO.Assets.Models
         protected override void Initialize()
         {
             this.TypeName = BlockTypeNames[Type];
+            if(InitCollider)
+                this.InitNewComponent<Collider>();
 
             switch (Type)
             {
                 case BlockType.Ground1:
-                    this.InitNewComponent<Collider>();
+                    /*this.InitNewComponent<Collider>();
                     this.Collider.IsTrigger = true;
-                    this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y, this.Transform.Dimensions.X, 1);
+                    this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y, this.Transform.Dimensions.X, 1);*/
                     break;
 
                 case BlockType.Ground2:

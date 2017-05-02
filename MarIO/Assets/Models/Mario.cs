@@ -1,12 +1,17 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Scripts;
+using System.Drawing;
 
 namespace MarIO.Assets.Models
 {
     internal class Mario : AnimatedObject
     {
         public bool KilledEnemy = false;
+        public Trigger LeftTrigger;
+        public Trigger RightTrigger;
+        public Trigger TopTrigger;
+        public Trigger BottomTrigger;
 
         public Mario()
         { }
@@ -40,41 +45,41 @@ namespace MarIO.Assets.Models
 
             this.InitNewScript<CharacterController>();
 
-            Trigger bottom = new Trigger(this)
+            BottomTrigger = new Trigger(this)
             {
                 Name = "Bottom_Trigger"
             };
-            bottom.Transform.Position += new Vector3(0, 16, 0);
-            bottom.Transform.Dimensions = new Vector3(14, 1, 0);
-            bottom.InitNewScript<BottomMarioChecker>();
-            //bottom.Model = new Material(Color.Black, bottom);
+            BottomTrigger.Transform.Position += new Vector3(0.5f, 16, 0);
+            BottomTrigger.Transform.Dimensions = new Vector3(14, 0.5f, 0);
+            BottomTrigger.InitNewScript<BottomMarioChecker>();
+            BottomTrigger.Model = new Material(Color.Black, BottomTrigger);
 
-            Trigger left = new Trigger(this)
+            LeftTrigger = new Trigger(this)
             {
                 Name = "Left_Trigger"
             };
-            left.Transform.Position += new Vector3(-1, 0, 0);
-            left.Transform.Dimensions = new Vector3(1, 16, 0);
-            left.InitNewScript<LeftMarioChecker>();
-            //left.Model = new Material(Color.Black, left);
+            LeftTrigger.Transform.Position += new Vector3(-1, 0, 0);
+            LeftTrigger.Transform.Dimensions = new Vector3(1, 16, 0);
+            LeftTrigger.InitNewScript<LeftMarioChecker>();
+            LeftTrigger.Model = new Material(Color.Black, LeftTrigger);
 
-            Trigger right = new Trigger(this)
+            RightTrigger = new Trigger(this)
             {
                 Name = "Right_Trigger"
             };
-            right.Transform.Position += new Vector3(14, 0, 0);
-            right.Transform.Dimensions = new Vector3(1, 16, 0);
-            right.InitNewScript<RightMarioChecker>();
-            //right.Model = new Material(Color.Black, right);
+            RightTrigger.Transform.Position += new Vector3(14, 0, 0);
+            RightTrigger.Transform.Dimensions = new Vector3(1, 16, 0);
+            RightTrigger.InitNewScript<RightMarioChecker>();
+            RightTrigger.Model = new Material(Color.Black, RightTrigger);
 
-            Trigger top = new Trigger(this)
+            TopTrigger = new Trigger(this)
             {
                 Name = "Top_Trigger"
             };
-            top.Transform.Position += new Vector3(0, -1, 0);
-            top.Transform.Dimensions = new Vector3(14, 1, 0);
-            top.InitNewScript<TopMarioChecker>();
-            //top.Model = new Material(Color.Black, top);
+            TopTrigger.Transform.Position += new Vector3(0.5f, -0.5f, 0);
+            TopTrigger.Transform.Dimensions = new Vector3(14, 0.5f, 0);
+            TopTrigger.InitNewScript<TopMarioChecker>();
+            TopTrigger.Model = new Material(Color.Black, TopTrigger);
         }
     }
 }

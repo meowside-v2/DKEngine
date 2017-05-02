@@ -88,7 +88,7 @@ namespace MarIO.Assets.Scripts
         {
             if (firstTimeDeadAnimation)
             {
-                Target.Collider.Destroy();
+
             }
         }
     }

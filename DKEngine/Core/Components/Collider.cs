@@ -24,6 +24,7 @@ namespace DKEngine.Core.Components
         /// If is TRUE => Triggers OnColliderEnter once another GameObject enter this collider
         /// </summary>
         public bool IsTrigger = false;
+        public bool Enabled = true;
 
         private float X { get { return Parent.Transform.Position.X + Area.X; } }
         private float Y { get { return Parent.Transform.Position.Y + Area.Y; } }
@@ -78,7 +79,7 @@ namespace DKEngine.Core.Components
         /// <returns></returns>
         public bool Collision(Direction direction)
         {
-            if (this.IsTrigger)
+            if (this.IsTrigger || !this.Enabled)
                 return false;
 
             if (LastUpdated != Engine.LastUpdated)
@@ -92,6 +93,8 @@ namespace DKEngine.Core.Components
 
                 foreach (Collider tmp in Engine.CurrentScene.AllGameObjectsColliders)
                 {
+                    
+
                     bool _L = false;
                     bool _R = false;
                     bool _T = false;
@@ -320,6 +323,9 @@ namespace DKEngine.Core.Components
 
         internal void TriggerCheck(List<GameObject> VisibleObjects)
         {
+            if (!this.Enabled)
+                return;
+
             int VisibleObjectsCount = VisibleObjects.Count;
             for (int i = 0; i < VisibleObjectsCount; i++)
             {
@@ -402,7 +408,7 @@ namespace DKEngine.Core.Components
         {
             try
             {
-                if (!this.Equals(obj) && !obj.IsTrigger)
+                if (!this.Equals(obj) && !obj.IsTrigger && Enabled)
                     return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X >= obj.X + obj.Width / 2 && this.X <= obj.X + obj.Width); //(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X <= obj.X + obj.Width && this.X > obj.X);
             }
             catch { }
@@ -414,7 +420,7 @@ namespace DKEngine.Core.Components
         {
             try
             {
-                if (!this.Equals(obj) && !obj.IsTrigger)
+                if (!this.Equals(obj) && !obj.IsTrigger && Enabled)
                     return (this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y && this.X + this.Width >= obj.X && this.X + this.Width <= obj.X + obj.Width / 2);//(this.Y < obj.Y + obj.Width && this.Y + this.Width > obj.Y && this.X + this.Width >= obj.X && this.X < X);
             }
             catch { }
@@ -426,7 +432,7 @@ namespace DKEngine.Core.Components
         {
             try
             {
-                if (!this.Equals(obj) && !obj.IsTrigger)
+                if (!this.Equals(obj) && !obj.IsTrigger && Enabled)
                     return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Height && this.Y >= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y <= obj.Y + obj.Width && this.Y > obj.Y);
             }
             catch { }
@@ -438,7 +444,7 @@ namespace DKEngine.Core.Components
         {
             try
             {
-                if (!this.Equals(obj) && !obj.IsTrigger)
+                if (!this.Equals(obj) && !obj.IsTrigger && Enabled)
                     return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Height >= obj.Y && this.Y + this.Height <= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
             }
             catch { }

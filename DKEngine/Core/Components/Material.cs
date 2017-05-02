@@ -120,8 +120,8 @@ namespace DKEngine.Core.Components
         /// <param name="Size">Vector3 used for material size</param>
         public Material(Color clr, Vector3 Size)
         {
-            this.Width = (int)Size.X;
-            this.Height = (int)Size.Y;
+            this.Width = (int)(Size.X < 1 ? 1 : Size.X);
+            this.Height = (int)(Size.Y < 1 ? 1 : Size.Y);
 
             Frames = 1;
 

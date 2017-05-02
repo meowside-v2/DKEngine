@@ -51,6 +51,7 @@
     <Compile Include="Assets\Models\AnimatedObject.cs" />
     <Compile Include="Assets\Models\Block.cs" />
     <Compile Include="Assets\Models\Blocker.cs" />
+    <Compile Include="Assets\Models\BackgroundWorker.cs" />
     <Compile Include="Assets\Models\Enemy.cs" />
     <Compile Include="Assets\Models\Group.cs" />
     <Compile Include="Assets\Models\GUIUpdater.cs" />

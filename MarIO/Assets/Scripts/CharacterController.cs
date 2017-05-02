@@ -169,12 +169,18 @@ namespace MarIO.Assets.Scripts
 
             if (FirstTimeDeadAnimPlay)
             {
-                Player.Collider.Destroy();
+                Player.Collider.Enabled = false;
+                Player.BottomTrigger.Collider.Enabled = false;
+                Player.LeftTrigger.Collider.Enabled = false;
+                Player.RightTrigger.Collider.Enabled = false;
+                Player.TopTrigger.Collider.Enabled = false;
+
+                /*Player.Collider.Destroy();
 
                 foreach (GameObject child in Player.Child)
                 {
                     child.Collider.Destroy();
-                }
+                }*/
 
                 vertSpeed = -FloatSpeed;
 

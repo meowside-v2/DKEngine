@@ -44,15 +44,18 @@ namespace MarIO.Assets.Scripts
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
                 Mario.IsDestroyed = true;
-                //Mario?.Destroy();
             }
             else if (e.Parent is Block)
             {
                 Block tmp = e.Parent as Block;
-                tmp.ChangeState = true;
 
-                Shared.BlocksStartPositions.Add(tmp.Transform.Position.Y);
-                Shared.BlocksToUpdate.Add(tmp);
+                if (tmp.State == Block.CollisionState.Stay)
+                {
+                    tmp.State = Block.CollisionState.Up;
+
+                    Shared.BlocksStartPositions.Add(tmp.Transform.Position.Y);
+                    Shared.BlocksToUpdate.Add(tmp);
+                }
             }
         }
 

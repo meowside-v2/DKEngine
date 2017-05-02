@@ -1,5 +1,7 @@
 ﻿using DKEngine.Core.Components;
 using MarIO.Assets.Models;
+using MarIO.Assets.Scripts;
+using System.Diagnostics;
 
 namespace MarIO.Assets.Scenes
 {
@@ -38,6 +40,17 @@ namespace MarIO.Assets.Scenes
             };
             _3.SizeInBlocks = new Vector3(50, 3, 0);
             _3.Transform.Position = new Vector3(80 * 16, -30, 0);
+
+            for(int i = 0; i < 10; i++)
+            {
+                Block tmp = new Block()
+                {
+                    Type = Block.BlockType.Ground2,
+                    Name = string.Format("PlatformTest_{0:00}", i)
+                };
+                tmp.Transform.Position = new Vector3(80 + 16 * i, -110, 0);
+                tmp.InitCollider = true;
+            }
 
             Block pipe = new Block()
             {
@@ -83,6 +96,9 @@ namespace MarIO.Assets.Scenes
             };
 
             new GUIUpdater();
+
+            BackgroundWorker BW = new BackgroundWorker();
+            BW.InitNewScript<BlockAnimatorScript>();
         }
 
         public override void Set(params string[] Args)
