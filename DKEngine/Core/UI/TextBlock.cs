@@ -61,29 +61,29 @@ namespace DKEngine.Core.UI
             {
                 _HA = value;
 
-                if (_IsGUI)
+                //if (_IsGUI)
+                //{
+                this.Transform.Position -= new Vector3(horiOffset, 0, 0);
+
+                switch (value)
                 {
-                    this.Transform.Position -= new Vector3(horiOffset, 0, 0);
+                    case HorizontalAlignment.Left:
+                        horiOffset = 0;
+                        break;
 
-                    switch (value)
-                    {
-                        case HorizontalAlignment.Left:
-                            horiOffset = 0;
-                            break;
+                    case HorizontalAlignment.Center:
+                        horiOffset = (Engine.Render.RenderWidth - this.Transform._ScaledDimensions.X) / 2;
+                        break;
 
-                        case HorizontalAlignment.Center:
-                            horiOffset = (Engine.Render.RenderWidth - this.Transform._ScaledDimensions.X) / 2;
-                            break;
-
-                        case HorizontalAlignment.Right:
-                            horiOffset = Engine.Render.RenderWidth - this.Transform._ScaledDimensions.X;
-                            break;
-                    }
-
-                    this.Transform.Position += new Vector3(horiOffset, 0, 0);
+                    case HorizontalAlignment.Right:
+                        horiOffset = Engine.Render.RenderWidth - this.Transform._ScaledDimensions.X;
+                        break;
                 }
 
-                _changed = true;
+                this.Transform.Position += new Vector3(horiOffset, 0, 0);
+                //}
+
+                //_changed = true;
             }
         }
 
@@ -93,29 +93,29 @@ namespace DKEngine.Core.UI
             {
                 _VA = value;
 
-                if (_IsGUI)
+                //if (_IsGUI)
+                //{
+                this.Transform.Position -= new Vector3(0, vertOffset, 0);
+
+                switch (value)
                 {
-                    this.Transform.Position -= new Vector3(0, vertOffset, 0);
+                    case VerticalAlignment.Top:
+                        vertOffset = 0;
+                        break;
 
-                    switch (value)
-                    {
-                        case VerticalAlignment.Top:
-                            vertOffset = 0;
-                            break;
+                    case VerticalAlignment.Center:
+                        vertOffset = (Engine.Render.RenderHeight - this.Transform._ScaledDimensions.Y) / 2;
+                        break;
 
-                        case VerticalAlignment.Center:
-                            vertOffset = (Engine.Render.RenderHeight - this.Transform._ScaledDimensions.Y) / 2;
-                            break;
-
-                        case VerticalAlignment.Bottom:
-                            vertOffset = Engine.Render.RenderHeight - this.Transform._ScaledDimensions.Y;
-                            break;
-                    }
-
-                    this.Transform.Position += new Vector3(0, vertOffset, 0);
+                    case VerticalAlignment.Bottom:
+                        vertOffset = Engine.Render.RenderHeight - this.Transform._ScaledDimensions.Y;
+                        break;
                 }
 
-                _changed = true;
+                this.Transform.Position += new Vector3(0, vertOffset, 0);
+                //}
+
+                //_changed = true;
             }
         }
 
@@ -161,6 +161,13 @@ namespace DKEngine.Core.UI
             : base(Parent)
         { }
 
+        protected override void Initialize()
+        {
+            this.VAlignment = _VA;
+            this.HAlignment = _HA;
+            this.InitNewScript<TextControlScript>();
+        }
+
         internal override void Render()
         { Model?.Render(this, _bg); }
 
@@ -191,11 +198,6 @@ namespace DKEngine.Core.UI
 
             Model = null;
             Animator = null;
-        }
-
-        protected override void Initialize()
-        {
-            this.InitNewScript<TextControlScript>();
         }
     }
 }

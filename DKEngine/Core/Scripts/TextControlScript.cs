@@ -38,8 +38,8 @@ namespace DKEngine.Core.Scripts
             for (int i = _textCount - 1; i >= 0; i--)
                 _Parent._text[i].Destroy();
 
-            _Parent.VAlignment = _Parent._VA;
-            _Parent.HAlignment = _Parent._HA;
+            /*_Parent.VAlignment = _Parent._VA;
+            _Parent.HAlignment = _Parent._HA;*/
 
             List<Letter> retValue = new List<Letter>();
             List<List<Letter>> textAligned = new List<List<Letter>>() { new List<Letter>() };

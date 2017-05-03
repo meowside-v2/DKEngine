@@ -8,10 +8,13 @@ namespace MarIO.Assets.Models
     internal class Mario : AnimatedObject
     {
         public bool KilledEnemy = false;
-        public Trigger LeftTrigger;
-        public Trigger RightTrigger;
-        public Trigger TopTrigger;
-        public Trigger BottomTrigger;
+        public Trigger LeftTrigger { get; private set; }
+        public Trigger RightTrigger { get; private set; }
+        public Trigger TopTrigger { get; private set; }
+        public Trigger BottomTrigger { get; private set; }
+
+        public bool InitCharacterController { get; set; }
+        public bool InitCameraController { get; set; }
 
         public Mario()
         { }
@@ -43,7 +46,11 @@ namespace MarIO.Assets.Models
 
             this.Animator.Play(Shared.MARIO_IDLE_RIGHT);
 
-            this.InitNewScript<CharacterController>();
+            if(InitCharacterController)
+                this.InitNewScript<CharacterController>();
+
+            if(InitCameraController)
+                this.InitNewScript<CameraController>();
 
             BottomTrigger = new Trigger(this)
             {

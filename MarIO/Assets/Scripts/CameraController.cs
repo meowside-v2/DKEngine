@@ -41,6 +41,18 @@ namespace MarIO.Assets.Scripts
             if (Player.Transform.Position.X - TargetCam.Position.X > MaxCameraDistance)
             {
                 TargetCam.Position.X += Player.Transform.Position.X - PositionX;
+            }
+
+            if (Player.Transform.Position.X < TargetCam.Position.X)
+            {
+                Player.Transform.Position = Player.Transform.Position.Add(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
+            }
+
+            PositionX = Player.Transform.Position.X;
+
+            /*if (Player.Transform.Position.X - TargetCam.Position.X > MaxCameraDistance)
+            {
+                TargetCam.Position.X += Player.Transform.Position.X - PositionX;
                 //Border.Transform.Position = TargetCam.Position - Offset;
             }
 
@@ -49,7 +61,7 @@ namespace MarIO.Assets.Scripts
                 Player.Transform.Position += new Vector3(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
             }
 
-            PositionX = Player.Transform.Position.X;
+            PositionX = Player.Transform.Position.X;*/
         }
     }
 }

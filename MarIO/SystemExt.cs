@@ -1,4 +1,5 @@
 ﻿using DKEngine.Core.UI;
+using MarIO.Assets.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,14 @@ namespace MarIO
         {
             Shared.FloatingTexts.Add(txBlock);
             Shared.FloatingTextStartPosition.Add(txBlock.Transform.Position.Y);
+        }
+
+        public static void AnimateBlockCollision(this Block block)
+        {
+            block.State = Block.CollisionState.Up;
+
+            Shared.BlocksToUpdate.Add(block);
+            Shared.BlocksStartPositions.Add(block.Transform.Position.Y);
         }
     }
 }

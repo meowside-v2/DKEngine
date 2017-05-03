@@ -44,6 +44,8 @@ namespace MarIO
         public static List<TextBlock> FloatingTexts = new List<TextBlock>();
         public static List<float> FloatingTextStartPosition = new List<float>();
 
+        public const uint OverworldBackground = 0xFF20CCCC;
+
         #region Constants
 
         public const int GOOMBA_POINTS = 100;

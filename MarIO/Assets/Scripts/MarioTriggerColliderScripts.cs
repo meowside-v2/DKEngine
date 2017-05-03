@@ -17,7 +17,7 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Enemy tmp = e.Parent as Enemy;
-                Debug.WriteLine(string.Format("Zabil jsi {0}", tmp.TypeName));
+                Debug.WriteLine(string.Format("Zabil jsi {0}", tmp.Name));
                 tmp.IsDestroyed = true;
                 Mario.KilledEnemy = true;
             }
@@ -52,10 +52,7 @@ namespace MarIO.Assets.Scripts
 
                 if (tmp.State == Block.CollisionState.Stay)
                 {
-                    tmp.State = Block.CollisionState.Up;
-
-                    Shared.BlocksStartPositions.Add(tmp.Transform.Position.Y);
-                    Shared.BlocksToUpdate.Add(tmp);
+                    tmp.AnimateBlockCollision();
                 }
             }
         }

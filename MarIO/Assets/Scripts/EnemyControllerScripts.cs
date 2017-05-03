@@ -92,6 +92,7 @@ namespace MarIO.Assets.Scripts
         {
             if (firstTimeDeadAnimation)
             {
+                Shared.GameScore += Shared.GOOMBA_POINTS;
                 TextBlock FloatingText = new TextBlock()
                 {
                     Text = string.Format("{0}", Shared.GOOMBA_POINTS),

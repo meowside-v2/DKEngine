@@ -113,9 +113,6 @@ namespace MarIO.Assets.Models
             switch (Type)
             {
                 case BlockType.Ground1:
-                    /*this.InitNewComponent<Collider>();
-                    this.Collider.IsTrigger = true;
-                    this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y, this.Transform.Dimensions.X, 1);*/
                     break;
 
                 case BlockType.Ground2:

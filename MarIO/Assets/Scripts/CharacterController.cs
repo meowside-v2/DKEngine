@@ -10,13 +10,13 @@ namespace MarIO.Assets.Scripts
     {
         private Animator PlayerAnimator;
         private Mario Player;
-        private Camera TargetCam;
-        private Vector3 Offset;
+        /*private Camera TargetCam;
+        private Vector3 Offset;*/
 
         //Parabola test;
 
-        private float PositionX;
-        private float MaxCameraDistance;
+        /*private float PositionX;
+        private float MaxCameraDistance;*/
 
         private float horiSpeed = 0;
         private float vertSpeed = 0;
@@ -120,13 +120,13 @@ namespace MarIO.Assets.Scripts
 
         protected override void Start()
         {
-            MaxCameraDistance = Engine.Render.RenderWidth / 3;
-            Offset = new Vector3(20, 0, 0);
+            /*MaxCameraDistance = Engine.Render.RenderWidth / 3;
+            Offset = new Vector3(20, 0, 0);*/
 
             Player = GameObject.Find<Mario>("Player");
             PlayerAnimator = Component.Find<Animator>("Player_Animator");
-            TargetCam = Component.Find<Camera>("Camera");
-            TargetCam.Position = new Vector3(0, -180, 0);
+            /*TargetCam = Component.Find<Camera>("Camera");
+            TargetCam.Position = new Vector3(0, -180, 0);*/
 
             /*test = new Parabola(Player)
             {
@@ -159,7 +159,7 @@ namespace MarIO.Assets.Scripts
 
             Player.Transform.Position = Player.Transform.Position.Add(horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
 
-            CameraControl();
+            //CameraControl();
             AnimationControl();
         }
 
@@ -192,7 +192,7 @@ namespace MarIO.Assets.Scripts
             }
         }
 
-        private void CameraControl()
+        /*private void CameraControl()
         {
             if (Player.Transform.Position.X - TargetCam.Position.X > MaxCameraDistance)
             {
@@ -206,7 +206,7 @@ namespace MarIO.Assets.Scripts
             }
 
             PositionX = Player.Transform.Position.X;
-        }
+        }*/
 
         private void Movement()
         {
