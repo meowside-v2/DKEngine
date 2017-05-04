@@ -50,7 +50,7 @@ namespace MarIO.Assets.Models
         {
             { BlockType.Bridge, "bridge" },
             { BlockType.Bush1, "bush_01" },
-            { BlockType.Bush2, "bush02" },
+            { BlockType.Bush2, "bush_02" },
             { BlockType.Bush3, "bush_03" },
             { BlockType.BushSmall, "bush_small" },
             { BlockType.CastleBig, "castle_big" },

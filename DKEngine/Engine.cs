@@ -369,7 +369,7 @@ namespace DKEngine
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
-
+                
                 while (Engine.CurrentScene?.NewlyGeneratedComponents.Count > 0)
                 {
                     Engine.CurrentScene.NewlyGeneratedComponents.Pop().InitInternal();
@@ -380,6 +380,13 @@ namespace DKEngine
                     Behavior tmp = Engine.CurrentScene.NewlyGeneratedBehaviors.Pop();
                     UpdateEvent += tmp.UpdateHandle;
                     tmp.Start();
+                }
+
+                while(Engine.CurrentScene?.DestroyObjectAwaitList.Count > 0)
+                {
+                    GameObject tmp = Engine.CurrentScene.DestroyObjectAwaitList[0];
+                    Engine.CurrentScene.DestroyObjectAwaitList.RemoveAt(0);
+                    tmp.Destroy();
                 }
 
                 while (Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)

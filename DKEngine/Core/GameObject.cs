@@ -12,7 +12,6 @@ namespace DKEngine.Core
     public abstract class GameObject : Component
     {
         public bool HasShadow { get; set; } = false;
-
         public bool IsInView
         {
             get
@@ -23,13 +22,11 @@ namespace DKEngine.Core
                 return (this.Transform.Position.X + this.Transform._ScaledDimensions.X >= X && this.Transform.Position.X < X + Engine.Render.RenderWidth && this.Transform.Position.Y + this.Transform._ScaledDimensions.Y >= Y && this.Transform.Position.Y < Y + Engine.Render.RenderHeight);
             }
         }
-
         public bool IsGUI
         {
             get { return Parent != null ? Parent.IsGUI : _IsGUI; }
             set { _IsGUI = value; }
         }
-
         public string TypeName
         {
             get { return _typeName; }
@@ -39,7 +36,6 @@ namespace DKEngine.Core
                 this.Model = Database.GetGameObjectMaterial(value);
             }
         }
-
         public Material Model
         {
             get { return _Model; }
@@ -58,9 +54,6 @@ namespace DKEngine.Core
                 }
             }
         }
-
-        internal Collider _collider;
-
         public Collider Collider
         {
             get { return _collider; }
@@ -90,19 +83,19 @@ namespace DKEngine.Core
                 }
             }
         }
-
-        internal bool _IsGUI = false;
-        internal string _typeName = "";
-
-        internal Material _Model = null;
-        public Animator Animator = null;
-
-        public SoundSource SoundSource = null;
+        public Animator Animator { get; set; }
+        public SoundSource SoundSource { get; set; }
         public Color? Foreground { get; set; }
 
         public Transform Transform { get; }
         public List<GameObject> Child { get; }
         internal List<Script> Scripts { get; }
+
+        internal bool _IsGUI = false;
+        internal string _typeName = "";
+
+        internal Material _Model = null;
+        internal Collider _collider = null;
 
         public GameObject()
             : base(null)
@@ -115,8 +108,6 @@ namespace DKEngine.Core
                 Scale = new Vector3(1, 1, 1),
                 Position = new Vector3(0, 0, 0)
             };
-            //this.Collider             = new Collider(this);
-            //this.Animator             = new Animator(this);
         }
 
         public GameObject(GameObject Parent)
@@ -130,8 +121,6 @@ namespace DKEngine.Core
                 Scale = new Vector3(1, 1, 1),
                 Position = new Vector3(0, 0, 0)
             };
-            //this.Collider = new Collider(this);
-            //this.Animator = new Animator(this);
 
             if (Parent != null)
             {
@@ -151,12 +140,6 @@ namespace DKEngine.Core
             {
                 if (Parent == null)
                     Engine.LoadingScene.Model.Add(this);
-
-                /*if (this.GetType() != typeof(Letter))
-                {
-                    Engine.LoadingScene.AllComponents.AddSafe(this);
-                    //Engine.LoadingScene.AllGameObjects.AddSafe(this);
-                }*/
 
                 Engine.LoadingScene.GameObjectsToAddToRender.Push(this);
             }
@@ -184,13 +167,7 @@ namespace DKEngine.Core
 
                 return;
             }
-
-            /*if (typeof(T).IsSubclassOf(typeof(Script)))
-            {
-                this.Scripts.Add((Script)Activator.CreateInstance(typeof(T), (GameObject)this));
-                return;
-            }*/
-
+            
             if (typeof(T) == typeof(Collider) || typeof(T).IsSubclassOf(typeof(Collider)))
             {
                 if (this.Collider == null)
@@ -218,7 +195,11 @@ namespace DKEngine.Core
         {
             try
             {
-                Engine.CurrentScene.NewlyGeneratedComponents.Pop();
+                if (Engine.LoadingScene.NewlyGeneratedComponents.Contains(this))
+                {
+                    Engine.LoadingScene.DestroyObjectAwaitList.Add(this);
+                    return;
+                }   
             }
             catch { }
 
@@ -227,12 +208,6 @@ namespace DKEngine.Core
                 Engine.CurrentScene.AllComponents.Remove(this.Name);
             }
             catch { }
-
-            /*try
-            {
-                Engine.CurrentScene.AllGameObjects.Remove(this.Name);
-            }
-            catch { }*/
 
             try
             {
@@ -296,6 +271,24 @@ namespace DKEngine.Core
             }
 
             return retValue;
+        }
+
+        public static T Instantiate<T>(Vector3 Position, Vector3 Dimensions, Vector3 Scale)
+            where T : GameObject, new()
+        {
+            T retValue = new T();
+
+            retValue.Transform.Position = Position;
+            retValue.Transform.Dimensions = Dimensions;
+            retValue.Transform.Scale = Scale;
+
+            return retValue;
+        }
+
+        public static T Instantiate<T>(Transform @Transform)
+            where T : GameObject, new()
+        {
+            return Instantiate<T>(@Transform.Position, @Transform.Dimensions, @Transform.Scale);
         }
     }
 }

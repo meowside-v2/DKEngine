@@ -22,9 +22,9 @@ namespace MarIO.Assets.Scripts
         private float vertSpeed = 0;
 
         private float MovementSpeed = 80f;
-        private float FloatSpeed = 120f;
+        private float FloatSpeed = 200f;
 
-        private float Acceleration = 2f;
+        private float Acceleration = 3f;
 
         private float DeathAnimSpeed = 50;
 

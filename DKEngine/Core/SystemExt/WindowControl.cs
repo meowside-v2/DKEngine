@@ -30,10 +30,13 @@ namespace DKEngine.Core.Ext
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool SetConsoleDisplayMode(IntPtr ConsoleOutput, uint Flags, out COORD NewScreenBufferDimensions);
 
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, int cmdShow);
+
         private static IntPtr hConsole = GetStdHandle(-11);
         private static COORD xy = new COORD(100, 100);
         private static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
-
+        
         internal static void WindowInit()
         {
             Console.CursorVisible = false;

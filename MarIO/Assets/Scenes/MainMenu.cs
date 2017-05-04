@@ -2,6 +2,7 @@
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
 using MarIO.Assets.Models;
+using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -87,7 +88,7 @@ namespace MarIO.Assets.Scenes
 
             Camera baseCam = new Camera()
             {
-                BackGround = Color.FromArgb((byte)((Shared.OverworldBackground >> 24) % 256), (byte)((Shared.OverworldBackground >> 16) % 256), (byte)((Shared.OverworldBackground >> 8) % 256), (byte)((Shared.OverworldBackground >> 0) % 256))
+                BackGround = Shared.OverworldBackground.ToColor()
             };
 
             Mario player = new Mario()
@@ -97,7 +98,7 @@ namespace MarIO.Assets.Scenes
 
             TextBlock MainMenuHeader = new TextBlock()
             {
-                FontSize = 4,
+                FontSize = 5,
                 HAlignment = Text.HorizontalAlignment.Center,
                 Name = "tx_MainMenuHeader",
                 Text = "MARIO",
@@ -142,7 +143,93 @@ namespace MarIO.Assets.Scenes
             ExitText.Transform.Position += new Vector3(-8, 80, -1);
             ExitText.Transform.Dimensions = new Vector3(80, 20, 0);
 
+            Block cloud1 = new Block()
+            {
+                Name = "cloud_1",
+                Type = Block.BlockType.Cloud3
+            };
+            cloud1.Transform.Position = new Vector3(-10, 20, -1);
+
+            Block cloud2 = new Block()
+            {
+                Name = "cloud_2",
+                Type = Block.BlockType.Cloud1
+            };
+            cloud2.Transform.Position = new Vector3(120, -15, -1);
+
+            Block cloud3 = new Block()
+            {
+                Name = "cloud_3",
+                Type = Block.BlockType.Cloud2
+            };
+            cloud3.Transform.Position = new Vector3(180, 34, -1);
+
+            Block mountain = new Block()
+            {
+                Name = "mountain",
+                Type = Block.BlockType.Mountain
+            };
+            mountain.Transform.Position = new Vector3(100, 120, -1);
+            mountain.Transform.Scale = new Vector3(2, 2, 0);
+
+            Block bush1 = new Block()
+            {
+                Name = "bush_1",
+                Type = Block.BlockType.Bush3
+            };
+            bush1.Transform.Position = new Vector3(180, 150, -1);
+
+            Block bush2 = new Block()
+            {
+                Name = "bush_2",
+                Type = Block.BlockType.Bush2
+            };
+            bush2.Transform.Position = new Vector3(25, 150, -1);
+
+            Block fence1 = new Block()
+            {
+                Name = "fence_1",
+                Type = Block.BlockType.Fence
+            };
+            fence1.Transform.Position = new Vector3(90, 160, -1);
+
+            Block fence2 = new Block()
+            {
+                Name = "fence_2",
+                Type = Block.BlockType.Fence
+            };
+            fence2.Transform.Position = new Vector3(106, 160, -1);
+
+            Block fence3 = new Block()
+            {
+                Name = "fence_3",
+                Type = Block.BlockType.Fence
+            };
+            fence3.Transform.Position = new Vector3(122, 160, -1);
+
             //player.Transform.Position = new Vector3(20, 20, 0);
+
+            Blocker leftSide = new Blocker()
+            {
+                Name = "LeftSideBlocker"
+            };
+            leftSide.Transform.Position = new Vector3(-10, 0, 0);
+            leftSide.Transform.Dimensions = new Vector3(10, 128, 0);
+            //leftSide.Model = new Material(Color.Black, leftSide);
+
+            Blocker rightSide = new Blocker()
+            {
+                Name = "LeftSideBlocker"
+            };
+            rightSide.Transform.Position = new Vector3(256, 0, 0);
+            rightSide.Transform.Dimensions = new Vector3(10, 128, 0);
+            //rightSide.Model = new Material(Color.Black, leftSide);
+
+            BackgroundWorker BW = new BackgroundWorker();
+            BW.InitNewComponent<Collider>();
+            BW.Collider.Area = new RectangleF(-10, 160, 10, 10);
+            BW.Collider.IsTrigger = true;
+            BW.InitNewScript<MainMenuSpawnScript>();
         }
 
         public override void Set(params string[] Args)

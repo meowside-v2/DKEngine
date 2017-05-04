@@ -21,6 +21,8 @@ namespace DKEngine.Core
         internal readonly Stack<GameObject> GameObjectsToAddToRender;
         internal readonly Stack<GameObject> GameObjectsAddedToRender;
 
+        internal readonly List<GameObject> DestroyObjectAwaitList;
+
         public Scene()
         {
             AllComponents = new Dictionary<string, Component>(0xFFFF);
@@ -36,6 +38,8 @@ namespace DKEngine.Core
 
             GameObjectsToAddToRender = new Stack<GameObject>(0xFFFF);
             GameObjectsAddedToRender = new Stack<GameObject>(0xFFFF);
+
+            DestroyObjectAwaitList = new List<GameObject>(0xFFFF);
         }
 
         public abstract void Init();

@@ -2,10 +2,11 @@
 using DKEngine.Core.Components;
 using MarIO.Assets.Scripts;
 using System.Collections.Generic;
+using System;
 
 namespace MarIO.Assets.Models
 {
-    internal class Enemy : AnimatedObject
+    internal abstract class Enemy : AnimatedObject
     {
         public enum EnemyType
         {
@@ -25,7 +26,7 @@ namespace MarIO.Assets.Models
             BillBlasterSmall
         }
 
-        private Dictionary<EnemyType, string> EnemyTypeNames = new Dictionary<EnemyType, string>()
+        protected static Dictionary<EnemyType, string> EnemyTypeNames = new Dictionary<EnemyType, string>()
         {
             { EnemyType.Goomba, "goomba" },
             { EnemyType.GoombaBlue, "" },
@@ -52,66 +53,22 @@ namespace MarIO.Assets.Models
         public Enemy(GameObject Parent)
             : base(Parent)
         { }
+    }
 
+    class Goomba : Enemy
+    {
         protected override void Initialize()
         {
-            this.Name = "Enemy";
-            //this.TypeName = EnemyTypeNames[Type];
+            this.Name = "Goomba";
+            this.Type = EnemyType.Goomba;
 
-            switch (Type)
-            {
-                case EnemyType.Goomba:
-                    this.InitNewComponent<Collider>();
-                    this.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
+            this.InitNewComponent<Collider>();
+            this.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
 
-                    this.InitNewScript<GoombaController>();
-                    this.InitNewComponent<Animator>();
-                    this.Animator.AddAnimation("default", Database.GetGameObjectMaterial(EnemyTypeNames[Type]));
-                    this.Animator.AddAnimation("dead", Database.GetGameObjectMaterial(EnemyTypeNames[Type] + "_dead"));
-                    break;
-
-                case EnemyType.GoombaBlue:
-                    break;
-
-                case EnemyType.GoombaSilver:
-                    break;
-
-                case EnemyType.KoopaTroopa:
-                    break;
-
-                case EnemyType.KoopaParatroopa:
-                    break;
-
-                case EnemyType.PiranhaPlant:
-                    break;
-
-                case EnemyType.Spiny:
-                    break;
-
-                case EnemyType.BuzzyBeatle:
-                    break;
-
-                case EnemyType.BuzzyBeatleBlue:
-                    break;
-
-                case EnemyType.BuzzyBeatleSilver:
-                    break;
-
-                case EnemyType.FireBar:
-                    break;
-
-                case EnemyType.BulletBill:
-                    break;
-
-                case EnemyType.BillBlasterLarge:
-                    break;
-
-                case EnemyType.BillBlasterSmall:
-                    break;
-
-                default:
-                    break;
-            }
+            this.InitNewScript<GoombaController>();
+            this.InitNewComponent<Animator>();
+            this.Animator.AddAnimation("default", Database.GetGameObjectMaterial(EnemyTypeNames[Type]));
+            this.Animator.AddAnimation("dead", Database.GetGameObjectMaterial(EnemyTypeNames[Type] + "_dead"));
         }
     }
 }

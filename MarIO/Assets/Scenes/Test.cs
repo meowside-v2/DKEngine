@@ -79,10 +79,7 @@ namespace MarIO.Assets.Scenes
             blck2.InitNewComponent<Collider>();
             blck2.Collider.Area = new System.Drawing.RectangleF(0, 0, 16, 16);
 
-            Enemy goomba = new Enemy()
-            {
-                Type = Enemy.EnemyType.Goomba
-            };
+            Goomba goomba = new Goomba();
             goomba.Transform.Position = new Vector3(500, -50, 0);
 
             Mario m = new Mario();

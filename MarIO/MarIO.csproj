@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\EnemyControllerScripts.cs" />
     <Compile Include="Assets\Scripts\FloatingTextAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\GUIUpdateScript.cs" />
+    <Compile Include="Assets\Scripts\MainMenuSpawnScript.cs" />
     <Compile Include="Assets\Scripts\MarioTriggerColliderScripts.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\CharacterController.cs" />

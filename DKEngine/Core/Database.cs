@@ -3,11 +3,11 @@ using DKEngine.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Resources;
-using System.Windows.Forms;
 
 namespace DKEngine.Core
 {
@@ -218,7 +218,7 @@ namespace DKEngine.Core
             }
             catch (Exception e)
             {
-                MessageBox.Show("Object not found\n" + e);
+                Debug.WriteLine("Object not found\n" + e);
             }
         }
 
@@ -230,9 +230,9 @@ namespace DKEngine.Core
             {
                 retValue = CachedMaterials[Key];
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                MessageBox.Show("Object not found\n" + ex);
+                Debug.WriteLine("Object not found\n" + e);
             }
 
             return retValue;
@@ -246,9 +246,9 @@ namespace DKEngine.Core
             {
                 retValue = CachedMaterials.ElementAtOrDefault(Position).Value;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                MessageBox.Show("Object not found\n" + ex);
+                Debug.WriteLine("Object not found\n" + e);
             }
 
             return retValue;
