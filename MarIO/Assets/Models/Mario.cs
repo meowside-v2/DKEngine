@@ -2,6 +2,7 @@
 using DKEngine.Core.Components;
 using MarIO.Assets.Scripts;
 using System.Drawing;
+using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Models
 {
@@ -16,6 +17,13 @@ namespace MarIO.Assets.Models
         public bool InitCharacterController { get; set; }
         public bool InitCameraController { get; set; }
 
+        public State CurrentState { get; set; }
+        public Movement CurrentMovement { get; set; }
+        public Direction PipeEnteredInDirection { get { return EnteredPipe.PipeEnterDirection; } }
+        public Block EnteredPipe { get; set; }
+
+        public WorldChangeManagerScript WorldManager { get; set; }
+
         public Mario()
         { }
 
@@ -29,7 +37,13 @@ namespace MarIO.Assets.Models
             Super,
             Fire,
             Invincible
-        };
+        }
+
+        public enum Movement
+        {
+            Standing,
+            Crouching
+        }
 
         protected override void Initialize()
         {
@@ -87,6 +101,14 @@ namespace MarIO.Assets.Models
             TopTrigger.Transform.Dimensions = new Vector3(14, 0.5f, 0);
             TopTrigger.InitNewScript<TopMarioChecker>();
             TopTrigger.Model = new Material(Color.Black, TopTrigger);
+
+            WorldManager = Behavior.Find<WorldChangeManagerScript>("worldManager");
+        }
+
+        public void PipeEnter(Block Pipe)
+        {
+            ChangeState = true;
+            EnteredPipe = Pipe;
         }
     }
 }

@@ -3,6 +3,7 @@ using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
 using MarIO.Assets.Models;
+using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Scripts
 {
@@ -50,17 +51,17 @@ namespace MarIO.Assets.Scripts
 
         private void Movement()
         {
-            if (Target.Collider.Collision(Collider.Direction.Left))
+            if (Target.Collider.Collision(Direction.Left))
             {
                 CurrentSpeed = Speed;
             }
 
-            if (Target.Collider.Collision(Collider.Direction.Right))
+            if (Target.Collider.Collision(Direction.Right))
             {
                 CurrentSpeed = -Speed;
             }
 
-            if (!Target.Collider.Collision(Collider.Direction.Down))
+            if (!Target.Collider.Collision(Direction.Down))
             {
                 if (!IsFalling)
                 {

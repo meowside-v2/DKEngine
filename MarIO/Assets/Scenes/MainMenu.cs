@@ -1,4 +1,5 @@
-﻿using DKEngine.Core;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
 using MarIO.Assets.Models;
@@ -70,21 +71,23 @@ namespace MarIO.Assets.Scenes
                 Name = "Pipe_1_Play",
                 Type = Block.BlockType.Pipe3
             };
-            pipe1.Transform.Position = new Vector3(32, 16 * 6, 0);
+            pipe1.Transform.Position = new Vector3(32, 16 * 6, 1);
+            pipe1.SpecialAction = Play;
 
             Block pipe2 = new Block()
             {
                 Name = "Pipe_2_Options",
                 Type = Block.BlockType.Pipe3
             };
-            pipe2.Transform.Position = new Vector3(112, 16 * 6, 0);
+            pipe2.Transform.Position = new Vector3(112, 16 * 6, 1);
 
             Block pipe3 = new Block()
             {
                 Name = "Pipe_3_Exit",
                 Type = Block.BlockType.Pipe3
             };
-            pipe3.Transform.Position = new Vector3(32 * 6, 16 * 6, 0);
+            pipe3.Transform.Position = new Vector3(32 * 6, 16 * 6, 1);
+            pipe3.SpecialAction = Exit;
 
             Camera baseCam = new Camera()
             {
@@ -225,14 +228,14 @@ namespace MarIO.Assets.Scenes
             rightSide.Transform.Dimensions = new Vector3(10, 128, 0);
             //rightSide.Model = new Material(Color.Black, leftSide);
 
-            /*Block CoinBlockTest = new Block()
+            Block CoinBlockTest = new Block()
             {
                 Name = "CoinBlockTest",
                 Type = Block.BlockType.Ground1
             };
             CoinBlockTest.InitNewComponent<Collider>();
             CoinBlockTest.Collider.Area = new RectangleF(0, 0, 16, 16);
-            CoinBlockTest.Transform.Position = new Vector3(30, 30, 0);*/
+            CoinBlockTest.Transform.Position = new Vector3(30, 30, 0);
 
             BackgroundWorker BW = new BackgroundWorker();
             BW.InitNewComponent<Collider>();
@@ -246,5 +249,15 @@ namespace MarIO.Assets.Scenes
 
         public override void Unload()
         { }
+
+        private void Exit()
+        {
+            Environment.Exit(1);
+        }
+
+        private void Play()
+        {
+            Engine.ChangeScene("test");
+        }
     }
 }

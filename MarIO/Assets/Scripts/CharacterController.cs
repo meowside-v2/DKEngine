@@ -3,6 +3,7 @@ using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
 using System;
+using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Scripts
 {
@@ -34,7 +35,10 @@ namespace MarIO.Assets.Scripts
         private bool IsFacingLeft = false;
         private bool EnemyKilledAnim = false;
         private bool FirstTimeDeadAnimPlay = true;
-        //bool
+
+        private bool FirstTimePipeEnter = true;
+        private float PipeEnterStartPosition;
+        private float PipeEnterSpeed = 50f;
 
         private string IDLE
         {
@@ -148,7 +152,41 @@ namespace MarIO.Assets.Scripts
                 vertSpeed = -FloatSpeed;
             }
 
-            if (!Player.IsDestroyed)
+            if (Player.ChangeState)
+            {
+                if (FirstTimePipeEnter)
+                {
+                    PipeEnterStartPosition = Player.PipeEnteredInDirection == Direction.Down ? Player.Transform.Position.Y : Player.Transform.Position.X;
+                    horiSpeed = 0;
+                    vertSpeed = 0;
+                    FirstTimePipeEnter = false;
+                }
+
+                if (Player.PipeEnteredInDirection == Direction.Right)
+                {
+                    if (Player.Transform.Position.X < PipeEnterStartPosition + 16)
+                    {
+                        horiSpeed = PipeEnterSpeed;
+                    }
+                    else
+                    {
+                        Player.WorldManager.CurrentlyEnteredPipeScript = Player.EnteredPipe;
+                    }
+                }
+                else if (Player.PipeEnteredInDirection == Direction.Down)
+                {
+                    if (Player.Transform.Position.Y < PipeEnterStartPosition + 16)
+                    {
+                        vertSpeed = PipeEnterSpeed;
+                    }
+                    else
+                    {
+                        Player.WorldManager.CurrentlyEnteredPipeScript = Player.EnteredPipe;
+                    }
+                }
+            }
+
+            else if (!Player.IsDestroyed)
             {
                 Movement();
             }
@@ -210,7 +248,7 @@ namespace MarIO.Assets.Scripts
 
         private void Movement()
         {
-            if (Player.Collider.Collision(Collider.Direction.Down))
+            if (Player.Collider.Collision(Direction.Down))
             {
                 IsFalling = false;
                 Jumped = false;
@@ -233,7 +271,12 @@ namespace MarIO.Assets.Scripts
                 Right();
             }
 
-            if (!Player.Collider.Collision(Collider.Direction.Down))
+            if (Engine.Input.IsKeyDown(ConsoleKey.S))
+            {
+                Down();
+            }
+
+            if (!Player.Collider.Collision(Direction.Down))
             {
                 Fall();
             }
@@ -243,6 +286,8 @@ namespace MarIO.Assets.Scripts
         {
             if (Engine.Input.IsKeyDown(ConsoleKey.W))
             {
+                Player.CurrentMovement = Mario.Movement.Standing;
+
                 if (CanJump)
                 {
                     if (EnemyKilledAnim)
@@ -262,7 +307,7 @@ namespace MarIO.Assets.Scripts
                             vertSpeed = -FloatSpeed * 1.5f;
                             Jumped = true;
                         }
-                        else if (!Player.Collider.Collision(Collider.Direction.Up) && vertSpeed < 0)
+                        else if (!Player.Collider.Collision(Direction.Up) && vertSpeed < 0)
                         {
                             vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed;
                         }
@@ -288,7 +333,7 @@ namespace MarIO.Assets.Scripts
                 }
                 else if (!IsFalling)
                 {
-                    vertSpeed = -vertSpeed * Acceleration;
+                    vertSpeed = -vertSpeed/* * Acceleration*/;
                     IsFalling = true;
                     EnemyKilledAnim = false;
                 }
@@ -299,12 +344,14 @@ namespace MarIO.Assets.Scripts
         {
             if (Engine.Input.IsKeyDown(ConsoleKey.A))
             {
+                Player.CurrentMovement = Mario.Movement.Standing;
+
                 IsFacingLeft = true;
-                if (!Player.Collider.Collision(Collider.Direction.Left) && horiSpeed > -MovementSpeed)
+                if (!Player.Collider.Collision(Direction.Left) && horiSpeed > -MovementSpeed)
                 {
                     horiSpeed -= Engine.DeltaTime * Acceleration * MovementSpeed;
                 }
-                else if (Player.Collider.Collision(Collider.Direction.Left))
+                else if (Player.Collider.Collision(Direction.Left))
                 {
                     horiSpeed = 0;
                 }
@@ -318,7 +365,7 @@ namespace MarIO.Assets.Scripts
                 IsFacingLeft = true;
                 horiSpeed += Engine.DeltaTime * Acceleration * MovementSpeed * 4;
 
-                if (horiSpeed >= 0 || Player.Collider.Collision(Collider.Direction.Left))
+                if (horiSpeed >= 0 || Player.Collider.Collision(Direction.Left))
                 {
                     horiSpeed = 0;
                 }
@@ -329,12 +376,14 @@ namespace MarIO.Assets.Scripts
         {
             if (Engine.Input.IsKeyDown(ConsoleKey.D))
             {
+                Player.CurrentMovement = Mario.Movement.Standing;
+
                 IsFacingLeft = false;
-                if (!Player.Collider.Collision(Collider.Direction.Right) && horiSpeed < MovementSpeed)
+                if (!Player.Collider.Collision(Direction.Right) && horiSpeed < MovementSpeed)
                 {
                     horiSpeed += Engine.DeltaTime * Acceleration * MovementSpeed;
                 }
-                else if (Player.Collider.Collision(Collider.Direction.Right))
+                else if (Player.Collider.Collision(Direction.Right))
                 {
                     horiSpeed = 0;
                 }
@@ -348,7 +397,7 @@ namespace MarIO.Assets.Scripts
                 IsFacingLeft = false;
                 horiSpeed -= Engine.DeltaTime * Acceleration * MovementSpeed * 2;
 
-                if (horiSpeed <= 0 || Player.Collider.Collision(Collider.Direction.Right))
+                if (horiSpeed <= 0 || Player.Collider.Collision(Direction.Right))
                 {
                     horiSpeed = 0;
                 }
@@ -373,6 +422,15 @@ namespace MarIO.Assets.Scripts
                 {
                     vertSpeed = FloatSpeed;
                 }
+            }
+        }
+
+        private void Down()
+        {
+            if(vertSpeed == 0)
+            {
+                horiSpeed = 0;
+                Player.CurrentMovement = Mario.Movement.Crouching;
             }
         }
 

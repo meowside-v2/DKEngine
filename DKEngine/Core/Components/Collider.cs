@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using static DKEngine.Core.Components.Transform;
 
 namespace DKEngine.Core.Components
 {
@@ -60,18 +61,7 @@ namespace DKEngine.Core.Components
         }
 
 #endif
-
-        /// <summary>
-        /// Direction of the collision detection: Up, Down, Left, Right
-        /// </summary>
-        public enum Direction
-        {
-            Up,
-            Left,
-            Down,
-            Right
-        }
-
+        
         /// <summary>
         /// Collision check in specified direction.
         /// </summary>

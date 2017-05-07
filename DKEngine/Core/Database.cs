@@ -291,22 +291,13 @@ namespace DKEngine.Core
             { }
         }
 
-        internal static void AddScene(params Scene[] Source)
+        internal static void AddScene(Scene Source)
         {
-            foreach (Scene item in Source)
+            try
             {
-                try
-                {
-                    if (item != null)
-                    {
-                        CachedScenes.Add(item.Name, item);
-                    }
-                    else
-                        throw new Exception("Scene is null\n" + item.ToString());
-                }
-                catch
-                { }
+                CachedScenes.Add(Source.Name, Source);
             }
+            catch { }
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using DKEngine.Core.Components;
+﻿/*using DKEngine.Core.Components;
 using System;
+using static DKEngine.Core.Components.Transform;
 
 namespace DKEngine.Core.Scripts
 {
@@ -40,7 +41,7 @@ namespace DKEngine.Core.Scripts
 
         protected internal override void Update()
         {
-            if (Landed = Parent.Collider.Collision(Collider.Direction.Down))
+            if (Landed = Parent.Collider.Collision(Direction.Down))
             {
                 IsFalling = false;
                 Jumped = false;
@@ -50,7 +51,7 @@ namespace DKEngine.Core.Scripts
 
             if (Engine.Input.IsKeyDown(ConsoleKey.A))
             {
-                if (!(CollisionLeft = Parent.Collider.Collision(Collider.Direction.Left)) && horiSpeed > -MovementSpeed)
+                if (!(CollisionLeft = Parent.Collider.Collision(Direction.Left)) && horiSpeed > -MovementSpeed)
                 {
                     horiSpeed -= Engine.DeltaTime * Acceleration;
                 }
@@ -63,7 +64,7 @@ namespace DKEngine.Core.Scripts
                     horiSpeed = -MovementSpeed;
                 }
             }
-            else if (CollisionLeft = Parent.Collider.Collision(Collider.Direction.Left))
+            else if (CollisionLeft = Parent.Collider.Collision(Direction.Left))
             {
                 horiSpeed = 0;
             }
@@ -77,7 +78,7 @@ namespace DKEngine.Core.Scripts
 
             if (Engine.Input.IsKeyDown(ConsoleKey.D))
             {
-                if (!(CollisionRight = Parent.Collider.Collision(Collider.Direction.Right)) && horiSpeed < MovementSpeed)
+                if (!(CollisionRight = Parent.Collider.CollisionDirection.Right)) && horiSpeed < MovementSpeed)
                 {
                     horiSpeed += Engine.DeltaTime * Acceleration;
                 }
@@ -97,7 +98,7 @@ namespace DKEngine.Core.Scripts
                 if (horiSpeed < 0)
                     horiSpeed = 0;
             }
-            else if (CollisionRight = Parent.Collider.Collision(Collider.Direction.Right))
+            else if (CollisionRight = Parent.Collider.Collision(Direction.Right))
             {
                 horiSpeed = 0;
             }
@@ -113,7 +114,7 @@ namespace DKEngine.Core.Scripts
                             vertSpeed = -FloatSpeed;
                             Jumped = true;
                         }
-                        else if (!(CollisionTop = Parent.Collider.Collision(Collider.Direction.Up)))
+                        else if (!(CollisionTop = Parent.Collider.Collision(Direction.Up)))
                         {
                             vertSpeed += Engine.DeltaTime * Acceleration * 2;
                         }
@@ -129,7 +130,7 @@ namespace DKEngine.Core.Scripts
             {
                 /*if ((CollisionTop = Parent.Collider.Collision(Collider.Direction.Up)) && !IsFalling)
                 {*/
-                if (!IsFalling)
+/*                if (!IsFalling)
                 {
                     vertSpeed = -vertSpeed;
                     IsFalling = true;
@@ -139,7 +140,7 @@ namespace DKEngine.Core.Scripts
                 {
                     vertSpeed += Engine.deltaTime * Acceleration * 2;
                 }*/
-            }
+ /*           }
 
             if (!Landed)
             {
@@ -162,7 +163,7 @@ namespace DKEngine.Core.Scripts
                 }
             }
 
-            this.Parent.Transform.Position += new Vector3(/*0, 1, 0*/ horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
+            this.Parent.Transform.Position += new Vector3(/*0, 1, 0*//* horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
         }
     }
-}
+}*/

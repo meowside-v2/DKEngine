@@ -9,28 +9,46 @@ namespace MarIO.Assets.Scripts
 {
     internal class PipePort : Script
     {
-        private GameObject Player;
-        private Block Pipe;
+        private Mario Player;
+        public Block Pipe;
 
         public PipePort(GameObject Parent) : base(Parent)
         { }
 
         protected override void OnColliderEnter(Collider e)
         {
-            if (e.Parent == Player)
+            if(Pipe.SpecialAction != null)
             {
-                ConsoleKey tmp = Pipe.Type == Block.BlockType.Pipe1 ? ConsoleKey.D : ConsoleKey.S;
-
-                if (Engine.Input.IsKeyDown(tmp))
+                if (e.Parent == Player)
                 {
-                    Debug.Write("Mario Action Do");
+                    switch (Pipe.PipeEnterDirection)
+                    {
+                        case Transform.Direction.Up:
+                            break;
+                        case Transform.Direction.Left:
+                            break;
+                        case Transform.Direction.Down:
+                            if (Player.CurrentMovement == Mario.Movement.Crouching)
+                            {
+                                Player.PipeEnter(Pipe);
+                            }
+                            break;
+                        case Transform.Direction.Right:
+                            if (Player.CurrentMovement == Mario.Movement.Standing)
+                            {
+                                Player.PipeEnter(Pipe);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
 
         protected override void Start()
         {
-            Player = GameObject.Find("Player");
+            Player = GameObject.Find<Mario>("Player");
             Pipe = (Block)Parent;
         }
 

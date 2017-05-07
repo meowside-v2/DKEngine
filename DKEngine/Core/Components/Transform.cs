@@ -67,6 +67,14 @@ namespace DKEngine.Core.Components
 
         public override void Destroy()
         { }
+
+        public enum Direction
+        {
+            Up,
+            Left,
+            Down,
+            Right
+        }
     }
 }
 

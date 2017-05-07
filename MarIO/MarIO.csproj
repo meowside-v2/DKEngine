@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\MusicScript.cs" />
     <Compile Include="Assets\Scripts\PipePort.cs" />
     <Compile Include="Assets\Scripts\SpecialBlocksUpdateScript.cs" />
+    <Compile Include="Assets\Scripts\WorldChangeManagerScript.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared.cs" />
@@ -114,6 +115,8 @@
     <Content Include="Sprites\Ground\block_02.png" />
     <Content Include="Sprites\Ground\block_03.png" />
     <Content Include="Sprites\Ground\block_04.png" />
+    <Content Include="Sprites\Ground\block_1_with_coin.gif" />
+    <Content Include="Sprites\Ground\block_nocoins.png" />
     <Content Include="Sprites\Ground\bridge.png" />
     <Content Include="Sprites\Ground\bush_01.png" />
     <Content Include="Sprites\Ground\bush_02.png" />

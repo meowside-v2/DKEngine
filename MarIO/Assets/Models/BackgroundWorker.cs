@@ -16,6 +16,7 @@ namespace MarIO.Assets.Models
             this.InitNewScript<FloatingCoinAnimatorScript>();
             this.InitNewScript<FloatingTextAnimatorScript>();
             this.InitNewScript<SpecialBlocksUpdateScript>();
+            this.InitNewScript<WorldChangeManagerScript>();
         }
     }
 }

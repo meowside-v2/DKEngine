@@ -1,9 +1,11 @@
-﻿using DKEngine.Core;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models.Miscellaneous;
 using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
+using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Models
 {
@@ -30,6 +32,7 @@ namespace MarIO.Assets.Models
             Flag,
             FlagPole,
             Mountain,
+            NoCoin,
             Sky,
             Water1,
             Water2,
@@ -62,11 +65,12 @@ namespace MarIO.Assets.Models
             { BlockType.Fence, "fence" },
             { BlockType.Flag, "finish_flag" },
             { BlockType.FlagPole, "flag_pole" },
-            { BlockType.Ground1, "block_01" },
+            { BlockType.Ground1, "block_1_with_coin" },
             { BlockType.Ground2, "block_02" },
             { BlockType.Ground3, "block_03" },
             { BlockType.Ground4, "block_04" },
             { BlockType.Mountain, "mountain" },
+            { BlockType.NoCoin, "block_nocoins" },
             { BlockType.Pipe1, "pipe_01" },
             { BlockType.Pipe2, "pipe_02" },
             { BlockType.Pipe3, "pipe_03" },
@@ -107,7 +111,8 @@ namespace MarIO.Assets.Models
             }
         }
         public Action SpecialAction { get; set; }
-        public bool HaveCoin { get; private set; }
+        public byte CoinCount { get; private set; }
+        public Direction PipeEnterDirection { get; set; }
 
         private bool _specialAction = false;
 
@@ -124,20 +129,15 @@ namespace MarIO.Assets.Models
             this.TypeName = BlockTypeNames[Type];
             if(InitCollider)
                 this.InitNewComponent<Collider>();
-
+            
             switch (Type)
             {
                 case BlockType.Ground1:
-                    HaveCoin = true;
-                    SpecialAction = () =>
-                    {
-                        if (HaveCoin)
-                        {
-                            GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
-                            HaveCoin = false;
-                            Shared.GameScore += Shared.COIN_SCORE;
-                        }
-                    };
+                    CoinCount = 1;
+                    SpecialAction += GetCoins;
+                    break;
+                    
+                case BlockType.NoCoin:
                     break;
 
                 case BlockType.Ground2:
@@ -214,9 +214,10 @@ namespace MarIO.Assets.Models
 
                 case BlockType.Pipe1:
                     {
+                        PipeEnterDirection = Direction.Right;
                         this.InitNewComponent<Collider>();
                         this.Collider.IsTrigger = true;
-                        this.Collider.Area = new System.Drawing.RectangleF(-2, 0, 1, this.Transform.Dimensions.Y);
+                        this.Collider.Area = new System.Drawing.RectangleF(-1, 15, 1, 1);
 
                         this.InitNewScript<PipePort>();
 
@@ -226,6 +227,8 @@ namespace MarIO.Assets.Models
                         };
                         block.InitNewComponent<Collider>();
                         block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
+
+                        //SpecialAction = WorldChange;
                     }
                     break;
 
@@ -234,9 +237,10 @@ namespace MarIO.Assets.Models
 
                 case BlockType.Pipe3:
                     {
+                        PipeEnterDirection = Direction.Down;
                         this.InitNewComponent<Collider>();
                         this.Collider.IsTrigger = true;
-                        this.Collider.Area = new System.Drawing.RectangleF(0, -1, this.Transform.Dimensions.X, 1);
+                        this.Collider.Area = new System.Drawing.RectangleF(15, -1, 1, 1);
 
                         this.InitNewScript<PipePort>();
 
@@ -246,6 +250,8 @@ namespace MarIO.Assets.Models
                         };
                         block.InitNewComponent<Collider>();
                         block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
+
+                        //SpecialAction = WorldChange;
                     }
                     break;
 
@@ -256,16 +262,8 @@ namespace MarIO.Assets.Models
                     break;
 
                 case BlockType.UnderGround1:
-                    HaveCoin = true;
-                    SpecialAction = () =>
-                    {
-                        if (HaveCoin)
-                        {
-                            GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
-                            HaveCoin = false;
-                            Shared.GameScore += Shared.COIN_SCORE;
-                        }
-                    };
+                    CoinCount = 1;
+                    SpecialAction += GetCoins;
                     break;
 
                 case BlockType.UnderGround2:
@@ -286,11 +284,33 @@ namespace MarIO.Assets.Models
                 default:
                     throw new Exception("A TO SE TI JAK POVEDLO");
             }
+
+            if(CoinCount > 0)
+            {
+                this.InitNewComponent<Animator>();
+                this.Animator.AddAnimation("default", this.TypeName);
+                this.Animator.AddAnimation("nocoin", BlockTypeNames[BlockType.NoCoin]);
+            }
         }
 
-        private void CoinBlockAnim()
+        private void GetCoins()
         {
+            if (CoinCount > 0)
+            {
+                GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
+                CoinCount--;
+                Shared.GameScore += Shared.COIN_SCORE;
 
+                if (CoinCount == 0)
+                {
+                    this.Animator.Play("nocoin");
+                }
+            }
         }
+
+        /*private void WorldChange()
+        {
+            Engine.ChangeScene(PipeWorld);
+        }*/
     }
 }

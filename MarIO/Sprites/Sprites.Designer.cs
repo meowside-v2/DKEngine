@@ -123,6 +123,26 @@ namespace MarIO.Sprites {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap block_1_with_coin {
+            get {
+                object obj = ResourceManager.GetObject("block_1_with_coin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap block_nocoins {
+            get {
+                object obj = ResourceManager.GetObject("block_nocoins", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap bridge {
             get {
                 object obj = ResourceManager.GetObject("bridge", resourceCulture);

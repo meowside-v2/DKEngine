@@ -136,6 +136,12 @@
   <data name="block_04" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\block_04.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="block_1_with_coin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ground\block_1_with_coin.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="block_nocoins" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ground\block_nocoins.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="bridge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\bridge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

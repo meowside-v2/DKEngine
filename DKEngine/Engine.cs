@@ -263,7 +263,7 @@ namespace DKEngine
                 Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
             }
 
-            RegisterScene(Engine.LoadingScene);
+            ChangeScene(Engine.LoadingScene.Name);
         }
 
         public static void ReloadScene(string Name)
@@ -291,13 +291,23 @@ namespace DKEngine
                     }
                     catch { }
                 }
+
+                while(CurrentScene.GameObjectsAddedToRender.Count > 0)
+                {
+                    GameObject tmp = CurrentScene.GameObjectsAddedToRender.Pop();
+                    if (Engine.RenderObjects.Contains(tmp))
+                        Engine.RenderObjects.Remove(tmp);
+
+                    CurrentScene.GameObjectsToAddToRender.Push(tmp);
+                }
             }
             catch { }
         }
 
         private static void RegisterScene(Scene source, params string[] args)
         {
-            Engine.CurrentScene = Engine.LoadingScene;
+            Engine.LoadingScene = source;
+            Engine.CurrentScene = source;
             source.Set(args);
 
             foreach (var item in source.AllBehaviors)
