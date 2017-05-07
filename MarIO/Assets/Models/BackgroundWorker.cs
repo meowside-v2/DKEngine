@@ -1,4 +1,5 @@
 ﻿using DKEngine.Core;
+using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,11 @@ namespace MarIO.Assets.Models
     class BackgroundWorker : GameObject
     {
         protected override void Initialize()
-        { }
+        {
+            this.InitNewScript<BlockAnimatorScript>();
+            this.InitNewScript<FloatingCoinAnimatorScript>();
+            this.InitNewScript<FloatingTextAnimatorScript>();
+            this.InitNewScript<SpecialBlocksUpdateScript>();
+        }
     }
 }

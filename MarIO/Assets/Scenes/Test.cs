@@ -96,8 +96,6 @@ namespace MarIO.Assets.Scenes
             new GUIUpdater();
 
             BackgroundWorker BW = new BackgroundWorker();
-            BW.InitNewScript<BlockAnimatorScript>();
-            BW.InitNewScript<FloatingTextAnimatorScript>();
 
             Trigger DeathZone = new Trigger();
             DeathZone.InitNewScript<DeathZoneScript>();

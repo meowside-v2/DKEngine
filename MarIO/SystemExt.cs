@@ -1,5 +1,6 @@
 ﻿using DKEngine.Core.UI;
 using MarIO.Assets.Models;
+using MarIO.Assets.Models.Miscellaneous;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -23,6 +24,12 @@ namespace MarIO
 
             Shared.BlocksToUpdate.Add(block);
             Shared.BlocksStartPositions.Add(block.Transform.Position.Y);
+        }
+
+        public static void AddAsFloatingCoin(this Coin coin)
+        {
+            Shared.FloatingCoins.Add(coin);
+            Shared.FloatingCoinsStartPosition.Add(coin.Transform.Position.Y);
         }
 
         public static Color ToColor(this uint color)

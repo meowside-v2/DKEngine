@@ -1,5 +1,6 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
+using MarIO.Assets.Models.Miscellaneous;
 using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
@@ -90,11 +91,25 @@ namespace MarIO.Assets.Models
         }
 
         public BlockType Type { get; set; }
-        public delegate void PipeEnter();
         public bool InitCollider { get; set; }
         public CollisionState State { get; set; }
+        public bool SpecialActionActivate
+        {
+            get { return _specialAction; }
+            set
+            {
+                if (value)
+                {
+                    Shared.SpecialActions.Push(this);
+                }
 
-        private event PipeEnter PipeEnterEvent;
+                _specialAction = value;
+            }
+        }
+        public Action SpecialAction { get; set; }
+        public bool HaveCoin { get; private set; }
+
+        private bool _specialAction = false;
 
         public Block()
             : base()
@@ -113,6 +128,16 @@ namespace MarIO.Assets.Models
             switch (Type)
             {
                 case BlockType.Ground1:
+                    HaveCoin = true;
+                    SpecialAction = () =>
+                    {
+                        if (HaveCoin)
+                        {
+                            GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
+                            HaveCoin = false;
+                            Shared.GameScore += Shared.COIN_SCORE;
+                        }
+                    };
                     break;
 
                 case BlockType.Ground2:
@@ -231,10 +256,16 @@ namespace MarIO.Assets.Models
                     break;
 
                 case BlockType.UnderGround1:
-                    this.InitNewComponent<Collider>();
-                    this.InitNewScript<BottomMarioChecker>();
-                    this.Collider.IsTrigger = true;
-                    this.Collider.Area = new System.Drawing.RectangleF(0, this.Transform.Dimensions.Y * this.Transform.Scale.Y, this.Transform.Dimensions.X * this.Transform.Scale.X, 1);
+                    HaveCoin = true;
+                    SpecialAction = () =>
+                    {
+                        if (HaveCoin)
+                        {
+                            GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
+                            HaveCoin = false;
+                            Shared.GameScore += Shared.COIN_SCORE;
+                        }
+                    };
                     break;
 
                 case BlockType.UnderGround2:
@@ -255,6 +286,11 @@ namespace MarIO.Assets.Models
                 default:
                     throw new Exception("A TO SE TI JAK POVEDLO");
             }
+        }
+
+        private void CoinBlockAnim()
+        {
+
         }
     }
 }

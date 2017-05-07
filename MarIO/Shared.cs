@@ -1,5 +1,6 @@
 ﻿using DKEngine.Core.UI;
 using MarIO.Assets.Models;
+using MarIO.Assets.Models.Miscellaneous;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -44,11 +45,17 @@ namespace MarIO
         public static List<TextBlock> FloatingTexts = new List<TextBlock>();
         public static List<float> FloatingTextStartPosition = new List<float>();
 
+        public static Stack<Block> SpecialActions = new Stack<Block>();
+
+        public static List<Coin> FloatingCoins = new List<Coin>();
+        public static List<float> FloatingCoinsStartPosition = new List<float>();
+
         public const uint OverworldBackground = 0xFF20CCCC;
 
         #region Constants
 
         public const int GOOMBA_POINTS = 100;
+        public const int COIN_SCORE = 100;
 
         #endregion
 

@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\BlockAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\DeathZoneScript.cs" />
     <Compile Include="Assets\Scripts\EnemyControllerScripts.cs" />
+    <Compile Include="Assets\Scripts\FloatingCoinAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\FloatingTextAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\GUIUpdateScript.cs" />
     <Compile Include="Assets\Scripts\MainMenuSpawnScript.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Assets\Scripts\CharacterController.cs" />
     <Compile Include="Assets\Scripts\MusicScript.cs" />
     <Compile Include="Assets\Scripts\PipePort.cs" />
+    <Compile Include="Assets\Scripts\SpecialBlocksUpdateScript.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared.cs" />

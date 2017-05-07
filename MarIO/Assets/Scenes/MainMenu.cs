@@ -225,6 +225,15 @@ namespace MarIO.Assets.Scenes
             rightSide.Transform.Dimensions = new Vector3(10, 128, 0);
             //rightSide.Model = new Material(Color.Black, leftSide);
 
+            /*Block CoinBlockTest = new Block()
+            {
+                Name = "CoinBlockTest",
+                Type = Block.BlockType.Ground1
+            };
+            CoinBlockTest.InitNewComponent<Collider>();
+            CoinBlockTest.Collider.Area = new RectangleF(0, 0, 16, 16);
+            CoinBlockTest.Transform.Position = new Vector3(30, 30, 0);*/
+
             BackgroundWorker BW = new BackgroundWorker();
             BW.InitNewComponent<Collider>();
             BW.Collider.Area = new RectangleF(-10, 160, 10, 10);

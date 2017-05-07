@@ -90,7 +90,7 @@ namespace DKEngine.Core.Components
 
         protected internal override void Update()
         {
-            if (Parent.Model?.Frames > 1)
+            if (Parent?.Model?.Frames > 1)
             {
                 CurrentAnimationTime = CurrentAnimationTime.Add(new TimeSpan(0, 0, 0, 0, (int)(Engine.DeltaTime * 1000)));
 

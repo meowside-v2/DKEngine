@@ -15,7 +15,8 @@ namespace MarIO.Assets.Scripts
         float AnimationHeight = 30;
         float AnimationSpeed = 20;
 
-        public FloatingTextAnimatorScript(GameObject Parent) : base(Parent)
+        public FloatingTextAnimatorScript(GameObject Parent)
+            : base(Parent)
         { }
 
         protected override void OnColliderEnter(Collider e)

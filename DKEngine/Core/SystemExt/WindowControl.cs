@@ -33,10 +33,11 @@ namespace DKEngine.Core.Ext
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hWnd, int cmdShow);
 
-        private static IntPtr hConsole = GetStdHandle(-11);
+        private static readonly IntPtr hConsole = GetStdHandle(-11);
+        private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
         private static COORD xy = new COORD(100, 100);
-        private static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
-        
+        private static bool ConsoleStateChangeAvailable = true;
+
         internal static void WindowInit()
         {
             Console.CursorVisible = false;
@@ -68,7 +69,14 @@ namespace DKEngine.Core.Ext
         {
             if (Console.WindowHeight != Console.LargestWindowHeight || Console.WindowWidth != Console.LargestWindowWidth)
             {
-                SetConsoleDisplayMode(hConsole, 1, out xy);
+                if (ConsoleStateChangeAvailable)
+                {
+                    if (!SetConsoleDisplayMode(hConsole, 1, out xy))
+                    {
+                        ConsoleStateChangeAvailable = false;
+                    }
+                }
+                
                 Console.CursorVisible = false;
             }
         }
