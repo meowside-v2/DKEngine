@@ -29,7 +29,7 @@ namespace MarIO.Assets.Scripts
 
             Player = GameObject.Find<GameObject>("Player");
             TargetCam = Component.Find<Camera>("Camera");
-            TargetCam.Position = new Vector3(0, -180, 0);
+            TargetCam.Position = new Vector3(0, -160, 0);
 
             /*Border = new Blocker();
             Border.Transform.Dimensions = new Vector3(20, Engine.Render.RenderHeight, 0);

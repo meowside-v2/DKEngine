@@ -233,7 +233,7 @@ namespace DKEngine
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
-            while (Engine.LoadingScene.NewlyGeneratedComponents.Count > 0)
+            /*while (Engine.LoadingScene.NewlyGeneratedComponents.Count > 0)
             {
                 Engine.LoadingScene.NewlyGeneratedComponents.Pop().InitInternal();
             }
@@ -241,7 +241,7 @@ namespace DKEngine
             while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
             {
                 Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
-            }
+            }*/
 
             Database.AddScene(Engine.LoadingScene);
 
@@ -253,7 +253,7 @@ namespace DKEngine
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
-            while (Engine.LoadingScene.NewlyGeneratedComponents.Count > 0)
+            /*while (Engine.LoadingScene.NewlyGeneratedComponents.Count > 0)
             {
                 Engine.LoadingScene.NewlyGeneratedComponents.Pop().InitInternal();
             }
@@ -261,9 +261,11 @@ namespace DKEngine
             while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
             {
                 Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
-            }
+            }*/
 
-            ChangeScene(Engine.LoadingScene.Name);
+            UnregisterScene();
+            RegisterScene(Engine.LoadingScene);
+            //ChangeScene(Engine.LoadingScene.Name);
         }
 
         public static void ReloadScene(string Name)
@@ -307,7 +309,6 @@ namespace DKEngine
         private static void RegisterScene(Scene source, params string[] args)
         {
             Engine.LoadingScene = source;
-            Engine.CurrentScene = source;
             source.Set(args);
 
             foreach (var item in source.AllBehaviors)
@@ -318,6 +319,8 @@ namespace DKEngine
                 }
                 catch { }
             }
+
+            Engine.CurrentScene = source;
         }
 
         private static void ReloadScene(Scene source)
