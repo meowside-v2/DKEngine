@@ -86,7 +86,7 @@ namespace DKEngine.Core.Scripts
 
                         Letter l = new Letter(_Parent);
 
-                        l.Transform.Position += new Vector3(Xoffset, Yoffset, 1);
+                        l.Transform.Position += new Vector3(Xoffset, Yoffset, _Parent.Transform.Position.Z);
                         l.Model = newLetterMaterial;
                         l.Transform.Scale *= _Parent.FontSize;
                         l.Name = _Parent._textStr[i].ToString();

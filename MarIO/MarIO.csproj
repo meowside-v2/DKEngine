@@ -146,6 +146,7 @@
     <None Include="Sprites\PSD\coin.psd" />
     <None Include="Sprites\PSD\Goomba.psd" />
     <None Include="Sprites\PSD\heart.psd" />
+    <None Include="Sprites\PSD\icon.psd" />
     <None Include="Sprites\PSD\Mario.psd" />
   </ItemGroup>
   <ItemGroup>
