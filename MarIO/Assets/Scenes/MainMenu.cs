@@ -96,7 +96,8 @@ namespace MarIO.Assets.Scenes
 
             Mario player = new Mario()
             {
-                InitCharacterController = true
+                InitCharacterController = true,
+                InitCollider = true
             };
 
             TextBlock MainMenuHeader = new TextBlock()

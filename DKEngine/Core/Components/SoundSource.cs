@@ -8,17 +8,18 @@ namespace DKEngine.Core.Components
 {
     internal class SoundPlayer
     {
-        private readonly IWavePlayer outputDevice;
+        private readonly DirectSoundOut outputDevice;
         private readonly MixingSampleProvider mixer;
         private bool IsAvailable = true;
 
         internal SoundPlayer(int sampleRate = 44100, int channelCount = 2)
         {
-            outputDevice = new WaveOutEvent();
+            outputDevice = new DirectSoundOut(40);
             mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount))
             {
                 ReadFully = true
             };
+            //outputDevice.DesiredLatency = 50;
             outputDevice.Init(mixer);
             outputDevice.Play();
         }

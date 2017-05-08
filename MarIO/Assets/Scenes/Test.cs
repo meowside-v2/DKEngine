@@ -82,10 +82,14 @@ namespace MarIO.Assets.Scenes
             Goomba goomba = new Goomba();
             goomba.Transform.Position = new Vector3(500, -20, 0);
 
-            Mario m = new Mario();
+            Mario m = new Mario()
+            {
+                InitCameraController = true,
+                InitCharacterController = true,
+                InitCollider = true
+            };
             m.Transform.Position = new Vector3(10, -10, 0);
-            m.InitCameraController = true;
-            m.InitCharacterController = true;
+            
 
             new MusicPlayer();
 

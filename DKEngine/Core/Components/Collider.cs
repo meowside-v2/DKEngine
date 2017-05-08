@@ -194,7 +194,7 @@ namespace DKEngine.Core.Components
                 if (!tmp.Enabled)
                     continue;
 
-                if (Left(tmp) || Right(tmp) || Up(tmp) || Down(tmp))
+                if (IsCollided(tmp) /*Left(tmp) || Right(tmp) || Up(tmp) || Down(tmp)*/)
                 {
                     //Debug.WriteLine(Parent.Name);
                     //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
@@ -309,6 +309,18 @@ namespace DKEngine.Core.Components
             {
                 if (!this.Equals(obj) && !obj.IsTrigger && obj.Enabled)
                     return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Height >= obj.Y && this.Y + this.Height <= obj.Y + obj.Height / 2);//(this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y + this.Width >= obj.Y && this.Y < obj.Y);
+            }
+            catch { }
+
+            return false;
+        }
+
+        private bool IsCollided(Collider obj)
+        {
+            try
+            {
+                if (!this.Equals(obj) && !obj.IsTrigger && obj.Enabled)
+                    return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y);
             }
             catch { }
 
