@@ -29,7 +29,7 @@ namespace DKEngine
     {
         public static class Sound
         {
-            public static bool IsSoundEnabled = false;
+            public static bool IsSoundEnabled = true;
             public static float SoundVolume = 1f;
 
             internal readonly static SoundPlayer Instance = new SoundPlayer();

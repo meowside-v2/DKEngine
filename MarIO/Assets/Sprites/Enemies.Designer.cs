@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MarIO.Sprites {
+namespace MarIO.Assets.Sprites {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MarIO.Sprites {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MarIO.Sprites.Enemies", typeof(Enemies).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MarIO.Assets.Sprites.Enemies", typeof(Enemies).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

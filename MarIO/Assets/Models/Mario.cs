@@ -102,6 +102,8 @@ namespace MarIO.Assets.Models
             TopTrigger.InitNewScript<TopMarioChecker>();
             TopTrigger.Model = new Material(Color.Black, TopTrigger);
 
+            this.InitNewComponent<SoundSource>();
+
             WorldManager = Behavior.Find<WorldChangeManagerScript>("worldManager");
         }
 

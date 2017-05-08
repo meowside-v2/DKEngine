@@ -11,6 +11,9 @@ namespace MarIO.Assets.Scripts
     {
         private Animator PlayerAnimator;
         private Mario Player;
+        private SoundSource SoundPlay;
+
+        private Sound JumpSound;
         /*private Camera TargetCam;
         private Vector3 Offset;*/
 
@@ -129,6 +132,9 @@ namespace MarIO.Assets.Scripts
 
             Player = GameObject.Find<Mario>("Player");
             PlayerAnimator = Component.Find<Animator>("Player_Animator");
+            SoundPlay = Component.Find<SoundSource>("Player_SoundSource");
+
+            JumpSound = new Sound(Shared.MARIO_JUMP_FX);
             /*TargetCam = Component.Find<Camera>("Camera");
             TargetCam.Position = new Vector3(0, -180, 0);*/
 
@@ -304,6 +310,7 @@ namespace MarIO.Assets.Scripts
                     {
                         if (vertSpeed == 0 && !Jumped)
                         {
+                            SoundPlay.PlaySound(JumpSound);
                             vertSpeed = -FloatSpeed * 1.5f;
                             Jumped = true;
                         }

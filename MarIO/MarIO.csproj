@@ -25,7 +25,7 @@
     <MapFileExtensions>false</MapFileExtensions>
     <ProductName>MarIO</ProductName>
     <PublisherName>David Knieradl</PublisherName>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -124,12 +124,17 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Shared.cs" />
-    <Compile Include="Sprites\Enemies.Designer.cs">
+    <Compile Include="Assets\Sounds\Sounds.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sounds.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\Sprites\Enemies.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Enemies.resx</DependentUpon>
     </Compile>
-    <Compile Include="Sprites\Sprites.Designer.cs">
+    <Compile Include="Assets\Sprites\Sprites.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Sprites.resx</DependentUpon>
@@ -142,74 +147,79 @@
     <None Include="MarIO_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
-    <None Include="Sprites\PSD\blocks_project.psd" />
-    <None Include="Sprites\PSD\coin.psd" />
-    <None Include="Sprites\PSD\Goomba.psd" />
-    <None Include="Sprites\PSD\heart.psd" />
-    <None Include="Sprites\PSD\icon.psd" />
-    <None Include="Sprites\PSD\Mario.psd" />
+    <None Include="Assets\Sprites\PSD\blocks_project.psd" />
+    <None Include="Assets\Sprites\PSD\coin.psd" />
+    <None Include="Assets\Sprites\PSD\Goomba.psd" />
+    <None Include="Assets\Sprites\PSD\heart.psd" />
+    <None Include="Assets\Sprites\PSD\icon.psd" />
+    <None Include="Assets\Sprites\PSD\Mario.psd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo_150x150.ico" />
     <Content Include="Assets\Logo_150x150.png" />
-    <Content Include="Sounds\Overworld_Theme.mp3" />
-    <Content Include="Sprites\Enemy\goomba.gif" />
-    <Content Include="Sprites\Enemy\goomba_dead.png" />
-    <Content Include="Sprites\Enemy\mario_dead.png" />
-    <Content Include="Sprites\Enemy\mario_jump_left.png" />
-    <Content Include="Sprites\Enemy\mario_left.png" />
-    <Content Include="Sprites\Enemy\mario_move_left.gif" />
-    <Content Include="Sprites\Enemy\mario_right.png" />
-    <Content Include="Sprites\Ground\block_01.png" />
-    <Content Include="Sprites\Ground\block_02.png" />
-    <Content Include="Sprites\Ground\block_03.png" />
-    <Content Include="Sprites\Ground\block_04.png" />
-    <Content Include="Sprites\Ground\block_1_with_coin.gif" />
-    <Content Include="Sprites\Ground\block_nocoins.png" />
-    <Content Include="Sprites\Ground\bridge.png" />
-    <Content Include="Sprites\Ground\bush_01.png" />
-    <Content Include="Sprites\Ground\bush_02.png" />
-    <Content Include="Sprites\Ground\bush_03.png" />
-    <Content Include="Sprites\Ground\bush_small.png" />
-    <Content Include="Sprites\Ground\castle_big.png" />
-    <Content Include="Sprites\Ground\castle_small.png" />
-    <Content Include="Sprites\Ground\cloud_01.png" />
-    <Content Include="Sprites\Ground\cloud_02.png" />
-    <Content Include="Sprites\Ground\cloud_03.png" />
-    <Content Include="Sprites\Ground\fence.png" />
-    <Content Include="Sprites\Ground\finish_flag.png" />
-    <Content Include="Sprites\Ground\finish_pole.png" />
-    <Content Include="Sprites\Ground\mountain.png" />
-    <Content Include="Sprites\Ground\sky_07.png" />
-    <Content Include="Sprites\Ground\water_01.png" />
-    <Content Include="Sprites\Ground\water_02.png" />
-    <Content Include="Sprites\Enemy\mario_jump_right.png" />
-    <Content Include="Sprites\Enemy\mario_move_right.gif" />
-    <Content Include="Sprites\Miscellaneous\coin.gif" />
-    <Content Include="Sprites\Miscellaneous\heart.gif" />
-    <Content Include="Sprites\Pipes\pipe_01.png" />
-    <Content Include="Sprites\Pipes\pipe_02.png" />
-    <Content Include="Sprites\Pipes\pipe_03.png" />
-    <Content Include="Sprites\Pipes\pipe_04.png" />
-    <Content Include="Sprites\Pipes\pipe_05.png" />
-    <Content Include="Sprites\UnderGround\background_01.png" />
-    <Content Include="Sprites\UnderGround\background_02.png" />
-    <Content Include="Sprites\UnderGround\underground_block_01.png" />
-    <Content Include="Sprites\UnderGround\underground_block_02.png" />
-    <Content Include="Sprites\UnderGround\underground_block_03.png" />
-    <Content Include="Sprites\UnderGround\underground_block_04.png" />
+    <Content Include="Assets\Sounds\MarioJumpFX.mp3" />
+    <Content Include="Assets\Sounds\Overworld_Theme.mp3" />
+    <Content Include="Assets\Sprites\Enemy\goomba.gif" />
+    <Content Include="Assets\Sprites\Enemy\goomba_dead.png" />
+    <Content Include="Assets\Sprites\Enemy\mario_dead.png" />
+    <Content Include="Assets\Sprites\Enemy\mario_jump_left.png" />
+    <Content Include="Assets\Sprites\Enemy\mario_left.png" />
+    <Content Include="Assets\Sprites\Enemy\mario_move_left.gif" />
+    <Content Include="Assets\Sprites\Enemy\mario_right.png" />
+    <Content Include="Assets\Sprites\Ground\block_01.png" />
+    <Content Include="Assets\Sprites\Ground\block_02.png" />
+    <Content Include="Assets\Sprites\Ground\block_03.png" />
+    <Content Include="Assets\Sprites\Ground\block_04.png" />
+    <Content Include="Assets\Sprites\Ground\block_1_with_coin.gif" />
+    <Content Include="Assets\Sprites\Ground\block_nocoins.png" />
+    <Content Include="Assets\Sprites\Ground\bridge.png" />
+    <Content Include="Assets\Sprites\Ground\bush_01.png" />
+    <Content Include="Assets\Sprites\Ground\bush_02.png" />
+    <Content Include="Assets\Sprites\Ground\bush_03.png" />
+    <Content Include="Assets\Sprites\Ground\bush_small.png" />
+    <Content Include="Assets\Sprites\Ground\castle_big.png" />
+    <Content Include="Assets\Sprites\Ground\castle_small.png" />
+    <Content Include="Assets\Sprites\Ground\cloud_01.png" />
+    <Content Include="Assets\Sprites\Ground\cloud_02.png" />
+    <Content Include="Assets\Sprites\Ground\cloud_03.png" />
+    <Content Include="Assets\Sprites\Ground\fence.png" />
+    <Content Include="Assets\Sprites\Ground\finish_flag.png" />
+    <Content Include="Assets\Sprites\Ground\finish_pole.png" />
+    <Content Include="Assets\Sprites\Ground\mountain.png" />
+    <Content Include="Assets\Sprites\Ground\sky_07.png" />
+    <Content Include="Assets\Sprites\Ground\water_01.png" />
+    <Content Include="Assets\Sprites\Ground\water_02.png" />
+    <Content Include="Assets\Sprites\Enemy\mario_jump_right.png" />
+    <Content Include="Assets\Sprites\Enemy\mario_move_right.gif" />
+    <Content Include="Assets\Sprites\Miscellaneous\coin.gif" />
+    <Content Include="Assets\Sprites\Miscellaneous\heart.gif" />
+    <Content Include="Assets\Sprites\Pipes\pipe_01.png" />
+    <Content Include="Assets\Sprites\Pipes\pipe_02.png" />
+    <Content Include="Assets\Sprites\Pipes\pipe_03.png" />
+    <Content Include="Assets\Sprites\Pipes\pipe_04.png" />
+    <Content Include="Assets\Sprites\Pipes\pipe_05.png" />
+    <Content Include="Assets\Sprites\UnderGround\background_01.png" />
+    <Content Include="Assets\Sprites\UnderGround\background_02.png" />
+    <Content Include="Assets\Sprites\UnderGround\underground_block_01.png" />
+    <Content Include="Assets\Sprites\UnderGround\underground_block_02.png" />
+    <Content Include="Assets\Sprites\UnderGround\underground_block_03.png" />
+    <Content Include="Assets\Sprites\UnderGround\underground_block_04.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Sprites\Enemies.resx">
+    <EmbeddedResource Include="Assets\Sounds\Sounds.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Sounds.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\Sprites\Enemies.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Enemies.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Sprites\Sprites.resx">
+    <EmbeddedResource Include="Assets\Sprites\Sprites.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Sprites.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -233,6 +243,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)\Assets\Sounds\* $(ProjectDir)$(OutDir)\Assets\Sounds\*</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -57,6 +57,9 @@ namespace MarIO
         public const int GOOMBA_POINTS = 100;
         public const int COIN_SCORE = 100;
 
+        public const string OVERWORLD_THEME = @".\Assets\Sounds\Overworld_theme.mp3";
+        public const string MARIO_JUMP_FX = @".\Assets\Sounds\MarioJumpFX.mp3";
+
         #endregion
 
         #region Animations

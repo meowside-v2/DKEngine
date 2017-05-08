@@ -100,6 +100,7 @@ namespace MarIO.Assets.Scripts
                     TextShadow = true
                 };
                 FloatingText.Transform.Position = Target.Transform.Position;
+                FloatingText.Transform.Dimensions = new Vector3(20, 6, 0);
                 FloatingText.AddAsFloatingText();
 
                 Target.Collider.Enabled = false;
