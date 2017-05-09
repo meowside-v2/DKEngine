@@ -51,15 +51,15 @@ namespace MarIO.Assets.Models
             this.Name = "Player";
 
             this.InitNewComponent<Animator>();
-            this.Animator.AddAnimation(Shared.MARIO_IDLE_LEFT, Shared.MARIO_IDLE_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.MARIO_IDLE_RIGHT, Shared.MARIO_IDLE_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.MARIO_JUMP_LEFT, Shared.MARIO_JUMP_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.MARIO_JUMP_RIGHT, Shared.MARIO_JUMP_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.MARIO_MOVE_LEFT, Shared.MARIO_MOVE_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.MARIO_MOVE_RIGHT, Shared.MARIO_MOVE_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.MARIO_DEAD, Shared.MARIO_DEAD_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_LEFT, Shared.Assets.Animations.MARIO_IDLE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_RIGHT, Shared.Assets.Animations.MARIO_IDLE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_LEFT, Shared.Assets.Animations.MARIO_JUMP_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_RIGHT, Shared.Assets.Animations.MARIO_JUMP_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_LEFT, Shared.Assets.Animations.MARIO_MOVE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_RIGHT, Shared.Assets.Animations.MARIO_MOVE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_DEAD, Shared.Assets.Animations.MARIO_DEAD_MAT);
 
-            this.Animator.Play(Shared.MARIO_IDLE_RIGHT);
+            this.Animator.Play(Shared.Assets.Animations.MARIO_IDLE_RIGHT);
 
             if(InitCharacterController)
                 this.InitNewScript<CharacterController>();

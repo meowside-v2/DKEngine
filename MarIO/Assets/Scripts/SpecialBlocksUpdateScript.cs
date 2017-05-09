@@ -24,9 +24,9 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
-            while(Shared.SpecialActions.Count > 0)
+            while(Shared.AnimatedWorldReferences.SpecialActions.Count > 0)
             {
-                Shared.SpecialActions.Pop().SpecialAction();
+                Shared.AnimatedWorldReferences.SpecialActions.Pop().SpecialAction();
             }
         }
     }

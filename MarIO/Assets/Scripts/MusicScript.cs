@@ -21,7 +21,7 @@ namespace MarIO.Assets.Scripts
 
         protected override void Start()
         {
-            Music = new Sound(Shared.OVERWORLD_THEME);
+            Music = new Sound(Shared.Assets.Sounds.OVERWORLD_THEME);
             Output = Component.Find<SoundSource>("MusicPlayer_SoundSource");
 
             MusicLenght = Music.FileReader.TotalTime;

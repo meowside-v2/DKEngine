@@ -28,18 +28,18 @@ namespace MarIO.Assets.Scripts
             this.Lives = GameObject.Find<TextBlock>("txt_Lives");
 
             this.World.Text = Engine.SceneName;
-            this.Time.Text = string.Format("{0:000}", Shared.TimeLeft.TotalSeconds);
-            this.Score.Text = string.Format("{0:00000000}", Shared.GameScore);
-            this.Coins.Text = string.Format("*{0:00}", Shared.CoinsCount);
-            this.Lives.Text = string.Format("*{0:00}", Shared.Lives);
+            this.Time.Text = string.Format("{0:000}", Shared.Mechanics.TimeLeft.TotalSeconds);
+            this.Score.Text = string.Format("{0:00000000}", Shared.Mechanics.GameScore);
+            this.Coins.Text = string.Format("*{0:00}", Shared.Mechanics.CoinsCount);
+            this.Lives.Text = string.Format("*{0:00}", Shared.Mechanics.Lives);
         }
 
         protected override void Update()
         {
-            this.Time.Text = string.Format("{0:000}", Shared.TimeLeft.TotalSeconds);
-            this.Score.Text = string.Format("{0:00000000}", Shared.GameScore);
-            this.Coins.Text = string.Format("*{0:00}", Shared.CoinsCount);
-            this.Lives.Text = string.Format("*{0:00}", Shared.Lives);
+            this.Time.Text = string.Format("{0:000}", Shared.Mechanics.TimeLeft.TotalSeconds);
+            this.Score.Text = string.Format("{0:00000000}", Shared.Mechanics.GameScore);
+            this.Coins.Text = string.Format("*{0:00}", Shared.Mechanics.CoinsCount);
+            this.Lives.Text = string.Format("*{0:00}", Shared.Mechanics.Lives);
         }
     }
 }

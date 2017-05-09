@@ -27,12 +27,12 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
-            if (Shared.FloatingTexts.Count > 0)
+            if (Shared.AnimatedWorldReferences.FloatingTexts.Count > 0)
             {
-                for (int i = 0; i < Shared.FloatingTexts.Count; i++)
+                for (int i = 0; i < Shared.AnimatedWorldReferences.FloatingTexts.Count; i++)
                 {
-                    float StartTextBlockY = Shared.FloatingTextStartPosition[i];
-                    TextBlock CurrentTextBlock = Shared.FloatingTexts[i];
+                    float StartTextBlockY = Shared.AnimatedWorldReferences.FloatingTextStartPosition[i];
+                    TextBlock CurrentTextBlock = Shared.AnimatedWorldReferences.FloatingTexts[i];
 
                     if (CurrentTextBlock.Transform.Position.Y > StartTextBlockY - AnimationHeight)
                     {
@@ -40,8 +40,8 @@ namespace MarIO.Assets.Scripts
 
                         if(CurrentTextBlock.Transform.Position.Y < StartTextBlockY - AnimationHeight)
                         {
-                            Shared.FloatingTextStartPosition.RemoveAt(i);
-                            Shared.FloatingTexts.RemoveAt(i);
+                            Shared.AnimatedWorldReferences.FloatingTextStartPosition.RemoveAt(i);
+                            Shared.AnimatedWorldReferences.FloatingTexts.RemoveAt(i);
 
                             CurrentTextBlock.Destroy();
 

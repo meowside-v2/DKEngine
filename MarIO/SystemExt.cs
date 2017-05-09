@@ -14,22 +14,22 @@ namespace MarIO
     {
         public static void AddAsFloatingText(this TextBlock txBlock)
         {
-            Shared.FloatingTexts.Add(txBlock);
-            Shared.FloatingTextStartPosition.Add(txBlock.Transform.Position.Y);
+            Shared.AnimatedWorldReferences.FloatingTexts.Add(txBlock);
+            Shared.AnimatedWorldReferences.FloatingTextStartPosition.Add(txBlock.Transform.Position.Y);
         }
 
         public static void AnimateBlockCollision(this Block block)
         {
             block.State = Block.CollisionState.Up;
 
-            Shared.BlocksToUpdate.Add(block);
-            Shared.BlocksStartPositions.Add(block.Transform.Position.Y);
+            Shared.AnimatedWorldReferences.BlocksToUpdate.Add(block);
+            Shared.AnimatedWorldReferences.BlocksStartPositions.Add(block.Transform.Position.Y);
         }
 
         public static void AddAsFloatingCoin(this Coin coin)
         {
-            Shared.FloatingCoins.Add(coin);
-            Shared.FloatingCoinsStartPosition.Add(coin.Transform.Position.Y);
+            Shared.AnimatedWorldReferences.FloatingCoins.Add(coin);
+            Shared.AnimatedWorldReferences.FloatingCoinsStartPosition.Add(coin.Transform.Position.Y);
         }
 
         public static Color ToColor(this uint color)

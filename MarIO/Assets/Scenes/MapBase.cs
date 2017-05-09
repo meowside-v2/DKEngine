@@ -8,12 +8,12 @@ namespace MarIO.Assets.Scenes
         {
             Load();
 
-            Shared.TimeCounter.Start();
+            Shared.Mechanics.TimeCounter.Start();
         }
 
         public sealed override void Unload()
         {
-            Shared.TimeCounter.Reset();
+            Shared.Mechanics.TimeCounter.Reset();
         }
 
         public abstract void Load();

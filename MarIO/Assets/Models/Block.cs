@@ -104,7 +104,7 @@ namespace MarIO.Assets.Models
             {
                 if (value)
                 {
-                    Shared.SpecialActions.Push(this);
+                    Shared.AnimatedWorldReferences.SpecialActions.Push(this);
                 }
 
                 _specialAction = value;
@@ -299,7 +299,7 @@ namespace MarIO.Assets.Models
             {
                 GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
                 CoinCount--;
-                Shared.GameScore += Shared.COIN_SCORE;
+                Shared.Mechanics.GameScore += Shared.Mechanics.COIN_SCORE;
 
                 if (CoinCount == 0)
                 {

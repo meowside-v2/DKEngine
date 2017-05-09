@@ -323,6 +323,8 @@ namespace DKEngine
         {
             try
             {
+                Engine.CurrentScene.Unload();
+
                 foreach (var item in CurrentScene.AllBehaviors)
                 {
                     try

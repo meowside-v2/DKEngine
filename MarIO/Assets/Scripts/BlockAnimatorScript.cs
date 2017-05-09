@@ -31,12 +31,12 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
-            if(Shared.BlocksToUpdate.Count > 0)
+            if(Shared.AnimatedWorldReferences.BlocksToUpdate.Count > 0)
             {
-                for(int i = 0; i < Shared.BlocksToUpdate.Count; i++)
+                for(int i = 0; i < Shared.AnimatedWorldReferences.BlocksToUpdate.Count; i++)
                 {
-                    float StartBlockY = Shared.BlocksStartPositions[i];
-                    Block CurrentBlock = Shared.BlocksToUpdate[i];
+                    float StartBlockY = Shared.AnimatedWorldReferences.BlocksStartPositions[i];
+                    Block CurrentBlock = Shared.AnimatedWorldReferences.BlocksToUpdate[i];
 
                     if(CurrentBlock.State == Block.CollisionState.Up && StartBlockY - AnimationHeight < CurrentBlock.Transform.Position.Y)
                     {
@@ -57,8 +57,8 @@ namespace MarIO.Assets.Scripts
                             CurrentBlock.State = Block.CollisionState.Stay;
                             CurrentBlock.Transform.Position -= new Vector3(0, StartBlockY - CurrentBlock.Transform.Position.Y, 0);
                             
-                            Shared.BlocksStartPositions.RemoveAt(i);
-                            Shared.BlocksToUpdate.RemoveAt(i);
+                            Shared.AnimatedWorldReferences.BlocksStartPositions.RemoveAt(i);
+                            Shared.AnimatedWorldReferences.BlocksToUpdate.RemoveAt(i);
 
                             i--;
                         }

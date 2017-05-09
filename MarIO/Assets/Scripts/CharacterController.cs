@@ -40,10 +40,10 @@ namespace MarIO.Assets.Scripts
         {
             get
             {
-                switch (Shared.MarioCurrentState)
+                switch (Shared.Mechanics.MarioCurrentState)
                 {
                     case Mario.State.Small:
-                        return IsFacingLeft ? Shared.MARIO_IDLE_LEFT : Shared.MARIO_IDLE_RIGHT;
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_IDLE_LEFT : Shared.Assets.Animations.MARIO_IDLE_RIGHT;
 
                     case Mario.State.Super:
                         return "idle";
@@ -64,10 +64,10 @@ namespace MarIO.Assets.Scripts
         {
             get
             {
-                switch (Shared.MarioCurrentState)
+                switch (Shared.Mechanics.MarioCurrentState)
                 {
                     case Mario.State.Small:
-                        return horiSpeed >= 0 ? Shared.MARIO_MOVE_RIGHT : Shared.MARIO_MOVE_LEFT;
+                        return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_MOVE_RIGHT : Shared.Assets.Animations.MARIO_MOVE_LEFT;
 
                     case Mario.State.Super:
                         return "idle";
@@ -88,11 +88,11 @@ namespace MarIO.Assets.Scripts
         {
             get
             {
-                switch (Shared.MarioCurrentState)
+                switch (Shared.Mechanics.MarioCurrentState)
                 {
                     case Mario.State.Small:
-                        return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.MARIO_JUMP_RIGHT : Shared.MARIO_JUMP_LEFT)
-                                              : (IsFacingLeft ? Shared.MARIO_JUMP_LEFT : Shared.MARIO_JUMP_RIGHT);
+                        return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.Assets.Animations.MARIO_JUMP_RIGHT : Shared.Assets.Animations.MARIO_JUMP_LEFT)
+                                              : (IsFacingLeft ? Shared.Assets.Animations.MARIO_JUMP_LEFT : Shared.Assets.Animations.MARIO_JUMP_RIGHT);
 
                     case Mario.State.Super:
                         return "idle";
@@ -124,7 +124,7 @@ namespace MarIO.Assets.Scripts
             PlayerAnimator = Component.Find<Animator>("Player_Animator");
             SoundPlay = Component.Find<SoundSource>("Player_SoundSource");
 
-            JumpSound = new Sound(Shared.MARIO_JUMP_FX);
+            JumpSound = new Sound(Shared.Assets.Sounds.MARIO_JUMP_FX);
 
             Player.Animator.Play("idle");
         }
@@ -418,7 +418,7 @@ namespace MarIO.Assets.Scripts
             }
             else
             {
-                PlayerAnimator.Play(Shared.MARIO_DEAD);
+                PlayerAnimator.Play(Shared.Assets.Animations.MARIO_DEAD);
             }
         }
     }

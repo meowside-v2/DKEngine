@@ -27,12 +27,12 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
-            if(Shared.FloatingCoins.Count > 0)
+            if(Shared.AnimatedWorldReferences.FloatingCoins.Count > 0)
             {
-                for (int i = 0; i < Shared.FloatingCoins.Count; i++)
+                for (int i = 0; i < Shared.AnimatedWorldReferences.FloatingCoins.Count; i++)
                 {
-                    Coin currentCoin = Shared.FloatingCoins[i];
-                    float currentCoinStartPosition = Shared.FloatingCoinsStartPosition[i];
+                    Coin currentCoin = Shared.AnimatedWorldReferences.FloatingCoins[i];
+                    float currentCoinStartPosition = Shared.AnimatedWorldReferences.FloatingCoinsStartPosition[i];
 
                     if(currentCoin.Transform.Position.Y > currentCoinStartPosition - AnimationHeight)
                     {
@@ -42,8 +42,8 @@ namespace MarIO.Assets.Scripts
                         {
                             currentCoin.Destroy();
 
-                            Shared.FloatingCoins.RemoveAt(i);
-                            Shared.FloatingCoinsStartPosition.RemoveAt(i);
+                            Shared.AnimatedWorldReferences.FloatingCoins.RemoveAt(i);
+                            Shared.AnimatedWorldReferences.FloatingCoinsStartPosition.RemoveAt(i);
 
                             i--;
                         }

@@ -65,7 +65,7 @@ namespace MarIO.Assets.Scenes
 
             Camera baseCam = new Camera()
             {
-                BackGround = Shared.OverworldBackground.ToColor()
+                BackGround = Shared.Mechanics.OverworldBackground.ToColor()
             };
 
             Mario player = new Mario()
@@ -232,6 +232,10 @@ namespace MarIO.Assets.Scenes
 
         private void Play()
         {
+            Shared.Mechanics.CoinsCount = 0;
+            Shared.Mechanics.GameScore = 0;
+            Shared.Mechanics.Lives = 3;
+            Shared.Mechanics.TimeCounter.Reset();
             Engine.ChangeScene("test");
         }
     }

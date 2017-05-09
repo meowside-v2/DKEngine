@@ -93,10 +93,10 @@ namespace MarIO.Assets.Scripts
         {
             if (firstTimeDeadAnimation)
             {
-                Shared.GameScore += Shared.GOOMBA_POINTS;
+                Shared.Mechanics.GameScore += Shared.Mechanics.GOOMBA_POINTS;
                 TextBlock FloatingText = new TextBlock()
                 {
-                    Text = string.Format("{0}", Shared.GOOMBA_POINTS),
+                    Text = string.Format("{0}", Shared.Mechanics.GOOMBA_POINTS),
                     TextShadow = true
                 };
                 FloatingText.Transform.Position = Target.Transform.Position;
