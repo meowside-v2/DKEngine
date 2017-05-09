@@ -14,7 +14,6 @@ namespace DKEngine.Core.Components
         public TimeSpan CurrentAnimationTime;
         internal Dictionary<string, AnimationNode> Animations;
         private AnimationNode _current;
-        //private GameObject _p;
 
         public int NumberOfPlays { get; private set; } = 0;
 

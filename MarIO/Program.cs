@@ -20,9 +20,6 @@ namespace MarIO
             Engine.LoadSceneToMemory<MainMenu>();
             Engine.LoadSceneToMemory<Test>();
             Engine.ChangeScene("MainMenu");
-
-            /*Engine.LoadSceneToMemory<Test>();
-            Engine.ChangeScene("test");*/
         }
     }
 }

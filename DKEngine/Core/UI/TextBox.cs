@@ -32,14 +32,12 @@ namespace DKEngine.Core.UI
         public TextBox()
         {
             this.InitNewScript<TextBoxScript>();
-            //this.Scripts.Add(new TextBoxScript(this));
         }
 
         public TextBox(GameObject Parent)
             : base(Parent)
         {
             this.InitNewScript<TextBoxScript>();
-            //this.Scripts.Add(new TextBoxScript(this));
         }
 
         private bool TextControl(string key)
@@ -62,26 +60,5 @@ namespace DKEngine.Core.UI
                     return false;
             }
         }
-
-        /*private bool TextControl(char key)
-        {
-            switch (AllowedChars)
-            {
-                case Type.All:
-                    return true;
-
-                case Type.AlphaNumerical:
-                    return Char.IsLetterOrDigit(key);
-
-                case Type.Alpha:
-                    return Char.IsLetter(key);
-
-                case Type.Numerical:
-                    return Char.IsNumber(key);
-
-                default:
-                    return false;
-            }
-        }*/
     }
 }

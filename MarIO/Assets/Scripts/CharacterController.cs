@@ -14,13 +14,6 @@ namespace MarIO.Assets.Scripts
         private SoundSource SoundPlay;
 
         private Sound JumpSound;
-        /*private Camera TargetCam;
-        private Vector3 Offset;*/
-
-        //Parabola test;
-
-        /*private float PositionX;
-        private float MaxCameraDistance;*/
 
         private float horiSpeed = 0;
         private float vertSpeed = 0;
@@ -127,22 +120,11 @@ namespace MarIO.Assets.Scripts
 
         protected override void Start()
         {
-            /*MaxCameraDistance = Engine.Render.RenderWidth / 3;
-            Offset = new Vector3(20, 0, 0);*/
-
             Player = GameObject.Find<Mario>("Player");
             PlayerAnimator = Component.Find<Animator>("Player_Animator");
             SoundPlay = Component.Find<SoundSource>("Player_SoundSource");
 
             JumpSound = new Sound(Shared.MARIO_JUMP_FX);
-            /*TargetCam = Component.Find<Camera>("Camera");
-            TargetCam.Position = new Vector3(0, -180, 0);*/
-
-            /*test = new Parabola(Player)
-            {
-                Y = FloatSpeed,
-                Time = new TimeSpan(0, 0, 1)
-            };*/
 
             Player.Animator.Play("idle");
         }
@@ -219,13 +201,6 @@ namespace MarIO.Assets.Scripts
                 Player.RightTrigger.Collider.Enabled = false;
                 Player.TopTrigger.Collider.Enabled = false;
 
-                /*Player.Collider.Destroy();
-
-                foreach (GameObject child in Player.Child)
-                {
-                    child.Collider.Destroy();
-                }*/
-
                 vertSpeed = -FloatSpeed;
 
                 FirstTimeDeadAnimPlay = false;
@@ -235,22 +210,6 @@ namespace MarIO.Assets.Scripts
                 vertSpeed += Engine.DeltaTime * DeathAnimSpeed * Acceleration;
             }
         }
-
-        /*private void CameraControl()
-        {
-            if (Player.Transform.Position.X - TargetCam.Position.X > MaxCameraDistance)
-            {
-                TargetCam.Position.X += Player.Transform.Position.X - PositionX;
-            }
-
-            if (Player.Transform.Position.X < TargetCam.Position.X)
-            {
-                Player.Transform.Position = Player.Transform.Position.Add(TargetCam.Position.X - Player.Transform.Position.X, 0, 0);
-                horiSpeed = 0f;
-            }
-
-            PositionX = Player.Transform.Position.X;
-        }*/
 
         private void Movement()
         {
@@ -340,7 +299,7 @@ namespace MarIO.Assets.Scripts
                 }
                 else if (!IsFalling)
                 {
-                    vertSpeed = -vertSpeed/* * Acceleration*/;
+                    vertSpeed = -vertSpeed;
                     IsFalling = true;
                     EnemyKilledAnim = false;
                 }

@@ -74,15 +74,13 @@ namespace DKEngine.Core.Components
 
             if (LastUpdated != Engine.LastUpdated)
             {
-                //LastUpdated = Engine.LastUpdated;
-
                 _Right = false;
                 _Left = false;
                 _Bottom = false;
                 _Top = false;
 
                 int count = Engine.CurrentScene.AllGameObjectsColliders.Count;
-                for (int i = 0; i < count; i++) //foreach (Collider tmp in Engine.CurrentScene.AllGameObjectsColliders)
+                for (int i = 0; i < count; i++)
                 {
                     Collider tmp = Engine.CurrentScene.AllGameObjectsColliders[i];
 
@@ -98,66 +96,50 @@ namespace DKEngine.Core.Components
 
                     if (_L = Left(tmp))
                     {
-                        //_L = true;
                         _LeftSpan = LeftSpan(tmp);
                     }
 
                     if (_R = Right(tmp))
                     {
-                        //_R = true;
                         _RightSpan = RightSpan(tmp);
                     }
 
                     if (_T = Up(tmp))
                     {
-                        //_T = true;
                         _TopSpan = TopSpan(tmp);
                     }
 
                     if (_B = Down(tmp))
                     {
-                        //_B = true;
                         _BottomSpan = BottomSpan(tmp);
                     }
 
                     if (_T && _TopSpan <= _LeftSpan && _TopSpan <= _RightSpan && _TopSpan <= _BottomSpan)
                     {
-                        //if (_TopSpan <= _LeftSpan && _TopSpan <= _RightSpan && _TopSpan <= _BottomSpan)
-                        //{
-                            _Top = true;
-                            this.Parent.Transform.Position += new Vector3(0, _TopSpan, 0);
-                            continue;
-                        //}
+                        _Top = true;
+                        this.Parent.Transform.Position += new Vector3(0, _TopSpan, 0);
+                        continue;
                     }
 
                     if (_B && _BottomSpan <= _LeftSpan && _BottomSpan <= _RightSpan && _BottomSpan <= _TopSpan)
                     {
-                        //if (_BottomSpan <= _LeftSpan && _BottomSpan <= _RightSpan && _BottomSpan <= _TopSpan)
-                        //{
-                            _Bottom = true;
-                            this.Parent.Transform.Position += new Vector3(0, -_BottomSpan, 0);
-                            continue;
-                        //}
+                        _Bottom = true;
+                        this.Parent.Transform.Position += new Vector3(0, -_BottomSpan, 0);
+                        continue;
                     }
 
                     if (_L && _LeftSpan <= _BottomSpan && _LeftSpan <= _TopSpan && _LeftSpan <= _RightSpan)
                     {
-                        //if (_LeftSpan <= _BottomSpan && _LeftSpan <= _TopSpan && _LeftSpan <= _RightSpan)
-                        //{
-                            _Left = true;
-                            this.Parent.Transform.Position += new Vector3(_LeftSpan, 0, 0);
-                            continue;
-                        //}
+                        _Left = true;
+                        this.Parent.Transform.Position += new Vector3(_LeftSpan, 0, 0);
+                        continue;
                     }
 
                     if (_R && _RightSpan <= _BottomSpan && _RightSpan <= _TopSpan && _RightSpan <= _LeftSpan)
                     {
-                        //if (_RightSpan <= _BottomSpan && _RightSpan <= _TopSpan && _RightSpan <= _LeftSpan)
-                        //{
-                            _Right = true;
-                            this.Parent.Transform.Position += new Vector3(-_RightSpan, 0, 0);
-                            continue;
-                        //}
+                        _Right = true;
+                        this.Parent.Transform.Position += new Vector3(-_RightSpan, 0, 0);
+                        continue;
                     }
                 }
             }
@@ -194,59 +176,14 @@ namespace DKEngine.Core.Components
                 if (!tmp.Enabled)
                     continue;
 
-                if (IsCollided(tmp) /*Left(tmp) || Right(tmp) || Up(tmp) || Down(tmp)*/)
+                if (Collided(tmp))
                 {
-                    //Debug.WriteLine(Parent.Name);
-                    //CollisionEvent?.DynamicInvoke(VisibleObjects[i].Collider);
-                    //this.Parent.OnColliderEnter(VisibleObjects[i].Collider);
                     CollisionEvent?.Invoke(VisibleObjects[i].Collider);
                     continue;
                 }
             }
         }
-
-        /*private Collider.Direction Collision(Collider obj)
-        {
-            //Right collision
-            if (this.X >= obj.X + obj.Width / 2 && this.X < obj.X + obj.Width)
-            {
-                //Bottom collision
-                if(this.Y >= obj.Y + obj.Height / 2 && this.Y < obj.Y + obj.Height)
-                {
-                    return Direction.Down;
-                }
-                //Top collision
-                else if (this.Y + this.Height >= obj.Y && this.Y + this.Height < obj.Y + obj.Height / 2)
-                {
-                    return Direction.Up;
-                }
-                else
-                {
-                    return Direction.Right;
-                }
-            }
-            //Left collision
-            else if (this.X + this.Width >= obj.X && this.X + this.Width < obj.X + obj.Width / 2)
-            {
-                //Bottom collision
-                if (this.Y >= obj.Y + obj.Height / 2 && this.Y < obj.Y + obj.Height)
-                {
-                    return Direction.Down;
-                }
-                //Top collision
-                else if (this.Y + this.Height >= obj.Y && this.Y + this.Height < obj.Y + obj.Height / 2)
-                {
-                    return Direction.Up;
-                }
-                else
-                {
-                    return Direction.Left;
-                }
-            }
-
-            return Direction.None;
-        }*/
-
+        
         private float LeftSpan(Collider obj)
         {
             return obj.X + obj.Width - this.X;
@@ -315,7 +252,7 @@ namespace DKEngine.Core.Components
             return false;
         }
 
-        private bool IsCollided(Collider obj)
+        private bool Collided(Collider obj)
         {
             try
             {

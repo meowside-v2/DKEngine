@@ -1,9 +1,4 @@
-﻿using DKEngine.Core;
-using DKEngine.Core.Components;
-using DKEngine.Core.Ext;
-using DKEngine.Core.UI;
-
-/**
+﻿/**
 * (C) 2017 David Knieradl
 *
 * For the brave souls who get this far: You are the chosen ones,
@@ -14,6 +9,10 @@ using DKEngine.Core.UI;
 * never gonna say goodbye. Never gonna tell a lie and hurt you.
 */
 
+using DKEngine.Core;
+using DKEngine.Core.Components;
+using DKEngine.Core.Ext;
+using DKEngine.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -50,21 +49,8 @@ namespace DKEngine
             internal static byte[] imageBufferKey;
             internal static byte[] ImageOutData;
 
-            /*internal const  short sampleSize = 100;
-            internal static int   lastTime   = 0;
-            internal static int   numRenders = 0;*/
-
             internal static bool AbortRender = false;
         }
-
-        /*public static class Sound
-        {
-            public static WaveOut OutputDevice;
-            public static bool IsSoundAvailable
-            {
-                get { return OutputDevice != null; }
-            }
-        }*/
 
         public static class Input
         {
@@ -233,19 +219,7 @@ namespace DKEngine
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
-            /*while (Engine.LoadingScene.NewlyGeneratedComponents.Count > 0)
-            {
-                Engine.LoadingScene.NewlyGeneratedComponents.Pop().InitInternal();
-            }
-
-            while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
-            {
-                Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
-            }*/
-
             Database.AddScene(Engine.LoadingScene);
-
-            //Engine.LoadingScene.Init();
         }
 
         public static void LoadScene<T>() where T : Scene
@@ -253,19 +227,8 @@ namespace DKEngine
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
-            /*while (Engine.LoadingScene.NewlyGeneratedComponents.Count > 0)
-            {
-                Engine.LoadingScene.NewlyGeneratedComponents.Pop().InitInternal();
-            }
-
-            while (Engine.LoadingScene.NewlyGeneratedBehaviors.Count > 0)
-            {
-                Engine.LoadingScene.NewlyGeneratedBehaviors.Pop().Start();
-            }*/
-
             UnregisterScene();
             RegisterScene(Engine.LoadingScene);
-            //ChangeScene(Engine.LoadingScene.Name);
         }
 
         public static void ReloadScene(string Name)
@@ -326,29 +289,7 @@ namespace DKEngine
         private static void ReloadScene(Scene source)
         {
         }
-
-        /*public static void ChangeScene<T>() where T : Scene
-        {
-            if (CurrentScene != null)
-            {
-                foreach (var pair in Engine.CurrentScene.AllComponents)
-                    pair.Value.Destroy();
-
-                int ComponentCount = Engine.CurrentScene.AllBehaviors.Count;
-                for (int i = ComponentCount - 1; i >= 0; i--)
-                    Engine.CurrentScene.AllBehaviors[i].Destroy();
-            }
-
-            Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
-            Engine.LoadingScene.Init();
-
-            Engine.CurrentScene = Engine.LoadingScene;
-            Engine.NewGameobjects = Engine.CurrentScene.NewlyGeneratedGameObjects;
-            Engine.NewComponents = Engine.CurrentScene.NewlyGeneratedComponents;
-
-            //Engine._LoadingNewPage = false;
-        }*/
-
+        
         private static void SplashScreen()
         {
             if (!_IsInitialised)
@@ -493,7 +434,6 @@ namespace DKEngine
                     }
 
                     await Task.Delay(1);
-                    //Thread.Sleep(1);
                 }
             }
         }

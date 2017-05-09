@@ -17,10 +17,7 @@ namespace DKEngine.Core.Components
 
         internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.X + Position.X : Position.X; } }
         internal float Y { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.Y + Position.Y : Position.Y; } }
-
-        /*public float MinRenderDepth { get; set; }
-        public float MaxRenderDepth { get; set; }*/
-
+        
         private bool RenderingGUI = false;
 
         public Camera()
@@ -53,14 +50,7 @@ namespace DKEngine.Core.Components
             {
                 float tempHeight = GUI.FindMaxZ();
                 GameObject[] toRender = GUI.Where(item => item.Transform.Position.Z == tempHeight).ToArray();
-
-                /*Parallel.ForEach(toRender, (obj) =>
-                {
-                    obj.Render();
-                    //GUI.Remove(obj);
-                    GUICount--;
-                });*/
-
+                
                 int toRenderCount = toRender.Length;
                 for (int i = toRenderCount - 1; i >= 0; i--)
                 {
@@ -77,14 +67,7 @@ namespace DKEngine.Core.Components
             {
                 float tempHeight = GameObjectsInView.FindMaxZ();
                 GameObject[] toRender = GameObjectsInView.Where(item => item.Transform.Position.Z == tempHeight).ToArray();
-
-                /*Parallel.ForEach(toRender, (obj) =>
-                {
-                    obj.Render();
-                    //Temp.Remove(obj);
-                    TempCount--;
-                });*/
-
+                
                 int toRenderCount = toRender.Length;
                 for (int i = toRenderCount - 1; i >= 0; i--)
                 {

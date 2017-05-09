@@ -307,10 +307,5 @@ namespace MarIO.Assets.Models
                 }
             }
         }
-
-        /*private void WorldChange()
-        {
-            Engine.ChangeScene(PipeWorld);
-        }*/
     }
 }

@@ -16,17 +16,12 @@ namespace DKEngine.Core.UI
         public Button()
         {
             this.InitNewScript<ButtonScript>();
-            //this.Scripts.Add(new ButtonScript(this));
-            //Engine.Scene.PageControls.Add(this);
         }
 
         public Button(GameObject Parent)
             : base(Parent)
         {
             this.InitNewScript<ButtonScript>();
-            //this.Scripts.Add(new ButtonScript(this));
-            /*FocusElementID = Engine.Scene.PageControls.Count;
-            Engine.Scene.PageControls.Add(this);*/
         }
     }
 }

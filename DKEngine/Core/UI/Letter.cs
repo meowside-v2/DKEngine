@@ -17,12 +17,6 @@ namespace DKEngine.Core.UI
 
         public override void Destroy()
         {
-            /*try
-            {
-                if(Engine.LoadingScene.AllComponents.ContainsValue(this))
-                    Engine.LoadingScene.AllComponents.Remove(this.Name);
-            }
-            catch { }*/
             try
             {
                 
@@ -39,16 +33,8 @@ namespace DKEngine.Core.UI
                 Engine.RenderObjects.Remove(this);
             }
             catch { }
-
-            /*if(Engine.RenderGameObjects.Contains(this))
-                Engine.RenderGameObjects.Remove(this);*/
-
-            /*Engine.LoadingScene.AllGameObjects.Remove(this);
-            //if (Engine.ToRender.Contains(this))
-                Engine.RenderGameObjects.Remove(this);*/
-
+            
             Parent?.Child.Remove(this);
-            //((TextBlock)Parent)._text.Remove(this);
 
             Animator?.Destroy();
 

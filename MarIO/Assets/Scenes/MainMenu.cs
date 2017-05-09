@@ -22,32 +22,6 @@ namespace MarIO.Assets.Scenes
 
         public override void Init()
         {
-            /*Group wall1 = new Group()
-            {
-                InitCollider = true,
-                Name = "Wall_1",
-                SizeInBlocks = new Vector3(1, 12, 0),
-                Type = Block.BlockType.Ground2
-            };
-
-            Group wall2 = new Group()
-            {
-                InitCollider = true,
-                Name = "Wall_2",
-                SizeInBlocks = new Vector3(1, 12, 0),
-                Type = Block.BlockType.Ground2
-            };
-            wall2.Transform.Position = new Vector3(16 * 15, 0, 0);*/
-
-            /*Group wall3 = new Group()
-            {
-                InitCollider = true,
-                Name = "Wall_3",
-                SizeInBlocks = new Vector3(16, 1, 0),
-                Type = Block.BlockType.Ground2
-            };
-            wall3.Transform.Position = new Vector3(0, 0, 0);*/
-
             Group wall4 = new Group()
             {
                 InitCollider = true,

@@ -91,20 +91,6 @@ namespace DKEngine.Core.Components.Unused
                     IsAnimated = true;
                     IsLooped = BitConverter.ToInt16(source.GetPropertyItem(20737).Value, 0) != 1;
                 }
-
-                /*switch (source.PixelFormat)
-                {
-                    case PixelFormat.Format32bppArgb:
-                        BytesPerPixel = 4;
-                        break;
-
-                    case PixelFormat.Format24bppRgb:
-                        BytesPerPixel = 3;
-                        break;
-
-                    default:
-                        throw new Exception("Unsupported");
-                }*/
             }
         }
 
@@ -146,21 +132,6 @@ namespace DKEngine.Core.Components.Unused
 
             FrameDim = new FrameDimension(Texture.FrameDimensionsList[0]);
         }
-
-        /*/// <summary>
-        /// Returns color of pixel on coordinations
-        /// </summary>
-        /// <param name="x">Column coordination</param>
-        /// <param name="y">Row coordination</param>
-        /// <param name="frame">Layer/Frame coordination</param>
-        /// <returns></returns>
-        public string PixelToString(int x, int y, int frame = 0)
-        {
-            return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", this.colorMapA[frame][y][x],
-                                                              this.colorMapR[frame][y][x],
-                                                              this.colorMapG[frame][y][x],
-                                                              this.colorMapB[frame][y][x]);
-        }*/
 
         /// <summary>
         /// Render material into engine image buffer

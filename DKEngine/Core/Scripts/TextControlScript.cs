@@ -37,20 +37,17 @@ namespace DKEngine.Core.Scripts
             int _textCount = _Parent._text.Count;
             for (int i = _textCount - 1; i >= 0; i--)
                 _Parent._text[i].Destroy();
-
-            /*_Parent.VAlignment = _Parent._VA;
-            _Parent.HAlignment = _Parent._HA;*/
-
+            
             List<Letter> retValue = new List<Letter>();
             List<List<Letter>> textAligned = new List<List<Letter>>() { new List<Letter>() };
 
-            float Xoffset = 0; //this.Transform.Position.X + horiOffset;
-            float Yoffset = 0; //this.Transform.Position.Y + vertOffset;
+            float Xoffset = 0;
+            float Yoffset = 0;
             int rows = 0;
 
             if (_Parent.Transform.Dimensions.X > 0)
             {
-                for (int i = 0; i < _Parent._textStr.Length; i++)// (char letter in Text)
+                for (int i = 0; i < _Parent._textStr.Length; i++)
                 {
                     if (_Parent._textStr[i] == ' ')
                     {
@@ -79,11 +76,7 @@ namespace DKEngine.Core.Scripts
 
                             textAligned.Add(new List<Letter>());
                         }
-
-                        /*textAligned[Yoffset / 6].Add(new Letter(this,
-                                                                new Position(Xoffset, Yoffset, 1),
-                                                                newLetterMaterial));*/
-
+                        
                         Letter l = new Letter(_Parent);
 
                         l.Transform.Position += new Vector3(Xoffset, Yoffset, _Parent.Transform.Position.Z);
