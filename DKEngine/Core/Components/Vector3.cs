@@ -1,14 +1,27 @@
 ﻿namespace DKEngine.Core.Components
 {
 #pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
-#pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
-
+#pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()    
+    /// <summary>
+    /// Three-dimensional vector
+    /// </summary>
     public struct Vector3
 #pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
 #pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
     {
+        /// <summary>
+        /// The X vector
+        /// </summary>
         public float X;
+        
+        /// <summary>
+        /// The Y vector
+        /// </summary>
         public float Y;
+
+        /// <summary>
+        /// The Z vector
+        /// </summary>
         public float Z;
 
         public Vector3(float X, float Y, float Z)

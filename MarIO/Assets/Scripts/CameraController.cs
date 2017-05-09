@@ -35,7 +35,7 @@ namespace MarIO.Assets.Scripts
         {
             if (Player.Transform.Position.X - TargetCam.Position.X > MaxCameraDistance)
             {
-                TargetCam.Position.X += Player.Transform.Position.X - PositionX;
+                TargetCam.Position += new Vector3(Player.Transform.Position.X - PositionX, 0, 0);
             }
 
             if (Player.Transform.Position.X < TargetCam.Position.X)

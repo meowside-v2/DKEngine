@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 namespace DKEngine.Core.Components
 {
     /// <summary>
-    /// Low-Memory Material, unreleased stuff
+    /// Low-Memory Material
     /// </summary>
     public sealed class Material
     {

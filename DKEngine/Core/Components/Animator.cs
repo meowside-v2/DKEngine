@@ -9,6 +9,11 @@ using System.Linq;
 
 namespace DKEngine.Core.Components
 {
+    /// <summary>
+    /// Used for GameObject material animation
+    /// </summary>
+    /// <seealso cref="DKEngine.Core.Components.Behavior" />
+    /// <seealso cref="DKEngine.IAnimated" />
     public class Animator : Behavior, IAnimated
     {
         public TimeSpan CurrentAnimationTime;
@@ -49,6 +54,11 @@ namespace DKEngine.Core.Components
             this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Animator));
         }
 
+        /// <summary>
+        /// Adds the animation.
+        /// </summary>
+        /// <param name="Name">The animation node name.</param>
+        /// <param name="Source">The source material for animation node.</param>
         public void AddAnimation(string Name, Material Source)
         {
             Animations.Add(Name, new AnimationNode(Name, Source));
@@ -58,6 +68,11 @@ namespace DKEngine.Core.Components
             }
         }
 
+        /// <summary>
+        /// Adds the animation.
+        /// </summary>
+        /// <param name="Name">The animation node name.</param>
+        /// <param name="MaterialKey">The material key to search for material.</param>
         public void AddAnimation(string Name, string MaterialKey)
         {
             Animations.Add(Name, new AnimationNode(Name, Database.GetGameObjectMaterial(MaterialKey)));
@@ -67,6 +82,10 @@ namespace DKEngine.Core.Components
             }
         }
 
+        /// <summary>
+        /// Plays the specified animation name.
+        /// </summary>
+        /// <param name="AnimationName">Name of the animation.</param>
         public void Play(string AnimationName)
         {
             if (AnimationName != Current?.Name)

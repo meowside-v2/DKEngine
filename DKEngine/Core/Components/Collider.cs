@@ -10,6 +10,10 @@ using static DKEngine.Core.Components.Transform;
 
 namespace DKEngine.Core.Components
 {
+    /// <summary>
+    /// Collider used for GameObjects
+    /// </summary>
+    /// <seealso cref="DKEngine.Core.Components.Component" />
     public class Collider : Component
     {
         internal event CollisionEnterHandler CollisionEvent;
@@ -25,6 +29,10 @@ namespace DKEngine.Core.Components
         /// If is TRUE => Triggers OnColliderEnter once another GameObject enter this collider
         /// </summary>
         public bool IsTrigger = false;
+
+        /// <summary>
+        /// Collider is enabled or disabled
+        /// </summary>
         public bool Enabled = true;
 
         private float X { get { return Parent.Transform.Position.X + Area.X; } }
@@ -262,21 +270,6 @@ namespace DKEngine.Core.Components
             catch { }
 
             return false;
-        }
-
-        public static void SetNewCollider(Collider destination, RectangleF Area)
-        {
-            destination.Area = Area;
-        }
-
-        public static void SetNewCollider(Collider destination, PointF Point, SizeF Size)
-        {
-            destination.Area = new RectangleF(Point, Size);
-        }
-
-        public static void SetNewCollider(Collider destination, float X, float Y, float Width, float Height)
-        {
-            destination.Area = new RectangleF(X, Y, Width, Height);
         }
 
         public override void Destroy()

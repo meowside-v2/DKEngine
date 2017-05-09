@@ -9,6 +9,9 @@ using System.Timers;
 
 namespace DKEngine.Core.Ext
 {
+    /// <summary>
+    /// DKEngine window controller
+    /// </summary>
     public static class WindowControl
     {
         [StructLayout(LayoutKind.Sequential)]

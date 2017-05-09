@@ -9,9 +9,24 @@ using System.Reflection;
 
 namespace DKEngine.Core
 {
+    /// <summary>
+    /// Primitive type for all renderable objects
+    /// </summary>
+    /// <seealso cref="DKEngine.Core.Components.Component" />
     public abstract class GameObject : Component
     {
-        public bool HasShadow { get; set; } = false;
+
+        /// <summary>
+        /// The GameObject has shadow
+        /// </summary>
+        public bool HasShadow = false;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is in view.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is in view; otherwise, <c>false</c>.
+        /// </value>
         public bool IsInView
         {
             get
@@ -22,11 +37,25 @@ namespace DKEngine.Core
                 return (this.Transform.Position.X + this.Transform._ScaledDimensions.X >= X && this.Transform.Position.X < X + Engine.Render.RenderWidth && this.Transform.Position.Y + this.Transform._ScaledDimensions.Y >= Y && this.Transform.Position.Y < Y + Engine.Render.RenderHeight);
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is GUI.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is GUI; otherwise, <c>false</c>.
+        /// </value>
         public bool IsGUI
         {
             get { return Parent != null ? Parent.IsGUI : _IsGUI; }
             set { _IsGUI = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the name of the type.
+        /// </summary>
+        /// <value>
+        /// The name of the type.
+        /// </value>
         public string TypeName
         {
             get { return _typeName; }
@@ -36,6 +65,13 @@ namespace DKEngine.Core
                 this.Model = Database.GetGameObjectMaterial(value);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the model.
+        /// </summary>
+        /// <value>
+        /// The model.
+        /// </value>
         public Material Model
         {
             get { return _Model; }
@@ -54,6 +90,13 @@ namespace DKEngine.Core
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the collider.
+        /// </summary>
+        /// <value>
+        /// The collider.
+        /// </value>
         public Collider Collider
         {
             get { return _collider; }
@@ -83,17 +126,50 @@ namespace DKEngine.Core
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the animator.
+        /// </summary>
+        /// <value>
+        /// The animator.
+        /// </value>
         public Animator Animator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sound source.
+        /// </summary>
+        /// <value>
+        /// The sound source.
+        /// </value>
         public SoundSource SoundSource { get; set; }
+
+        /// <summary>
+        /// Gets or sets the foreground.
+        /// </summary>
+        /// <value>
+        /// The foreground.
+        /// </value>
         public Color? Foreground { get; set; }
 
+        /// <summary>
+        /// Gets the transform.
+        /// </summary>
+        /// <value>
+        /// The transform.
+        /// </value>
         public Transform Transform { get; }
-        public List<GameObject> Child { get; }
-        internal List<Script> Scripts { get; }
 
+        /// <summary>
+        /// Gets the list of childs.
+        /// </summary>
+        /// <value>
+        /// The child.
+        /// </value>
+        public List<GameObject> Child { get; }
+        
+        internal List<Script> Scripts { get; }
         internal bool _IsGUI = false;
         internal string _typeName = "";
-
         internal Material _Model = null;
         internal Collider _collider = null;
 
@@ -151,11 +227,19 @@ namespace DKEngine.Core
 
         protected abstract void Initialize();
 
+        /// <summary>
+        /// Initializes the new script.
+        /// </summary>
+        /// <typeparam name="T">Scirpt</typeparam>
         public void InitNewScript<T>() where T : Script
         {
             this.Scripts.Add((T)Activator.CreateInstance(typeof(T), this));
         }
 
+        /// <summary>
+        /// Initializes the new component.
+        /// </summary>
+        /// <typeparam name="T">Component</typeparam>
         public void InitNewComponent<T>() where T : Component
         {
             if (typeof(T) == typeof(Animator) || typeof(T).IsSubclassOf(typeof(Animator)))
@@ -241,6 +325,12 @@ namespace DKEngine.Core
         internal virtual void Render()
         { Model?.Render(this, Foreground); }
 
+        /// <summary>
+        /// Finds the specified GameObject of desired name.
+        /// </summary>
+        /// <typeparam name="T">Type</typeparam>
+        /// <param name="Name">Desired name</param>
+        /// <returns></returns>
         public static new T Find<T>(string Name) where T : GameObject
         {
             T retValue = null;
@@ -257,6 +347,11 @@ namespace DKEngine.Core
             return retValue;
         }
 
+        /// <summary>
+        /// Finds the specified GameObject of desired name.
+        /// </summary>
+        /// <param name="Name">Desired name</param>
+        /// <returns></returns>
         public static GameObject Find(string Name)
         {
             GameObject retValue = null;
@@ -273,6 +368,14 @@ namespace DKEngine.Core
             return retValue;
         }
 
+        /// <summary>
+        /// Instantiates GameObject.
+        /// </summary>
+        /// <typeparam name="T">Type</typeparam>
+        /// <param name="Position">The position</param>
+        /// <param name="Dimensions">The dimensions</param>
+        /// <param name="Scale">The scale</param>
+        /// <returns></returns>
         public static T Instantiate<T>(Vector3 Position, Vector3 Dimensions, Vector3 Scale)
             where T : GameObject, new()
         {
@@ -285,6 +388,12 @@ namespace DKEngine.Core
             return retValue;
         }
 
+        /// <summary>
+        /// Instantiates GameObject.
+        /// </summary>
+        /// <typeparam name="T">Type</typeparam>
+        /// <param name="Transform">The transform</param>
+        /// <returns></returns>
         public static T Instantiate<T>(Transform @Transform)
             where T : GameObject, new()
         {

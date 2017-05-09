@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace DKEngine.Core
 {
+    /// <summary>
+    /// DKEngine library scene
+    /// </summary>
+    /// <seealso cref="DKEngine.IPage" />
     public abstract class Scene : IPage
     {
         public string Name = "";
@@ -41,10 +45,20 @@ namespace DKEngine.Core
             DestroyObjectAwaitList = new List<GameObject>(0xFFFF);
         }
 
+        /// <summary>
+        /// Initializes model of Scene.
+        /// </summary>
         public abstract void Init();
 
+        /// <summary>
+        /// Sets the specified arguments.
+        /// </summary>
+        /// <param name="Args">The arguments</param>
         public abstract void Set(params string[] Args);
 
+        /// <summary>
+        /// Unloads this instance.
+        /// </summary>
         public abstract void Unload();
     }
 }

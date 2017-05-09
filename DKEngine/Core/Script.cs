@@ -2,6 +2,10 @@
 
 namespace DKEngine.Core
 {
+    /// <summary>
+    /// Script base class
+    /// </summary>
+    /// <seealso cref="DKEngine.Core.Components.Behavior" />
     public abstract class Script : Behavior
     {
         internal Collider.CollisionEnterHandler CollisionHandler;

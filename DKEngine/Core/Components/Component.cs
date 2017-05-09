@@ -5,6 +5,9 @@ using System.Diagnostics;
 
 namespace DKEngine.Core.Components
 {
+    /// <summary>
+    /// Base class for all objects using DKEngine library
+    /// </summary>
     public abstract class Component
     {
         private TimeSpan _lastUpdated;
@@ -19,8 +22,15 @@ namespace DKEngine.Core.Components
             }
         }
 
-        public GameObject Parent { get; set; } = null;
-        public string Name { get; set; } = "";
+        /// <summary>
+        /// The parent object of this instance
+        /// </summary>
+        public GameObject Parent = null;
+
+        /// <summary>
+        /// The name of this instance
+        /// </summary>
+        public string Name = "";
 
         internal Component(GameObject Parent)
         {
@@ -62,6 +72,12 @@ namespace DKEngine.Core.Components
 
         public abstract void Destroy();
 
+        /// <summary>
+        /// Finds the specified component of specified name.
+        /// </summary>
+        /// <typeparam name="T">Determines type of desired component</typeparam>
+        /// <param name="Name">The name of desired component.</param>
+        /// <returns></returns>
         public static T Find<T>(string Name) where T : Component
         {
             T retValue = null;

@@ -11,6 +11,9 @@ using System.Resources;
 
 namespace DKEngine.Core
 {
+    /// <summary>
+    /// DKEngine library database holding all loaded materials, scenes, etc.
+    /// </summary>
     public static class Database
     {
         private enum Font

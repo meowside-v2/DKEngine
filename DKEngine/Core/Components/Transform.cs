@@ -4,6 +4,10 @@
 
 namespace DKEngine.Core.Components
 {
+    /// <summary>
+    /// Transformation class holding information about position, scale and sizes of GameObject
+    /// </summary>
+    /// <seealso cref="DKEngine.Core.Components.Component" />
     public sealed class Transform : Component
     {
         private Vector3 _Dimensions;
@@ -68,6 +72,9 @@ namespace DKEngine.Core.Components
         public override void Destroy()
         { }
 
+        /// <summary>
+        /// Possible directions
+        /// </summary>
         public enum Direction
         {
             Up,

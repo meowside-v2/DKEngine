@@ -10,9 +10,20 @@ using System.Linq;
 
 namespace DKEngine.Core.Components
 {
+    /// <summary>
+    /// Camera used for rendering
+    /// </summary>
+    /// <seealso cref="DKEngine.Core.Components.Component" />
     public sealed class Camera : Component
     {
+        /// <summary>
+        /// Sets the canvas background color
+        /// </summary>
         public Color BackGround = Color.Black;
+
+        /// <summary>
+        /// The offset position of camera
+        /// </summary>
         public Vector3 Position;
 
         internal float X { get { return RenderingGUI ? 0 : Parent != null ? Parent.Transform.Position.X + Position.X : Position.X; } }

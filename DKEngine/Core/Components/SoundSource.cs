@@ -82,6 +82,10 @@ namespace DKEngine.Core.Components
         }
     }
 
+    /// <summary>
+    /// SoundSource component used for sound effects
+    /// </summary>
+    /// <seealso cref="DKEngine.Core.Components.Component" />
     public class SoundSource : Component
     {
         private bool IsAvailable = true;
@@ -172,6 +176,9 @@ namespace DKEngine.Core.Components
         public WaveFormat WaveFormat { get { return cachedSound.WaveFormat; } }
     }
 
+    /// <summary>
+    /// Class holding specified audio file
+    /// </summary>
     public class Sound
     {
         public float[] AudioData { get; private set; }

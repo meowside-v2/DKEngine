@@ -24,22 +24,48 @@ using System.Threading.Tasks;
 
 namespace DKEngine
 {
+    /// <summary>
+    /// Engine class
+    /// </summary>
     public static class Engine
     {
+        /// <summary>
+        /// Sound subclass
+        /// </summary>
         public static class Sound
         {
+            /// <summary>
+            /// Enables sound
+            /// </summary>
             public static bool IsSoundEnabled = true;
+
+            /// <summary>
+            /// Sets volume on sound inicialization
+            /// </summary>
             public static float SoundVolume = 1f;
 
             internal readonly static SoundPlayer Instance = new SoundPlayer();
         }
 
+        /// <summary>
+        /// Render subclass
+        /// </summary>
         public static class Render
         {
+            /// <summary>
+            /// Sets resolution scale in %
+            /// </summary>
             public const int ResolutionScale = 40;
             public const float ResolutionRatio = ResolutionScale / 100f;
 
+            /// <summary>
+            /// The rendered image width
+            /// </summary>
             public const int RenderWidth = (int)(640 * ResolutionRatio);
+
+            /// <summary>
+            /// The rendered image height
+            /// </summary>
             public const int RenderHeight = (int)(480 * ResolutionRatio);
 
             internal const int ImageBufferSize = 3 * RenderWidth * RenderHeight;
@@ -52,6 +78,9 @@ namespace DKEngine
             internal static bool AbortRender = false;
         }
 
+        /// <summary>
+        /// Input subclass
+        /// </summary>
         public static class Input
         {
             [DllImport("user32.dll")]
@@ -66,28 +95,52 @@ namespace DKEngine
 
             internal static short NumberOfKeys;
 
+            /// <summary>
+            /// Determines whether [is key pressed] [the specified key].
+            /// </summary>
+            /// <param name="key">The key</param>
+            /// <returns>
+            ///   <c>true</c> if [is key pressed] [the specified key]; otherwise, <c>false</c>.
+            /// </returns>
             public static bool IsKeyPressed(ConsoleKey key)
             {
                 return KeysPressed[(short)key];
-                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
             }
 
+            /// <summary>
+            /// Determines whether [is key down] [the specified key].
+            /// </summary>
+            /// <param name="key">The key</param>
+            /// <returns>
+            ///   <c>true</c> if [is key down] [the specified key]; otherwise, <c>false</c>.
+            /// </returns>
             public static bool IsKeyDown(ConsoleKey key)
             {
                 return KeysDown[(short)key];
-                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
             }
 
+            /// <summary>
+            /// Determines whether [is key up] [the specified key].
+            /// </summary>
+            /// <param name="key">The key</param>
+            /// <returns>
+            ///   <c>true</c> if [is key up] [the specified key]; otherwise, <c>false</c>.
+            /// </returns>
             public static bool IsKeyUp(ConsoleKey key)
             {
                 return KeysUp[(short)key];
-                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
             }
 
+            /// <summary>
+            /// Determines whether [is key released] [the specified key].
+            /// </summary>
+            /// <param name="key">The key</param>
+            /// <returns>
+            ///   <c>true</c> if [is key released] [the specified key]; otherwise, <c>false</c>.
+            /// </returns>
             public static bool IsKeyReleased(ConsoleKey key)
             {
                 return KeysReleased[(short)key];
-                //return ((GetKeyState((short)key) & keyDownBit) == keyDownBit);
             }
 
             internal static void CheckForKeys()
@@ -127,13 +180,10 @@ namespace DKEngine
                 }
             }
         }
-
-        //private static bool _LoadingNewPage = false;
+        
         private static bool _IsInitialised = false;
 
         private static Thread BackgroundWorks;
-        //private static Thread RenderWorker;
-
         private static TextBlock FpsMeter;
         private static Stopwatch DeltaT;
         internal static Camera BaseCam;
@@ -152,9 +202,16 @@ namespace DKEngine
         public static string SceneName { get { return Engine.LoadingScene != null ? Engine.LoadingScene.Name : ""; } }
 
         internal static event EngineHandler UpdateEvent;
-
         internal delegate void EngineHandler();
 
+        /// <summary>
+        /// Sets engine to work.
+        /// </summary>
+        /// <exception cref="System.Exception">
+        /// Engine initialisation failed\n" + e
+        /// or
+        /// Engine is being initialised second time
+        /// </exception>
         public static void Init()
         {
             if (!_IsInitialised)
@@ -214,6 +271,10 @@ namespace DKEngine
                 throw new Exception("Engine is being initialised second time");
         }
 
+        /// <summary>
+        /// Loads the scene to memory.
+        /// </summary>
+        /// <typeparam name="T">Scene</typeparam>
         public static void LoadSceneToMemory<T>() where T : Scene
         {
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
@@ -222,6 +283,10 @@ namespace DKEngine
             Database.AddScene(Engine.LoadingScene);
         }
 
+        /// <summary>
+        /// Loads and changes the scene.
+        /// </summary>
+        /// <typeparam name="T">Scene</typeparam>
         public static void LoadScene<T>() where T : Scene
         {
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
@@ -231,11 +296,21 @@ namespace DKEngine
             RegisterScene(Engine.LoadingScene);
         }
 
+        /// <summary>
+        /// Reloads the scene.
+        /// </summary>
+        /// <param name="Name">The name of scene</param>
         public static void ReloadScene(string Name)
         {
             ReloadScene(Database.GetScene(Name));
         }
 
+        /// <summary>
+        /// Changes the scene.
+        /// </summary>
+        /// <param name="Name">The name</param>
+        /// <param name="Reload">if set to <c>true</c> [reload]</param>
+        /// <param name="args">The arguments</param>
         public static void ChangeScene(string Name, bool Reload = false, params string[] args)
         {
             UnregisterScene();
