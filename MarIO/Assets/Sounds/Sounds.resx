@@ -124,4 +124,28 @@
   <data name="Overworld_Theme" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>overworld_theme.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="smb_1_up" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>smb_1-up.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="smb_breakblock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>smb_breakblock.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="smb_coin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>smb_coin.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="smb_jump_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>smb_jump-small.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="smb_mariodie" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>smb_mariodie.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="smb_pipe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>smb_pipe.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="smb_powerup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>smb_powerup.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="smb_stomp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>smb_stomp.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

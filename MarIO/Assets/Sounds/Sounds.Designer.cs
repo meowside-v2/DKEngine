@@ -79,5 +79,85 @@ namespace MarIO.Assets.Sounds {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smb_1_up {
+            get {
+                object obj = ResourceManager.GetObject("smb_1_up", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smb_breakblock {
+            get {
+                object obj = ResourceManager.GetObject("smb_breakblock", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smb_coin {
+            get {
+                object obj = ResourceManager.GetObject("smb_coin", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smb_jump_small {
+            get {
+                object obj = ResourceManager.GetObject("smb_jump_small", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smb_mariodie {
+            get {
+                object obj = ResourceManager.GetObject("smb_mariodie", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smb_pipe {
+            get {
+                object obj = ResourceManager.GetObject("smb_pipe", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smb_powerup {
+            get {
+                object obj = ResourceManager.GetObject("smb_powerup", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] smb_stomp {
+            get {
+                object obj = ResourceManager.GetObject("smb_stomp", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

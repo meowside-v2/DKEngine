@@ -93,7 +93,7 @@ namespace MarIO.Assets.Models
             Up,
             Down
         }
-
+        
         public BlockType Type { get; set; }
         public bool InitCollider { get; set; }
         public CollisionState State { get; set; }
@@ -110,6 +110,7 @@ namespace MarIO.Assets.Models
                 _specialAction = value;
             }
         }
+        
         public Action SpecialAction { get; set; }
         public byte CoinCount { get; private set; }
         public Direction PipeEnterDirection { get; set; }
@@ -134,7 +135,6 @@ namespace MarIO.Assets.Models
             {
                 case BlockType.Ground1:
                     CoinCount = 1;
-                    SpecialAction += GetCoins;
                     break;
                     
                 case BlockType.NoCoin:
@@ -263,7 +263,6 @@ namespace MarIO.Assets.Models
 
                 case BlockType.UnderGround1:
                     CoinCount = 1;
-                    SpecialAction += GetCoins;
                     break;
 
                 case BlockType.UnderGround2:
@@ -293,7 +292,7 @@ namespace MarIO.Assets.Models
             }
         }
 
-        private void GetCoins()
+        public void GetCoin()
         {
             if (CoinCount > 0)
             {
@@ -306,6 +305,11 @@ namespace MarIO.Assets.Models
                     this.Animator.Play("nocoin");
                 }
             }
+        }
+
+        public void DestroyAnim()
+        {
+
         }
     }
 }

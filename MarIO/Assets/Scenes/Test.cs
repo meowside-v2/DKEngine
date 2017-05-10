@@ -95,7 +95,7 @@ namespace MarIO.Assets.Scenes
 
             Camera c = new Camera()
             {
-                BackGround = System.Drawing.Color.FromArgb(0xFF, 0x20, 0xCC, 0xCC)
+                BackGround = Shared.Mechanics.OverworldBackground.ToColor()
             };
 
             new GUIUpdater();

@@ -50,6 +50,8 @@ namespace MarIO.Assets.Models
         {
             this.Name = "Player";
 
+            CurrentState = Shared.Mechanics.MarioCurrentState;
+
             this.InitNewComponent<Animator>();
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_LEFT, Shared.Assets.Animations.MARIO_IDLE_LEFT_MAT);
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_RIGHT, Shared.Assets.Animations.MARIO_IDLE_RIGHT_MAT);
@@ -77,7 +79,7 @@ namespace MarIO.Assets.Models
             {
                 Name = "Bottom_Trigger"
             };
-            BottomTrigger.Transform.Position += new Vector3(0.5f, 16, 0);
+            BottomTrigger.Transform.Position += new Vector3(2.5f, 16, 0);
             BottomTrigger.Transform.Dimensions = new Vector3(11, 1, 0);
             BottomTrigger.InitNewScript<BottomMarioChecker>();
             BottomTrigger.Model = new Material(Color.Black, BottomTrigger);

@@ -9,11 +9,13 @@ namespace MarIO.Assets.Scripts
 {
     internal class CharacterController : Script
     {
+        private static Sound PIPE_ENTER_FX = new Sound(Shared.Assets.Sounds.PIPE_ENTER_FX);
+        private static Sound JUMP_FX = new Sound(Shared.Assets.Sounds.MARIO_JUMP_FX);
+        private static Sound STOMP_FX = new Sound(Shared.Assets.Sounds.STOMP_FX);
+
         private Animator PlayerAnimator;
         private Mario Player;
-        private SoundSource SoundPlay;
-
-        private Sound JumpSound;
+        private SoundSource SoundOutput;
 
         private float horiSpeed = 0;
         private float vertSpeed = 0;
@@ -23,7 +25,7 @@ namespace MarIO.Assets.Scripts
 
         private float Acceleration = 3f;
 
-        private float DeathAnimSpeed = 50;
+        private float DeathAnimSpeed = 20;
 
         private bool CanJump = true;
         private bool IsFalling = false;
@@ -122,9 +124,7 @@ namespace MarIO.Assets.Scripts
         {
             Player = GameObject.Find<Mario>("Player");
             PlayerAnimator = Component.Find<Animator>("Player_Animator");
-            SoundPlay = Component.Find<SoundSource>("Player_SoundSource");
-
-            JumpSound = new Sound(Shared.Assets.Sounds.MARIO_JUMP_FX);
+            SoundOutput = Component.Find<SoundSource>("Player_SoundSource");
 
             Player.Animator.Play("idle");
         }
@@ -133,6 +133,7 @@ namespace MarIO.Assets.Scripts
         {
             if (Player.KilledEnemy)
             {
+                SoundOutput.PlaySound(STOMP_FX);
                 Player.KilledEnemy = false;
                 EnemyKilledAnim = true;
                 Jumped = true;
@@ -144,6 +145,7 @@ namespace MarIO.Assets.Scripts
             {
                 if (FirstTimePipeEnter)
                 {
+                    SoundOutput.PlaySound(PIPE_ENTER_FX);
                     PipeEnterStartPosition = Player.PipeEnteredInDirection == Direction.Down ? Player.Transform.Position.Y : Player.Transform.Position.X;
                     horiSpeed = 0;
                     vertSpeed = 0;
@@ -269,7 +271,7 @@ namespace MarIO.Assets.Scripts
                     {
                         if (vertSpeed == 0 && !Jumped)
                         {
-                            SoundPlay.PlaySound(JumpSound);
+                            SoundOutput.PlaySound(JUMP_FX);
                             vertSpeed = -FloatSpeed * 1.5f;
                             Jumped = true;
                         }

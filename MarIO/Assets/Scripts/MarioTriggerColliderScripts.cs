@@ -55,10 +55,7 @@ namespace MarIO.Assets.Scripts
                     tmp.AnimateBlockCollision();
                 }
 
-                if(tmp.Type == Block.BlockType.Ground1 || tmp.Type == Block.BlockType.UnderGround1)
-                {
-                    tmp.SpecialActionActivate = true;
-                }
+                tmp.GetCoin();
             }
         }
 

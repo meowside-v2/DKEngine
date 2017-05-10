@@ -217,6 +217,8 @@ namespace MarIO.Assets.Scenes
             BW.Collider.Area = new RectangleF(-10, 160, 10, 10);
             BW.Collider.IsTrigger = true;
             BW.InitNewScript<MainMenuSpawnScript>();
+
+            new SoundOutput();
         }
 
         public override void Set(params string[] Args)
@@ -236,7 +238,8 @@ namespace MarIO.Assets.Scenes
             Shared.Mechanics.GameScore = 0;
             Shared.Mechanics.Lives = 3;
             Shared.Mechanics.TimeCounter.Reset();
-            Engine.ChangeScene("test");
+            Engine.LoadScene<Test>();
+            //Engine.ChangeScene("test");
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using DKEngine.Core.UI;
+﻿using DKEngine.Core.Components;
+using DKEngine.Core.UI;
 using MarIO.Assets.Models;
 using MarIO.Assets.Models.Miscellaneous;
+using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +13,9 @@ namespace MarIO
     {
         internal static class Mechanics
         {
+            public static SoundOutput FXPlayer;
+            public static SoundSource FXSoundSource { get { return FXPlayer.SoundSource; } }
+
             private static byte _coinsCount = 0;
 
             public static short GameScore { get; set; } = 0;
@@ -66,7 +71,14 @@ namespace MarIO
             internal static class Sounds
             {
                 public const string OVERWORLD_THEME = @".\Assets\Sounds\Overworld_theme.mp3";
-                public const string MARIO_JUMP_FX = @".\Assets\Sounds\MarioJumpFX.mp3";
+                public const string MARIO_JUMP_FX = @".\Assets\Sounds\smb_jump-small.mp3";
+                public const string PIPE_ENTER_FX = @".\Assets\Sounds\smb_pipe.mp3";
+                public const string COIN_GET_FX = @".Assets\Sounds\smb_coin.mp3";
+                public const string UP_1_FX = @".\Assets\Sounds\smb_1-up.mp3";
+                public const string BREAK_BLOCK_FX = @".\Assets\Sounds\smb_breakblock.mp3";
+                public const string MARIO_DIE_FX = @".\Assets\Sounds\smb_mariodie.mp3";
+                public const string POWER_UP_FX = @".\Assets\Sounds\smb_powerup.mp3";
+                public const string STOMP_FX = @".\Assets\Sounds\smb_stomp.mp3";
             }
 
             internal static class Animations
