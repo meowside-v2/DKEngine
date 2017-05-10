@@ -1,4 +1,5 @@
-﻿using DKEngine.Core;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
 using System;
 using System.Diagnostics;
@@ -33,6 +34,15 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
+            if (Engine.Input.IsKeyDown(ConsoleKey.P))
+            {
+                Output.StopSound(Music);
+            }
+            if (Engine.Input.IsKeyDown(ConsoleKey.O))
+            {
+                Output.PlaySound(Music);
+            }
+
             if (Timer.Elapsed > MusicLenght)
             {
                 Output.PlaySound(Music);

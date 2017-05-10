@@ -23,35 +23,19 @@ namespace DKEngine.Core.Components
             outputDevice.Init(mixer);
             outputDevice.Play();
         }
+        
 
-        public void PlaySound(string fileName)
-        {
-            if (Engine.Sound.IsSoundEnabled)
-            {
-                if (IsAvailable)
-                {
-                    try
-                    {
-                        var input = new AudioFileReader(fileName);
-                        AddMixerInput(new AutoDisposeFileReader(input));
-                    }
-                    catch
-                    {
-                        IsAvailable = false;
-                    }
-                }
-            }
-        }
-
-        private ISampleProvider ConvertToRightChannelCount(ISampleProvider input)
+        private ISampleProvider ConvertToRightChannelCount(CachedSoundSampleProvider input)
         {
             if (input.WaveFormat.Channels == mixer.WaveFormat.Channels)
             {
-                return input;
+                input.cachedSound._MonoToStereoSampleProvider = input;
+                return input.cachedSound._MonoToStereoSampleProvider;
             }
             if (input.WaveFormat.Channels == 1 && mixer.WaveFormat.Channels == 2)
             {
-                return new MonoToStereoSampleProvider(input);
+                input.cachedSound._MonoToStereoSampleProvider = new MonoToStereoSampleProvider(input);
+                return input.cachedSound._MonoToStereoSampleProvider;
             }
             throw new NotImplementedException("Not yet implemented this channel count conversion");
         }
@@ -62,7 +46,7 @@ namespace DKEngine.Core.Components
             {
                 try
                 {
-                    AddMixerInput(new CachedSoundSampleProvider(sound));
+                    AddMixerInput(ConvertToRightChannelCount(new CachedSoundSampleProvider(sound)));
                 }
                 catch
                 {
@@ -71,9 +55,28 @@ namespace DKEngine.Core.Components
             }
         }
 
+        public void StopSound(Sound sound)
+        {
+            if (IsAvailable)
+            {
+                try
+                {
+                    RemoveMixerInput(sound._MonoToStereoSampleProvider);
+                    
+                }
+                catch
+                { }
+            }
+        }
+
         private void AddMixerInput(ISampleProvider input)
         {
-            mixer.AddMixerInput(ConvertToRightChannelCount(input));
+            mixer.AddMixerInput(input);
+        }
+
+        private void RemoveMixerInput(ISampleProvider input)
+        {
+            mixer.RemoveMixerInput(input);
         }
 
         public void Dispose()
@@ -114,6 +117,22 @@ namespace DKEngine.Core.Components
             }
         }
 
+        public void StopSound(Sound sound)
+        {
+            if (Engine.Sound.IsSoundEnabled)
+            {
+                if (IsAvailable)
+                {
+                    try
+                    {
+                        Engine.Sound.Instance.StopSound(sound);
+                    }
+                    catch
+                    { }
+                }
+            }
+        }
+
         public override void Destroy()
         {
             try
@@ -127,41 +146,15 @@ namespace DKEngine.Core.Components
         }
     }
 
-    internal class AutoDisposeFileReader : ISampleProvider
-    {
-        private readonly AudioFileReader reader;
-        private bool isDisposed;
-
-        public AutoDisposeFileReader(AudioFileReader reader)
-        {
-            this.reader = reader;
-            this.WaveFormat = reader.WaveFormat;
-        }
-
-        public int Read(float[] buffer, int offset, int count)
-        {
-            if (isDisposed)
-                return 0;
-            int read = reader.Read(buffer, offset, count);
-            if (read == 0)
-            {
-                reader.Dispose();
-                isDisposed = true;
-            }
-            return read;
-        }
-
-        public WaveFormat WaveFormat { get; private set; }
-    }
-
     internal class CachedSoundSampleProvider : ISampleProvider
     {
-        private readonly Sound cachedSound;
+        public Sound cachedSound;
         private long position;
 
         public CachedSoundSampleProvider(Sound cachedSound)
         {
             this.cachedSound = cachedSound;
+            this.cachedSound._CachedSoundSampleProvider = this;
         }
 
         public int Read(float[] buffer, int offset, int count)
@@ -170,6 +163,7 @@ namespace DKEngine.Core.Components
             var samplesToCopy = Math.Min(availableSamples, count);
             Array.Copy(cachedSound.AudioData, position, buffer, offset, samplesToCopy);
             position += samplesToCopy;
+
             return (int)samplesToCopy;
         }
 
@@ -184,6 +178,8 @@ namespace DKEngine.Core.Components
         public float[] AudioData { get; private set; }
         public WaveFormat WaveFormat { get; private set; }
         public AudioFileReader FileReader { get; private set; }
+        internal CachedSoundSampleProvider _CachedSoundSampleProvider { get; set; }
+        internal ISampleProvider _MonoToStereoSampleProvider { get; set; }
 
         public Sound(string audioFileName)
         {
