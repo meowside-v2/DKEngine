@@ -1,15 +1,10 @@
 ﻿using DKEngine.Core.Components;
 using MarIO.Assets.Models;
 using MarIO.Assets.Scripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Scenes
 {
-    class Level_1_1 : MapBase
+    internal class Level_1_1 : MapBase
     {
         public Level_1_1()
         {

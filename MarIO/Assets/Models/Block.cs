@@ -1,5 +1,4 @@
-﻿using DKEngine;
-using DKEngine.Core;
+﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models.Miscellaneous;
 using MarIO.Assets.Scripts;
@@ -93,10 +92,11 @@ namespace MarIO.Assets.Models
             Up,
             Down
         }
-        
+
         public BlockType Type { get; set; }
         public bool InitCollider { get; set; }
         public CollisionState State { get; set; }
+
         public bool SpecialActionActivate
         {
             get { return _specialAction; }
@@ -110,7 +110,7 @@ namespace MarIO.Assets.Models
                 _specialAction = value;
             }
         }
-        
+
         public Action SpecialAction { get; set; }
         public byte CoinCount { get; private set; }
         public Direction PipeEnterDirection { get; set; }
@@ -128,15 +128,15 @@ namespace MarIO.Assets.Models
         protected override void Initialize()
         {
             this.TypeName = BlockTypeNames[Type];
-            if(InitCollider)
+            if (InitCollider)
                 this.InitNewComponent<Collider>();
-            
+
             switch (Type)
             {
                 case BlockType.Ground1:
                     CoinCount = 1;
                     break;
-                    
+
                 case BlockType.NoCoin:
                     break;
 
@@ -284,7 +284,7 @@ namespace MarIO.Assets.Models
                     throw new Exception("A TO SE TI JAK POVEDLO");
             }
 
-            if(CoinCount > 0)
+            if (CoinCount > 0)
             {
                 this.InitNewComponent<Animator>();
                 this.Animator.AddAnimation("default", this.TypeName);
@@ -308,8 +308,6 @@ namespace MarIO.Assets.Models
         }
 
         public void DestroyAnim()
-        {
-
-        }
+        { }
     }
 }

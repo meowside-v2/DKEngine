@@ -63,10 +63,10 @@ namespace MarIO.Assets.Models
 
             this.Animator.Play(Shared.Assets.Animations.MARIO_IDLE_RIGHT);
 
-            if(InitCharacterController)
+            if (InitCharacterController)
                 this.InitNewScript<CharacterController>();
 
-            if(InitCameraController)
+            if (InitCameraController)
                 this.InitNewScript<CameraController>();
 
             if (InitCollider)

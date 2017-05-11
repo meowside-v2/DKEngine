@@ -192,7 +192,6 @@ namespace DKEngine.Core.UI
                 _text[0].Destroy();
                 _text.RemoveAt(0);
             }
-                
 
             Animator?.Destroy();
 

@@ -23,7 +23,7 @@ namespace DKEngine.Core.Scripts
 
         protected internal override void Update()
         {
-            if(_Parent != null)
+            if (_Parent != null)
             {
                 if (_Parent._changed)
                 {
@@ -37,7 +37,7 @@ namespace DKEngine.Core.Scripts
             int _textCount = _Parent._text.Count;
             for (int i = _textCount - 1; i >= 0; i--)
                 _Parent._text[i].Destroy();
-            
+
             List<Letter> retValue = new List<Letter>();
             List<List<Letter>> textAligned = new List<List<Letter>>() { new List<Letter>() };
 
@@ -76,7 +76,7 @@ namespace DKEngine.Core.Scripts
 
                             textAligned.Add(new List<Letter>());
                         }
-                        
+
                         Letter l = new Letter(_Parent);
 
                         l.Transform.Position += new Vector3(Xoffset, Yoffset, _Parent.Transform.Position.Z);

@@ -1,7 +1,4 @@
-﻿using DKEngine;
-using DKEngine.Core;
-using DKEngine.Core.Components;
-using System;
+﻿using System;
 
 namespace DKEngine.Core.Components
 {
@@ -10,7 +7,7 @@ namespace DKEngine.Core.Components
      * DOES NOT WORK YET
      * ------------------
     */
-    
+
     [Obsolete]
     public class Parabola : Behavior
     {

@@ -1,22 +1,17 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models.Miscellaneous;
-using DKEngine;
 
 namespace MarIO.Assets.Scripts
 {
-    class FloatingCoinAnimatorScript : Script
+    internal class FloatingCoinAnimatorScript : Script
     {
-        float AnimationHeight = 60;
-        float AnimationSpeed = 20;
+        private float AnimationHeight = 60;
+        private float AnimationSpeed = 20;
 
         public FloatingCoinAnimatorScript(GameObject Parent)
-            :base(Parent)
+            : base(Parent)
         { }
 
         protected override void OnColliderEnter(Collider e)
@@ -27,18 +22,18 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
-            if(Shared.AnimatedWorldReferences.FloatingCoins.Count > 0)
+            if (Shared.AnimatedWorldReferences.FloatingCoins.Count > 0)
             {
                 for (int i = 0; i < Shared.AnimatedWorldReferences.FloatingCoins.Count; i++)
                 {
                     Coin currentCoin = Shared.AnimatedWorldReferences.FloatingCoins[i];
                     float currentCoinStartPosition = Shared.AnimatedWorldReferences.FloatingCoinsStartPosition[i];
 
-                    if(currentCoin.Transform.Position.Y > currentCoinStartPosition - AnimationHeight)
+                    if (currentCoin.Transform.Position.Y > currentCoinStartPosition - AnimationHeight)
                     {
                         currentCoin.Transform.Position -= new Vector3(0, Engine.DeltaTime * AnimationSpeed, 0);
 
-                        if(currentCoin.Transform.Position.Y <= currentCoinStartPosition - AnimationHeight)
+                        if (currentCoin.Transform.Position.Y <= currentCoinStartPosition - AnimationHeight)
                         {
                             currentCoin.Destroy();
 

@@ -1,19 +1,14 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
-using DKEngine;
 
 namespace MarIO.Assets.Scripts
 {
-    class FloatingTextAnimatorScript : Script
+    internal class FloatingTextAnimatorScript : Script
     {
-        float AnimationHeight = 30;
-        float AnimationSpeed = 20;
+        private float AnimationHeight = 30;
+        private float AnimationSpeed = 20;
 
         public FloatingTextAnimatorScript(GameObject Parent)
             : base(Parent)
@@ -38,7 +33,7 @@ namespace MarIO.Assets.Scripts
                     {
                         CurrentTextBlock.Transform.Position -= new Vector3(0, Engine.DeltaTime * AnimationSpeed, 0);
 
-                        if(CurrentTextBlock.Transform.Position.Y < StartTextBlockY - AnimationHeight)
+                        if (CurrentTextBlock.Transform.Position.Y < StartTextBlockY - AnimationHeight)
                         {
                             Shared.AnimatedWorldReferences.FloatingTextStartPosition.RemoveAt(i);
                             Shared.AnimatedWorldReferences.FloatingTexts.RemoveAt(i);

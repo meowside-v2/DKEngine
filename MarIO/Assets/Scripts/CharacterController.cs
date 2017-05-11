@@ -175,7 +175,6 @@ namespace MarIO.Assets.Scripts
                     }
                 }
             }
-
             else if (!Player.IsDestroyed)
             {
                 Movement();
@@ -395,7 +394,7 @@ namespace MarIO.Assets.Scripts
 
         private void Down()
         {
-            if(vertSpeed == 0)
+            if (vertSpeed == 0)
             {
                 horiSpeed = 0;
                 Player.CurrentMovement = Mario.Movement.Crouching;

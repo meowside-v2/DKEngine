@@ -1,19 +1,15 @@
-﻿using DKEngine;
-using DKEngine.Core;
+﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
 using MarIO.Assets.Models;
 using MarIO.Assets.Models.Miscellaneous;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Scenes
 {
-    class WorldScreen : Scene
+    internal class WorldScreen : Scene
     {
         private Action _worldChange;
         private TimeSpan? _delay;
@@ -30,6 +26,7 @@ namespace MarIO.Assets.Scenes
                 Delayer.CalledAction = value;
             }
         }
+
         public TimeSpan? Delay
         {
             set
@@ -38,7 +35,7 @@ namespace MarIO.Assets.Scenes
                 Delayer.TimeToWait = value ?? _defautlTimeSpan;
             }
         }
-        
+
         public WorldScreen()
         {
             Name = nameof(WorldScreen);
@@ -79,7 +76,7 @@ namespace MarIO.Assets.Scenes
                 IsGUI = true,
                 Name = "heart_icon"
             };
-            
+
             _HeartIcon.Transform.Scale = new Vector3(2, 2, 0);
 
             Lives = new TextBlock(holder)
@@ -101,7 +98,7 @@ namespace MarIO.Assets.Scenes
                 BackGround = Shared.Mechanics.WorldChangeBackground.ToColor()
             };
         }
-            
+
         public override void Set(params object[] args)
         {
             string[] stringParameters = args.Where(obj => obj is string).ToList().Cast<string>().ToArray();
@@ -125,7 +122,7 @@ namespace MarIO.Assets.Scenes
 
             foreach (object item in otherParameters)
             {
-                if(item is Action)
+                if (item is Action)
                 {
                     WorldChange = ((Action)item);
                 }

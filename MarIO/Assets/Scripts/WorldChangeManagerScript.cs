@@ -1,15 +1,10 @@
 ﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    class WorldChangeManagerScript : Script
+    internal class WorldChangeManagerScript : Script
     {
         public Block CurrentlyEnteredPipeScript;
 

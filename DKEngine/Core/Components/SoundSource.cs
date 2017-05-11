@@ -22,7 +22,6 @@ namespace DKEngine.Core.Components
             outputDevice.Init(mixer);
             outputDevice.Play();
         }
-        
 
         private ISampleProvider ConvertToRightChannelCount(CachedSoundSampleProvider input)
         {
@@ -62,7 +61,6 @@ namespace DKEngine.Core.Components
                 try
                 {
                     RemoveMixerInput(sound._SampleProvider);
-                    
                 }
                 catch
                 { }

@@ -1,14 +1,9 @@
 ﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DKEngine.Core.Components;
 
 namespace MarIO.Assets.Scripts
 {
-    class SpecialBlocksUpdateScript : Script
+    internal class SpecialBlocksUpdateScript : Script
     {
         public SpecialBlocksUpdateScript(GameObject Parent)
             : base(Parent)
@@ -19,12 +14,11 @@ namespace MarIO.Assets.Scripts
 
         protected override void Start()
         {
-
         }
 
         protected override void Update()
         {
-            while(Shared.AnimatedWorldReferences.SpecialActions.Count > 0)
+            while (Shared.AnimatedWorldReferences.SpecialActions.Count > 0)
             {
                 Shared.AnimatedWorldReferences.SpecialActions.Pop().SpecialAction();
             }

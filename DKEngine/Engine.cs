@@ -57,6 +57,10 @@ namespace DKEngine
             /// Sets resolution scale in %
             /// </summary>
             public const int ResolutionScale = 40;
+
+            /// <summary>
+            /// The resolution ratio
+            /// </summary>
             public const float ResolutionRatio = ResolutionScale / 100f;
 
             /// <summary>
@@ -183,7 +187,7 @@ namespace DKEngine
                 }
             }
         }
-        
+
         private static bool _IsInitialised = false;
 
         private static Thread BackgroundWorks;
@@ -205,6 +209,7 @@ namespace DKEngine
         public static string SceneName { get { return Engine.LoadingScene != null ? Engine.LoadingScene.Name : ""; } }
 
         internal static event EngineHandler UpdateEvent;
+
         internal delegate void EngineHandler();
 
         /// <summary>
@@ -337,7 +342,7 @@ namespace DKEngine
                     catch { }
                 }
 
-                while(CurrentScene.GameObjectsAddedToRender.Count > 0)
+                while (CurrentScene.GameObjectsAddedToRender.Count > 0)
                 {
                     GameObject tmp = CurrentScene.GameObjectsAddedToRender.Pop();
                     if (Engine.RenderObjects.Contains(tmp))
@@ -369,7 +374,7 @@ namespace DKEngine
         private static void ReloadScene(Scene source)
         {
         }
-        
+
         private static void SplashScreen()
         {
             if (!_IsInitialised)
@@ -388,7 +393,6 @@ namespace DKEngine
             TimeSpan timeOut = new TimeSpan(0, 0, 0, 0, 500);
             Stopwatch time = Stopwatch.StartNew();
             Stopwatch fpsLimiter = Stopwatch.StartNew();
-            const int maxRenderSpeed = 1000 / Render.Limiter;
 
             while (true)
             {
@@ -399,7 +403,7 @@ namespace DKEngine
                 DeltaT?.Restart();
 
                 UpdateEvent?.Invoke();
-                
+
                 while (Engine.CurrentScene?.NewlyGeneratedComponents.Count > 0)
                 {
                     Engine.CurrentScene.NewlyGeneratedComponents.Pop().InitInternal();
@@ -412,7 +416,7 @@ namespace DKEngine
                     tmp.Start();
                 }
 
-                while(Engine.CurrentScene?.DestroyObjectAwaitList.Count > 0)
+                while (Engine.CurrentScene?.DestroyObjectAwaitList.Count > 0)
                 {
                     GameObject tmp = Engine.CurrentScene.DestroyObjectAwaitList[0];
                     Engine.CurrentScene.DestroyObjectAwaitList.RemoveAt(0);

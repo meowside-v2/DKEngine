@@ -1,6 +1,4 @@
 ﻿using DKEngine.Core.Components;
-using DKEngine.Core.Ext;
-using DKEngine.Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +13,6 @@ namespace DKEngine.Core
     /// <seealso cref="DKEngine.Core.Components.Component" />
     public class GameObject : Component
     {
-
         /// <summary>
         /// The GameObject has shadow
         /// </summary>
@@ -166,7 +163,7 @@ namespace DKEngine.Core
         /// The child.
         /// </value>
         public List<GameObject> Child { get; }
-        
+
         internal List<Script> Scripts { get; }
         internal bool _IsGUI = false;
         internal string _typeName = "";
@@ -252,7 +249,7 @@ namespace DKEngine.Core
 
                 return;
             }
-            
+
             if (typeof(T) == typeof(Collider) || typeof(T).IsSubclassOf(typeof(Collider)))
             {
                 if (this.Collider == null)
@@ -284,7 +281,7 @@ namespace DKEngine.Core
                 {
                     Engine.LoadingScene.DestroyObjectAwaitList.Add(this);
                     return;
-                }   
+                }
             }
             catch { }
 

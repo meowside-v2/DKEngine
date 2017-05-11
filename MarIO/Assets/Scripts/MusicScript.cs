@@ -1,5 +1,4 @@
-﻿using DKEngine;
-using DKEngine.Core;
+﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using System;
 using System.Diagnostics;
@@ -24,10 +23,10 @@ namespace MarIO.Assets.Scripts
         {
             Music = new Sound(Shared.Assets.Sounds.OVERWORLD_THEME);
             Output = Component.Find<SoundSource>("MusicPlayer_SoundSource");
-            
+
             MusicLenght = Music.FileReader.TotalTime;
             Output.PlaySound(Music);
-            
+
             Timer = Stopwatch.StartNew();
         }
 

@@ -1,17 +1,12 @@
 ﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    class MainMenuSpawnScript : Script
+    internal class MainMenuSpawnScript : Script
     {
-        Vector3 Position;
+        private Vector3 Position;
 
         public MainMenuSpawnScript(GameObject Parent) : base(Parent)
         { }

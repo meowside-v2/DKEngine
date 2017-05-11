@@ -1,8 +1,6 @@
 ﻿using DKEngine.Core.Components;
 using MarIO.Assets.Models;
 using MarIO.Assets.Scripts;
-using System.Diagnostics;
-using System.Drawing;
 
 namespace MarIO.Assets.Scenes
 {
@@ -44,7 +42,7 @@ namespace MarIO.Assets.Scenes
             _3.SizeInBlocks = new Vector3(50, 3, 0);
             _3.Transform.Position = new Vector3(80 * 16, 0, 0);
 
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Block tmp = new Block()
                 {
@@ -91,7 +89,6 @@ namespace MarIO.Assets.Scenes
                 InitCollider = true
             };
             m.Transform.Position = new Vector3(10, -10, 0);
-            
 
             new MusicPlayer();
 

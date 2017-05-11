@@ -79,7 +79,7 @@ namespace DKEngine.Core.Ext
                         ConsoleStateChangeAvailable = false;
                     }
                 }
-                
+
                 Console.CursorVisible = false;
             }
         }

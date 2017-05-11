@@ -107,13 +107,11 @@ namespace MarIO.Assets.Scripts
                 Target.Animator.Play("dead");
                 firstTimeDeadAnimation = false;
                 Target.Transform.Position += new Vector3(0, 8, 0);
-
-                
             }
 
             DeadTimeCurrent += Engine.DeltaTime;
 
-            if(DeadTimeCurrent > DeadTime)
+            if (DeadTimeCurrent > DeadTime)
             {
                 Target.Destroy();
             }

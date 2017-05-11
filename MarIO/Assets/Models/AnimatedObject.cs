@@ -4,14 +4,6 @@ namespace MarIO.Assets.Models
 {
     internal abstract class AnimatedObject : GameObject
     {
-        enum Direction
-        {
-            Left,
-
-            Right,
-            Down
-        }
-
         public bool IsDestroyed = false;
         public bool ChangeState = false;
 

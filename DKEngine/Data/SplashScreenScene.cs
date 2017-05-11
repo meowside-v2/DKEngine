@@ -1,15 +1,9 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DKEngine.Data
 {
-    class SplashScreenScene : Scene
+    internal class SplashScreenScene : Scene
     {
         internal SplashScreen Splash;
 
@@ -20,7 +14,7 @@ namespace DKEngine.Data
             Splash.Transform.Scale = new Vector3(0.5f, 0.5f, 0);
             Camera splashScreenCam = new Camera();
         }
-        
+
         public override void Unload()
         { }
     }

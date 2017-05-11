@@ -69,7 +69,7 @@ namespace DKEngine.Core.Components
         }
 
 #endif
-        
+
         /// <summary>
         /// Collision check in specified direction.
         /// </summary>
@@ -191,7 +191,7 @@ namespace DKEngine.Core.Components
                 }
             }
         }
-        
+
         private float LeftSpan(Collider obj)
         {
             return obj.X + obj.Width - this.X;

@@ -1,9 +1,6 @@
-﻿using DKEngine;
-using DKEngine.Core;
+﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
-using System;
-using System.Diagnostics;
 
 namespace MarIO.Assets.Scripts
 {
@@ -17,7 +14,7 @@ namespace MarIO.Assets.Scripts
 
         protected override void OnColliderEnter(Collider e)
         {
-            if(Pipe.SpecialAction != null)
+            if (Pipe.SpecialAction != null)
             {
                 if (e.Parent == Player)
                 {
@@ -25,20 +22,24 @@ namespace MarIO.Assets.Scripts
                     {
                         case Transform.Direction.Up:
                             break;
+
                         case Transform.Direction.Left:
                             break;
+
                         case Transform.Direction.Down:
                             if (Player.CurrentMovement == Mario.Movement.Crouching)
                             {
                                 Player.PipeEnter(Pipe);
                             }
                             break;
+
                         case Transform.Direction.Right:
                             if (Player.CurrentMovement == Mario.Movement.Standing)
                             {
                                 Player.PipeEnter(Pipe);
                             }
                             break;
+
                         default:
                             break;
                     }

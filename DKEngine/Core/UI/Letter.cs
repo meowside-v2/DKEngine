@@ -2,8 +2,6 @@
 * (C) 2017 David Knieradl
 */
 
-using System;
-
 namespace DKEngine.Core.UI
 {
     internal sealed class Letter : GameObject
@@ -19,7 +17,6 @@ namespace DKEngine.Core.UI
         {
             try
             {
-                
                 if (Engine.LoadingScene.NewlyGeneratedComponents.Contains(this))
                 {
                     Engine.LoadingScene.NewlyGeneratedComponents.Pop();
@@ -33,7 +30,7 @@ namespace DKEngine.Core.UI
                 Engine.RenderObjects.Remove(this);
             }
             catch { }
-            
+
             Parent?.Child.Remove(this);
 
             Animator?.Destroy();

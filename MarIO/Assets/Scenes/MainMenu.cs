@@ -5,15 +5,11 @@ using DKEngine.Core.UI;
 using MarIO.Assets.Models;
 using MarIO.Assets.Scripts;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Scenes
 {
-    class MainMenu : Scene
+    internal class MainMenu : Scene
     {
         public MainMenu()
         {
@@ -87,7 +83,6 @@ namespace MarIO.Assets.Scenes
             MainMenuHeader.Transform.Position += new Vector3(0, 10, 0);
             MainMenuHeader.Transform.Dimensions = new Vector3(200, 50, 0);
 
-
             TextBlock PlayText = new TextBlock()
             {
                 Name = "tx_Play",
@@ -97,7 +92,6 @@ namespace MarIO.Assets.Scenes
             };
             PlayText.Transform.Position = new Vector3(9, 80, -1);
             PlayText.Transform.Dimensions = new Vector3(80, 20, 0);
-
 
             TextBlock OptionsText = new TextBlock()
             {
@@ -240,7 +234,7 @@ namespace MarIO.Assets.Scenes
             Shared.Mechanics.TimeCounter.Reset();
 
             Engine.LoadScene<WorldScreen>((Action)(() => Engine.LoadScene<Test>()), $"world:{Test.StaticName}");
-            
+
             //Engine.LoadScene<Test>();
             //Engine.ChangeScene("test");
         }

@@ -2,7 +2,6 @@
 using DKEngine.Core.Components;
 using MarIO.Assets.Scripts;
 using System.Collections.Generic;
-using System;
 
 namespace MarIO.Assets.Models
 {
@@ -55,7 +54,7 @@ namespace MarIO.Assets.Models
         { }
     }
 
-    class Goomba : Enemy
+    internal class Goomba : Enemy
     {
         protected override void Initialize()
         {
