@@ -20,10 +20,7 @@ namespace DKEngine.Data
             Splash.Transform.Scale = new Vector3(0.5f, 0.5f, 0);
             Camera splashScreenCam = new Camera();
         }
-
-        public override void Set(params string[] Args)
-        { }
-
+        
         public override void Unload()
         { }
     }

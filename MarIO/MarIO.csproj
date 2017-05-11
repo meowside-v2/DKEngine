@@ -91,6 +91,7 @@
     <Compile Include="Assets\Models\Block.cs" />
     <Compile Include="Assets\Models\Blocker.cs" />
     <Compile Include="Assets\Models\BackgroundWorker.cs" />
+    <Compile Include="Assets\Models\Delayer.cs" />
     <Compile Include="Assets\Models\Enemy.cs" />
     <Compile Include="Assets\Models\Group.cs" />
     <Compile Include="Assets\Models\GUIUpdater.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Assets\Scenes\WorldScreen.cs" />
     <Compile Include="Assets\Scripts\BlockAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\DeathZoneScript.cs" />
+    <Compile Include="Assets\Scripts\DelayScript.cs" />
     <Compile Include="Assets\Scripts\EnemyControllerScripts.cs" />
     <Compile Include="Assets\Scripts\FloatingCoinAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\FloatingTextAnimatorScript.cs" />

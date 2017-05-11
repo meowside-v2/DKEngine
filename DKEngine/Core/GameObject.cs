@@ -13,7 +13,7 @@ namespace DKEngine.Core
     /// Primitive type for all renderable objects
     /// </summary>
     /// <seealso cref="DKEngine.Core.Components.Component" />
-    public abstract class GameObject : Component
+    public class GameObject : Component
     {
 
         /// <summary>
@@ -225,7 +225,8 @@ namespace DKEngine.Core
             }
         }
 
-        protected abstract void Initialize();
+        protected virtual void Initialize()
+        { }
 
         /// <summary>
         /// Initializes the new script.

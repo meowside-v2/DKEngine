@@ -6,6 +6,7 @@ using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace MarIO
 {
@@ -43,10 +44,11 @@ namespace MarIO
             {
                 get { return LevelTime - TimeCounter.Elapsed; }
             }
-
+            
             public static Mario.State MarioCurrentState = Mario.State.Small;
 
             public const uint OverworldBackground = 0xFF20CCCC;
+            public const uint WorldChangeBackground = 0x00000000;
 
             public const int GOOMBA_POINTS = 100;
             public const int COIN_SCORE = 100;

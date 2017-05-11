@@ -77,6 +77,8 @@ namespace DKEngine
             internal static byte[] ImageOutData;
 
             internal static bool AbortRender = false;
+
+            internal const int Limiter = 120;
         }
 
         /// <summary>
@@ -276,25 +278,25 @@ namespace DKEngine
         /// Loads the scene to memory.
         /// </summary>
         /// <typeparam name="T">Scene</typeparam>
-        public static void LoadSceneToMemory<T>() where T : Scene
+        /*public static void LoadSceneToMemory<T>() where T : Scene
         {
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
             Database.AddScene(Engine.LoadingScene);
-        }
+        }*/
 
         /// <summary>
         /// Loads and changes the scene.
         /// </summary>
         /// <typeparam name="T">Scene</typeparam>
-        public static void LoadScene<T>() where T : Scene
+        public static void LoadScene<T>(params object[] args) where T : Scene
         {
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
             Engine.LoadingScene.Init();
 
             UnregisterScene();
-            RegisterScene(Engine.LoadingScene);
+            RegisterScene(Engine.LoadingScene, args);
         }
 
         /// <summary>
@@ -312,13 +314,13 @@ namespace DKEngine
         /// <param name="Name">The name</param>
         /// <param name="Reload">if set to <c>true</c> [reload]</param>
         /// <param name="args">The arguments</param>
-        public static void ChangeScene(string Name, bool Reload = false, params string[] args)
+        /*public static void ChangeScene(string Name, bool Reload = false, params object[] args)
         {
             UnregisterScene();
             if (Reload)
                 ReloadScene(Name);
             RegisterScene(Database.GetScene(Name), args);
-        }
+        }*/
 
         private static void UnregisterScene()
         {
@@ -347,7 +349,7 @@ namespace DKEngine
             catch { }
         }
 
-        private static void RegisterScene(Scene source, params string[] args)
+        private static void RegisterScene(Scene source, params object[] args)
         {
             Engine.LoadingScene = source;
             source.Set(args);
@@ -385,6 +387,8 @@ namespace DKEngine
             int NumberOfFrames = 0;
             TimeSpan timeOut = new TimeSpan(0, 0, 0, 0, 500);
             Stopwatch time = Stopwatch.StartNew();
+            Stopwatch fpsLimiter = Stopwatch.StartNew();
+            const int maxRenderSpeed = 1000 / Render.Limiter;
 
             while (true)
             {
@@ -435,6 +439,9 @@ namespace DKEngine
                 Buffer.BlockCopy(Render.imageBuffer, 0, Render.ImageOutData, 0, Render.ImageBufferSize);
 
                 NumberOfFrames++;
+
+                Vsync(Render.Limiter, (int)fpsLimiter.ElapsedMilliseconds);
+                fpsLimiter.Restart();
 
                 if (time.ElapsedMilliseconds > timeOut.TotalMilliseconds)
                 {
@@ -507,6 +514,16 @@ namespace DKEngine
 
                     await Task.Delay(1);
                 }
+            }
+        }
+
+        private static void Vsync(int TargetFrameRate, int ImageRenderDelay)
+        {
+            int targetDelay = 1000 / TargetFrameRate;
+
+            if (ImageRenderDelay < targetDelay)
+            {
+                Thread.Sleep(targetDelay - ImageRenderDelay);
             }
         }
 

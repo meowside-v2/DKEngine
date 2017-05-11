@@ -53,12 +53,19 @@ namespace DKEngine.Core
         /// <summary>
         /// Sets the specified arguments.
         /// </summary>
-        /// <param name="Args">The arguments</param>
-        public abstract void Set(params string[] Args);
+        /// <param name="args">The arguments</param>
+        public virtual void Set(params object[] args)
+        { }
 
         /// <summary>
         /// Unloads this instance.
         /// </summary>
         public abstract void Unload();
+
+        public static T Find<T>(string name)
+            where T : Scene
+        {
+            return (T)Database.GetScene(name);
+        }
     }
 }

@@ -221,7 +221,7 @@ namespace MarIO.Assets.Scenes
             new SoundOutput();
         }
 
-        public override void Set(params string[] Args)
+        public override void Set(params object[] Args)
         { }
 
         public override void Unload()
@@ -238,7 +238,10 @@ namespace MarIO.Assets.Scenes
             Shared.Mechanics.GameScore = 0;
             Shared.Mechanics.Lives = 3;
             Shared.Mechanics.TimeCounter.Reset();
-            Engine.LoadScene<Test>();
+
+            Engine.LoadScene<WorldScreen>((Action)(() => Engine.LoadScene<Test>()), $"world:{Test.StaticName}");
+            
+            //Engine.LoadScene<Test>();
             //Engine.ChangeScene("test");
         }
     }

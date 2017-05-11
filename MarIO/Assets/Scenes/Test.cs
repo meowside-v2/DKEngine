@@ -8,9 +8,11 @@ namespace MarIO.Assets.Scenes
 {
     internal class Test : MapBase
     {
+        public static string StaticName = "test";
+
         public Test()
         {
-            Name = "test";
+            Name = StaticName;
         }
 
         public override void Load()
@@ -107,8 +109,5 @@ namespace MarIO.Assets.Scenes
             DeathZone.Transform.Dimensions = new Vector3(3200, 10, 0);
             DeathZone.Transform.Position = new Vector3(0, 50, 0);
         }
-
-        public override void Set(params string[] Args)
-        { }
     }
 }

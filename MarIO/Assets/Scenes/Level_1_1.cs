@@ -48,8 +48,5 @@ namespace MarIO.Assets.Scenes
                 BackGround = Shared.Mechanics.OverworldBackground.ToColor()
             };
         }
-
-        public override void Set(params string[] Args)
-        { }
     }
 }
