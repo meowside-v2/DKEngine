@@ -19,7 +19,6 @@ namespace DKEngine.Core.Components
             {
                 ReadFully = true
             };
-            //outputDevice.DesiredLatency = 50;
             outputDevice.Init(mixer);
             outputDevice.Play();
         }
@@ -29,13 +28,13 @@ namespace DKEngine.Core.Components
         {
             if (input.WaveFormat.Channels == mixer.WaveFormat.Channels)
             {
-                input.cachedSound._MonoToStereoSampleProvider = input;
-                return input.cachedSound._MonoToStereoSampleProvider;
+                input.cachedSound._SampleProvider = input;
+                return input.cachedSound._SampleProvider;
             }
             if (input.WaveFormat.Channels == 1 && mixer.WaveFormat.Channels == 2)
             {
-                input.cachedSound._MonoToStereoSampleProvider = new MonoToStereoSampleProvider(input);
-                return input.cachedSound._MonoToStereoSampleProvider;
+                input.cachedSound._SampleProvider = new MonoToStereoSampleProvider(input);
+                return input.cachedSound._SampleProvider;
             }
             throw new NotImplementedException("Not yet implemented this channel count conversion");
         }
@@ -46,7 +45,8 @@ namespace DKEngine.Core.Components
             {
                 try
                 {
-                    AddMixerInput(ConvertToRightChannelCount(new CachedSoundSampleProvider(sound)));
+                    sound._SampleProvider = ConvertToRightChannelCount(new CachedSoundSampleProvider(sound));
+                    AddMixerInput(sound._SampleProvider);
                 }
                 catch
                 {
@@ -61,7 +61,7 @@ namespace DKEngine.Core.Components
             {
                 try
                 {
-                    RemoveMixerInput(sound._MonoToStereoSampleProvider);
+                    RemoveMixerInput(sound._SampleProvider);
                     
                 }
                 catch
@@ -154,7 +154,6 @@ namespace DKEngine.Core.Components
         public CachedSoundSampleProvider(Sound cachedSound)
         {
             this.cachedSound = cachedSound;
-            this.cachedSound._CachedSoundSampleProvider = this;
         }
 
         public int Read(float[] buffer, int offset, int count)
@@ -178,8 +177,7 @@ namespace DKEngine.Core.Components
         public float[] AudioData { get; private set; }
         public WaveFormat WaveFormat { get; private set; }
         public AudioFileReader FileReader { get; private set; }
-        internal CachedSoundSampleProvider _CachedSoundSampleProvider { get; set; }
-        internal ISampleProvider _MonoToStereoSampleProvider { get; set; }
+        internal ISampleProvider _SampleProvider { get; set; }
 
         public Sound(string audioFileName)
         {

@@ -13,6 +13,7 @@ using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.Ext;
 using DKEngine.Core.UI;
+using DKEngine.Data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -371,15 +372,9 @@ namespace DKEngine
         {
             if (!_IsInitialised)
             {
-                Engine.LoadScene<Scene>();
+                Engine.LoadScene<SplashScreenScene>();
 
-                SplashScreen splash = new SplashScreen();
-                Camera splashScreenCam = new Camera();
-
-                SpinWait.SpinUntil(() => splash.Animator.NumberOfPlays >= 1);
-
-                splash.Destroy();
-                splashScreenCam.Destroy();
+                SpinWait.SpinUntil(() => ((SplashScreenScene)Engine.CurrentScene).Splash.Animator.NumberOfPlays >= 1);
             }
         }
 

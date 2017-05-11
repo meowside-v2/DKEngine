@@ -103,6 +103,7 @@
     <Compile Include="Assets\Scenes\MainMenu.cs" />
     <Compile Include="Assets\Scenes\MapBase.cs" />
     <Compile Include="Assets\Scenes\Test.cs" />
+    <Compile Include="Assets\Scenes\WorldScreen.cs" />
     <Compile Include="Assets\Scripts\BlockAnimatorScript.cs" />
     <Compile Include="Assets\Scripts\DeathZoneScript.cs" />
     <Compile Include="Assets\Scripts\EnemyControllerScripts.cs" />

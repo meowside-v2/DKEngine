@@ -24,25 +24,15 @@ namespace MarIO.Assets.Scripts
         {
             Music = new Sound(Shared.Assets.Sounds.OVERWORLD_THEME);
             Output = Component.Find<SoundSource>("MusicPlayer_SoundSource");
-
+            
             MusicLenght = Music.FileReader.TotalTime;
-
             Output.PlaySound(Music);
-
+            
             Timer = Stopwatch.StartNew();
         }
 
         protected override void Update()
         {
-            if (Engine.Input.IsKeyDown(ConsoleKey.P))
-            {
-                Output.StopSound(Music);
-            }
-            if (Engine.Input.IsKeyDown(ConsoleKey.O))
-            {
-                Output.PlaySound(Music);
-            }
-
             if (Timer.Elapsed > MusicLenght)
             {
                 Output.PlaySound(Music);
