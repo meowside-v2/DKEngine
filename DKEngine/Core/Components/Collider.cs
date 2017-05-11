@@ -171,7 +171,7 @@ namespace DKEngine.Core.Components
             }
         }
 
-        internal void TriggerCheck(List<GameObject> VisibleObjects)
+        internal void TriggerCheck(List<Collider> VisibleObjects)
         {
             if (!this.Enabled)
                 return;
@@ -179,14 +179,14 @@ namespace DKEngine.Core.Components
             int VisibleObjectsCount = VisibleObjects.Count;
             for (int i = 0; i < VisibleObjectsCount; i++)
             {
-                Collider tmp = VisibleObjects[i].Collider;
+                Collider tmp = VisibleObjects[i];
 
                 if (!tmp.Enabled)
                     continue;
 
                 if (Collided(tmp))
                 {
-                    CollisionEvent?.Invoke(VisibleObjects[i].Collider);
+                    CollisionEvent?.Invoke(VisibleObjects[i]);
                     continue;
                 }
             }

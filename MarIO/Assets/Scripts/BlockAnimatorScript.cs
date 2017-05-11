@@ -38,7 +38,6 @@ namespace MarIO.Assets.Scripts
                         if (CurrentBlock.Transform.Position.Y <= StartBlockY - AnimationHeight)
                         {
                             CurrentBlock.State = Block.CollisionState.Down;
-                            CurrentBlock.Transform.Position += new Vector3(0, CurrentBlock.Transform.Position.Y - (StartBlockY + AnimationHeight), 0);
                         }
                     }
                     else if (CurrentBlock.State == Block.CollisionState.Down && CurrentBlock.Transform.Position.Y < StartBlockY)
@@ -48,7 +47,7 @@ namespace MarIO.Assets.Scripts
                         if (CurrentBlock.Transform.Position.Y > StartBlockY)
                         {
                             CurrentBlock.State = Block.CollisionState.Stay;
-                            CurrentBlock.Transform.Position -= new Vector3(0, StartBlockY - CurrentBlock.Transform.Position.Y, 0);
+                            CurrentBlock.Transform.Position = new Vector3(CurrentBlock.Transform.Position.X, StartBlockY, CurrentBlock.Transform.Position.Z);
 
                             Shared.AnimatedWorldReferences.BlocksStartPositions.RemoveAt(i);
                             Shared.AnimatedWorldReferences.BlocksToUpdate.RemoveAt(i);

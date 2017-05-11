@@ -172,6 +172,14 @@
     <Content Include="Assets\Sounds\smb_pipe.mp3" />
     <Content Include="Assets\Sounds\smb_powerup.mp3" />
     <Content Include="Assets\Sounds\smb_stomp.mp3" />
+    <Content Include="Assets\Sounds\WAVs\smb_1-up.wav" />
+    <Content Include="Assets\Sounds\WAVs\smb_breakblock.wav" />
+    <Content Include="Assets\Sounds\WAVs\smb_coin.wav" />
+    <Content Include="Assets\Sounds\WAVs\smb_jump-small.wav" />
+    <Content Include="Assets\Sounds\WAVs\smb_mariodie.wav" />
+    <Content Include="Assets\Sounds\WAVs\smb_pipe.wav" />
+    <Content Include="Assets\Sounds\WAVs\smb_powerup.wav" />
+    <Content Include="Assets\Sounds\WAVs\smb_stomp.wav" />
     <Content Include="Assets\Sprites\Enemy\goomba.gif" />
     <Content Include="Assets\Sprites\Enemy\goomba_dead.png" />
     <Content Include="Assets\Sprites\Enemy\mario_dead.png" />
