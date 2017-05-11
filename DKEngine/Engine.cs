@@ -82,7 +82,7 @@ namespace DKEngine
 
             internal static bool AbortRender = false;
 
-            internal const int Limiter = 120;
+            internal const int Limiter = 240;
         }
 
         /// <summary>
@@ -279,10 +279,7 @@ namespace DKEngine
                 throw new Exception("Engine is being initialised second time");
         }
 
-        /// <summary>
-        /// Loads the scene to memory.
-        /// </summary>
-        /// <typeparam name="T">Scene</typeparam>
+
         /*public static void LoadSceneToMemory<T>() where T : Scene
         {
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
@@ -291,17 +288,21 @@ namespace DKEngine
             Database.AddScene(Engine.LoadingScene);
         }*/
 
+
         /// <summary>
-        /// Loads and changes the scene.
+        /// Loads the scene to memory.
         /// </summary>
         /// <typeparam name="T">Scene</typeparam>
-        public static void LoadScene<T>(params object[] args) where T : Scene
+        /// <param name="argsPreLoad">The arguments pre load.</param>
+        /// <param name="argsPostLoad">The arguments post load.</param>
+        public static void LoadScene<T>(object[] argsPreLoad = null, object[] argsPostLoad = null) where T : Scene
         {
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
+            Engine.LoadingScene.Set(argsPreLoad);
             Engine.LoadingScene.Init();
 
             UnregisterScene();
-            RegisterScene(Engine.LoadingScene, args);
+            RegisterScene(Engine.LoadingScene, argsPostLoad);
         }
 
         /// <summary>
@@ -354,7 +355,7 @@ namespace DKEngine
             catch { }
         }
 
-        private static void RegisterScene(Scene source, params object[] args)
+        private static void RegisterScene(Scene source, object[] args)
         {
             Engine.LoadingScene = source;
             source.Set(args);
@@ -367,6 +368,8 @@ namespace DKEngine
                 }
                 catch { }
             }
+
+            
 
             Engine.CurrentScene = source;
         }

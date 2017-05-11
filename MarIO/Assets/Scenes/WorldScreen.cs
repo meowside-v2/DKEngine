@@ -11,30 +11,16 @@ namespace MarIO.Assets.Scenes
 {
     internal class WorldScreen : Scene
     {
-        private Action _worldChange;
-        private TimeSpan? _delay;
+        private static readonly TimeSpan _defautlTimeSpan = new TimeSpan(0, 0, 5);
+
         private TextBlock World;
         private TextBlock Lives;
         private Delayer Delayer;
-        private readonly TimeSpan _defautlTimeSpan = new TimeSpan(0, 0, 5);
 
-        public Action WorldChange
-        {
-            set
-            {
-                _worldChange = value;
-                Delayer.CalledAction = value;
-            }
-        }
-
-        public TimeSpan? Delay
-        {
-            set
-            {
-                _delay = value;
-                Delayer.TimeToWait = value ?? _defautlTimeSpan;
-            }
-        }
+        private static string RemainingLives;
+        private static string WorldName;
+        public static Action WorldChange;
+        public static TimeSpan? Delay;
 
         public WorldScreen()
         {
@@ -43,29 +29,33 @@ namespace MarIO.Assets.Scenes
 
         public override void Init()
         {
+
             TextBlock _World = new TextBlock()
             {
-                FontSize = 4,
+                FontSize = 2,
                 Foreground = Color.White,
                 HAlignment = Text.HorizontalAlignment.Center,
                 IsGUI = true,
                 Name = "tx_const_world",
                 Text = "WORLD",
-                TextHAlignment = Text.HorizontalAlignment.Center
+                TextHAlignment = Text.HorizontalAlignment.Center,
+                VAlignment = Text.VerticalAlignment.Center
             };
-            _World.Transform.Position = new Vector3(0, -20, 0);
+            _World.Transform.Position += new Vector3(0, -20, 0);
             _World.Transform.Dimensions = new Vector3(100, 30, 0);
 
             World = new TextBlock()
             {
-                FontSize = 4,
+                FontSize = 2,
                 Foreground = Color.White,
                 HAlignment = Text.HorizontalAlignment.Center,
                 IsGUI = true,
                 Name = "tx_world",
-                TextHAlignment = Text.HorizontalAlignment.Center
+                TextHAlignment = Text.HorizontalAlignment.Center,
+                VAlignment = Text.VerticalAlignment.Center,
+                Text = WorldName
             };
-            World.Transform.Position = new Vector3(0, 5, 0);
+            World.Transform.Position += new Vector3(0, -5, 0);
             World.Transform.Dimensions = new Vector3(100, 30, 0);
 
             GameObject holder = new GameObject();
@@ -83,14 +73,16 @@ namespace MarIO.Assets.Scenes
             {
                 FontSize = 2,
                 IsGUI = true,
-                TextHAlignment = Text.HorizontalAlignment.Center
+                TextHAlignment = Text.HorizontalAlignment.Center,
+                Text = RemainingLives
             };
             Lives.Transform.Dimensions = new Vector3(40, 15, 0);
             Lives.Transform.Position += new Vector3(16, 8, 0);
 
             Delayer = new Delayer()
             {
-                TimeToWait = _delay ?? _defautlTimeSpan
+                CalledAction = WorldChange,
+                TimeToWait = Delay ?? _defautlTimeSpan
             };
 
             new Camera()
@@ -101,6 +93,9 @@ namespace MarIO.Assets.Scenes
 
         public override void Set(params object[] args)
         {
+            if (args == null)
+                return;
+
             string[] stringParameters = args.Where(obj => obj is string).ToList().Cast<string>().ToArray();
             object[] otherParameters = args.Where(obj => !(obj is string)).ToArray();
 
@@ -111,7 +106,7 @@ namespace MarIO.Assets.Scenes
                 switch (parameters[0])
                 {
                     case "world":
-                        World.Text = parameters[1];
+                        WorldName = parameters[1];
                         break;
 
                     case "time":
@@ -128,7 +123,7 @@ namespace MarIO.Assets.Scenes
                 }
             }
 
-            Lives.Text = string.Format($"*{Shared.Mechanics.Lives:00}");
+            RemainingLives = string.Format($"*{Shared.Mechanics.Lives:00}");
         }
 
         public override void Unload()

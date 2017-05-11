@@ -233,7 +233,7 @@ namespace MarIO.Assets.Scenes
             Shared.Mechanics.Lives = 3;
             Shared.Mechanics.TimeCounter.Reset();
 
-            Engine.LoadScene<WorldScreen>((Action)(() => Engine.LoadScene<Test>()), $"world:{Test.StaticName}");
+            Engine.LoadScene<WorldScreen>(new object[] { (Action)(() => Engine.LoadScene<Test>()), $"world:{Test.StaticName}" });
 
             //Engine.LoadScene<Test>();
             //Engine.ChangeScene("test");
