@@ -4,7 +4,7 @@ using DKEngine.Core.Components;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class CameraController : Script
+    public class CameraController : Script
     {
         private GameObject Player;
 

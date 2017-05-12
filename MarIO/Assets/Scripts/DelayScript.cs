@@ -6,7 +6,7 @@ using System;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class DelayScript : Script
+    public class DelayScript : Script
     {
         private TimeSpan Checker;
         private Delayer Source;

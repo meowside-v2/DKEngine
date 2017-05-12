@@ -7,7 +7,7 @@ using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class CharacterController : Script
+    public class CharacterController : Script
     {
         private static Sound PIPE_ENTER_FX = new Sound(Shared.Assets.Sounds.PIPE_ENTER_FX);
         private static Sound JUMP_FX = new Sound(Shared.Assets.Sounds.MARIO_JUMP_FX);
@@ -37,8 +37,11 @@ namespace MarIO.Assets.Scripts
         private bool FirstTimePipeEnter = true;
         private float PipeEnterStartPosition;
         private float PipeEnterSpeed = 50f;
+        
+        private Mario.State LastState = Shared.Mechanics.MarioCurrentState;
+        private bool ChangingState = false;
 
-        private string IDLE
+        private string _idle
         {
             get
             {
@@ -53,15 +56,53 @@ namespace MarIO.Assets.Scripts
                     case Mario.State.Fire:
                         return IsFacingLeft ? Shared.Assets.Animations.MARIO_FIRE_IDLE_LEFT : Shared.Assets.Animations.MARIO_FIRE_IDLE_RIGHT;
 
-                    case Mario.State.Invincible:
-                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_INVINCIBLE_IDLE_LEFT : Shared.Assets.Animations.MARIO_INVINCIBLE_IDLE_RIGHT;
+                    /*case Mario.State.Invincible:
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_INVINCIBLE_IDLE_LEFT : Shared.Assets.Animations.MARIO_INVINCIBLE_IDLE_RIGHT;*/
 
                     default:
                         throw new Exception("JAK");
                 }
             }
         }
+        private string _crouch
+        {
+            get
+            {
+                switch (Shared.Mechanics.MarioCurrentState)
+                {
+                    case Mario.State.Small:
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_CROUCHING_LEFT : Shared.Assets.Animations.MARIO_CROUCHING_RIGHT;
 
+                    case Mario.State.Super:
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_SUPER_CROUCHING_LEFT : Shared.Assets.Animations.MARIO_SUPER_CROUCHING_RIGHT;
+
+                    case Mario.State.Fire:
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_FIRE_CROUCHING_LEFT : Shared.Assets.Animations.MARIO_FIRE_CROUCHING_RIGHT;
+
+                    /*case Mario.State.Invincible:
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_INVINCIBLE_IDLE_LEFT : Shared.Assets.Animations.MARIO_INVINCIBLE_IDLE_RIGHT;*/
+
+                    default:
+                        throw new Exception("JAK");
+                }
+            }
+        }
+        private string _superPowerUp
+        {
+            get { return IsFacingLeft ? Shared.Assets.Animations.MARIO_SUPER_POWERUP_LEFT : Shared.Assets.Animations.MARIO_SUPER_POWERUP_RIGHT; }
+        }
+        private string _firePowerUp
+        {
+            get { return IsFacingLeft ? Shared.Assets.Animations.MARIO_FIRE_POWERUP_LEFT : Shared.Assets.Animations.MARIO_FIRE_POWERUP_RIGHT; }
+        }
+
+        private string IDLE
+        {
+            get
+            {
+                return Player.CurrentMovement == Mario.Movement.Crouching ? _crouch : _idle;
+            }
+        }
         private string MOVE
         {
             get
@@ -77,15 +118,14 @@ namespace MarIO.Assets.Scripts
                     case Mario.State.Fire:
                         return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_FIRE_MOVE_RIGHT : Shared.Assets.Animations.MARIO_FIRE_MOVE_LEFT;
 
-                    case Mario.State.Invincible:
-                        return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_INVINCIBLE_MOVE_RIGHT : Shared.Assets.Animations.MARIO_INVINCIBLE_MOVE_LEFT;
+                    /*case Mario.State.Invincible:
+                        return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_INVINCIBLE_MOVE_RIGHT : Shared.Assets.Animations.MARIO_INVINCIBLE_MOVE_LEFT;*/
 
                     default:
                         throw new Exception("JAK");
                 }
             }
         }
-
         private string JUMP
         {
             get
@@ -104,10 +144,27 @@ namespace MarIO.Assets.Scripts
                         return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.Assets.Animations.MARIO_FIRE_JUMP_RIGHT : Shared.Assets.Animations.MARIO_FIRE_JUMP_LEFT)
                                               : (IsFacingLeft ? Shared.Assets.Animations.MARIO_FIRE_JUMP_LEFT : Shared.Assets.Animations.MARIO_FIRE_JUMP_RIGHT);
 
-                    case Mario.State.Invincible:
+                    /*case Mario.State.Invincible:
                         return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_RIGHT : Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_LEFT)
-                                              : (IsFacingLeft ? Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_LEFT : Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_RIGHT);
+                                              : (IsFacingLeft ? Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_LEFT : Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_RIGHT);*/
 
+                    default:
+                        throw new Exception("JAK");
+                }
+            }
+        }
+        private string POWERUP
+        {
+            get
+            {
+                switch (LastState)
+                {
+                    case Mario.State.Small:
+                        return _superPowerUp;
+                    case Mario.State.Super:
+                        return LastState < Shared.Mechanics.MarioCurrentState ? _firePowerUp : _superPowerUp;
+                    case Mario.State.Fire:
+                        return LastState < Shared.Mechanics.MarioCurrentState ? "" : _firePowerUp;
                     default:
                         throw new Exception("JAK");
                 }
@@ -134,6 +191,38 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
+            if(LastState != Shared.Mechanics.MarioCurrentState)
+            {
+                if (!ChangingState)
+                {
+                    PlayerAnimator.Play(POWERUP);
+                    float YtoAdd = Shared.Mechanics.MarioCurrentState > Mario.State.Small ? 16 : -16;
+                    Player.Transform.Position += new Vector3(0, YtoAdd, 0);
+                    ChangingState = true;
+
+                    Player.LeftTrigger.Collider.Enabled = false;
+                    Player.RightTrigger.Collider.Enabled = false;
+                    Player.TopTrigger.Collider.Enabled = false;
+                    Player.BottomTrigger.Collider.Enabled = false;
+
+                    Player.Collider.Enabled = false;
+
+                    return;
+                }
+
+                if(PlayerAnimator.NumberOfPlays > 5)
+                {
+                    LastState = Shared.Mechanics.MarioCurrentState;
+
+                    Player.LeftTrigger.Collider.Enabled = true;
+                    Player.RightTrigger.Collider.Enabled = true;
+                    Player.TopTrigger.Collider.Enabled = true;
+                    Player.BottomTrigger.Collider.Enabled = true;
+
+                    Player.Collider.Enabled = true;
+                }
+            }
+
             if (Player.KilledEnemy)
             {
                 Shared.Mechanics.FXSoundSource.PlaySound(STOMP_FX);

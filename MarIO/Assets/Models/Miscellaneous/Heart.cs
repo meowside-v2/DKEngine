@@ -3,7 +3,7 @@ using DKEngine.Core.Components;
 
 namespace MarIO.Assets.Models.Miscellaneous
 {
-    internal class Heart : GameObject
+    public class Heart : GameObject
     {
         public Heart()
         { }

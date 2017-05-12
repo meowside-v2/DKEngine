@@ -3,7 +3,7 @@ using DKEngine.Core.Components;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class SpecialBlocksUpdateScript : Script
+    public class SpecialBlocksUpdateScript : Script
     {
         public SpecialBlocksUpdateScript(GameObject Parent)
             : base(Parent)

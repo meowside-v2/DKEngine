@@ -9,9 +9,9 @@ using System.Diagnostics;
 
 namespace MarIO
 {
-    static class Shared
+    public static class Shared
     {
-        static class Mechanics
+        public static class Mechanics
         {
             public static SoundOutput FXPlayer;
             public static SoundSource FXSoundSource { get { return FXPlayer.SoundSource; } }
@@ -44,7 +44,7 @@ namespace MarIO
                 get { return LevelTime - TimeCounter.Elapsed; }
             }
 
-            public static Mario.State MarioCurrentState = Mario.State.Small;
+            public static Mario.State MarioCurrentState = Mario.State.Super;
 
             public const uint OverworldBackground = 0xFF20CCCC;
             public const uint WorldChangeBackground = 0x00000000;
@@ -85,6 +85,18 @@ namespace MarIO
             public static class Animations
             {
                 #region Mario
+                
+                private const string POWERUP_LEFT = "powerup_left";
+                private const string POWERUP_LEFT_MAT = "mario_powerup_left";
+
+                private const string POWERUP_RIGHT = "powerup_right";
+                private const string POWERUP_RIGHT_MAT = "mario_powerup_right";
+
+                private const string CROUCHING_LEFT = "crouch_left";
+                private const string CROUCHING_LEFT_MAT = "mario_crouch_left";
+
+                private const string CROUCHING_RIGHT = "crouch_right";
+                private const string CROUCHING_RIGHT_MAT = "mario_crouch_right";
 
                 /*--------------- SMALL -----------------*/
 
@@ -94,73 +106,95 @@ namespace MarIO
                 public const string MARIO_IDLE_RIGHT = "idle_right";
                 public const string MARIO_IDLE_RIGHT_MAT = "mario_right";
 
-                public const string MARIO_MOVE_LEFT = "left_move";
+                public const string MARIO_MOVE_LEFT = "move_left";
                 public const string MARIO_MOVE_LEFT_MAT = "mario_move_left";
 
-                public const string MARIO_MOVE_RIGHT = "right_move";
+                public const string MARIO_MOVE_RIGHT = "move_right";
                 public const string MARIO_MOVE_RIGHT_MAT = "mario_move_right";
 
-                public const string MARIO_JUMP_LEFT = "left_jump";
+                public const string MARIO_JUMP_LEFT = "jump_left";
                 public const string MARIO_JUMP_LEFT_MAT = "mario_jump_left";
 
-                public const string MARIO_JUMP_RIGHT = "right_jump";
+                public const string MARIO_JUMP_RIGHT = "jump_right";
                 public const string MARIO_JUMP_RIGHT_MAT = "mario_jump_right";
 
                 public const string MARIO_DEAD = "dead";
                 public const string MARIO_DEAD_MAT = "mario_dead";
 
+                public const string MARIO_CROUCHING_LEFT = CROUCHING_LEFT;
+                public const string MARIO_CROUCHING_LEFT_MAT = MARIO_IDLE_LEFT_MAT;
+
+                public const string MARIO_CROUCHING_RIGHT = CROUCHING_RIGHT;
+                public const string MARIO_CROUCHING_RIGHT_MAT = MARIO_IDLE_RIGHT_MAT;
 
                 /*--------------- SUPER -----------------*/
 
-                public const string MARIO_SUPER_IDLE_LEFT;
-                public const string MARIO_SUPER_IDLE_LEFT_MAT;
+                public const string MARIO_SUPER_IDLE_LEFT = "super_" + MARIO_IDLE_LEFT;
+                public const string MARIO_SUPER_IDLE_LEFT_MAT = "super_" + MARIO_IDLE_LEFT_MAT;
 
-                public const string MARIO_SUPER_IDLE_RIGHT;
-                public const string MARIO_SUPER_IDLE_RIGHT_MAT;
+                public const string MARIO_SUPER_IDLE_RIGHT = "super_" + MARIO_IDLE_RIGHT;
+                public const string MARIO_SUPER_IDLE_RIGHT_MAT = "super_" + MARIO_IDLE_RIGHT_MAT;
 
-                public const string MARIO_SUPER_MOVE_LEFT;
-                public const string MARIO_SUPER_MOVE_LEFT_MAT;
+                public const string MARIO_SUPER_MOVE_LEFT = "super_" + MARIO_MOVE_LEFT;
+                public const string MARIO_SUPER_MOVE_LEFT_MAT = "super_" + MARIO_MOVE_LEFT_MAT;
 
-                public const string MARIO_SUPER_MOVE_RIGHT;
-                public const string MARIO_SUPER_MOVE_RIGHT_MAT;
+                public const string MARIO_SUPER_MOVE_RIGHT = "super_" + MARIO_MOVE_RIGHT;
+                public const string MARIO_SUPER_MOVE_RIGHT_MAT = "super_" + MARIO_MOVE_RIGHT_MAT;
 
-                public const string MARIO_SUPER_JUMP_LEFT;
-                public const string MARIO_SUPER_JUMP_LEFT_MAT;
+                public const string MARIO_SUPER_JUMP_LEFT = "super_" + MARIO_JUMP_LEFT;
+                public const string MARIO_SUPER_JUMP_LEFT_MAT = "super_" + MARIO_JUMP_LEFT_MAT;
 
-                public const string MARIO_SUPER_JUMP_RIGHT;
-                public const string MARIO_SUPER_JUMP_RIGHT_MAT;
+                public const string MARIO_SUPER_JUMP_RIGHT = "super_" + MARIO_JUMP_RIGHT;
+                public const string MARIO_SUPER_JUMP_RIGHT_MAT = "super_" + MARIO_JUMP_RIGHT_MAT;
+                
+                public const string MARIO_SUPER_POWERUP_LEFT = "super_" + POWERUP_LEFT;
+                public const string MARIO_SUPER_POWERUP_LEFT_MAT = "super_" + POWERUP_LEFT_MAT;
 
-                public const string MARIO_SUPER_DEAD;
-                public const string MARIO_SUPER_DEAD_MAT;
+                public const string MARIO_SUPER_POWERUP_RIGHT = "super_" + POWERUP_RIGHT;
+                public const string MARIO_SUPER_POWERUP_RIGHT_MAT = "super_" + POWERUP_RIGHT_MAT;
 
+                public const string MARIO_SUPER_CROUCHING_LEFT = "super_" + CROUCHING_LEFT;
+                public const string MARIO_SUPER_CROUCHING_LEFT_MAT = "super_" + CROUCHING_LEFT_MAT;
+
+                public const string MARIO_SUPER_CROUCHING_RIGHT = "super_" + CROUCHING_RIGHT;
+                public const string MARIO_SUPER_CROUCHING_RIGHT_MAT = "super_" + CROUCHING_RIGHT_MAT;
 
                 /*--------------- FIRE -----------------*/
 
-                public const string MARIO_FIRE_IDLE_LEFT;
-                public const string MARIO_FIRE_IDLE_LEFT_MAT;
+                public const string MARIO_FIRE_IDLE_LEFT = "fire_" + MARIO_IDLE_LEFT;
+                public const string MARIO_FIRE_IDLE_LEFT_MAT = "fire_" + MARIO_IDLE_LEFT_MAT;
 
-                public const string MARIO_FIRE_IDLE_RIGHT;
-                public const string MARIO_FIRE_IDLE_RIGHT_MAT;
+                public const string MARIO_FIRE_IDLE_RIGHT = "fire_" + MARIO_IDLE_RIGHT;
+                public const string MARIO_FIRE_IDLE_RIGHT_MAT = "fire_" + MARIO_IDLE_RIGHT_MAT;
 
-                public const string MARIO_FIRE_MOVE_LEFT;
-                public const string MARIO_FIRE_MOVE_LEFT_MAT;
+                public const string MARIO_FIRE_MOVE_LEFT = "fire_" + MARIO_MOVE_LEFT;
+                public const string MARIO_FIRE_MOVE_LEFT_MAT = "fire_" + MARIO_MOVE_LEFT_MAT;
 
-                public const string MARIO_FIRE_MOVE_RIGHT;
-                public const string MARIO_FIRE_MOVE_RIGHT_MAT;
+                public const string MARIO_FIRE_MOVE_RIGHT = "fire_" + MARIO_MOVE_RIGHT;
+                public const string MARIO_FIRE_MOVE_RIGHT_MAT = "fire_" + MARIO_MOVE_RIGHT_MAT;
 
-                public const string MARIO_FIRE_JUMP_LEFT;
-                public const string MARIO_FIRE_JUMP_LEFT_MAT;
+                public const string MARIO_FIRE_JUMP_LEFT = "fire_" + MARIO_JUMP_LEFT;
+                public const string MARIO_FIRE_JUMP_LEFT_MAT = "fire_" + MARIO_JUMP_LEFT_MAT;
 
-                public const string MARIO_FIRE_JUMP_RIGHT;
-                public const string MARIO_FIRE_JUMP_RIGHT_MAT;
+                public const string MARIO_FIRE_JUMP_RIGHT = "fire_" + MARIO_JUMP_RIGHT;
+                public const string MARIO_FIRE_JUMP_RIGHT_MAT = "fire_" + MARIO_JUMP_RIGHT_MAT;
 
-                public const string MARIO_FIRE_DEAD;
-                public const string MARIO_FIRE_DEAD_MAT;
+                public const string MARIO_FIRE_POWERUP_LEFT = "fire_" + POWERUP_LEFT;
+                public const string MARIO_FIRE_POWERUP_LEFT_MAT = "fire_" + POWERUP_LEFT_MAT;
+
+                public const string MARIO_FIRE_POWERUP_RIGHT = "fire_" + POWERUP_RIGHT;
+                public const string MARIO_FIRE_POWERUP_RIGHT_MAT = "fire_" + POWERUP_RIGHT_MAT;
+
+                public const string MARIO_FIRE_CROUCHING_LEFT = "fire_" + CROUCHING_LEFT;
+                public const string MARIO_FIRE_CROUCHING_LEFT_MAT = "fire_" + CROUCHING_LEFT_MAT;
+
+                public const string MARIO_FIRE_CROUCHING_RIGHT = "fire_" + CROUCHING_RIGHT;
+                public const string MARIO_FIRE_CROUCHING_RIGHT_MAT = "fire_" + CROUCHING_RIGHT_MAT;
 
 
                 /*--------------- INVINCIBLE -----------------*/
 
-                public const string MARIO_INVINCIBLE_IDLE_LEFT;
+                /*public const string MARIO_INVINCIBLE_IDLE_LEFT;
                 public const string MARIO_INVINCIBLE_IDLE_LEFT_MAT;
 
                 public const string MARIO_INVINCIBLE_IDLE_RIGHT;
@@ -179,7 +213,7 @@ namespace MarIO
                 public const string MARIO_INVINCIBLE_JUMP_RIGHT_MAT;
 
                 public const string MARIO_INVINCIBLE_DEAD;
-                public const string MARIO_INVINCIBLE_DEAD_MAT;
+                public const string MARIO_INVINCIBLE_DEAD_MAT;*/
 
                 #endregion Mario
             }

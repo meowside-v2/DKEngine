@@ -143,9 +143,99 @@ namespace MarIO.Assets.Sprites {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap mario_right {
+        internal static System.Drawing.Bitmap super_mario_crouch_left {
             get {
-                object obj = ResourceManager.GetObject("mario_right", resourceCulture);
+                object obj = ResourceManager.GetObject("super_mario_crouch_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_crouch_right {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_crouch_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_jump_left {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_jump_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_jump_right {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_jump_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_left {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_move_left {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_move_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_move_right {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_move_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_powerup_left {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_powerup_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_powerup_right {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_powerup_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap super_mario_right {
+            get {
+                object obj = ResourceManager.GetObject("super_mario_right", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

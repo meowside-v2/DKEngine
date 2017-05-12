@@ -5,7 +5,7 @@ using MarIO.Assets.Models.Miscellaneous;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class FloatingCoinAnimatorScript : Script
+    public class FloatingCoinAnimatorScript : Script
     {
         private float AnimationHeight = 60;
         private float AnimationSpeed = 20;

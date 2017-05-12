@@ -3,7 +3,7 @@ using DKEngine.Core.Components;
 
 namespace MarIO.Assets.Models
 {
-    internal class SoundOutput : GameObject
+    public class SoundOutput : GameObject
     {
         protected override void Initialize()
         {

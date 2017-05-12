@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class BottomMarioChecker : Script
+    public class BottomMarioChecker : Script
     {
         private Mario Mario;
 

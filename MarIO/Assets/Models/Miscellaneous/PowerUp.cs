@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models.Miscellaneous
 {
-    class PowerUp : GameObject
+    public class PowerUp : GameObject
     {
         public Action OnPickedUp { get; private set; }
 

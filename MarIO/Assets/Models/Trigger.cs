@@ -3,7 +3,7 @@ using DKEngine.Core.Components;
 
 namespace MarIO.Assets.Models
 {
-    class Trigger : GameObject
+    public class Trigger : GameObject
     {
         public Trigger()
             : base()

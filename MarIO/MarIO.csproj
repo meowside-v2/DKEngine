@@ -146,10 +146,10 @@
       <DependentUpon>Sprites.resx</DependentUpon>
     </Compile>
     <Compile Include="SystemExt.cs" />
-    <Compile Include="TestObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\Sprites\PSD\Mario_super.psd" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Assets\Sprites\PSD\blocks_project.psd" />
@@ -187,6 +187,16 @@
     <Content Include="Assets\Sprites\Enemy\mario_left.png" />
     <Content Include="Assets\Sprites\Enemy\mario_move_left.gif" />
     <Content Include="Assets\Sprites\Enemy\mario_right.png" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_crouch_left.png" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_crouch_right.png" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_jump_left.png" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_jump_right.png" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_left.png" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_move_left.gif" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_move_right.gif" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_powerup_left.gif" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_powerup_right.gif" />
+    <Content Include="Assets\Sprites\Enemy\super_mario_right.png" />
     <Content Include="Assets\Sprites\Ground\block_01.png" />
     <Content Include="Assets\Sprites\Ground\block_02.png" />
     <Content Include="Assets\Sprites\Ground\block_03.png" />

@@ -4,7 +4,7 @@ using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class PipePort : Script
+    public class PipePort : Script
     {
         private Mario Player;
         public Block Pipe;

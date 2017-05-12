@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace MarIO.Assets.Scenes
 {
-    internal class MainMenu : Scene
+    public class MainMenu : Scene
     {
         public MainMenu()
         {

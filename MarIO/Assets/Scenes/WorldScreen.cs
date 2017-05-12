@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MarIO.Assets.Scenes
 {
-    internal class WorldScreen : Scene
+    public class WorldScreen : Scene
     {
         private static readonly TimeSpan _defautlTimeSpan = new TimeSpan(0, 0, 5);
 

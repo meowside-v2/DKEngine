@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MarIO.Assets.Scenes
 {
-    internal abstract class MapBase : Scene
+    public abstract class MapBase : Scene
     {
         public static Dictionary<string, string> LevelsNames = new Dictionary<string, string>()
         {

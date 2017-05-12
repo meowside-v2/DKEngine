@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace MarIO
 {
-    internal static class SystemExt
+    public static class SystemExt
     {
         public static void AddAsFloatingText(this TextBlock txBlock)
         {

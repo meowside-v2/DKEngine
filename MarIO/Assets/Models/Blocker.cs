@@ -3,7 +3,7 @@ using DKEngine.Core.Components;
 
 namespace MarIO.Assets.Models
 {
-    internal class Blocker : GameObject
+    public class Blocker : GameObject
     {
         public Blocker()
             : base()

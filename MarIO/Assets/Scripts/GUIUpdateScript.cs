@@ -5,7 +5,7 @@ using DKEngine.Core.UI;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class GUIUpdateScript : Script
+    public class GUIUpdateScript : Script
     {
         private TextBlock Time;
         private TextBlock Coins;

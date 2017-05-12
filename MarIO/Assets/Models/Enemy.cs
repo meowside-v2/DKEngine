@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MarIO.Assets.Models
 {
-    internal abstract class Enemy : AnimatedObject
+    public abstract class Enemy : AnimatedObject
     {
         public enum EnemyType
         {

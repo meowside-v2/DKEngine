@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class MusicScript : Script
+    public class MusicScript : Script
     {
         private Sound Music;
         //private SoundSource Output;

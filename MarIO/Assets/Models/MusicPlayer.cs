@@ -4,7 +4,7 @@ using MarIO.Assets.Scripts;
 
 namespace MarIO.Assets.Models
 {
-    internal class MusicPlayer : GameObject
+    public class MusicPlayer : GameObject
     {
         protected override void Initialize()
         {

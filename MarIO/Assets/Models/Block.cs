@@ -8,7 +8,7 @@ using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Models
 {
-    class Block : AnimatedObject
+    public class Block : AnimatedObject
     {
         public enum BlockType
         {

@@ -6,7 +6,7 @@ using MarIO.Assets.Scripts;
 
 namespace MarIO.Assets.Models
 {
-    internal class GUIUpdater : GameObject
+    public class GUIUpdater : GameObject
     {
         protected override void Initialize()
         {

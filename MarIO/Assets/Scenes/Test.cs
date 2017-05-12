@@ -4,7 +4,7 @@ using MarIO.Assets.Scripts;
 
 namespace MarIO.Assets.Scenes
 {
-    internal class Test : MapBase
+    public class Test : MapBase
     {
         public static string StaticName = "test";
 

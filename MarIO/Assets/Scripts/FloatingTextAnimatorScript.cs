@@ -5,7 +5,7 @@ using DKEngine.Core.UI;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class FloatingTextAnimatorScript : Script
+    public class FloatingTextAnimatorScript : Script
     {
         private float AnimationHeight = 30;
         private float AnimationSpeed = 20;

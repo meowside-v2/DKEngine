@@ -4,7 +4,7 @@ using System;
 
 namespace MarIO.Assets.Models
 {
-    internal class Delayer : GameObject
+    public class Delayer : GameObject
     {
         public TimeSpan TimeToWait;
         public Action CalledAction;

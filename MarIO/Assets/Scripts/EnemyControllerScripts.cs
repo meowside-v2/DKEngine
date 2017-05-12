@@ -7,7 +7,7 @@ using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class GoombaController : Script
+    public class GoombaController : Script
     {
         private const int Speed = 20;
         private const int FloatSpeed = 60;

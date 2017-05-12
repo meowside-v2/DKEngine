@@ -3,7 +3,7 @@ using DKEngine.Core.Components;
 
 namespace MarIO.Assets.Models
 {
-    internal class Group : GameObject
+    public class Group : GameObject
     {
         public bool InitCollider = false;
 

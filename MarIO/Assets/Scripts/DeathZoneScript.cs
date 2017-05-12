@@ -4,7 +4,7 @@ using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class DeathZoneScript : Script
+    public class DeathZoneScript : Script
     {
         public DeathZoneScript(GameObject Parent) : base(Parent)
         { }

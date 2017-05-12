@@ -4,7 +4,7 @@ using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class MainMenuSpawnScript : Script
+    public class MainMenuSpawnScript : Script
     {
         private Vector3 Position;
 

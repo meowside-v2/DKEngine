@@ -4,7 +4,7 @@ using MarIO.Assets.Scripts;
 
 namespace MarIO.Assets.Scenes
 {
-    internal class Level_1_1 : MapBase
+    public class Level_1_1 : MapBase
     {
         public Level_1_1()
         {

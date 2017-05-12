@@ -5,7 +5,7 @@ using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class BlockAnimatorScript : Script
+    public class BlockAnimatorScript : Script
     {
         private float AnimationHeight = 2;
         private float AnimationSpeed = 20;
