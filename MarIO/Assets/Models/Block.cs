@@ -8,7 +8,7 @@ using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Models
 {
-    internal class Block : AnimatedObject
+    class Block : AnimatedObject
     {
         public enum BlockType
         {
@@ -112,10 +112,12 @@ namespace MarIO.Assets.Models
         }
 
         public Action SpecialAction { get; set; }
-        public byte CoinCount { get; private set; }
+        public byte CoinCount { get; set; }
         public Direction PipeEnterDirection { get; set; }
+        public bool PowerUp { get; set; }
 
         private bool _specialAction = false;
+        private SoundOutput FX_Player;
 
         public Block()
             : base()
@@ -290,21 +292,31 @@ namespace MarIO.Assets.Models
                 this.Animator.AddAnimation("default", this.TypeName);
                 this.Animator.AddAnimation("nocoin", BlockTypeNames[BlockType.NoCoin]);
             }
+
+            FX_Player = GameObject.Find<SoundOutput>(nameof(SoundOutput));
         }
 
-        public void GetCoin()
+        public void GetContent()
         {
-            if (CoinCount > 0)
+            if (PowerUp)
+            {
+
+            }
+
+            else if (CoinCount > 0)
             {
                 GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
                 CoinCount--;
                 Shared.Mechanics.GameScore += Shared.Mechanics.COIN_SCORE;
+                Shared.Mechanics.FXSoundSource.PlaySound(Coin.COIN_FX);
 
                 if (CoinCount == 0)
                 {
                     this.Animator.Play("nocoin");
                 }
             }
+
+            
         }
 
         public void DestroyAnim()

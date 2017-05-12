@@ -8,7 +8,7 @@ namespace MarIO.Assets.Scripts
     internal class MusicScript : Script
     {
         private Sound Music;
-        private SoundSource Output;
+        //private SoundSource Output;
         private TimeSpan MusicLenght;
 
         private Stopwatch Timer;
@@ -22,10 +22,10 @@ namespace MarIO.Assets.Scripts
         protected override void Start()
         {
             Music = new Sound(Shared.Assets.Sounds.OVERWORLD_THEME);
-            Output = Component.Find<SoundSource>("MusicPlayer_SoundSource");
+            //Output = Component.Find<SoundSource>("MusicPlayer_SoundSource");
 
             MusicLenght = Music.FileReader.TotalTime;
-            Output.PlaySound(Music);
+            Shared.Mechanics.FXSoundSource.PlaySound(Music);
 
             Timer = Stopwatch.StartNew();
         }
@@ -34,7 +34,7 @@ namespace MarIO.Assets.Scripts
         {
             if (Timer.Elapsed > MusicLenght)
             {
-                Output.PlaySound(Music);
+                Shared.Mechanics.FXSoundSource.PlaySound(Music);
 
                 Timer.Restart();
             }

@@ -106,7 +106,15 @@ namespace MarIO.Assets.Scenes
                 switch (parameters[0])
                 {
                     case "world":
-                        WorldName = parameters[1];
+                        if(parameters[1].Split('|')[0] == "get")
+                        {
+                            WorldName = MapBase.LevelsNames[parameters[1].Split('|')[1]];
+                        }
+                        else
+                        {
+                            WorldName = parameters[1];
+                        }
+                        
                         break;
 
                     case "time":

@@ -1,6 +1,7 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
+using MarIO.Assets.Models.Miscellaneous;
 using System.Diagnostics;
 
 namespace MarIO.Assets.Scripts
@@ -20,6 +21,10 @@ namespace MarIO.Assets.Scripts
                 Debug.WriteLine(string.Format("Zabil jsi {0}", tmp.Name));
                 tmp.IsDestroyed = true;
                 Mario.KilledEnemy = true;
+            }
+            else if(e.Parent is PowerUp)
+            {
+                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
             }
         }
 
@@ -55,7 +60,11 @@ namespace MarIO.Assets.Scripts
                     tmp.AnimateBlockCollision();
                 }
 
-                tmp.GetCoin();
+                tmp.GetContent();
+            }
+            else if (e.Parent is PowerUp)
+            {
+                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
             }
         }
 
@@ -83,6 +92,10 @@ namespace MarIO.Assets.Scripts
                 Mario.IsDestroyed = true;
                 //Mario?.Destroy();
             }
+            else if (e.Parent is PowerUp)
+            {
+                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
+            }
         }
 
         protected override void Start()
@@ -108,6 +121,10 @@ namespace MarIO.Assets.Scripts
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
                 Mario.IsDestroyed = true;
                 //Mario?.Destroy();
+            }
+            else if (e.Parent is PowerUp)
+            {
+                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
             }
         }
 

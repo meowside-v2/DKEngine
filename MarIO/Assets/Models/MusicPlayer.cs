@@ -9,7 +9,7 @@ namespace MarIO.Assets.Models
         protected override void Initialize()
         {
             this.Name = "MusicPlayer";
-            this.InitNewComponent<SoundSource>();
+            //this.InitNewComponent<SoundSource>();
             this.InitNewScript<MusicScript>();
         }
     }

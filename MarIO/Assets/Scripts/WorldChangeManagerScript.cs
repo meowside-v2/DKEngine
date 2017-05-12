@@ -4,7 +4,7 @@ using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
-    internal class WorldChangeManagerScript : Script
+    class WorldChangeManagerScript : Script
     {
         public Block CurrentlyEnteredPipeScript;
 

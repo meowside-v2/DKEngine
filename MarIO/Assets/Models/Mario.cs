@@ -3,10 +3,11 @@ using DKEngine.Core.Components;
 using MarIO.Assets.Scripts;
 using System.Drawing;
 using static DKEngine.Core.Components.Transform;
+using static MarIO.Shared.Assets.Animations;
 
 namespace MarIO.Assets.Models
 {
-    internal class Mario : AnimatedObject
+    class Mario : AnimatedObject
     {
         public bool KilledEnemy = false;
         public Trigger LeftTrigger { get; private set; }
@@ -49,10 +50,34 @@ namespace MarIO.Assets.Models
         protected override void Initialize()
         {
             this.Name = "Player";
-
+            
             CurrentState = Shared.Mechanics.MarioCurrentState;
 
             this.InitNewComponent<Animator>();
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_LEFT, Shared.Assets.Animations.MARIO_IDLE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_RIGHT, Shared.Assets.Animations.MARIO_IDLE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_LEFT, Shared.Assets.Animations.MARIO_JUMP_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_RIGHT, Shared.Assets.Animations.MARIO_JUMP_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_LEFT, Shared.Assets.Animations.MARIO_MOVE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_RIGHT, Shared.Assets.Animations.MARIO_MOVE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_DEAD, Shared.Assets.Animations.MARIO_DEAD_MAT);
+
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_LEFT, Shared.Assets.Animations.MARIO_IDLE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_RIGHT, Shared.Assets.Animations.MARIO_IDLE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_LEFT, Shared.Assets.Animations.MARIO_JUMP_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_RIGHT, Shared.Assets.Animations.MARIO_JUMP_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_LEFT, Shared.Assets.Animations.MARIO_MOVE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_RIGHT, Shared.Assets.Animations.MARIO_MOVE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_DEAD, Shared.Assets.Animations.MARIO_DEAD_MAT);
+
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_LEFT, Shared.Assets.Animations.MARIO_IDLE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_RIGHT, Shared.Assets.Animations.MARIO_IDLE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_LEFT, Shared.Assets.Animations.MARIO_JUMP_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_RIGHT, Shared.Assets.Animations.MARIO_JUMP_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_LEFT, Shared.Assets.Animations.MARIO_MOVE_LEFT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_RIGHT, Shared.Assets.Animations.MARIO_MOVE_RIGHT_MAT);
+            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_DEAD, Shared.Assets.Animations.MARIO_DEAD_MAT);
+
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_LEFT, Shared.Assets.Animations.MARIO_IDLE_LEFT_MAT);
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_RIGHT, Shared.Assets.Animations.MARIO_IDLE_RIGHT_MAT);
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_LEFT, Shared.Assets.Animations.MARIO_JUMP_LEFT_MAT);
@@ -72,15 +97,15 @@ namespace MarIO.Assets.Models
             if (InitCollider)
             {
                 this.InitNewComponent<Collider>();
-                this.Collider.Area = new RectangleF(2, 0, 12, 16);
+                //this.Collider.Area = new RectangleF(2, 0, 12, 16);
             }
 
             BottomTrigger = new Trigger(this)
             {
                 Name = "Bottom_Trigger"
             };
-            BottomTrigger.Transform.Position += new Vector3(2.5f, 16, 0);
-            BottomTrigger.Transform.Dimensions = new Vector3(11, 1, 0);
+            //BottomTrigger.Transform.Position += new Vector3(1, 16, 0);
+            //BottomTrigger.Transform.Dimensions = new Vector3(14, 2, 0);
             BottomTrigger.InitNewScript<BottomMarioChecker>();
             BottomTrigger.Model = new Material(Color.Black, BottomTrigger);
 
@@ -88,8 +113,8 @@ namespace MarIO.Assets.Models
             {
                 Name = "Left_Trigger"
             };
-            LeftTrigger.Transform.Position += new Vector3(1, 0.5f, 0);
-            LeftTrigger.Transform.Dimensions = new Vector3(1, 15, 0);
+            //LeftTrigger.Transform.Position += new Vector3(1, 0, 0);
+            //LeftTrigger.Transform.Dimensions = new Vector3(1, 14, 0);
             LeftTrigger.InitNewScript<LeftMarioChecker>();
             LeftTrigger.Model = new Material(Color.Black, LeftTrigger);
 
@@ -97,8 +122,8 @@ namespace MarIO.Assets.Models
             {
                 Name = "Right_Trigger"
             };
-            RightTrigger.Transform.Position += new Vector3(14, 0.5f, 0);
-            RightTrigger.Transform.Dimensions = new Vector3(1, 15, 0);
+            //RightTrigger.Transform.Position += new Vector3(14, 0, 0);
+            //RightTrigger.Transform.Dimensions = new Vector3(1, 14, 0);
             RightTrigger.InitNewScript<RightMarioChecker>();
             RightTrigger.Model = new Material(Color.Black, RightTrigger);
 
@@ -106,12 +131,51 @@ namespace MarIO.Assets.Models
             {
                 Name = "Top_Trigger"
             };
-            TopTrigger.Transform.Position += new Vector3(2.5f, -1, 0);
-            TopTrigger.Transform.Dimensions = new Vector3(11, 1, 0);
+            //TopTrigger.Transform.Position += new Vector3(2.5f, -1, 0);
+            //TopTrigger.Transform.Dimensions = new Vector3(11, 1, 0);
             TopTrigger.InitNewScript<TopMarioChecker>();
             TopTrigger.Model = new Material(Color.Black, TopTrigger);
 
-            this.InitNewComponent<SoundSource>();
+            switch (Shared.Mechanics.MarioCurrentState)
+            {
+                case State.Small:
+                    this.Collider.Area = new RectangleF(2, 0, 12, 16);
+
+                    TopTrigger.Transform.Position += new Vector3(2.5f, -1, 0);
+                    TopTrigger.Transform.Dimensions = new Vector3(11, 1, 0);
+
+                    RightTrigger.Transform.Position += new Vector3(14, 0, 0);
+                    RightTrigger.Transform.Dimensions = new Vector3(1, 14, 0);
+
+                    LeftTrigger.Transform.Position += new Vector3(1, 0, 0);
+                    LeftTrigger.Transform.Dimensions = new Vector3(1, 14, 0);
+
+                    BottomTrigger.Transform.Position += new Vector3(1, 16, 0);
+                    BottomTrigger.Transform.Dimensions = new Vector3(14, 2, 0);
+
+                    break;
+                case State.Super:
+                case State.Fire:
+                case State.Invincible:
+                    this.Collider.Area = new RectangleF(2, 0, 12, 32);
+
+                    TopTrigger.Transform.Position += new Vector3(2.5f, -1, 0);
+                    TopTrigger.Transform.Dimensions = new Vector3(11, 1, 0);
+
+                    RightTrigger.Transform.Position += new Vector3(14, 0, 0);
+                    RightTrigger.Transform.Dimensions = new Vector3(1, 30, 0);
+
+                    LeftTrigger.Transform.Position += new Vector3(1, 0, 0);
+                    LeftTrigger.Transform.Dimensions = new Vector3(1, 30, 0);
+
+                    BottomTrigger.Transform.Position += new Vector3(1, 32, 0);
+                    BottomTrigger.Transform.Dimensions = new Vector3(14, 2, 0);
+                    break;
+                default:
+                    break;
+            }
+
+            //this.InitNewComponent<SoundSource>();
 
             WorldManager = Behavior.Find<WorldChangeManagerScript>("worldManager");
         }

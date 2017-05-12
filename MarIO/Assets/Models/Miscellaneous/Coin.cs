@@ -5,6 +5,8 @@ namespace MarIO.Assets.Models.Miscellaneous
 {
     internal class Coin : GameObject
     {
+        public static Sound COIN_FX = new Sound(Shared.Assets.Sounds.COIN_GET_FX);
+
         public Coin()
         { }
 

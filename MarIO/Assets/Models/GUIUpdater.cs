@@ -117,9 +117,9 @@ namespace MarIO.Assets.Models
                 TextShadow = true,
                 FontSize = 2,
                 HAlignment = Text.HorizontalAlignment.Right,
-                TextHAlignment = Text.HorizontalAlignment.Right
+                TextHAlignment = Text.HorizontalAlignment.Center
             };
-            _world.Transform.Dimensions = new Vector3(100, 20, 1);
+            _world.Transform.Dimensions = new Vector3(50, 20, 1);
             _world.Transform.Position += new Vector3(-90, 4, 128);
 
             TextBlock World = new TextBlock(this)
@@ -130,9 +130,9 @@ namespace MarIO.Assets.Models
                 TextShadow = true,
                 FontSize = 2,
                 HAlignment = Text.HorizontalAlignment.Right,
-                TextHAlignment = Text.HorizontalAlignment.Right
+                TextHAlignment = Text.HorizontalAlignment.Center
             };
-            World.Transform.Dimensions = new Vector3(100, 20, 1);
+            World.Transform.Dimensions = new Vector3(50, 20, 1);
             World.Transform.Position += new Vector3(-90, 16, 128);
 
             #endregion WORLD

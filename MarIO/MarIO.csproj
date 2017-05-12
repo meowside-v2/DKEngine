@@ -66,7 +66,7 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Assets\Logo_150x150.ico</ApplicationIcon>
@@ -98,6 +98,7 @@
     <Compile Include="Assets\Models\Mario.cs" />
     <Compile Include="Assets\Models\Miscellaneous\Coin.cs" />
     <Compile Include="Assets\Models\Miscellaneous\Heart.cs" />
+    <Compile Include="Assets\Models\Miscellaneous\PowerUp.cs" />
     <Compile Include="Assets\Models\MusicPlayer.cs" />
     <Compile Include="Assets\Models\Trigger.cs" />
     <Compile Include="Assets\Scenes\Level_1_1.cs" />
@@ -118,7 +119,7 @@
     <Compile Include="Assets\Scripts\CharacterController.cs" />
     <Compile Include="Assets\Scripts\MusicScript.cs" />
     <Compile Include="Assets\Scripts\PipePort.cs" />
-    <Compile Include="Assets\Scripts\SoundOutput.cs" />
+    <Compile Include="Assets\Models\SoundOutput.cs" />
     <Compile Include="Assets\Scripts\SpecialBlocksUpdateScript.cs" />
     <Compile Include="Assets\Scripts\WorldChangeManagerScript.cs" />
     <Compile Include="Assets\Sounds\Sounds.Designer.cs">
@@ -149,7 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="MarIO_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Assets\Sprites\PSD\blocks_project.psd" />

@@ -8,7 +8,7 @@ namespace MarIO.Assets.Scenes
     {
         public Level_1_1()
         {
-            Name = "1-1";
+            Name = MapBase.LevelsNames[nameof(Level_1_1)];
         }
 
         public override void Load()
@@ -30,6 +30,17 @@ namespace MarIO.Assets.Scenes
             _1.SizeInBlocks = new Vector3(50, 3, 0);
             _1.Transform.Position = new Vector3(0, 0, 0);
 
+            for (int i = 0; i < 10; i++)
+            {
+                Block tmp = new Block()
+                {
+                    Type = Block.BlockType.Ground2,
+                    Name = string.Format("PlatformTest_{0:00}", i)
+                };
+                tmp.Transform.Position = new Vector3(80 + 16 * i, -80, 0);
+                tmp.InitCollider = true;
+            }
+
             Mario m = new Mario()
             {
                 InitCameraController = true,
@@ -42,6 +53,10 @@ namespace MarIO.Assets.Scenes
             {
                 BackGround = Shared.Mechanics.OverworldBackground.ToColor()
             };
+
+            new SoundOutput();
+            new GUIUpdater();
+            new BackgroundWorker();
         }
     }
 }

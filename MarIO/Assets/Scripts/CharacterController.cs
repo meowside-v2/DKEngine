@@ -15,17 +15,17 @@ namespace MarIO.Assets.Scripts
 
         private Animator PlayerAnimator;
         private Mario Player;
-        private SoundSource SoundOutput;
+        //private SoundSource SoundOutput;
 
         private float horiSpeed = 0;
         private float vertSpeed = 0;
 
         private float MovementSpeed = 80f;
-        private float FloatSpeed = 200f;
+        private float FloatSpeed = 300f;
 
-        private float Acceleration = 3f;
+        private float Acceleration = 3.5f;
 
-        private float DeathAnimSpeed = 20;
+        private float DeathAnimSpeed = 80;
 
         private bool CanJump = true;
         private bool IsFalling = false;
@@ -48,13 +48,13 @@ namespace MarIO.Assets.Scripts
                         return IsFacingLeft ? Shared.Assets.Animations.MARIO_IDLE_LEFT : Shared.Assets.Animations.MARIO_IDLE_RIGHT;
 
                     case Mario.State.Super:
-                        return "idle";
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_SUPER_IDLE_LEFT : Shared.Assets.Animations.MARIO_SUPER_IDLE_RIGHT;
 
                     case Mario.State.Fire:
-                        return "idle";
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_FIRE_IDLE_LEFT : Shared.Assets.Animations.MARIO_FIRE_IDLE_RIGHT;
 
                     case Mario.State.Invincible:
-                        return "idle";
+                        return IsFacingLeft ? Shared.Assets.Animations.MARIO_INVINCIBLE_IDLE_LEFT : Shared.Assets.Animations.MARIO_INVINCIBLE_IDLE_RIGHT;
 
                     default:
                         throw new Exception("JAK");
@@ -72,13 +72,13 @@ namespace MarIO.Assets.Scripts
                         return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_MOVE_RIGHT : Shared.Assets.Animations.MARIO_MOVE_LEFT;
 
                     case Mario.State.Super:
-                        return "idle";
+                        return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_SUPER_MOVE_RIGHT : Shared.Assets.Animations.MARIO_SUPER_MOVE_LEFT;
 
                     case Mario.State.Fire:
-                        return "idle";
+                        return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_FIRE_MOVE_RIGHT : Shared.Assets.Animations.MARIO_FIRE_MOVE_LEFT;
 
                     case Mario.State.Invincible:
-                        return "idle";
+                        return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_INVINCIBLE_MOVE_RIGHT : Shared.Assets.Animations.MARIO_INVINCIBLE_MOVE_LEFT;
 
                     default:
                         throw new Exception("JAK");
@@ -97,13 +97,16 @@ namespace MarIO.Assets.Scripts
                                               : (IsFacingLeft ? Shared.Assets.Animations.MARIO_JUMP_LEFT : Shared.Assets.Animations.MARIO_JUMP_RIGHT);
 
                     case Mario.State.Super:
-                        return "idle";
+                        return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.Assets.Animations.MARIO_SUPER_JUMP_RIGHT : Shared.Assets.Animations.MARIO_SUPER_JUMP_LEFT)
+                                              : (IsFacingLeft ? Shared.Assets.Animations.MARIO_SUPER_JUMP_LEFT : Shared.Assets.Animations.MARIO_SUPER_JUMP_RIGHT);
 
                     case Mario.State.Fire:
-                        return "idle";
+                        return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.Assets.Animations.MARIO_FIRE_JUMP_RIGHT : Shared.Assets.Animations.MARIO_FIRE_JUMP_LEFT)
+                                              : (IsFacingLeft ? Shared.Assets.Animations.MARIO_FIRE_JUMP_LEFT : Shared.Assets.Animations.MARIO_FIRE_JUMP_RIGHT);
 
                     case Mario.State.Invincible:
-                        return "idle";
+                        return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_RIGHT : Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_LEFT)
+                                              : (IsFacingLeft ? Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_LEFT : Shared.Assets.Animations.MARIO_INVINCIBLE_JUMP_RIGHT);
 
                     default:
                         throw new Exception("JAK");
@@ -124,7 +127,7 @@ namespace MarIO.Assets.Scripts
         {
             Player = GameObject.Find<Mario>("Player");
             PlayerAnimator = Component.Find<Animator>("Player_Animator");
-            SoundOutput = Component.Find<SoundSource>("Player_SoundSource");
+            //SoundOutput = Component.Find<SoundSource>("Player_SoundSource");
 
             Player.Animator.Play("idle");
         }
@@ -133,7 +136,7 @@ namespace MarIO.Assets.Scripts
         {
             if (Player.KilledEnemy)
             {
-                SoundOutput.PlaySound(STOMP_FX);
+                Shared.Mechanics.FXSoundSource.PlaySound(STOMP_FX);
                 Player.KilledEnemy = false;
                 EnemyKilledAnim = true;
                 Jumped = true;
@@ -145,7 +148,8 @@ namespace MarIO.Assets.Scripts
             {
                 if (FirstTimePipeEnter)
                 {
-                    SoundOutput.PlaySound(PIPE_ENTER_FX);
+                    Shared.Mechanics.FXSoundSource.PlaySound(PIPE_ENTER_FX);
+                    Player.Collider.Enabled = false;
                     PipeEnterStartPosition = Player.PipeEnteredInDirection == Direction.Down ? Player.Transform.Position.Y : Player.Transform.Position.X;
                     horiSpeed = 0;
                     vertSpeed = 0;
@@ -270,7 +274,7 @@ namespace MarIO.Assets.Scripts
                     {
                         if (vertSpeed == 0 && !Jumped)
                         {
-                            SoundOutput.PlaySound(JUMP_FX);
+                            Shared.Mechanics.FXSoundSource.PlaySound(JUMP_FX);
                             vertSpeed = -FloatSpeed * 1.5f;
                             Jumped = true;
                         }

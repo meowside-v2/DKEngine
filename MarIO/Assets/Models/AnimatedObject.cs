@@ -2,7 +2,7 @@
 
 namespace MarIO.Assets.Models
 {
-    internal abstract class AnimatedObject : GameObject
+    abstract class AnimatedObject : GameObject
     {
         public bool IsDestroyed = false;
         public bool ChangeState = false;

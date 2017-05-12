@@ -1,9 +1,17 @@
 ﻿using DKEngine.Core;
+using System;
+using System.Collections.Generic;
 
 namespace MarIO.Assets.Scenes
 {
     internal abstract class MapBase : Scene
     {
+        public static Dictionary<string, string> LevelsNames = new Dictionary<string, string>()
+        {
+            { nameof(Test), "test" },
+            { nameof(Level_1_1), "1-1" }
+        };
+
         public sealed override void Init()
         {
             Load();
