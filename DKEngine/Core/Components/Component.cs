@@ -56,10 +56,7 @@ namespace DKEngine.Core.Components
                 if (this.GetType() != typeof(Letter))
                 {
                     Engine.LoadingScene.AllComponents.AddSafe(this);
-                    //Engine.LoadingScene.AllGameObjects.AddSafe(this);
                 }
-
-                //Engine.LoadingScene.AllComponents.AddSafe(this);
             }
             catch (Exception e)
             {

@@ -22,6 +22,10 @@ namespace MarIO.Assets.Scripts
                 tmp.IsDestroyed = true;
                 Mario.KilledEnemy = true;
             }
+            else if (e.Parent is PowerUp)
+            {
+                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
+            }
         }
 
         protected override void Start()
@@ -58,6 +62,10 @@ namespace MarIO.Assets.Scripts
 
                 tmp.GetContent();
             }
+            else if (e.Parent is PowerUp)
+            {
+                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
+            }
         }
 
         protected override void Start()
@@ -84,6 +92,10 @@ namespace MarIO.Assets.Scripts
                 Mario.CurrentState--;
                 //Mario?.Destroy();
             }
+            else if (e.Parent is PowerUp)
+            {
+                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
+            }
         }
 
         protected override void Start()
@@ -109,6 +121,10 @@ namespace MarIO.Assets.Scripts
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
                 Mario.CurrentState--;
                 //Mario?.Destroy();
+            }
+            else if (e.Parent is PowerUp)
+            {
+                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
             }
         }
 

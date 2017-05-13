@@ -9,10 +9,6 @@ namespace MarIO.Assets.Scripts
 {
     public class CharacterController : Script
     {
-        private static Sound PIPE_ENTER_FX = new Sound(Shared.Assets.Sounds.PIPE_ENTER_FX);
-        private static Sound JUMP_FX = new Sound(Shared.Assets.Sounds.MARIO_JUMP_FX);
-        private static Sound STOMP_FX = new Sound(Shared.Assets.Sounds.STOMP_FX);
-
         private Animator PlayerAnimator;
         private Mario Player;
         //private SoundSource SoundOutput;
@@ -20,12 +16,12 @@ namespace MarIO.Assets.Scripts
         private float horiSpeed = 0;
         private float vertSpeed = 0;
 
-        private float MovementSpeed = 80f;
-        private float FloatSpeed = 300f;
+        private const float MovementSpeed = 80f;
+        private const float FloatSpeed = 300f;
 
-        private float Acceleration = 3.5f;
+        private const float Acceleration = 3.5f;
 
-        private float DeathAnimSpeed = 80;
+        private const float DeathAnimSpeed = 120f;
 
         private bool CanJump = true;
         private bool IsFalling = false;
@@ -199,6 +195,7 @@ namespace MarIO.Assets.Scripts
                 if (!ChangingState)
                 {
                     PlayerAnimator.Play(POWERUP);
+                    Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_1_UP_SOUND);
                     /*float YtoAdd = Player.CurrentState > Mario.State.Small ? -16 : 16;
                     Player.Transform.Position += new Vector3(0, YtoAdd, 0);*/
                     ChangingState = true;
@@ -233,7 +230,7 @@ namespace MarIO.Assets.Scripts
 
             else if (Player.KilledEnemy)
             {
-                Shared.Mechanics.FXSoundSource.PlaySound(STOMP_FX);
+                Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_STOMP_SOUND);
                 Player.KilledEnemy = false;
                 EnemyKilledAnim = true;
                 Jumped = true;
@@ -245,7 +242,7 @@ namespace MarIO.Assets.Scripts
             {
                 if (FirstTimePipeEnter)
                 {
-                    Shared.Mechanics.FXSoundSource.PlaySound(PIPE_ENTER_FX);
+                    Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_PIPE_ENTER_SOUND);
                     Player.Collider.Enabled = false;
                     PipeEnterStartPosition = Player.PipeEnteredInDirection == Direction.Down ? Player.Transform.Position.Y : Player.Transform.Position.X;
                     horiSpeed = 0;
@@ -306,6 +303,8 @@ namespace MarIO.Assets.Scripts
                 vertSpeed = -FloatSpeed;
 
                 FirstTimeDeadAnimPlay = false;
+
+                Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_MARIO_DIE_SOUND);
             }
             else
             {
@@ -379,7 +378,7 @@ namespace MarIO.Assets.Scripts
                     {
                         if (vertSpeed == 0 && !Jumped)
                         {
-                            Shared.Mechanics.FXSoundSource.PlaySound(JUMP_FX);
+                            Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_MARIO_JUMP_SOUND);
                             vertSpeed = -FloatSpeed * 1.5f;
                             Jumped = true;
                         }

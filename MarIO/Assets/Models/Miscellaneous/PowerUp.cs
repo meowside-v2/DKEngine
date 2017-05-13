@@ -13,6 +13,8 @@ namespace MarIO.Assets.Models.Miscellaneous
 {
     public class PowerUp : GameObject
     {
+        public Mario PlayerReference;
+
         public enum PowerUpType
         {
             Mushroom,
@@ -48,7 +50,7 @@ namespace MarIO.Assets.Models.Miscellaneous
                         FloatingText.Transform.Position = this.Transform.Position;
                         FloatingText.Transform.Dimensions = new Vector3(20, 6, 0);
                         FloatingText.AddAsFloatingText();
-                        Shared.Mechanics.MarioCurrentState = Mario.State.Super;
+                        PlayerReference.CurrentState = Mario.State.Super;
 
                         this.Destroy();
                     };
@@ -71,7 +73,7 @@ namespace MarIO.Assets.Models.Miscellaneous
                         FloatingText.Transform.Dimensions = new Vector3(20, 6, 0);
                         FloatingText.AddAsFloatingText();
 
-                        Shared.Mechanics.MarioCurrentState = Mario.State.Fire;
+                        PlayerReference.CurrentState = Mario.State.Fire;
 
                         this.Destroy();
                     }; 
@@ -97,7 +99,7 @@ namespace MarIO.Assets.Models.Miscellaneous
                         FloatingText.Transform.Dimensions = new Vector3(20, 6, 0);
                         FloatingText.AddAsFloatingText();
 
-                        Shared.Mechanics.MarioCurrentState = Mario.State.Invincible;
+                        PlayerReference.CurrentState = Mario.State.Invincible;
                         Shared.Mechanics.Lives++;
 
                         this.Destroy();

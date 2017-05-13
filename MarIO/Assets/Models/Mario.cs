@@ -67,6 +67,7 @@ namespace MarIO.Assets.Models
                         BottomTrigger.Collider.Area = new RectangleF(0, 0, 14, 2);
 
                         break;
+
                     case State.Super:
                     case State.Fire:
                     case State.Invincible:
@@ -90,6 +91,7 @@ namespace MarIO.Assets.Models
                         BottomTrigger.Collider.Area = new RectangleF(0, 0, 16, 2);
 
                         break;
+
                     default:
                         break;
                 }
@@ -102,6 +104,7 @@ namespace MarIO.Assets.Models
 #endif
             }
         }
+
         public Movement CurrentMovement { get; set; }
         public Direction PipeEnteredInDirection { get { return EnteredPipe.PipeEnterDirection; } }
         public Block EnteredPipe { get; set; }
@@ -109,11 +112,15 @@ namespace MarIO.Assets.Models
         public WorldChangeManagerScript WorldManager { get; set; }
 
         public Mario()
-        { }
+        {
+            InitTriggers();
+        }
 
         public Mario(GameObject Parent)
             : base(Parent)
-        { }
+        {
+            InitTriggers();
+        }
 
         public enum State
         {
@@ -133,28 +140,28 @@ namespace MarIO.Assets.Models
         protected override void Initialize()
         {
             this.Name = "Player";
-            
-            this.InitNewComponent<Animator>();
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_LEFT, Shared.Assets.Animations.MARIO_IDLE_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_IDLE_RIGHT, Shared.Assets.Animations.MARIO_IDLE_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_LEFT, Shared.Assets.Animations.MARIO_JUMP_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_JUMP_RIGHT, Shared.Assets.Animations.MARIO_JUMP_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_LEFT, Shared.Assets.Animations.MARIO_MOVE_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_RIGHT, Shared.Assets.Animations.MARIO_MOVE_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_DEAD, Shared.Assets.Animations.MARIO_DEAD_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_CROUCHING_LEFT, Shared.Assets.Animations.MARIO_CROUCHING_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_CROUCHING_RIGHT, Shared.Assets.Animations.MARIO_CROUCHING_RIGHT_MAT);
 
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_IDLE_LEFT, Shared.Assets.Animations.MARIO_SUPER_IDLE_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_IDLE_RIGHT, Shared.Assets.Animations.MARIO_SUPER_IDLE_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_JUMP_LEFT, Shared.Assets.Animations.MARIO_SUPER_JUMP_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_JUMP_RIGHT, Shared.Assets.Animations.MARIO_SUPER_JUMP_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_MOVE_LEFT, Shared.Assets.Animations.MARIO_SUPER_MOVE_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_MOVE_RIGHT, Shared.Assets.Animations.MARIO_SUPER_MOVE_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_POWERUP_LEFT, Shared.Assets.Animations.MARIO_SUPER_POWERUP_LEFT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_POWERUP_RIGHT, Shared.Assets.Animations.MARIO_SUPER_POWERUP_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_CROUCHING_RIGHT, Shared.Assets.Animations.MARIO_SUPER_CROUCHING_RIGHT_MAT);
-            this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_SUPER_CROUCHING_LEFT, Shared.Assets.Animations.MARIO_SUPER_CROUCHING_LEFT_MAT);
+            this.InitNewComponent<Animator>();
+            this.Animator.AddAnimation(MARIO_IDLE_LEFT, MARIO_IDLE_LEFT_MAT);
+            this.Animator.AddAnimation(MARIO_IDLE_RIGHT, MARIO_IDLE_RIGHT_MAT);
+            this.Animator.AddAnimation(MARIO_JUMP_LEFT, MARIO_JUMP_LEFT_MAT);
+            this.Animator.AddAnimation(MARIO_JUMP_RIGHT, MARIO_JUMP_RIGHT_MAT);
+            this.Animator.AddAnimation(MARIO_MOVE_LEFT, MARIO_MOVE_LEFT_MAT);
+            this.Animator.AddAnimation(MARIO_MOVE_RIGHT, MARIO_MOVE_RIGHT_MAT);
+            this.Animator.AddAnimation(MARIO_DEAD, MARIO_DEAD_MAT);
+            this.Animator.AddAnimation(MARIO_CROUCHING_LEFT, MARIO_CROUCHING_LEFT_MAT);
+            this.Animator.AddAnimation(MARIO_CROUCHING_RIGHT, MARIO_CROUCHING_RIGHT_MAT);
+
+            this.Animator.AddAnimation(MARIO_SUPER_IDLE_LEFT, MARIO_SUPER_IDLE_LEFT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_IDLE_RIGHT, MARIO_SUPER_IDLE_RIGHT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_JUMP_LEFT, MARIO_SUPER_JUMP_LEFT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_JUMP_RIGHT, MARIO_SUPER_JUMP_RIGHT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_MOVE_LEFT, MARIO_SUPER_MOVE_LEFT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_MOVE_RIGHT, MARIO_SUPER_MOVE_RIGHT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_POWERUP_LEFT, MARIO_SUPER_POWERUP_LEFT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_POWERUP_RIGHT, MARIO_SUPER_POWERUP_RIGHT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_CROUCHING_RIGHT, MARIO_SUPER_CROUCHING_RIGHT_MAT);
+            this.Animator.AddAnimation(MARIO_SUPER_CROUCHING_LEFT, MARIO_SUPER_CROUCHING_LEFT_MAT);
 
             /*this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_FIRE_IDLE_LEFT, Shared.Assets.Animations.MARIO_FIRE_IDLE_LEFT_MAT);
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_FIRE_IDLE_RIGHT, Shared.Assets.Animations.MARIO_FIRE_IDLE_RIGHT_MAT);
@@ -174,7 +181,7 @@ namespace MarIO.Assets.Models
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_LEFT, Shared.Assets.Animations.MARIO_MOVE_LEFT_MAT);
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_MOVE_RIGHT, Shared.Assets.Animations.MARIO_MOVE_RIGHT_MAT);
             this.Animator.AddAnimation(Shared.Assets.Animations.MARIO_DEAD, Shared.Assets.Animations.MARIO_DEAD_MAT);*/
-            
+
             if (InitCharacterController)
                 this.InitNewScript<CharacterController>();
 
@@ -186,28 +193,10 @@ namespace MarIO.Assets.Models
                 this.InitNewComponent<Collider>();
             }
 
-            BottomTrigger = new Trigger(this)
-            {
-                Name = "Bottom_Trigger"
-            };
+            
             BottomTrigger.InitNewScript<BottomMarioChecker>();
-
-            LeftTrigger = new Trigger(this)
-            {
-                Name = "Left_Trigger"
-            };
             LeftTrigger.InitNewScript<LeftMarioChecker>();
-
-            RightTrigger = new Trigger(this)
-            {
-                Name = "Right_Trigger"
-            };
             RightTrigger.InitNewScript<RightMarioChecker>();
-
-            TopTrigger = new Trigger(this)
-            {
-                Name = "Top_Trigger"
-            };
             TopTrigger.InitNewScript<TopMarioChecker>();
 
             CurrentState = Shared.Mechanics.MarioCurrentState;
@@ -215,6 +204,25 @@ namespace MarIO.Assets.Models
             WorldManager = Behavior.Find<WorldChangeManagerScript>("worldManager");
         }
 
+        private void InitTriggers()
+        {
+            BottomTrigger = new Trigger(this)
+            {
+                Name = "Bottom_Trigger"
+            };
+            LeftTrigger = new Trigger(this)
+            {
+                Name = "Left_Trigger"
+            };
+            TopTrigger = new Trigger(this)
+            {
+                Name = "Top_Trigger"
+            };
+            RightTrigger = new Trigger(this)
+            {
+                Name = "Right_Trigger"
+            };
+        }
         public void PipeEnter(Block Pipe)
         {
             ChangeState = true;

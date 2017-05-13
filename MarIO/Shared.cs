@@ -44,7 +44,7 @@ namespace MarIO
                 get { return LevelTime - TimeCounter.Elapsed; }
             }
 
-            public static Mario.State MarioCurrentState = Mario.State.Super;
+            public static Mario.State MarioCurrentState = Mario.State.Small;
 
             public const uint OverworldBackground = 0xFF20CCCC;
             public const uint WorldChangeBackground = 0x00000000;
@@ -83,6 +83,15 @@ namespace MarIO
                 public const string MARIO_DIE_FX = @".\Assets\Sounds\smb_mariodie.mp3";
                 public const string POWER_UP_FX = @".\Assets\Sounds\smb_powerup.mp3";
                 public const string STOMP_FX = @".\Assets\Sounds\smb_stomp.mp3";
+
+                public static readonly Sound OVERWORLD_THEME_SOUND = new Sound(OVERWORLD_THEME);
+                public static readonly Sound FX_MARIO_JUMP_SOUND = new Sound(MARIO_JUMP_FX);
+                public static readonly Sound FX_PIPE_ENTER_SOUND = new Sound(PIPE_ENTER_FX);
+                public static readonly Sound FX_1_UP_SOUND = new Sound(UP_1_FX);
+                public static readonly Sound FX_BREAK_BLOCK_SOUND = new Sound(BREAK_BLOCK_FX);
+                public static readonly Sound FX_MARIO_DIE_SOUND = new Sound(MARIO_DIE_FX);
+                public static readonly Sound FX_POWER_UP_SOUND = new Sound(POWER_UP_FX);
+                public static readonly Sound FX_STOMP_SOUND = new Sound(STOMP_FX);
             }
 
             public static class Animations

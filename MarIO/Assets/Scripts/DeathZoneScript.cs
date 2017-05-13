@@ -1,6 +1,7 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
+using System.Diagnostics;
 
 namespace MarIO.Assets.Scripts
 {
@@ -11,6 +12,8 @@ namespace MarIO.Assets.Scripts
 
         protected override void OnColliderEnter(Collider e)
         {
+            Debug.WriteLine($"{e.Parent}");
+
             if (e.Parent is AnimatedObject)
             {
                 ((AnimatedObject)e.Parent).IsDestroyed = true;

@@ -7,21 +7,16 @@ namespace MarIO.Assets.Models
     {
         public Trigger()
             : base()
-        {
-            this.InitNewComponent<Collider>();
-            this.Collider.IsTrigger = true;
-        }
+        { }
 
         public Trigger(GameObject Parent)
             : base(Parent)
-        {
-            this.InitNewComponent<Collider>();
-            this.Collider.IsTrigger = true;
-        }
+        { }
 
         protected override void Initialize()
         {
-            
+            this.InitNewComponent<Collider>();
+            this.Collider.IsTrigger = true;
         }
     }
 }

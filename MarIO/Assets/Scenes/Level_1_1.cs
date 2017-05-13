@@ -14,14 +14,6 @@ namespace MarIO.Assets.Scenes
 
         public override void Load()
         {
-            new GUIUpdater();
-            new BackgroundWorker();
-
-            Trigger DeathZone = new Trigger();
-            DeathZone.InitNewScript<DeathZoneScript>();
-            DeathZone.Transform.Dimensions = new Vector3(3200, 10, 0);
-            DeathZone.Transform.Position = new Vector3(0, 50, 0);
-
             Group _1 = new Group()
             {
                 Name = "ground1",
@@ -61,6 +53,11 @@ namespace MarIO.Assets.Scenes
             new SoundOutput();
             new GUIUpdater();
             new BackgroundWorker();
+
+            Trigger DeathZone = new Trigger();
+            DeathZone.InitNewScript<DeathZoneScript>();
+            DeathZone.Transform.Dimensions = new Vector3(3200, 10, 0);
+            DeathZone.Transform.Position = new Vector3(0, 50, 0);
         }
     }
 }

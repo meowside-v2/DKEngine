@@ -35,15 +35,14 @@ namespace MarIO.Assets.Scripts
         }
 
         protected override void OnColliderEnter(Collider e)
-        {
-            if (e.Parent is Mario)
-            {
-                Target.OnPickedUp?.Invoke();
-            }
-        }
+        { }
 
         protected override void Start()
-        { }
+        {
+            CurrentSpeed = -Speed;
+
+            Target.PlayerReference = GameObject.Find<Mario>("Player");
+        }
 
         protected override void Update()
         {
@@ -77,6 +76,7 @@ namespace MarIO.Assets.Scripts
                         MushroomMovement();
                         break;
                     case PowerUp.PowerUpType.Flower:
+                        CurrentSpeed = 0;
                         break;
                     case PowerUp.PowerUpType.Star:
                         StarMovement();
