@@ -38,15 +38,16 @@ namespace MarIO.Assets.Scripts
         private float PipeEnterStartPosition;
         private float PipeEnterSpeed = 50f;
         
-        private Mario.State LastState = Shared.Mechanics.MarioCurrentState;
+        private Mario.State LastState;
         private bool ChangingState = false;
 
         private string _idle
         {
             get
             {
-                switch (Shared.Mechanics.MarioCurrentState)
+                switch (Player.CurrentState)
                 {
+                    case Mario.State.Dead:
                     case Mario.State.Small:
                         return IsFacingLeft ? Shared.Assets.Animations.MARIO_IDLE_LEFT : Shared.Assets.Animations.MARIO_IDLE_RIGHT;
 
@@ -68,7 +69,7 @@ namespace MarIO.Assets.Scripts
         {
             get
             {
-                switch (Shared.Mechanics.MarioCurrentState)
+                switch (Player.CurrentState)
                 {
                     case Mario.State.Small:
                         return IsFacingLeft ? Shared.Assets.Animations.MARIO_CROUCHING_LEFT : Shared.Assets.Animations.MARIO_CROUCHING_RIGHT;
@@ -107,7 +108,7 @@ namespace MarIO.Assets.Scripts
         {
             get
             {
-                switch (Shared.Mechanics.MarioCurrentState)
+                switch (Player.CurrentState)
                 {
                     case Mario.State.Small:
                         return horiSpeed >= 0 ? Shared.Assets.Animations.MARIO_MOVE_RIGHT : Shared.Assets.Animations.MARIO_MOVE_LEFT;
@@ -130,7 +131,7 @@ namespace MarIO.Assets.Scripts
         {
             get
             {
-                switch (Shared.Mechanics.MarioCurrentState)
+                switch (Player.CurrentState)
                 {
                     case Mario.State.Small:
                         return horiSpeed != 0 ? (horiSpeed > 0 ? Shared.Assets.Animations.MARIO_JUMP_RIGHT : Shared.Assets.Animations.MARIO_JUMP_LEFT)
@@ -162,9 +163,9 @@ namespace MarIO.Assets.Scripts
                     case Mario.State.Small:
                         return _superPowerUp;
                     case Mario.State.Super:
-                        return LastState < Shared.Mechanics.MarioCurrentState ? _firePowerUp : _superPowerUp;
+                        return LastState < Player.CurrentState ? _firePowerUp : _superPowerUp;
                     case Mario.State.Fire:
-                        return LastState < Shared.Mechanics.MarioCurrentState ? "" : _firePowerUp;
+                        return LastState < Player.CurrentState ? "" : _firePowerUp;
                     default:
                         throw new Exception("JAK");
                 }
@@ -186,18 +187,20 @@ namespace MarIO.Assets.Scripts
             PlayerAnimator = Component.Find<Animator>("Player_Animator");
             //SoundOutput = Component.Find<SoundSource>("Player_SoundSource");
 
-            Player.Animator.Play("idle");
+            LastState = Player.CurrentState;
+
+            Player.Animator.Play(Shared.Assets.Animations.MARIO_IDLE_RIGHT);
         }
 
         protected override void Update()
         {
-            if(LastState != Shared.Mechanics.MarioCurrentState)
+            if(LastState != Player.CurrentState && Player.CurrentState != Mario.State.Dead)
             {
                 if (!ChangingState)
                 {
                     PlayerAnimator.Play(POWERUP);
-                    float YtoAdd = Shared.Mechanics.MarioCurrentState > Mario.State.Small ? 16 : -16;
-                    Player.Transform.Position += new Vector3(0, YtoAdd, 0);
+                    /*float YtoAdd = Player.CurrentState > Mario.State.Small ? -16 : 16;
+                    Player.Transform.Position += new Vector3(0, YtoAdd, 0);*/
                     ChangingState = true;
 
                     Player.LeftTrigger.Collider.Enabled = false;
@@ -210,9 +213,9 @@ namespace MarIO.Assets.Scripts
                     return;
                 }
 
-                if(PlayerAnimator.NumberOfPlays > 5)
+                if (PlayerAnimator.NumberOfPlays > 5)
                 {
-                    LastState = Shared.Mechanics.MarioCurrentState;
+                    LastState = Player.CurrentState;
 
                     Player.LeftTrigger.Collider.Enabled = true;
                     Player.RightTrigger.Collider.Enabled = true;
@@ -220,10 +223,15 @@ namespace MarIO.Assets.Scripts
                     Player.BottomTrigger.Collider.Enabled = true;
 
                     Player.Collider.Enabled = true;
+
+                    ChangingState = false;
                 }
+
+                else
+                    return;
             }
 
-            if (Player.KilledEnemy)
+            else if (Player.KilledEnemy)
             {
                 Shared.Mechanics.FXSoundSource.PlaySound(STOMP_FX);
                 Player.KilledEnemy = false;
@@ -233,7 +241,7 @@ namespace MarIO.Assets.Scripts
                 vertSpeed = -FloatSpeed;
             }
 
-            if (Player.ChangeState)
+            else if (Player.ChangeState)
             {
                 if (FirstTimePipeEnter)
                 {
@@ -268,7 +276,7 @@ namespace MarIO.Assets.Scripts
                     }
                 }
             }
-            else if (!Player.IsDestroyed)
+            else if (Player.CurrentState > Mario.State.Dead)
             {
                 Movement();
             }
@@ -332,7 +340,15 @@ namespace MarIO.Assets.Scripts
 
             if (Engine.Input.IsKeyDown(ConsoleKey.S))
             {
-                Down();
+                if (vertSpeed == 0)
+                {
+                    horiSpeed = 0;
+                    Player.CurrentMovement = Mario.Movement.Crouching;
+                }
+            }
+            else
+            {
+                Player.CurrentMovement = Mario.Movement.Standing;
             }
 
             if (!Player.Collider.Collision(Direction.Down))
@@ -485,18 +501,9 @@ namespace MarIO.Assets.Scripts
             }
         }
 
-        private void Down()
-        {
-            if (vertSpeed == 0)
-            {
-                horiSpeed = 0;
-                Player.CurrentMovement = Mario.Movement.Crouching;
-            }
-        }
-
         private void AnimationControl()
         {
-            if (!Player.IsDestroyed)
+            if (Player.CurrentState > Mario.State.Dead)
             {
                 if (Jumped)
                 {

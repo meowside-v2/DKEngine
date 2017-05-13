@@ -1,5 +1,6 @@
 ﻿using DKEngine.Core.Components;
 using MarIO.Assets.Models;
+using MarIO.Assets.Models.Miscellaneous;
 using MarIO.Assets.Scripts;
 
 namespace MarIO.Assets.Scenes
@@ -53,6 +54,9 @@ namespace MarIO.Assets.Scenes
             {
                 BackGround = Shared.Mechanics.OverworldBackground.ToColor()
             };
+
+            PowerUp test = new PowerUp();
+            test.Transform.Position = new Vector3(180, -50, 0);
 
             new SoundOutput();
             new GUIUpdater();

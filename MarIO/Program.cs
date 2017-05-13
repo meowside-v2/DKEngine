@@ -19,7 +19,7 @@ namespace MarIO
 
             //Engine.LoadSceneToMemory<WorldScreen>();
 
-            Engine.LoadScene<Level_1_1>();
+            Engine.LoadScene<Test>();
         }
     }
 }

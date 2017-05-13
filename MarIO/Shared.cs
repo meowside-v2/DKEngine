@@ -51,6 +51,9 @@ namespace MarIO
 
             public const int GOOMBA_POINTS = 100;
             public const int COIN_SCORE = 100;
+            public const int MUSHROOM_SCORE = 200;
+            public const int FLOWER_SCORE = 300;
+            public const int STAR_SCORE = 500;
         }
 
         public static class AnimatedWorldReferences

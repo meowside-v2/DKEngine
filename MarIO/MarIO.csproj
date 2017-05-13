@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\MusicScript.cs" />
     <Compile Include="Assets\Scripts\PipePort.cs" />
     <Compile Include="Assets\Models\SoundOutput.cs" />
+    <Compile Include="Assets\Scripts\PowerUpScript.cs" />
     <Compile Include="Assets\Scripts\SpecialBlocksUpdateScript.cs" />
     <Compile Include="Assets\Scripts\WorldChangeManagerScript.cs" />
     <Compile Include="Assets\Sounds\Sounds.Designer.cs">
@@ -149,7 +150,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\Sprites\PSD\1-UP.psd" />
+    <None Include="Assets\Sprites\PSD\coin2.psd" />
+    <None Include="Assets\Sprites\PSD\Flower.psd" />
     <None Include="Assets\Sprites\PSD\Mario_super.psd" />
+    <None Include="Assets\Sprites\PSD\Mushroom.psd" />
+    <None Include="Assets\Sprites\PSD\particles.psd" />
+    <None Include="Assets\Sprites\PSD\star.psd" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Assets\Sprites\PSD\blocks_project.psd" />
@@ -222,8 +229,17 @@
     <Content Include="Assets\Sprites\Ground\water_02.png" />
     <Content Include="Assets\Sprites\Enemy\mario_jump_right.png" />
     <Content Include="Assets\Sprites\Enemy\mario_move_right.gif" />
+    <Content Include="Assets\Sprites\Miscellaneous\1-UP.png" />
     <Content Include="Assets\Sprites\Miscellaneous\coin.gif" />
+    <Content Include="Assets\Sprites\Miscellaneous\coin2.gif" />
+    <Content Include="Assets\Sprites\Miscellaneous\flower.gif" />
     <Content Include="Assets\Sprites\Miscellaneous\heart.gif" />
+    <Content Include="Assets\Sprites\Miscellaneous\mushroom.png" />
+    <Content Include="Assets\Sprites\Miscellaneous\particles1.png" />
+    <Content Include="Assets\Sprites\Miscellaneous\particles2.png" />
+    <Content Include="Assets\Sprites\Miscellaneous\particles3.png" />
+    <Content Include="Assets\Sprites\Miscellaneous\particles4.png" />
+    <Content Include="Assets\Sprites\Miscellaneous\star.gif" />
     <Content Include="Assets\Sprites\Pipes\pipe_01.png" />
     <Content Include="Assets\Sprites\Pipes\pipe_02.png" />
     <Content Include="Assets\Sprites\Pipes\pipe_03.png" />

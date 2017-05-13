@@ -1,6 +1,7 @@
 ﻿using DKEngine.Core.Components;
 using MarIO.Assets.Models;
 using MarIO.Assets.Scripts;
+using System.Drawing;
 
 namespace MarIO.Assets.Scenes
 {
@@ -98,13 +99,15 @@ namespace MarIO.Assets.Scenes
             };
 
             new GUIUpdater();
+            new SoundOutput();
 
             BackgroundWorker BW = new BackgroundWorker();
 
             Trigger DeathZone = new Trigger();
             DeathZone.InitNewScript<DeathZoneScript>();
             DeathZone.Transform.Dimensions = new Vector3(3200, 10, 0);
-            DeathZone.Transform.Position = new Vector3(0, 50, 0);
+            DeathZone.Transform.Position = new Vector3(0, -10, 0);
+            DeathZone.Model = new Material(Color.Black, DeathZone);
         }
     }
 }

@@ -143,6 +143,16 @@ namespace MarIO.Assets.Sprites {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mario_right {
+            get {
+                object obj = ResourceManager.GetObject("mario_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap super_mario_crouch_left {
             get {
                 object obj = ResourceManager.GetObject("super_mario_crouch_left", resourceCulture);

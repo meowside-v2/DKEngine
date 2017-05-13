@@ -265,7 +265,7 @@ namespace DKEngine.Core.Components
             try
             {
                 if (!this.Equals(obj) && !obj.IsTrigger && obj.Enabled)
-                    return (this.X <= obj.X + obj.Width && this.X + this.Width >= obj.X && this.Y <= obj.Y + obj.Height && this.Y + this.Height >= obj.Y);
+                    return (this.X < obj.X + obj.Width && this.X + this.Width > obj.X && this.Y < obj.Y + obj.Height && this.Y + this.Height > obj.Y);
             }
             catch { }
 

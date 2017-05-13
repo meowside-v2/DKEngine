@@ -4,7 +4,7 @@ namespace MarIO.Assets.Models
 {
     public abstract class AnimatedObject : GameObject
     {
-        public bool IsDestroyed = false;
+        public virtual bool IsDestroyed { get; set; }
         public bool ChangeState = false;
 
         public AnimatedObject()

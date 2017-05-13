@@ -22,10 +22,6 @@ namespace MarIO.Assets.Scripts
                 tmp.IsDestroyed = true;
                 Mario.KilledEnemy = true;
             }
-            else if(e.Parent is PowerUp)
-            {
-                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
-            }
         }
 
         protected override void Start()
@@ -49,7 +45,7 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
-                Mario.IsDestroyed = true;
+                Mario.CurrentState--;
             }
             else if (e.Parent is Block)
             {
@@ -61,10 +57,6 @@ namespace MarIO.Assets.Scripts
                 }
 
                 tmp.GetContent();
-            }
-            else if (e.Parent is PowerUp)
-            {
-                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
             }
         }
 
@@ -89,12 +81,8 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
-                Mario.IsDestroyed = true;
+                Mario.CurrentState--;
                 //Mario?.Destroy();
-            }
-            else if (e.Parent is PowerUp)
-            {
-                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
             }
         }
 
@@ -119,12 +107,8 @@ namespace MarIO.Assets.Scripts
             if (e.Parent is Enemy)
             {
                 Debug.WriteLine(string.Format("Zabilo Tě {0}", e.Parent.TypeName));
-                Mario.IsDestroyed = true;
+                Mario.CurrentState--;
                 //Mario?.Destroy();
-            }
-            else if (e.Parent is PowerUp)
-            {
-                ((PowerUp)e.Parent).OnPickedUp?.Invoke();
             }
         }
 

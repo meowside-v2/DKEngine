@@ -15,10 +15,17 @@ namespace MarIO
 
         public static void AnimateBlockCollision(this Block block)
         {
-            block.State = Block.CollisionState.Up;
+            if(Shared.Mechanics.MarioCurrentState == Mario.State.Small)
+            {
+                block.State = Block.CollisionState.Up;
 
-            Shared.AnimatedWorldReferences.BlocksToUpdate.Add(block);
-            Shared.AnimatedWorldReferences.BlocksStartPositions.Add(block.Transform.Position.Y);
+                Shared.AnimatedWorldReferences.BlocksToUpdate.Add(block);
+                Shared.AnimatedWorldReferences.BlocksStartPositions.Add(block.Transform.Position.Y);
+            }
+            else
+            {
+
+            }
         }
 
         public static void AddAsFloatingCoin(this Coin coin)

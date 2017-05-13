@@ -175,6 +175,9 @@
   <data name="coin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>miscellaneous\coin.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="coin2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\coin2.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="fence" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\fence.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -184,11 +187,29 @@
   <data name="finish_pole" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\finish_pole.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="flower" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\flower.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="heart" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>miscellaneous\heart.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="mountain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\mountain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mushroom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\mushroom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="particles1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\particles1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="particles2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\particles2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="particles3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\particles3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="particles4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\particles4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pipe_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pipes\pipe_01.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -208,6 +229,9 @@
   <data name="sky" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\sky_07.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="star" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\star.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="underground_block_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>underground\underground_block_01.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -225,5 +249,8 @@
   </data>
   <data name="water_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>ground\water_02.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1_UP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>miscellaneous\1-up.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

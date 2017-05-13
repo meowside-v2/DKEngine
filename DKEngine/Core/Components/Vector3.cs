@@ -84,110 +84,62 @@
 
         public Vector3 Add(Vector3 Value)
         {
-            this.X += Value.X;
-            this.Y += Value.Y;
-            this.Z += Value.Z;
-
-            return this;
+            return this + Value;
         }
 
         public Vector3 Add(float X, float Y, float Z)
         {
-            this.X += X;
-            this.Y += Y;
-            this.Z += Z;
-
-            return this;
+            return this + new Vector3(X, Y, Z);
         }
 
         public Vector3 Add(float Value)
         {
-            this.X += Value;
-            this.Y += Value;
-            this.Z += Value;
-
-            return this;
+            return this + Value;
         }
 
         public Vector3 Decrease(Vector3 Value)
         {
-            this.X -= Value.X;
-            this.Y -= Value.Y;
-            this.Z -= Value.Z;
-
-            return this;
+            return this - Value;
         }
 
         public Vector3 Decrease(float X, float Y, float Z)
         {
-            this.X -= X;
-            this.Y -= Y;
-            this.Z -= Z;
-
-            return this;
+            return this - new Vector3(X, Y, Z);
         }
 
         public Vector3 Decrease(float Value)
         {
-            this.X -= Value;
-            this.Y -= Value;
-            this.Z -= Value;
-
-            return this;
+            return this - Value;
         }
 
         public Vector3 Multiply(Vector3 Value)
         {
-            this.X *= Value.X;
-            this.Y *= Value.Y;
-            this.Z *= Value.Z;
-
-            return this;
+            return this * Value;
         }
 
         public Vector3 Multiply(float X, float Y, float Z)
         {
-            this.X *= X;
-            this.Y *= Y;
-            this.Z *= Z;
-
-            return this;
+            return this * new Vector3(X, Y, Z);
         }
 
         public Vector3 Multiply(float Value)
         {
-            this.X *= Value;
-            this.Y *= Value;
-            this.Z *= Value;
-
-            return this;
+            return this * Value;
         }
 
         public Vector3 Divide(Vector3 Value)
         {
-            this.X /= Value.X;
-            this.Y /= Value.Y;
-            this.Z /= Value.Z;
-
-            return this;
+            return this / Value;
         }
 
         public Vector3 Divide(float X, float Y, float Z)
         {
-            this.X /= X;
-            this.Y /= Y;
-            this.Z /= Z;
-
-            return this;
+            return this / new Vector3(X, Y, Z);
         }
 
         public Vector3 Divide(float Value)
         {
-            this.X /= Value;
-            this.Y /= Value;
-            this.Z /= Value;
-
-            return this;
+            return this / Value;
         }
 
         private static Vector3 _zero = new Vector3(0, 0, 0);
