@@ -56,7 +56,7 @@ namespace DKEngine
             /// <summary>
             /// Sets resolution scale in %
             /// </summary>
-            public const int ResolutionScale = 40;
+            public const int ResolutionScale = 50;
 
             /// <summary>
             /// The resolution ratio
@@ -82,7 +82,7 @@ namespace DKEngine
 
             internal static bool AbortRender = false;
 
-            internal const int Limiter = 240;
+            internal const int Limiter = 1000;
         }
 
         /// <summary>
@@ -198,6 +198,8 @@ namespace DKEngine
         internal static Scene CurrentScene { get; set; }
         internal static Scene LoadingScene { get; set; }
 
+        internal static Type LoadingSceneType { get; set; }
+
         internal static List<GameObject> RenderObjects;
 
         private static float deltaT = 0;
@@ -208,8 +210,11 @@ namespace DKEngine
 
         public static string SceneName { get { return Engine.LoadingScene != null ? Engine.LoadingScene.Name : ""; } }
 
-        internal static event EngineHandler UpdateEvent;
+        private static readonly TimeSpan _firstTimeLoadDelay = new TimeSpan(0, 0, 1);
+        private static TimeSpan FirstTimeLoadDelay = new TimeSpan();
+        private static bool FirstTimeLoaded = true;
 
+        internal static event EngineHandler UpdateEvent;
         internal delegate void EngineHandler();
 
         /// <summary>
@@ -280,13 +285,17 @@ namespace DKEngine
         }
 
 
-        /*public static void LoadSceneToMemory<T>() where T : Scene
+        public static void LoadSceneToMemory<T>(object[] argsPreLoad = null, object[] argsPostLoad = null)
+            where T : Scene
         {
             Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
+            Engine.LoadingScene.argsPreLoad = argsPreLoad;
+            Engine.LoadingScene.argsPostLoad = argsPostLoad;
+            Engine.LoadingScene.Set(argsPreLoad);
             Engine.LoadingScene.Init();
 
             Database.AddScene(Engine.LoadingScene);
-        }*/
+        }
 
 
         /// <summary>
@@ -297,7 +306,20 @@ namespace DKEngine
         /// <param name="argsPostLoad">The arguments post load.</param>
         public static void LoadScene<T>(object[] argsPreLoad = null, object[] argsPostLoad = null) where T : Scene
         {
-            Engine.LoadingScene = (T)Activator.CreateInstance(typeof(T));
+            LoadingSceneType = typeof(T);
+            LoadScene(LoadingSceneType, argsPreLoad, argsPostLoad);
+        }
+
+        public static void LoadScene(Type scene, object[] argsPreLoad = null, object[] argsPostLoad = null)
+        {
+            if (!scene.IsSubclassOf(typeof(Scene)))
+                throw new Exception($"Provided type {scene} is not subclass of Scene");
+
+            Engine.LoadingScene = (Scene)Activator.CreateInstance(LoadingSceneType);
+
+            Engine.LoadingScene.argsPreLoad = argsPreLoad;
+            Engine.LoadingScene.argsPostLoad = argsPostLoad;
+
             Engine.LoadingScene.Set(argsPreLoad);
             Engine.LoadingScene.Init();
 
@@ -309,24 +331,30 @@ namespace DKEngine
         /// Reloads the scene.
         /// </summary>
         /// <param name="Name">The name of scene</param>
-        public static void ReloadScene(string Name)
+        public static void ReloadScene(string Name, object[] argsPreLoad = null)
         {
-            ReloadScene(Database.GetScene(Name));
+            Database.RewriteWorld(Name, argsPreLoad);
         }
-
+        
         /// <summary>
         /// Changes the scene.
         /// </summary>
         /// <param name="Name">The name</param>
         /// <param name="Reload">if set to <c>true</c> [reload]</param>
         /// <param name="args">The arguments</param>
-        /*public static void ChangeScene(string Name, bool Reload = false, params object[] args)
+        public static void ChangeScene(string Name, bool Reload = false, object[] argsPreLoad = null, object[] argsPostLoad = null)
         {
             UnregisterScene();
             if (Reload)
-                ReloadScene(Name);
-            RegisterScene(Database.GetScene(Name), args);
-        }*/
+            {
+                ReloadScene(Name, argsPreLoad);
+
+                if(argsPostLoad != null)
+                    Database.GetScene(Name).argsPostLoad = argsPostLoad;
+            }
+                
+            RegisterScene(Database.GetScene(Name), argsPostLoad);
+        }
 
         private static void UnregisterScene()
         {
@@ -358,7 +386,16 @@ namespace DKEngine
         private static void RegisterScene(Scene source, object[] args)
         {
             Engine.LoadingScene = source;
-            source.Set(args);
+
+            if (args != null)
+            {
+                source.argsPostLoad = args;
+                source.Set(args);
+            }
+                
+            else if (source.argsPostLoad != null)
+                source.Set(source.argsPostLoad);
+
 
             foreach (var item in source.AllBehaviors)
             {
@@ -368,14 +405,15 @@ namespace DKEngine
                 }
                 catch { }
             }
-
             
-
+            Engine.BaseCam = Engine.LoadingScene.BaseCamera;
             Engine.CurrentScene = source;
         }
 
-        private static void ReloadScene(Scene source)
+        public static void ReloadCurrentScene()
         {
+            UnregisterScene();
+            LoadScene(LoadingSceneType);
         }
 
         private static void SplashScreen()
@@ -405,48 +443,62 @@ namespace DKEngine
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;
                 DeltaT?.Restart();
 
-                UpdateEvent?.Invoke();
-
-                while (Engine.CurrentScene?.NewlyGeneratedComponents.Count > 0)
+                if (!FirstTimeLoaded)
                 {
-                    Engine.CurrentScene.NewlyGeneratedComponents.Pop().InitInternal();
-                }
+                    UpdateEvent?.Invoke();
 
-                while (Engine.CurrentScene?.NewlyGeneratedBehaviors.Count > 0)
+                    while (Engine.CurrentScene?.NewlyGeneratedComponents.Count > 0)
+                    {
+                        Engine.CurrentScene.NewlyGeneratedComponents.Pop().InitInternal();
+                    }
+
+                    while (Engine.CurrentScene?.NewlyGeneratedBehaviors.Count > 0)
+                    {
+                        Behavior tmp = Engine.CurrentScene.NewlyGeneratedBehaviors.Pop();
+                        UpdateEvent += tmp.UpdateHandle;
+                        tmp.Start();
+                    }
+
+                    while (Engine.CurrentScene?.DestroyObjectAwaitList.Count > 0)
+                    {
+                        GameObject tmp = Engine.CurrentScene.DestroyObjectAwaitList[0];
+                        Engine.CurrentScene.DestroyObjectAwaitList.RemoveAt(0);
+                        tmp.Destroy();
+                    }
+
+                    while (Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)
+                    {
+                        GameObject tmp = Engine.CurrentScene.GameObjectsToAddToRender.Pop();
+                        Engine.RenderObjects.Add(tmp);
+                        Engine.CurrentScene.GameObjectsAddedToRender.Push(tmp);
+                    }
+
+                    List<GameObject> reference = Engine.RenderObjects.GetGameObjectsInView();
+
+                    if (Engine.CurrentScene != null)
+                    {
+                        List<Collider> VisibleTriggers = Engine.CurrentScene?.AllGameObjectsColliders.Where(obj => obj.IsTrigger).ToList();
+                        List<Collider> VisibleColliders = Engine.CurrentScene?.AllGameObjectsColliders.Where(obj => !obj.IsTrigger).ToList();
+                        int ColliderCount = VisibleTriggers.Count;
+                        for (int i = 0; i < ColliderCount; i++)
+                            VisibleTriggers[i]?.TriggerCheck(VisibleColliders);
+                    }
+
+                    Engine.CurrentScene?.BaseCamera?.BufferImage(reference);
+
+                    Buffer.BlockCopy(Render.imageBuffer, 0, Render.ImageOutData, 0, Render.ImageBufferSize);
+                }
+                else
                 {
-                    Behavior tmp = Engine.CurrentScene.NewlyGeneratedBehaviors.Pop();
-                    UpdateEvent += tmp.UpdateHandle;
-                    tmp.Start();
-                }
+                    FirstTimeLoadDelay += new TimeSpan(0, 0, 0, 0, (int)(DeltaTime * 1000));
 
-                while (Engine.CurrentScene?.DestroyObjectAwaitList.Count > 0)
-                {
-                    GameObject tmp = Engine.CurrentScene.DestroyObjectAwaitList[0];
-                    Engine.CurrentScene.DestroyObjectAwaitList.RemoveAt(0);
-                    tmp.Destroy();
+                    if(FirstTimeLoadDelay > _firstTimeLoadDelay)
+                    {
+                        FirstTimeLoaded = false;
+                        FirstTimeLoadDelay = new TimeSpan();
+                    }
                 }
-
-                while (Engine.CurrentScene?.GameObjectsToAddToRender.Count > 0)
-                {
-                    GameObject tmp = Engine.CurrentScene.GameObjectsToAddToRender.Pop();
-                    Engine.RenderObjects.Add(tmp);
-                    Engine.CurrentScene.GameObjectsAddedToRender.Push(tmp);
-                }
-
-                List<GameObject> reference = Engine.RenderObjects.GetGameObjectsInView();
                 
-                if(Engine.CurrentScene != null)
-                {
-                    List<Collider> VisibleTriggers = Engine.CurrentScene?.AllGameObjectsColliders.Where(obj => obj.IsTrigger).ToList();
-                    List<Collider> VisibleColliders = Engine.CurrentScene?.AllGameObjectsColliders.Where(obj => !obj.IsTrigger).ToList();
-                    int ColliderCount = VisibleTriggers.Count;
-                    for (int i = 0; i < ColliderCount; i++)
-                        VisibleTriggers[i]?.TriggerCheck(VisibleColliders);
-                }
-
-                BaseCam?.BufferImage(reference);
-
-                Buffer.BlockCopy(Render.imageBuffer, 0, Render.ImageOutData, 0, Render.ImageBufferSize);
 
                 NumberOfFrames++;
 
@@ -457,9 +509,9 @@ namespace DKEngine
                 {
                     long t = NumberOfFrames * 1000 / time.ElapsedMilliseconds;
                     FpsMeter.Text = t.ToString();
-#if DEBUG
+/*#if DEBUG
                     Debug.WriteLine(t);
-#endif
+#endif*/
                     time.Restart();
                     NumberOfFrames = 0;
                 }

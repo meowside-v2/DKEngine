@@ -2,13 +2,17 @@
 using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
+using MarIO.Assets.Scenes;
 using System;
+using System.Diagnostics;
 using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Scripts
 {
     public class CharacterController : Script
     {
+        public bool Enabled = true;
+
         private Animator PlayerAnimator;
         private Mario Player;
         //private SoundSource SoundOutput;
@@ -16,7 +20,7 @@ namespace MarIO.Assets.Scripts
         private float horiSpeed = 0;
         private float vertSpeed = 0;
 
-        private const float MovementSpeed = 80f;
+        private const float MovementSpeed = 120f;
         private const float FloatSpeed = 300f;
 
         private const float Acceleration = 3.5f;
@@ -33,7 +37,10 @@ namespace MarIO.Assets.Scripts
         private bool FirstTimePipeEnter = true;
         private float PipeEnterStartPosition;
         private float PipeEnterSpeed = 50f;
-        
+
+        private readonly TimeSpan WorldReload = new TimeSpan(0, 0, 3);
+        private TimeSpan WorldReloadNow = new TimeSpan();
+
         private Mario.State LastState;
         private bool ChangingState = false;
 
@@ -171,6 +178,7 @@ namespace MarIO.Assets.Scripts
         public CharacterController(GameObject Parent)
             : base(Parent)
         {
+            this.Name = nameof(CharacterController);
             this.Parent.InitNewComponent<Collider>();
         }
 
@@ -190,14 +198,19 @@ namespace MarIO.Assets.Scripts
 
         protected override void Update()
         {
+            if (!Enabled)
+                return;
+
             if(LastState != Player.CurrentState && Player.CurrentState != Mario.State.Dead)
             {
                 if (!ChangingState)
                 {
                     PlayerAnimator.Play(POWERUP);
-                    Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_1_UP_SOUND);
-                    /*float YtoAdd = Player.CurrentState > Mario.State.Small ? -16 : 16;
-                    Player.Transform.Position += new Vector3(0, YtoAdd, 0);*/
+                    Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_POWER_UP_SOUND);
+                    bool FromSmalltoLarge = Player.CurrentState > Mario.State.Small && LastState == Mario.State.Small;
+                    bool FromLargeToSmall = Player.CurrentState == Mario.State.Small && LastState == Mario.State.Super;
+                    float YtoAdd = FromSmalltoLarge ? -16 : (FromLargeToSmall ? 0 : 16);
+                    Player.Transform.Position += new Vector3(0, YtoAdd, 0);
                     ChangingState = true;
 
                     Player.LeftTrigger.Collider.Enabled = false;
@@ -228,6 +241,11 @@ namespace MarIO.Assets.Scripts
                     return;
             }
 
+            else if(Player.CurrentState == Mario.State.Dead)
+            {
+                DeadAnimation();
+            }
+
             else if (Player.KilledEnemy)
             {
                 Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_STOMP_SOUND);
@@ -242,6 +260,7 @@ namespace MarIO.Assets.Scripts
             {
                 if (FirstTimePipeEnter)
                 {
+                    Shared.Mechanics.FXSoundSource.StopSound(Shared.Assets.Sounds.OVERWORLD_THEME_SOUND);
                     Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_PIPE_ENTER_SOUND);
                     Player.Collider.Enabled = false;
                     PipeEnterStartPosition = Player.PipeEnteredInDirection == Direction.Down ? Player.Transform.Position.Y : Player.Transform.Position.X;
@@ -277,14 +296,9 @@ namespace MarIO.Assets.Scripts
             {
                 Movement();
             }
-            else
-            {
-                DeadAnimation();
-            }
-
+            
             Player.Transform.Position = Player.Transform.Position.Add(horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
-
-            //CameraControl();
+            
             AnimationControl();
         }
 
@@ -304,11 +318,26 @@ namespace MarIO.Assets.Scripts
 
                 FirstTimeDeadAnimPlay = false;
 
+                Shared.Mechanics.FXSoundSource.StopSound(Shared.Assets.Sounds.OVERWORLD_THEME_SOUND);
                 Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_MARIO_DIE_SOUND);
             }
             else
             {
                 vertSpeed += Engine.DeltaTime * DeathAnimSpeed * Acceleration;
+
+                WorldReloadNow += new TimeSpan(0, 0, 0, 0, (int)(Engine.DeltaTime * 1000));
+
+                if(WorldReloadNow > WorldReload)
+                {
+                    Shared.Mechanics.Lives--;
+
+                    if (Shared.Mechanics.Lives == 0)
+                        Engine.ChangeScene(nameof(GameOver), true);
+
+                    else
+                        Engine.ChangeScene(nameof(WorldScreen), true);
+
+                }
             }
         }
 
@@ -492,6 +521,9 @@ namespace MarIO.Assets.Scripts
                 if (vertSpeed < FloatSpeed)
                 {
                     vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed;
+
+                    if (vertSpeed > FloatSpeed)
+                        vertSpeed = FloatSpeed;
                 }
                 else
                 {

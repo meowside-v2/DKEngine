@@ -71,7 +71,7 @@ namespace MarIO.Assets.Models
                     case State.Super:
                     case State.Fire:
                     case State.Invincible:
-                        this.Collider.Area = new RectangleF(2, 0, 14, 32);
+                        this.Collider.Area = new RectangleF(0, 0, 16, 32);
 
                         TopTrigger.Transform.Position = tmp.Add(0.5f, -1, 0); //new Vector3(tmp.X + 0.5f, tmp.Y - 1, tmp.Z + 0);
                         TopTrigger.Transform.Dimensions = new Vector3(15, 1, 0);

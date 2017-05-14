@@ -20,11 +20,11 @@ namespace MarIO.Assets.Scripts
         float CreatedStartY;
         const float CreationAnimationSpeed = 20f;
 
-        private const int Speed = 20;
-        private const int FloatSpeed = 60;
-        private const int Acceleration = 20;
+        private const float Speed = 80f;
+        private const float FloatSpeed = 250f;
+        private const float Acceleration = 3.5f;
 
-        private int CurrentSpeed = 0;
+        private float CurrentSpeed = 0;
         private float vertSpeed = 0;
         private bool IsFalling = false;
         private bool Jumped = false;
@@ -39,7 +39,7 @@ namespace MarIO.Assets.Scripts
 
         protected override void Start()
         {
-            CurrentSpeed = -Speed;
+            CurrentSpeed = Speed;
 
             Target.PlayerReference = GameObject.Find<Mario>("Player");
         }
@@ -48,6 +48,7 @@ namespace MarIO.Assets.Scripts
         {
             if (CreatedForFirstTime)
             {
+                Target.Collider.Enabled = false;
                 CreatedStartY = Target.Transform.Position.Y;
                 CreatedForFirstTime = false;
                 return;
@@ -55,13 +56,14 @@ namespace MarIO.Assets.Scripts
 
             else if (CreatedAnimation)
             {
-                if(CreatedStartY < Target.Transform.Position.Y)
+                if (CreatedStartY < Target.Transform.Position.Y + 16)
                 {
-                    Target.Transform.Position += new Vector3(0, Engine.DeltaTime * CreationAnimationSpeed, 0);
+                    Target.Transform.Position -= new Vector3(0, Engine.DeltaTime * CreationAnimationSpeed, 0);
                 }
                 else
                 {
-                    Target.Transform.Position = new Vector3(Target.Transform.Position.X, CreatedStartY + 16, Target.Transform.Position.Z);
+                    Target.Transform.Position = new Vector3(Target.Transform.Position.X, CreatedStartY - 16, Target.Transform.Position.Z);
+                    Target.Collider.Enabled = true;
                     CreatedAnimation = false;
                 }
 
@@ -111,7 +113,7 @@ namespace MarIO.Assets.Scripts
                 {
                     if (vertSpeed < FloatSpeed)
                     {
-                        vertSpeed += Engine.DeltaTime * Acceleration;
+                        vertSpeed += Engine.DeltaTime * Acceleration * FloatSpeed;
                     }
                     else
                     {

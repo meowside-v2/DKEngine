@@ -35,7 +35,7 @@ namespace DKEngine.Core.Components
             : base(null)
         {
             this.Position = new Vector3(0, 0, 0);
-            Engine.BaseCam = this;
+            Engine.LoadingScene.BaseCamera = this;
 
             this.Name = string.Format("{0}", nameof(Camera));
         }
@@ -43,7 +43,7 @@ namespace DKEngine.Core.Components
         public Camera(GameObject Parent)
             : base(Parent)
         {
-            Engine.BaseCam = this;
+            Engine.LoadingScene.BaseCamera = this;
 
             this.Name = string.Format("{0}_{1}", Parent.Name, nameof(Camera));
         }
@@ -110,6 +110,13 @@ namespace DKEngine.Core.Components
         {
             if (Engine.BaseCam == this)
                 Engine.BaseCam = null;
+
+            try
+            {
+                Engine.LoadingScene.AllComponents.Remove(this.Name);
+            }
+            catch
+            { }
 
             Parent = null;
         }

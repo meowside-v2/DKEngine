@@ -9,6 +9,11 @@ namespace MarIO.Assets.Models
         public TimeSpan TimeToWait;
         public Action CalledAction;
 
+        public Delayer()
+        {
+            Name = nameof(Delayer);
+        }
+
         protected override void Initialize()
         {
             this.InitNewScript<DelayScript>();

@@ -17,8 +17,8 @@ namespace MarIO.Assets.Scenes
         private TextBlock Lives;
         private Delayer Delayer;
 
-        private static string RemainingLives;
-        private static string WorldName;
+        private static string RemainingLives = "";
+        private static string WorldName = "";
         public static Action WorldChange;
         public static TimeSpan? Delay;
 
@@ -32,7 +32,7 @@ namespace MarIO.Assets.Scenes
 
             TextBlock _World = new TextBlock()
             {
-                FontSize = 2,
+                FontSize = 5,
                 Foreground = Color.White,
                 HAlignment = Text.HorizontalAlignment.Center,
                 IsGUI = true,
@@ -41,12 +41,12 @@ namespace MarIO.Assets.Scenes
                 TextHAlignment = Text.HorizontalAlignment.Center,
                 VAlignment = Text.VerticalAlignment.Center
             };
-            _World.Transform.Position += new Vector3(0, -20, 0);
-            _World.Transform.Dimensions = new Vector3(100, 30, 0);
+            _World.Transform.Position += new Vector3(0, -40, 0);
+            _World.Transform.Dimensions = new Vector3(120, 30, 0);
 
             World = new TextBlock()
             {
-                FontSize = 2,
+                FontSize = 4,
                 Foreground = Color.White,
                 HAlignment = Text.HorizontalAlignment.Center,
                 IsGUI = true,
@@ -59,7 +59,7 @@ namespace MarIO.Assets.Scenes
             World.Transform.Dimensions = new Vector3(100, 30, 0);
 
             GameObject holder = new GameObject();
-            holder.Transform.Position = new Vector3(100, 100, 0);
+            holder.Transform.Position = new Vector3(120, 140, 0);
 
             Heart _HeartIcon = new Heart(holder)
             {
@@ -67,17 +67,17 @@ namespace MarIO.Assets.Scenes
                 Name = "heart_icon"
             };
 
-            _HeartIcon.Transform.Scale = new Vector3(2, 2, 0);
+            _HeartIcon.Transform.Scale = new Vector3(3, 3, 0);
 
             Lives = new TextBlock(holder)
             {
-                FontSize = 2,
+                FontSize = 3.5f,
                 IsGUI = true,
                 TextHAlignment = Text.HorizontalAlignment.Center,
                 Text = RemainingLives
             };
             Lives.Transform.Dimensions = new Vector3(40, 15, 0);
-            Lives.Transform.Position += new Vector3(16, 8, 0);
+            Lives.Transform.Position += new Vector3(32, 8, 0);
 
             Delayer = new Delayer()
             {
@@ -89,6 +89,9 @@ namespace MarIO.Assets.Scenes
             {
                 BackGround = Shared.Mechanics.WorldChangeBackground.ToColor()
             };
+
+            if (Shared.Mechanics.MarioCurrentState == Mario.State.Dead)
+                Shared.Mechanics.MarioCurrentState = Mario.State.Small;
         }
 
         public override void Set(params object[] args)

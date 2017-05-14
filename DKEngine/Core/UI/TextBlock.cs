@@ -14,13 +14,18 @@ namespace DKEngine.Core.UI
     {
         public virtual string Text
         {
-            get { return _textStr; }
+            get
+            {
+                return _textStr ?? throw new System.Exception("WTF PROC KDY KDE A JAK");
+            }
             set
             {
                 if (value != _textStr)
                 {
-                    _textStr = value;
+                    _textStr = value ?? throw new System.Exception("WTF PROC KDY KDE A JAK");
                     _changed = true;
+
+                    
                 }
             }
         }
@@ -173,30 +178,7 @@ namespace DKEngine.Core.UI
 
         public override void Destroy()
         {
-            try
-            {
-                Engine.CurrentScene.NewlyGeneratedComponents.Pop();
-            }
-            catch { }
-
-            //Engine.CurrentScene.AllGameObjects.Remove(this);
-            //Engine.RenderGameObjects.Remove(this);
-
-            int ScriptsCount = this.Scripts.Count;
-            for (int i = 0; i < ScriptsCount; i++)
-                Scripts[0].Destroy();
-
-            int _textCount = _text.Count;
-            for (int i = 0; i < _textCount; i++)
-            {
-                _text[0].Destroy();
-                _text.RemoveAt(0);
-            }
-
-            Animator?.Destroy();
-
-            Model = null;
-            Animator = null;
+            base.Destroy();
         }
     }
 }

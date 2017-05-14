@@ -18,6 +18,7 @@ namespace MarIO
 
             private static byte _coinsCount = 0;
 
+            public static string GameScoreStr { get { return string.Format($"{GameScore:00000000}"); } }
             public static short GameScore { get; set; } = 0;
             public static byte Lives { get; set; } = 3;
 
@@ -37,16 +38,22 @@ namespace MarIO
 
             public readonly static Stopwatch TimeCounter = new Stopwatch();
 
-            private readonly static TimeSpan LevelTime = new TimeSpan(0, 10, 0);
+            private readonly static TimeSpan LevelTime = new TimeSpan(0, 0, 20);
 
             public static TimeSpan TimeLeft
             {
                 get { return LevelTime - TimeCounter.Elapsed; }
             }
 
-            public static Mario.State MarioCurrentState = Mario.State.Small;
+            //public static 
+            public static Type LastWorldType;
+            public static Mario.State MarioCurrentState
+            {
+                get;
+                set;
+            } = Mario.State.Super;
 
-            public const uint OverworldBackground = 0xFF20CCCC;
+            public const uint OverworldBackground = 0xFF30A0DD;
             public const uint WorldChangeBackground = 0x00000000;
 
             public const int GOOMBA_POINTS = 100;
@@ -74,7 +81,7 @@ namespace MarIO
         {
             public static class Sounds
             {
-                public const string OVERWORLD_THEME = @".\Assets\Sounds\Overworld_theme.mp3";
+                public const string OVERWORLD_THEME = @".\Assets\Sounds\Overworld_Theme.mp3";
                 public const string MARIO_JUMP_FX = @".\Assets\Sounds\smb_jump-small.mp3";
                 public const string PIPE_ENTER_FX = @".\Assets\Sounds\smb_pipe.mp3";
                 public const string COIN_GET_FX = @".\Assets\Sounds\smb_coin.mp3";

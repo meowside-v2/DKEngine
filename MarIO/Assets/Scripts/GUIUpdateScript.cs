@@ -2,6 +2,7 @@
 using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
+using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {
@@ -29,7 +30,7 @@ namespace MarIO.Assets.Scripts
 
             this.World.Text = Engine.SceneName;
             this.Time.Text = string.Format("{0:000}", Shared.Mechanics.TimeLeft.TotalSeconds);
-            this.Score.Text = string.Format("{0:00000000}", Shared.Mechanics.GameScore);
+            this.Score.Text = Shared.Mechanics.GameScoreStr;
             this.Coins.Text = string.Format("*{0:00}", Shared.Mechanics.CoinsCount);
             this.Lives.Text = string.Format("*{0:00}", Shared.Mechanics.Lives);
         }
@@ -37,7 +38,7 @@ namespace MarIO.Assets.Scripts
         protected override void Update()
         {
             this.Time.Text = string.Format("{0:000}", Shared.Mechanics.TimeLeft.TotalSeconds);
-            this.Score.Text = string.Format("{0:00000000}", Shared.Mechanics.GameScore);
+            this.Score.Text = Shared.Mechanics.GameScoreStr;
             this.Coins.Text = string.Format("*{0:00}", Shared.Mechanics.CoinsCount);
             this.Lives.Text = string.Format("*{0:00}", Shared.Mechanics.Lives);
         }

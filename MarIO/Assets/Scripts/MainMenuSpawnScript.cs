@@ -13,13 +13,12 @@ namespace MarIO.Assets.Scripts
 
         protected override void OnColliderEnter(Collider e)
         {
-            //GameObject.Instantiate<Goomba>(new Vector3(270, 150, 0), new Vector3(), new Vector3(1, 1, 1));
             e.Parent.Transform.Position = Position;
         }
 
         protected override void Start()
         {
-            Position = new Vector3(270, 150, 0);
+            Position = new Vector3(320, 176, 0);
 
             Goomba e = new Goomba()
             {

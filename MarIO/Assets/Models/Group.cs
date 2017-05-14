@@ -23,14 +23,14 @@ namespace MarIO.Assets.Models
             Material tmp = Database.GetGameObjectMaterial(Block.BlockTypeNames[Type]);
 
             this.Transform.Dimensions = new Vector3(SizeInBlocks.X * tmp.Width, SizeInBlocks.Y * tmp.Height, 0);
-            for (int i = 0; i < Transform.Dimensions.Y; i += tmp.Height)
+            for (int i = 0; i < SizeInBlocks.Y; i++)
             {
-                for (int j = 0; j < Transform.Dimensions.X; j += tmp.Width)
+                for (int j = 0; j < SizeInBlocks.X; j++)
                 {
                     Block newBlock = new Block(this);
 
                     newBlock.Type = Type;
-                    newBlock.Transform.Position += new Vector3(j * this.Transform.Scale.X, i * this.Transform.Scale.Y, 0);
+                    newBlock.Transform.Position += new Vector3(j * tmp.Width * this.Transform.Scale.X, i * tmp.Height * this.Transform.Scale.Y, this.Transform.Position.Z);
                     newBlock.Name = string.Format("{0}_{1}_{2}", Name, j, i);
                 }
             }

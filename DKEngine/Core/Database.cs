@@ -273,22 +273,36 @@ namespace DKEngine.Core
             }
         }
 
-        internal static void RewriteWorld(string Name)
+        internal static void RewriteWorld(string Name, object[] argsPreLoad = null)
         {
             try
             {
-                Scene tmp = (Scene)Activator.CreateInstance(CachedScenes[Name].GetType());
-                Scene ToBeDestroyed = CachedScenes[Name];
+                Engine.LoadingScene = CachedScenes[Name];
 
-                foreach (var pair in ToBeDestroyed.AllComponents)
-                    pair.Value.Destroy();
+                object[] preArgs = argsPreLoad ?? Engine.LoadingScene.argsPreLoad;
+                object[] postArgs = Engine.LoadingScene.argsPostLoad;
 
-                int ComponentCount = ToBeDestroyed.AllBehaviors.Count;
-                for (int i = ComponentCount - 1; i >= 0; i--)
-                    ToBeDestroyed.AllBehaviors[i].Destroy();
+                var list = Engine.LoadingScene.AllComponents.ToList();
+                for(int i = 0; i < list.Count; i++)
+                {
+                    list[0].Value.Destroy();
+                    list.RemoveAt(0);
+                    list = Engine.LoadingScene.AllComponents.ToList();
+                }
+                    
+                for (int i = 0; i < Engine.LoadingScene.AllBehaviors.Count; i++)
+                {
+                    Engine.LoadingScene.AllBehaviors[0].Destroy();
+                }
+                
+                Engine.LoadingScene = (Scene)Activator.CreateInstance(Engine.LoadingScene.GetType());
 
-                tmp.Init();
-                CachedScenes[Name] = tmp;
+                Engine.LoadingScene.argsPreLoad = preArgs;
+                Engine.LoadingScene.argsPostLoad = postArgs;
+
+                Engine.LoadingScene.Set(Engine.LoadingScene.argsPreLoad);
+                Engine.LoadingScene.Init();
+                CachedScenes[Name] = Engine.LoadingScene;
             }
             catch
             { }

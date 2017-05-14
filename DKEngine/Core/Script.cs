@@ -24,6 +24,18 @@ namespace DKEngine.Core
 
         public override void Destroy()
         {
+            try
+            {
+                Engine.LoadingScene.AllComponents.Remove(this.Name);
+            }
+            catch { }
+
+            try
+            {
+                Engine.LoadingScene.AllBehaviors.Remove(this);
+            }
+            catch { }
+
             if (UpdateHandle != null)
                 Engine.UpdateEvent -= UpdateHandle;
 

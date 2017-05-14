@@ -101,6 +101,7 @@
     <Compile Include="Assets\Models\Miscellaneous\PowerUp.cs" />
     <Compile Include="Assets\Models\MusicPlayer.cs" />
     <Compile Include="Assets\Models\Trigger.cs" />
+    <Compile Include="Assets\Scenes\GameOver.cs" />
     <Compile Include="Assets\Scenes\Level_1_1.cs" />
     <Compile Include="Assets\Scenes\MainMenu.cs" />
     <Compile Include="Assets\Scenes\MapBase.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Assets\Scripts\PowerUpScript.cs" />
     <Compile Include="Assets\Scripts\SpecialBlocksUpdateScript.cs" />
     <Compile Include="Assets\Scripts\WorldChangeManagerScript.cs" />
+    <Compile Include="Assets\Scripts\WorldEnd.cs" />
     <Compile Include="Assets\Sounds\Sounds.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

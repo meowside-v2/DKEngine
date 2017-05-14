@@ -15,7 +15,7 @@ namespace MarIO
 
         public static void AnimateBlockCollision(this Block block)
         {
-            if(Shared.Mechanics.MarioCurrentState == Mario.State.Small)
+            if(Shared.Mechanics.MarioCurrentState == Mario.State.Small || block.HadBonus)
             {
                 block.State = Block.CollisionState.Up;
 

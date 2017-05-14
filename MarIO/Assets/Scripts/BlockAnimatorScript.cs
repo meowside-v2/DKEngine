@@ -52,6 +52,8 @@ namespace MarIO.Assets.Scripts
                             Shared.AnimatedWorldReferences.BlocksStartPositions.RemoveAt(i);
                             Shared.AnimatedWorldReferences.BlocksToUpdate.RemoveAt(i);
 
+                            CurrentBlock.CoinGot = false;
+
                             i--;
                         }
                     }

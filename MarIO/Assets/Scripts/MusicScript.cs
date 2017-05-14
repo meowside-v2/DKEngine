@@ -7,8 +7,7 @@ namespace MarIO.Assets.Scripts
 {
     public class MusicScript : Script
     {
-        private Sound Music;
-        //private SoundSource Output;
+        Sound Music;
         private TimeSpan MusicLenght;
 
         private Stopwatch Timer;
@@ -21,12 +20,9 @@ namespace MarIO.Assets.Scripts
 
         protected override void Start()
         {
-            Music = new Sound(Shared.Assets.Sounds.OVERWORLD_THEME);
-            //Output = Component.Find<SoundSource>("MusicPlayer_SoundSource");
-
+            Music = Shared.Assets.Sounds.OVERWORLD_THEME_SOUND;
             MusicLenght = Music.FileReader.TotalTime;
             Shared.Mechanics.FXSoundSource.PlaySound(Music);
-
             Timer = Stopwatch.StartNew();
         }
 

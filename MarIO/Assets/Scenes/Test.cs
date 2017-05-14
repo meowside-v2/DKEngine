@@ -12,6 +12,7 @@ namespace MarIO.Assets.Scenes
         public Test()
         {
             Name = StaticName;
+            Shared.Mechanics.LastWorldType = typeof(Test);
         }
 
         public override void Load()

@@ -11,6 +11,8 @@ namespace DKEngine.Core
     {
         public string Name = "";
 
+        internal Camera BaseCamera;
+
         internal readonly Dictionary<string, Component> AllComponents;
         internal readonly Dictionary<string, int> ComponentCount;
         //internal readonly Dictionary<string, GameObject> AllGameObjects;
@@ -26,6 +28,9 @@ namespace DKEngine.Core
         internal readonly Stack<GameObject> GameObjectsAddedToRender;
 
         internal readonly List<GameObject> DestroyObjectAwaitList;
+
+        internal object[] argsPreLoad;
+        internal object[] argsPostLoad;
 
         public Scene()
         {

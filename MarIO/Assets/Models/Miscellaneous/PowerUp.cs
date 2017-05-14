@@ -31,6 +31,7 @@ namespace MarIO.Assets.Models.Miscellaneous
             
             this.InitNewComponent<Collider>();
             this.Collider.Area = new RectangleF(0, 0, 16, 16);
+            this.Collider.Enabled = false;
 
             this.InitNewScript<PowerUpScript>();
             
@@ -51,6 +52,8 @@ namespace MarIO.Assets.Models.Miscellaneous
                         FloatingText.Transform.Dimensions = new Vector3(20, 6, 0);
                         FloatingText.AddAsFloatingText();
                         PlayerReference.CurrentState = Mario.State.Super;
+
+                        OnPickedUp = null;
 
                         this.Destroy();
                     };
@@ -74,6 +77,8 @@ namespace MarIO.Assets.Models.Miscellaneous
                         FloatingText.AddAsFloatingText();
 
                         PlayerReference.CurrentState = Mario.State.Fire;
+
+                        OnPickedUp = null;
 
                         this.Destroy();
                     }; 
@@ -101,6 +106,8 @@ namespace MarIO.Assets.Models.Miscellaneous
 
                         PlayerReference.CurrentState = Mario.State.Invincible;
                         Shared.Mechanics.Lives++;
+
+                        OnPickedUp = null;
 
                         this.Destroy();
                     };

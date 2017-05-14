@@ -70,7 +70,13 @@ namespace DKEngine.Core.Components
         }
 
         public override void Destroy()
-        { }
+        {
+            try
+            {
+                Engine.LoadingScene.AllComponents.Remove(this.Name);
+            }
+            catch { }
+        }
 
         /// <summary>
         /// Possible directions

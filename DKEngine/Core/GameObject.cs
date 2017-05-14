@@ -287,7 +287,7 @@ namespace DKEngine.Core
 
             try
             {
-                Engine.CurrentScene.AllComponents.Remove(this.Name);
+                Engine.LoadingScene.AllComponents.Remove(this.Name);
             }
             catch { }
 
@@ -299,17 +299,17 @@ namespace DKEngine.Core
 
             try
             {
-                Engine.CurrentScene.Model.Remove(this);
+                Engine.LoadingScene.Model.Remove(this);
             }
             catch { }
 
-            int ScriptsCount = this.Scripts.Count;
-            for (int i = 0; i < ScriptsCount; i++)
-                Scripts[i].Destroy();
+            int ScriptCount = this.Scripts.Count;
+            for (int i = 0; i < ScriptCount; i++)
+                Scripts[0].Destroy();
 
             int ChildCount = this.Child.Count;
             for (int i = 0; i < ChildCount; i++)
-                Child[i].Destroy();
+                Child[0].Destroy();
 
             this.Animator?.Destroy();
             this.Animator = null;

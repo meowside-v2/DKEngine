@@ -64,6 +64,7 @@ namespace MarIO.Assets.Models
             { BlockType.Fence, "fence" },
             { BlockType.Flag, "finish_flag" },
             { BlockType.FlagPole, "flag_pole" },
+            { BlockType.Finish, "" },
             { BlockType.Ground1, "block_1_with_coin" },
             { BlockType.Ground2, "block_02" },
             { BlockType.Ground3, "block_03" },
@@ -112,10 +113,36 @@ namespace MarIO.Assets.Models
         }
 
         public Action SpecialAction { get; set; }
-        public byte CoinCount { get; set; }
         public Direction PipeEnterDirection { get; set; }
-        public bool PowerUp { get; set; }
+        public bool CoinGot { get; set; }
+        public bool PowerUp
+        {
+            get { return _powerUp; }
+            set
+            {
+                _powerUp = value;
+                if (value)
+                    _hadBonus = true;
+            }
+        }
+        public byte CoinCount
+        {
+            get { return _coinCount; }
+            set
+            {
+                _coinCount = value;
+                if (value > 0)
+                    _hadBonus = true;
+            }
+        }
+        public bool HadBonus
+        {
+            get { return _hadBonus; }
+        }
 
+        private bool _powerUp = false;
+        private byte _coinCount = 0;
+        private bool _hadBonus = false;
         private bool _specialAction = false;
         private SoundOutput FX_Player;
 
@@ -135,55 +162,6 @@ namespace MarIO.Assets.Models
 
             switch (Type)
             {
-                case BlockType.Ground1:
-                    CoinCount = 1;
-                    break;
-
-                case BlockType.NoCoin:
-                    break;
-
-                case BlockType.Ground2:
-                    break;
-
-                case BlockType.Ground3:
-                    break;
-
-                case BlockType.Ground4:
-                    break;
-
-                case BlockType.Bridge:
-                    break;
-
-                case BlockType.Bush1:
-                    break;
-
-                case BlockType.Bush2:
-                    break;
-
-                case BlockType.Bush3:
-                    break;
-
-                case BlockType.BushSmall:
-                    break;
-
-                case BlockType.CastleBig:
-                    break;
-
-                case BlockType.CastleSmall:
-                    break;
-
-                case BlockType.Cloud1:
-                    break;
-
-                case BlockType.Cloud2:
-                    break;
-
-                case BlockType.Cloud3:
-                    break;
-
-                case BlockType.Fence:
-                    break;
-
                 case BlockType.Finish:
                     {
                         this.Transform.Dimensions = new Vector3(32, 200, 0);
@@ -191,27 +169,15 @@ namespace MarIO.Assets.Models
                         Block part1 = new Block(this)
                         {
                             Name = string.Format("{0}_Flag", this.Name),
-                            TypeName = Block.BlockTypeNames[BlockType.Flag]
+                            Type = BlockType.Flag
                         };
                         Block part2 = new Block(this)
                         {
                             Name = string.Format("{0}_Pole", this.Name),
-                            TypeName = Block.BlockTypeNames[BlockType.FlagPole]
+                            Type = BlockType.FlagPole
                         };
-                        part2.Transform.Position += new Vector3(16, 0, 0);
+                        part2.Transform.Position -= new Vector3(16, 0, 0);
                     }
-                    break;
-
-                case BlockType.Mountain:
-                    break;
-
-                case BlockType.Sky:
-                    break;
-
-                case BlockType.Water1:
-                    break;
-
-                case BlockType.Water2:
                     break;
 
                 case BlockType.Pipe1:
@@ -229,12 +195,7 @@ namespace MarIO.Assets.Models
                         };
                         block.InitNewComponent<Collider>();
                         block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
-
-                        //SpecialAction = WorldChange;
                     }
-                    break;
-
-                case BlockType.Pipe2:
                     break;
 
                 case BlockType.Pipe3:
@@ -252,41 +213,11 @@ namespace MarIO.Assets.Models
                         };
                         block.InitNewComponent<Collider>();
                         block.Collider.Area = new System.Drawing.RectangleF(0, 0, this.Transform.Dimensions.X, this.Transform.Dimensions.Y);
-
-                        //SpecialAction = WorldChange;
                     }
                     break;
-
-                case BlockType.Pipe4:
-                    break;
-
-                case BlockType.Pipe5:
-                    break;
-
-                case BlockType.UnderGround1:
-                    CoinCount = 1;
-                    break;
-
-                case BlockType.UnderGround2:
-                    break;
-
-                case BlockType.UnderGround3:
-                    break;
-
-                case BlockType.UnderGround4:
-                    break;
-
-                case BlockType.UnderGroundBackground1:
-                    break;
-
-                case BlockType.UnderGroundBackground2:
-                    break;
-
-                default:
-                    throw new Exception("A TO SE TI JAK POVEDLO");
             }
 
-            if (CoinCount > 0)
+            if (CoinCount > 0 || PowerUp)
             {
                 this.InitNewComponent<Animator>();
                 this.Animator.AddAnimation("default", this.TypeName);
@@ -300,15 +231,18 @@ namespace MarIO.Assets.Models
         {
             if (PowerUp)
             {
-
+                GameObject.Instantiate<PowerUp>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z - 1), new Vector3(), new Vector3(1, 1, 1));
+                PowerUp = false;
+                this.Animator.Play("nocoin");
             }
 
-            else if (CoinCount > 0)
+            else if (CoinCount > 0 && !CoinGot)
             {
-                GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
+                GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z - 1), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
                 CoinCount--;
                 Shared.Mechanics.GameScore += Shared.Mechanics.COIN_SCORE;
                 Shared.Mechanics.FXSoundSource.PlaySound(Coin.COIN_FX);
+                CoinGot = true;
 
                 if (CoinCount == 0)
                 {

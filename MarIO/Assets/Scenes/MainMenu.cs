@@ -13,7 +13,7 @@ namespace MarIO.Assets.Scenes
     {
         public MainMenu()
         {
-            Name = "MainMenu";
+            Name = nameof(MainMenu);
         }
 
         public override void Init()
@@ -22,41 +22,41 @@ namespace MarIO.Assets.Scenes
             {
                 InitCollider = true,
                 Name = "Wall_4",
-                SizeInBlocks = new Vector3(17, 1, 0),
+                SizeInBlocks = new Vector3(21, 2, 0),
                 Type = Block.BlockType.Ground2
             };
-            wall4.Transform.Position = new Vector3(0, 16 * 11, 0);
+            wall4.Transform.Position = new Vector3(0, 16 * 13, 0);
 
             Group wall5 = new Group()
             {
                 InitCollider = true,
                 Name = "Wall_5",
-                SizeInBlocks = new Vector3(16, 1, 0),
+                SizeInBlocks = new Vector3(22, 1, 0),
                 Type = Block.BlockType.Ground2
             };
-            wall5.Transform.Position = new Vector3(0, 16 * 8, 0);
+            wall5.Transform.Position = new Vector3(0, 16 * 9, 0);
 
             Block pipe1 = new Block()
             {
                 Name = "Pipe_1_Play",
                 Type = Block.BlockType.Pipe3
             };
-            pipe1.Transform.Position = new Vector3(32, 16 * 6, 1);
+            pipe1.Transform.Position = new Vector3(32, 16 * 7, 1);
             pipe1.SpecialAction = Play;
 
             Block pipe2 = new Block()
             {
-                Name = "Pipe_2_Options",
+                Name = "Pipe_2_About",
                 Type = Block.BlockType.Pipe3
             };
-            pipe2.Transform.Position = new Vector3(112, 16 * 6, 1);
+            pipe2.Transform.Position = new Vector3(143, 16 * 7, 1);
 
             Block pipe3 = new Block()
             {
                 Name = "Pipe_3_Exit",
                 Type = Block.BlockType.Pipe3
             };
-            pipe3.Transform.Position = new Vector3(32 * 6, 16 * 6, 1);
+            pipe3.Transform.Position = new Vector3(256, 16 * 7, 1);
             pipe3.SpecialAction = Exit;
 
             Camera baseCam = new Camera()
@@ -72,14 +72,13 @@ namespace MarIO.Assets.Scenes
 
             TextBlock MainMenuHeader = new TextBlock()
             {
-                FontSize = 5,
+                FontSize = 6,
                 HAlignment = Text.HorizontalAlignment.Center,
                 Name = "tx_MainMenuHeader",
                 Text = "MARIO",
                 TextHAlignment = Text.HorizontalAlignment.Center,
                 TextShadow = true
             };
-            //MainMenuHeader.IsGUI = true;
             MainMenuHeader.Transform.Position += new Vector3(0, 10, 0);
             MainMenuHeader.Transform.Dimensions = new Vector3(200, 50, 0);
 
@@ -90,18 +89,18 @@ namespace MarIO.Assets.Scenes
                 TextHAlignment = Text.HorizontalAlignment.Center,
                 TextShadow = true
             };
-            PlayText.Transform.Position = new Vector3(9, 80, -1);
+            PlayText.Transform.Position = new Vector3(9, 96, -1);
             PlayText.Transform.Dimensions = new Vector3(80, 20, 0);
 
             TextBlock OptionsText = new TextBlock()
             {
                 Name = "tx_Options",
-                Text = "Options",
+                Text = "About",
                 TextHAlignment = Text.HorizontalAlignment.Center,
                 TextShadow = true,
                 HAlignment = Text.HorizontalAlignment.Center
             };
-            OptionsText.Transform.Position += new Vector3(0, 80, -1);
+            OptionsText.Transform.Position += new Vector3(0, 96, -1);
             OptionsText.Transform.Dimensions = new Vector3(80, 20, 0);
 
             TextBlock ExitText = new TextBlock()
@@ -112,7 +111,7 @@ namespace MarIO.Assets.Scenes
                 TextShadow = true,
                 HAlignment = Text.HorizontalAlignment.Right
             };
-            ExitText.Transform.Position += new Vector3(-8, 80, -1);
+            ExitText.Transform.Position += new Vector3(-8, 96, -1);
             ExitText.Transform.Dimensions = new Vector3(80, 20, 0);
 
             Block cloud1 = new Block()
@@ -141,7 +140,7 @@ namespace MarIO.Assets.Scenes
                 Name = "mountain",
                 Type = Block.BlockType.Mountain
             };
-            mountain.Transform.Position = new Vector3(100, 120, -1);
+            mountain.Transform.Position = new Vector3(100, 152, -1);
             mountain.Transform.Scale = new Vector3(2, 2, 0);
 
             Block bush1 = new Block()
@@ -149,69 +148,57 @@ namespace MarIO.Assets.Scenes
                 Name = "bush_1",
                 Type = Block.BlockType.Bush3
             };
-            bush1.Transform.Position = new Vector3(180, 150, -1);
+            bush1.Transform.Position = new Vector3(180, 182, -1);
 
             Block bush2 = new Block()
             {
                 Name = "bush_2",
                 Type = Block.BlockType.Bush2
             };
-            bush2.Transform.Position = new Vector3(25, 150, -1);
+            bush2.Transform.Position = new Vector3(25, 182, -1);
 
             Block fence1 = new Block()
             {
                 Name = "fence_1",
                 Type = Block.BlockType.Fence
             };
-            fence1.Transform.Position = new Vector3(90, 160, -1);
+            fence1.Transform.Position = new Vector3(90, 192, -1);
 
             Block fence2 = new Block()
             {
                 Name = "fence_2",
                 Type = Block.BlockType.Fence
             };
-            fence2.Transform.Position = new Vector3(106, 160, -1);
+            fence2.Transform.Position = new Vector3(106, 192, -1);
 
             Block fence3 = new Block()
             {
                 Name = "fence_3",
                 Type = Block.BlockType.Fence
             };
-            fence3.Transform.Position = new Vector3(122, 160, -1);
-
-            //player.Transform.Position = new Vector3(20, 20, 0);
+            fence3.Transform.Position = new Vector3(122, 192, -1);
 
             Blocker leftSide = new Blocker()
             {
                 Name = "LeftSideBlocker"
             };
-            leftSide.Transform.Position = new Vector3(-10, 0, 0);
-            leftSide.Transform.Dimensions = new Vector3(10, 128, 0);
-            //leftSide.Model = new Material(Color.Black, leftSide);
+            leftSide.Transform.Position = new Vector3(-10, -20, 0);
+            leftSide.Transform.Dimensions = new Vector3(10, 148, 0);
 
             Blocker rightSide = new Blocker()
             {
                 Name = "LeftSideBlocker"
             };
-            rightSide.Transform.Position = new Vector3(256, 0, 0);
-            rightSide.Transform.Dimensions = new Vector3(10, 128, 0);
-            //rightSide.Model = new Material(Color.Black, leftSide);
-
-            Block CoinBlockTest = new Block()
-            {
-                Name = "CoinBlockTest",
-                Type = Block.BlockType.Ground1
-            };
-            CoinBlockTest.InitNewComponent<Collider>();
-            CoinBlockTest.Collider.Area = new RectangleF(0, 0, 16, 16);
-            CoinBlockTest.Transform.Position = new Vector3(30, 30, 0);
-
+            rightSide.Transform.Position = new Vector3(320, -20, 0);
+            rightSide.Transform.Dimensions = new Vector3(10, 148, 0);
+            
             BackgroundWorker BW = new BackgroundWorker();
             BW.InitNewComponent<Collider>();
-            BW.Collider.Area = new RectangleF(-10, 160, 10, 10);
+            BW.Collider.Area = new RectangleF(-10, 160, 10, 30);
             BW.Collider.IsTrigger = true;
             BW.InitNewScript<MainMenuSpawnScript>();
 
+            new MusicPlayer();
             new SoundOutput();
         }
 
@@ -228,15 +215,13 @@ namespace MarIO.Assets.Scenes
 
         private void Play()
         {
+            Shared.Mechanics.MarioCurrentState = Mario.State.Small;
             Shared.Mechanics.CoinsCount = 0;
             Shared.Mechanics.GameScore = 0;
             Shared.Mechanics.Lives = 3;
             Shared.Mechanics.TimeCounter.Reset();
 
-            Engine.LoadScene<WorldScreen>(new object[] { (Action)(() => Engine.LoadScene<Level_1_1>()), $"world:get|{nameof(Level_1_1)}" });
-
-            //Engine.LoadScene<Test>();
-            //Engine.ChangeScene("test");
+            Engine.ChangeScene(nameof(WorldScreen), true, new object[] { (Action)(() => Engine.ChangeScene(MapBase.LevelsNames[nameof(Level_1_1)], true)), $"world:get|{nameof(Level_1_1)}" });
         }
     }
 }
