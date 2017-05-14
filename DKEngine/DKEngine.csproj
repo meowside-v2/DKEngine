@@ -55,9 +55,7 @@
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\Collider.cs" />
     <Compile Include="Core\Components\AnimationNode.cs" />
-    <Compile Include="Core\Components\Unused\Material_LowMemory.cs" />
     <Compile Include="Core\Components\Transform.cs" />
-    <Compile Include="Core\Components\Unused\Material_HighMemory.cs" />
     <Compile Include="Core\Components\Vector3.cs" />
     <Compile Include="Core\Interfaces\I3Dimensional.cs" />
     <Compile Include="Core\Interfaces\IAnimated.cs" />
@@ -99,7 +97,6 @@
     <Content Include="Build-in stuff\Images\DKEngine_splash1.gif" />
     <Content Include="Build-in stuff\Images\DKEngine_splash2.gif" />
     <Content Include="Build-in stuff\Images\DKEngine_splash3.gif" />
-    <None Include="Core\Components\Unused\MaterialBackups" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
