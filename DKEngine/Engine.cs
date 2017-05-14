@@ -210,9 +210,9 @@ namespace DKEngine
 
         public static string SceneName { get { return Engine.LoadingScene != null ? Engine.LoadingScene.Name : ""; } }
 
-        private static readonly TimeSpan _firstTimeLoadDelay = new TimeSpan(0, 0, 1);
+        /*private static readonly TimeSpan _firstTimeLoadDelay = new TimeSpan(0, 0, 5);
         private static TimeSpan FirstTimeLoadDelay = new TimeSpan();
-        private static bool FirstTimeLoaded = true;
+        private static bool FirstTimeLoaded = true;*/
 
         internal static event EngineHandler UpdateEvent;
 
@@ -440,8 +440,8 @@ namespace DKEngine
                 deltaT = (float)DeltaT.Elapsed.TotalSeconds;
                 DeltaT?.Restart();
 
-                if (!FirstTimeLoaded)
-                {
+                /*if (!FirstTimeLoaded)
+                {*/
                     UpdateEvent?.Invoke();
 
                     while (Engine.CurrentScene?.NewlyGeneratedComponents.Count > 0)
@@ -481,10 +481,10 @@ namespace DKEngine
                             VisibleTriggers[i]?.TriggerCheck(VisibleColliders);
                     }
 
-                    Engine.CurrentScene?.BaseCamera?.BufferImage(reference);
+                    Engine.BaseCam?.BufferImage(reference);
 
                     Buffer.BlockCopy(Render.imageBuffer, 0, Render.ImageOutData, 0, Render.ImageBufferSize);
-                }
+                /*}
                 else
                 {
                     FirstTimeLoadDelay += new TimeSpan(0, 0, 0, 0, (int)(DeltaTime * 1000));
@@ -494,7 +494,7 @@ namespace DKEngine
                         FirstTimeLoaded = false;
                         FirstTimeLoadDelay = new TimeSpan();
                     }
-                }
+                }*/
 
                 NumberOfFrames++;
 

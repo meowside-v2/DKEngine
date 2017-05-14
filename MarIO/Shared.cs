@@ -37,7 +37,7 @@ namespace MarIO
 
             public readonly static Stopwatch TimeCounter = new Stopwatch();
 
-            private readonly static TimeSpan LevelTime = new TimeSpan(0, 0, 20);
+            private readonly static TimeSpan LevelTime = new TimeSpan(0, 5, 0);
 
             public static TimeSpan TimeLeft
             {

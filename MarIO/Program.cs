@@ -22,7 +22,9 @@ namespace MarIO
             Engine.LoadSceneToMemory<GameOver>();
             Engine.LoadSceneToMemory<WorldScreen>();
 
-            Engine.ChangeScene(nameof(MainMenu));
+            Engine.LoadScene<About>();
+
+            //Engine.ChangeScene(nameof(MainMenu));
         }
     }
 }

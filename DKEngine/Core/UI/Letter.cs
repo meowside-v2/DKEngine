@@ -39,8 +39,5 @@ namespace DKEngine.Core.UI
             Animator = null;
             Model = null;
         }
-
-        protected override void Initialize()
-        { }
     }
 }

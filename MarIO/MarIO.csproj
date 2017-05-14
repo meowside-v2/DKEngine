@@ -101,6 +101,7 @@
     <Compile Include="Assets\Models\Miscellaneous\PowerUp.cs" />
     <Compile Include="Assets\Models\MusicPlayer.cs" />
     <Compile Include="Assets\Models\Trigger.cs" />
+    <Compile Include="Assets\Scenes\About.cs" />
     <Compile Include="Assets\Scenes\GameOver.cs" />
     <Compile Include="Assets\Scenes\Level_1_1.cs" />
     <Compile Include="Assets\Scenes\MainMenu.cs" />
