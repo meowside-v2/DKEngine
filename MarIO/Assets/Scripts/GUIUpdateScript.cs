@@ -2,7 +2,6 @@
 using DKEngine.Core;
 using DKEngine.Core.Components;
 using DKEngine.Core.UI;
-using MarIO.Assets.Models;
 
 namespace MarIO.Assets.Scripts
 {

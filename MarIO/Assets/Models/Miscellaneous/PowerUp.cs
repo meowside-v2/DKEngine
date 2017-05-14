@@ -3,11 +3,7 @@ using DKEngine.Core.Components;
 using DKEngine.Core.UI;
 using MarIO.Assets.Scripts;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Models.Miscellaneous
 {
@@ -28,13 +24,13 @@ namespace MarIO.Assets.Models.Miscellaneous
         protected override void Initialize()
         {
             this.Name = nameof(PowerUp);
-            
+
             this.InitNewComponent<Collider>();
             this.Collider.Area = new RectangleF(0, 0, 16, 16);
             this.Collider.Enabled = false;
 
             this.InitNewScript<PowerUpScript>();
-            
+
             switch (Shared.Mechanics.MarioCurrentState)
             {
                 case Mario.State.Small:
@@ -58,6 +54,7 @@ namespace MarIO.Assets.Models.Miscellaneous
                         this.Destroy();
                     };
                     break;
+
                 case Mario.State.Super:
                     this.TypeName = "flower";
                     Type = PowerUpType.Flower;
@@ -81,7 +78,7 @@ namespace MarIO.Assets.Models.Miscellaneous
                         OnPickedUp = null;
 
                         this.Destroy();
-                    }; 
+                    };
                     this.Collider.IsTrigger = true;
                     break;
 
@@ -112,6 +109,7 @@ namespace MarIO.Assets.Models.Miscellaneous
                         this.Destroy();
                     };
                     break;
+
                 default:
                     throw new Exception("JAK");
             }

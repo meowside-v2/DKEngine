@@ -24,8 +24,6 @@ namespace DKEngine.Core.UI
                 {
                     _textStr = value ?? throw new System.Exception("WTF PROC KDY KDE A JAK");
                     _changed = true;
-
-                    
                 }
             }
         }

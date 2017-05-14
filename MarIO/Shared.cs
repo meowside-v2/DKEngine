@@ -2,7 +2,6 @@
 using DKEngine.Core.UI;
 using MarIO.Assets.Models;
 using MarIO.Assets.Models.Miscellaneous;
-using MarIO.Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,8 +44,9 @@ namespace MarIO
                 get { return LevelTime - TimeCounter.Elapsed; }
             }
 
-            //public static 
+            //public static
             public static Type LastWorldType;
+
             public static Mario.State MarioCurrentState
             {
                 get;
@@ -104,7 +104,7 @@ namespace MarIO
             public static class Animations
             {
                 #region Mario
-                
+
                 private const string POWERUP_LEFT = "powerup_left";
                 private const string POWERUP_LEFT_MAT = "mario_powerup_left";
 
@@ -165,7 +165,7 @@ namespace MarIO
 
                 public const string MARIO_SUPER_JUMP_RIGHT = "super_" + MARIO_JUMP_RIGHT;
                 public const string MARIO_SUPER_JUMP_RIGHT_MAT = "super_" + MARIO_JUMP_RIGHT_MAT;
-                
+
                 public const string MARIO_SUPER_POWERUP_LEFT = "super_" + POWERUP_LEFT;
                 public const string MARIO_SUPER_POWERUP_LEFT_MAT = "super_" + POWERUP_LEFT_MAT;
 
@@ -209,7 +209,6 @@ namespace MarIO
 
                 public const string MARIO_FIRE_CROUCHING_RIGHT = "fire_" + CROUCHING_RIGHT;
                 public const string MARIO_FIRE_CROUCHING_RIGHT_MAT = "fire_" + CROUCHING_RIGHT_MAT;
-
 
                 /*--------------- INVINCIBLE -----------------*/
 

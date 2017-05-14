@@ -1,24 +1,20 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
-using MarIO.Assets.Models.Miscellaneous;
 using MarIO.Assets.Models;
-using DKEngine;
+using MarIO.Assets.Models.Miscellaneous;
+using System;
 using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Scripts
 {
-    class PowerUpScript : Script
+    internal class PowerUpScript : Script
     {
-        PowerUp Target;
-        bool CreatedForFirstTime = true;
-        bool CreatedAnimation = true;
-        float CreatedStartY;
-        const float CreationAnimationSpeed = 20f;
+        private PowerUp Target;
+        private bool CreatedForFirstTime = true;
+        private bool CreatedAnimation = true;
+        private float CreatedStartY;
+        private const float CreationAnimationSpeed = 20f;
 
         private const float Speed = 80f;
         private const float FloatSpeed = 250f;
@@ -53,7 +49,6 @@ namespace MarIO.Assets.Scripts
                 CreatedForFirstTime = false;
                 return;
             }
-
             else if (CreatedAnimation)
             {
                 if (CreatedStartY < Target.Transform.Position.Y + 16)
@@ -69,7 +64,6 @@ namespace MarIO.Assets.Scripts
 
                 return;
             }
-
             else
             {
                 switch (Target.Type)
@@ -77,17 +71,19 @@ namespace MarIO.Assets.Scripts
                     case PowerUp.PowerUpType.Mushroom:
                         MushroomMovement();
                         break;
+
                     case PowerUp.PowerUpType.Flower:
                         CurrentSpeed = 0;
                         break;
+
                     case PowerUp.PowerUpType.Star:
                         StarMovement();
                         break;
+
                     default:
                         throw new Exception("JAK");
                 }
             }
-                
         }
 
         private void MushroomMovement()

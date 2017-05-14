@@ -283,18 +283,18 @@ namespace DKEngine.Core
                 object[] postArgs = Engine.LoadingScene.argsPostLoad;
 
                 var list = Engine.LoadingScene.AllComponents.ToList();
-                for(int i = 0; i < list.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
                     list[0].Value.Destroy();
                     list.RemoveAt(0);
                     list = Engine.LoadingScene.AllComponents.ToList();
                 }
-                    
+
                 for (int i = 0; i < Engine.LoadingScene.AllBehaviors.Count; i++)
                 {
                     Engine.LoadingScene.AllBehaviors[0].Destroy();
                 }
-                
+
                 Engine.LoadingScene = (Scene)Activator.CreateInstance(Engine.LoadingScene.GetType());
 
                 Engine.LoadingScene.argsPreLoad = preArgs;

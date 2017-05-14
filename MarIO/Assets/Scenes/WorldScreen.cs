@@ -29,7 +29,6 @@ namespace MarIO.Assets.Scenes
 
         public override void Init()
         {
-
             TextBlock _World = new TextBlock()
             {
                 FontSize = 5,
@@ -109,7 +108,7 @@ namespace MarIO.Assets.Scenes
                 switch (parameters[0])
                 {
                     case "world":
-                        if(parameters[1].Split('|')[0] == "get")
+                        if (parameters[1].Split('|')[0] == "get")
                         {
                             WorldName = MapBase.LevelsNames[parameters[1].Split('|')[1]];
                         }
@@ -117,7 +116,7 @@ namespace MarIO.Assets.Scenes
                         {
                             WorldName = parameters[1];
                         }
-                        
+
                         break;
 
                     case "time":

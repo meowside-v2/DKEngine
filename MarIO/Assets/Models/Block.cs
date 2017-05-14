@@ -115,6 +115,7 @@ namespace MarIO.Assets.Models
         public Action SpecialAction { get; set; }
         public Direction PipeEnterDirection { get; set; }
         public bool CoinGot { get; set; }
+
         public bool PowerUp
         {
             get { return _powerUp; }
@@ -125,6 +126,7 @@ namespace MarIO.Assets.Models
                     _hadBonus = true;
             }
         }
+
         public byte CoinCount
         {
             get { return _coinCount; }
@@ -135,6 +137,7 @@ namespace MarIO.Assets.Models
                     _hadBonus = true;
             }
         }
+
         public bool HadBonus
         {
             get { return _hadBonus; }
@@ -235,7 +238,6 @@ namespace MarIO.Assets.Models
                 PowerUp = false;
                 this.Animator.Play("nocoin");
             }
-
             else if (CoinCount > 0 && !CoinGot)
             {
                 GameObject.Instantiate<Coin>(new Vector3(this.Transform.Position.X + 4, this.Transform.Position.Y, this.Transform.Position.Z - 1), new Vector3(), new Vector3(1, 1, 1)).AddAsFloatingCoin();
@@ -249,8 +251,6 @@ namespace MarIO.Assets.Models
                     this.Animator.Play("nocoin");
                 }
             }
-
-            
         }
 
         public void DestroyAnim()

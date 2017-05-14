@@ -5,15 +5,11 @@ using DKEngine.Core.UI;
 using MarIO.Assets.Models;
 using MarIO.Assets.Models.Miscellaneous;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarIO.Assets.Scenes
 {
-    class GameOver : Scene
+    internal class GameOver : Scene
     {
         public GameOver()
         {

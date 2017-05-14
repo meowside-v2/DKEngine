@@ -193,7 +193,6 @@ namespace MarIO.Assets.Models
                 this.InitNewComponent<Collider>();
             }
 
-            
             BottomTrigger.InitNewScript<BottomMarioChecker>();
             LeftTrigger.InitNewScript<LeftMarioChecker>();
             RightTrigger.InitNewScript<RightMarioChecker>();
@@ -223,6 +222,7 @@ namespace MarIO.Assets.Models
                 Name = "Right_Trigger"
             };
         }
+
         public void PipeEnter(Block Pipe)
         {
             ChangeState = true;

@@ -191,7 +191,7 @@ namespace MarIO.Assets.Scenes
             };
             rightSide.Transform.Position = new Vector3(320, -20, 0);
             rightSide.Transform.Dimensions = new Vector3(10, 148, 0);
-            
+
             BackgroundWorker BW = new BackgroundWorker();
             BW.InitNewComponent<Collider>();
             BW.Collider.Area = new RectangleF(-10, 160, 10, 30);

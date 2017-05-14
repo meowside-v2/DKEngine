@@ -4,7 +4,6 @@ using DKEngine.Core.Components;
 using MarIO.Assets.Models;
 using MarIO.Assets.Scenes;
 using System;
-using System.Diagnostics;
 using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Scripts
@@ -68,6 +67,7 @@ namespace MarIO.Assets.Scripts
                 }
             }
         }
+
         private string _crouch
         {
             get
@@ -91,10 +91,12 @@ namespace MarIO.Assets.Scripts
                 }
             }
         }
+
         private string _superPowerUp
         {
             get { return IsFacingLeft ? Shared.Assets.Animations.MARIO_SUPER_POWERUP_LEFT : Shared.Assets.Animations.MARIO_SUPER_POWERUP_RIGHT; }
         }
+
         private string _firePowerUp
         {
             get { return IsFacingLeft ? Shared.Assets.Animations.MARIO_FIRE_POWERUP_LEFT : Shared.Assets.Animations.MARIO_FIRE_POWERUP_RIGHT; }
@@ -107,6 +109,7 @@ namespace MarIO.Assets.Scripts
                 return Player.CurrentMovement == Mario.Movement.Crouching ? _crouch : _idle;
             }
         }
+
         private string MOVE
         {
             get
@@ -130,6 +133,7 @@ namespace MarIO.Assets.Scripts
                 }
             }
         }
+
         private string JUMP
         {
             get
@@ -157,6 +161,7 @@ namespace MarIO.Assets.Scripts
                 }
             }
         }
+
         private string POWERUP
         {
             get
@@ -165,10 +170,13 @@ namespace MarIO.Assets.Scripts
                 {
                     case Mario.State.Small:
                         return _superPowerUp;
+
                     case Mario.State.Super:
                         return LastState < Player.CurrentState ? _firePowerUp : _superPowerUp;
+
                     case Mario.State.Fire:
                         return LastState < Player.CurrentState ? "" : _firePowerUp;
+
                     default:
                         throw new Exception("JAK");
                 }
@@ -201,7 +209,7 @@ namespace MarIO.Assets.Scripts
             if (!Enabled)
                 return;
 
-            if(LastState != Player.CurrentState && Player.CurrentState != Mario.State.Dead)
+            if (LastState != Player.CurrentState && Player.CurrentState != Mario.State.Dead)
             {
                 if (!ChangingState)
                 {
@@ -236,16 +244,13 @@ namespace MarIO.Assets.Scripts
 
                     ChangingState = false;
                 }
-
                 else
                     return;
             }
-
-            else if(Player.CurrentState == Mario.State.Dead)
+            else if (Player.CurrentState == Mario.State.Dead)
             {
                 DeadAnimation();
             }
-
             else if (Player.KilledEnemy)
             {
                 Shared.Mechanics.FXSoundSource.PlaySound(Shared.Assets.Sounds.FX_STOMP_SOUND);
@@ -255,7 +260,6 @@ namespace MarIO.Assets.Scripts
                 IsFalling = false;
                 vertSpeed = -FloatSpeed;
             }
-
             else if (Player.ChangeState)
             {
                 if (FirstTimePipeEnter)
@@ -296,9 +300,9 @@ namespace MarIO.Assets.Scripts
             {
                 Movement();
             }
-            
+
             Player.Transform.Position = Player.Transform.Position.Add(horiSpeed * Engine.DeltaTime, vertSpeed * Engine.DeltaTime, 0);
-            
+
             AnimationControl();
         }
 
@@ -327,16 +331,14 @@ namespace MarIO.Assets.Scripts
 
                 WorldReloadNow += new TimeSpan(0, 0, 0, 0, (int)(Engine.DeltaTime * 1000));
 
-                if(WorldReloadNow > WorldReload)
+                if (WorldReloadNow > WorldReload)
                 {
                     Shared.Mechanics.Lives--;
 
                     if (Shared.Mechanics.Lives == 0)
                         Engine.ChangeScene(nameof(GameOver), true);
-
                     else
                         Engine.ChangeScene(nameof(WorldScreen), true);
-
                 }
             }
         }

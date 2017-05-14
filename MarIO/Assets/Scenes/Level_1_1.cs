@@ -1,7 +1,6 @@
 ﻿using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
-using MarIO.Assets.Models.Miscellaneous;
 using MarIO.Assets.Scripts;
 
 namespace MarIO.Assets.Scenes
@@ -18,9 +17,8 @@ namespace MarIO.Assets.Scenes
 
         public override void Load()
         {
-
             /*-------------- BG PRESET ----------------*/
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 new Block()
                 {
@@ -78,6 +76,7 @@ namespace MarIO.Assets.Scenes
             }
 
             #region GROUND
+
             Group _1 = new Group()
             {
                 Name = "ground1",
@@ -113,9 +112,11 @@ namespace MarIO.Assets.Scenes
             };
             _4.SizeInBlocks = new Vector3(100, 3, 0);
             _4.Transform.Position = new Vector3(2544, 48, 0);
-            #endregion
+
+            #endregion GROUND
 
             #region Platform1
+
             new Block()
             {
                 Name = "bonus_1",
@@ -169,7 +170,8 @@ namespace MarIO.Assets.Scenes
                 Type = Block.BlockType.Ground4,
                 InitCollider = true
             }.Transform.Position = new Vector3(464, -12, 0);
-            #endregion
+
+            #endregion Platform1
 
             new Block()
             {
@@ -315,7 +317,7 @@ namespace MarIO.Assets.Scenes
                 CoinCount = 1
             }.Transform.Position = new Vector3(1808, -12, 0);
 
-            #endregion
+            #endregion Bonus Field
 
             new Block()
             {
@@ -323,7 +325,7 @@ namespace MarIO.Assets.Scenes
                 InitCollider = true
             }.Transform.Position = new Vector3(1968, -12, 0);
 
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 new Block()
                 {
@@ -400,7 +402,7 @@ namespace MarIO.Assets.Scenes
                 Type = Block.BlockType.Ground3
             }.Transform.Position = new Vector3(2240, -16, 0);
 
-            #endregion
+            #endregion Stairs1
 
             #region Stairs2
 
@@ -432,7 +434,7 @@ namespace MarIO.Assets.Scenes
                 Type = Block.BlockType.Ground3
             }.Transform.Position = new Vector3(2288, -16, 0);
 
-            #endregion
+            #endregion Stairs2
 
             #region Stairs3
 
@@ -464,7 +466,7 @@ namespace MarIO.Assets.Scenes
                 Type = Block.BlockType.Ground3
             }.Transform.Position = new Vector3(2480, -16, 0);
 
-            #endregion
+            #endregion Stairs3
 
             #region Stairs4
 
@@ -496,7 +498,7 @@ namespace MarIO.Assets.Scenes
                 Type = Block.BlockType.Ground3
             }.Transform.Position = new Vector3(2544, -16, 0);
 
-            #endregion
+            #endregion Stairs4
 
             new Block()
             {
@@ -584,7 +586,7 @@ namespace MarIO.Assets.Scenes
                 Type = Block.BlockType.Ground3
             }.Transform.Position = new Vector3(3056, -64, 0);
 
-            #endregion
+            #endregion Stairs5
 
             new Block()
             {

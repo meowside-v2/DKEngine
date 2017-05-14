@@ -7,7 +7,7 @@ namespace MarIO.Assets.Scripts
 {
     public class MusicScript : Script
     {
-        Sound Music;
+        private Sound Music;
         private TimeSpan MusicLenght;
 
         private Stopwatch Timer;

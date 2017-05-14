@@ -215,6 +215,7 @@ namespace DKEngine
         private static bool FirstTimeLoaded = true;
 
         internal static event EngineHandler UpdateEvent;
+
         internal delegate void EngineHandler();
 
         /// <summary>
@@ -284,7 +285,6 @@ namespace DKEngine
                 throw new Exception("Engine is being initialised second time");
         }
 
-
         public static void LoadSceneToMemory<T>(object[] argsPreLoad = null, object[] argsPostLoad = null)
             where T : Scene
         {
@@ -296,7 +296,6 @@ namespace DKEngine
 
             Database.AddScene(Engine.LoadingScene);
         }
-
 
         /// <summary>
         /// Loads the scene to memory.
@@ -335,7 +334,7 @@ namespace DKEngine
         {
             Database.RewriteWorld(Name, argsPreLoad);
         }
-        
+
         /// <summary>
         /// Changes the scene.
         /// </summary>
@@ -349,10 +348,10 @@ namespace DKEngine
             {
                 ReloadScene(Name, argsPreLoad);
 
-                if(argsPostLoad != null)
+                if (argsPostLoad != null)
                     Database.GetScene(Name).argsPostLoad = argsPostLoad;
             }
-                
+
             RegisterScene(Database.GetScene(Name), argsPostLoad);
         }
 
@@ -392,10 +391,8 @@ namespace DKEngine
                 source.argsPostLoad = args;
                 source.Set(args);
             }
-                
             else if (source.argsPostLoad != null)
                 source.Set(source.argsPostLoad);
-
 
             foreach (var item in source.AllBehaviors)
             {
@@ -405,7 +402,7 @@ namespace DKEngine
                 }
                 catch { }
             }
-            
+
             Engine.BaseCam = Engine.LoadingScene.BaseCamera;
             Engine.CurrentScene = source;
         }
@@ -492,13 +489,12 @@ namespace DKEngine
                 {
                     FirstTimeLoadDelay += new TimeSpan(0, 0, 0, 0, (int)(DeltaTime * 1000));
 
-                    if(FirstTimeLoadDelay > _firstTimeLoadDelay)
+                    if (FirstTimeLoadDelay > _firstTimeLoadDelay)
                     {
                         FirstTimeLoaded = false;
                         FirstTimeLoadDelay = new TimeSpan();
                     }
                 }
-                
 
                 NumberOfFrames++;
 
@@ -509,9 +505,9 @@ namespace DKEngine
                 {
                     long t = NumberOfFrames * 1000 / time.ElapsedMilliseconds;
                     FpsMeter.Text = t.ToString();
-/*#if DEBUG
-                    Debug.WriteLine(t);
-#endif*/
+                    /*#if DEBUG
+                                        Debug.WriteLine(t);
+                    #endif*/
                     time.Restart();
                     NumberOfFrames = 0;
                 }

@@ -1,22 +1,18 @@
-﻿using DKEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DKEngine;
+using DKEngine.Core;
 using DKEngine.Core.Components;
 using MarIO.Assets.Models;
-using static DKEngine.Core.Components.Transform;
-using DKEngine;
 using MarIO.Assets.Scenes;
+using System;
+using static DKEngine.Core.Components.Transform;
 
 namespace MarIO.Assets.Scripts
 {
-    class WorldEnd : Script
+    internal class WorldEnd : Script
     {
-        Mario Player;
-        CharacterController PlayerController;
-        Animator PlayerAnimator;
+        private Mario Player;
+        private CharacterController PlayerController;
+        private Animator PlayerAnimator;
 
         private float horiSpeed = 0;
         private float vertSpeed = 0;
@@ -54,6 +50,7 @@ namespace MarIO.Assets.Scripts
                 }
             }
         }
+
         private string IDLE
         {
             get
@@ -104,7 +101,6 @@ namespace MarIO.Assets.Scripts
                 Player.CurrentState = Mario.State.Dead;
                 Shared.Mechanics.TimeCounter.Stop();
             }
-                
 
             if (!PlayerController.Enabled)
             {
@@ -134,7 +130,6 @@ namespace MarIO.Assets.Scripts
                         Shared.Mechanics.FXSoundSource.StopSound(Shared.Assets.Sounds.OVERWORLD_THEME_SOUND);
                         Engine.ChangeScene(nameof(GameOver), true);
                     }
-                        
                 }
                 else
                 {
